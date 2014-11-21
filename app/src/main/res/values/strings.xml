@@ -4,4 +4,7 @@
     <string name="app_name">ESN_Mobil-IT</string>
     <string name="action_settings">Settings</string>
 
+    <!-- splash.xml -->
+    <string name="loading">Loading ...</string>
+
 </resources>
