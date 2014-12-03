@@ -8,30 +8,58 @@ import android.util.Log;
 
 
 public class ChoiceActivity extends Activity {
-
     private static final String TAG = SplashActivity.class.getSimpleName();
     private SharedPreferences spOptions;
-    private SharedPreferences.Editor spOptionEditor;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choice);
+        reinitPreferences();
+        //chooseActivity();
+    }
 
+    protected void onResume(){
+        super.onResume();
+        chooseActivity();
+    }
+
+    protected void reinitPreferences(){
+        //Init
+        SharedPreferences.Editor spOptionEditor;
         spOptions = getSharedPreferences("section", 0);
+
+        //Change
         spOptionEditor = spOptions.edit();
-        spOptionEditor.putString("SECTION_NAME", "");
+        spOptionEditor.putString("CODE_SECTION", null);
+        spOptionEditor.putString("CODE_COUNTRY", null);
         spOptionEditor.commit();
+    }
 
-        String section_name = spOptions.getString("SECTION_NAME", null);
-        Intent intent;
 
-        if (section_name.equalsIgnoreCase("")) {
-            Log.d(TAG, "SECTION_NAME null");
-            intent = new Intent(this, CountrySpinnerActivity.class);
+    protected void chooseActivity(){
+        spOptions = getSharedPreferences("section", 0);
+        String code_section = spOptions.getString("CODE_SECTION", null);
+        String code_country = spOptions.getString("CODE_COUNTRY", null);
+        Intent intent = null;
+
+        Log.d(TAG, "CODE_SECTION :" + code_section);
+        Log.d(TAG, "CODE_COUNTRY :" + code_country);
+
+        if ((code_country == null || code_country.equalsIgnoreCase("")) || (code_section == null || code_section.equalsIgnoreCase(""))){
+            if (code_country == null || code_country.equalsIgnoreCase("")) {
+                Log.d(TAG, "CODE_COUNTRY :null");
+                if (code_section == null || code_section.equalsIgnoreCase("")) {
+                    Log.d(TAG, "CODE_COUNTRY && CODE_SECTION :null");
+                    intent = new Intent(this, CountrySpinnerActivity.class);
+                } else {
+                    intent = new Intent(this, SectionSpinnerActivity.class);
+                }
+            }else{
+                intent = new Intent(this, SectionSpinnerActivity.class);
+            }
         }
         else {
-            Log.d(TAG, "SECTION_NAME :" + section_name);
+            Log.d(TAG, "CODE_SECTION :" + code_section);
+            Log.d(TAG, "CODE_COUNTRY :" + code_country);
             intent = new Intent(this, org.esn.mobilit.SplashActivity.class);
         }
 

@@ -1,6 +1,7 @@
 package org.esn.mobilit;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,23 +23,33 @@ import java.util.ArrayList;
 public class SectionSpinnerActivity extends Activity {
 
     private static final String TAG = SectionSpinnerActivity.class.getSimpleName();
-    String code_country;
+    String code_country, code_section;
     ArrayList<String> spinnerSections;
     ArrayList<Sections> sections;
     JSONObject jsonobject;
     JSONArray jsonarray;
     TextView txtName;
+    Sections currentSection;
+    private SharedPreferences spOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sections_spinner);
 
+        //Init components
         txtName = (TextView) findViewById(R.id.section_name);
+        spOptions = getSharedPreferences("section", 0);
 
+        //Check if from CountrySpinnerActivity
         Bundle datas = getIntent().getExtras();
-        code_country = datas.getString("code_country");
-        if (code_country!= null) {
+        if (datas == null){
+            code_country = spOptions.getString("CODE_COUNTRY", null);
+        }else{
+            code_country = datas.getString("code_country");
+        }
+
+        if (code_country != null) {
             Log.d(TAG, "Code_country:"+code_country);
             new DownloadJSONSections().execute();
         }else{
@@ -48,6 +59,27 @@ public class SectionSpinnerActivity extends Activity {
 
 
     }
+
+    public void chooseSection(View view) {
+        Log.d(TAG,"Entering ChooseSection");
+
+        //Creat SharedPreferences
+        SharedPreferences.Editor spOptionEditor;
+        SharedPreferences spOptions;
+
+        //Init
+        spOptions = getSharedPreferences("section", 0);
+
+        //Change
+        spOptionEditor = spOptions.edit();
+        spOptionEditor.putString("CODE_SECTION", currentSection.getCode_section());
+        spOptionEditor.putString("CODE_COUNTRY", currentSection.getCode_country());
+        spOptionEditor.commit();
+
+
+        finish();
+    }
+
 
     // Download JSON file AsyncTask for Sections
     private class DownloadJSONSections extends AsyncTask<Void, Void, Void> {
@@ -63,13 +95,11 @@ public class SectionSpinnerActivity extends Activity {
             // JSON file URL address
             jsonobject = JSONfunctions
                     .getJSONfromURL(url);
-            Log.d(TAG,"Object:"+jsonobject.toString());
             Log.d(TAG,"URL:"+url);
             try {
 
                 // Locate the NodeList name
                 jsonarray = jsonobject.getJSONArray("sections");
-                Log.d(TAG,"TAILLE:"+jsonarray.length());
                 for (int i = 0; i < jsonarray.length(); i++) {
                     jsonobject = jsonarray.getJSONObject(i);
                     Sections s = new Sections(  jsonobject.optString("name"),
@@ -99,13 +129,14 @@ public class SectionSpinnerActivity extends Activity {
                             spinnerSections));
 
             // Spinner on item click listener
+
             spinnerSection
                     .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         public void onItemSelected(AdapterView<?> arg0,
                                                    View arg1, int position, long arg3) {
-
-                            txtName.setText("Name : "
-                                    + sections.get(position).getName());
+                                currentSection = sections.get(position);
+                                txtName.setText("Name : "
+                                        + currentSection.getName());
                         }
                         public void onNothingSelected(AdapterView<?> arg0) {
                             // TODO Auto-generated method stub

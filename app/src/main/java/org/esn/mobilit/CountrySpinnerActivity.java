@@ -3,6 +3,7 @@ package org.esn.mobilit;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +15,6 @@ import android.widget.TextView;
 
 import org.esn.mobilit.pojo.Country;
 import org.esn.mobilit.pojo.Section;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -34,6 +34,7 @@ public class CountrySpinnerActivity extends Activity {
     JSONArray jsonarray;
     Intent intent;
     Context context = this;
+    private Country currentCountry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,11 +108,30 @@ public class CountrySpinnerActivity extends Activity {
                                 txtUrl.setText("URL : "
                                         + countries.get(position).getUrl());
 
+                                //Set currentCountry
+                                currentCountry = countries.get(position);
+
+                                //Change preferences
+                                SharedPreferences.Editor spOptionEditor;
+                                SharedPreferences spOptions;
+
+                                    //Init
+                                    spOptions = getSharedPreferences("section", 0);
+
+                                    //Change
+                                    spOptionEditor = spOptions.edit();
+                                    spOptionEditor.putString("CODE_COUNTRY", currentCountry.getCode_country());
+                                    spOptionEditor.commit();
+
+                                finish();
+                                /*
+                                //Load new Activity
                                 intent = new Intent(context, SectionSpinnerActivity.class);
                                 intent.putExtra("code_country", countries.get(position).getCode_country());
 
-                                // on démare l'activity avec l'id
+                                // Start new Activity
                                 startActivity(intent);
+                                */
                             }
                             count++;
                         }
