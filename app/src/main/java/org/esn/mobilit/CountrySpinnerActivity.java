@@ -1,8 +1,6 @@
 package org.esn.mobilit;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,28 +11,19 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.esn.mobilit.pojo.Country;
-import org.esn.mobilit.pojo.Section;
+import org.esn.mobilit.pojo.Countries;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * Created by Spider on 02/12/14.
- */
 public class CountrySpinnerActivity extends Activity {
 
-    private static final String TAG = CountrySpinnerActivity.class.getSimpleName();
-    ArrayList<String> spinnerCountries;
-    ArrayList<Country> countries;
-    ArrayList<String> spinnerSections;
-    ArrayList<Section> sections;
-    JSONObject jsonobject;
-    JSONArray jsonarray;
-    Intent intent;
-    Context context = this;
-    private Country currentCountry;
+    private ArrayList<String> spinnerCountries;
+    private ArrayList<Countries> countries_list;
+    private JSONObject jsonobject;
+    private JSONArray jsonarray;
+    private Countries currentCountry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +39,7 @@ public class CountrySpinnerActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             // Locate the WorldPopulation Class
-            countries = new ArrayList<Country>();
+            countries_list = new ArrayList<Countries>();
             // Create an array to populate the spinner
             spinnerCountries = new ArrayList<String>();
             // JSON file URL address
@@ -63,11 +52,11 @@ public class CountrySpinnerActivity extends Activity {
                 for (int i = 0; i < jsonarray.length(); i++) {
                     jsonobject = jsonarray.getJSONObject(i);
 
-                    Country c = new Country(jsonobject.optString("code"),jsonobject.optString("name"),jsonobject.optString("url"));
-                    countries.add(c);
+                    Countries countries_object = new Countries(jsonobject.optString("name"),jsonobject.optString("url"),jsonobject.optString("code_country"));
+                    countries_list.add(countries_object);
 
                     // Populate spinner with country names
-                    spinnerCountries.add(c.getName());
+                    spinnerCountries.add(countries_object.getName());
                 }
             } catch (Exception e) {
                 Log.e("Error", e.getMessage());
@@ -94,7 +83,6 @@ public class CountrySpinnerActivity extends Activity {
                         public void onItemSelected(AdapterView<?> arg0,
                                                    View arg1, int position, long arg3) {
                             if(count >= 1) {
-                                // TODO Auto-generated method stub
                                 // Locate the textviews in activity_main.xml
                                 TextView txtName = (TextView) findViewById(R.id.name);
                                 TextView txtCode = (TextView) findViewById(R.id.code);
@@ -102,14 +90,14 @@ public class CountrySpinnerActivity extends Activity {
 
                                 // Set the text followed by the position
                                 txtName.setText("Name : "
-                                        + countries.get(position).getName());
+                                        + countries_list.get(position).getName());
                                 txtCode.setText("Code : "
-                                        + countries.get(position).getCode_country());
+                                        + countries_list.get(position).getCode_country());
                                 txtUrl.setText("URL : "
-                                        + countries.get(position).getUrl());
+                                        + countries_list.get(position).getUrl());
 
                                 //Set currentCountry
-                                currentCountry = countries.get(position);
+                                currentCountry = countries_list.get(position);
 
                                 //Change preferences
                                 SharedPreferences.Editor spOptionEditor;
@@ -124,22 +112,11 @@ public class CountrySpinnerActivity extends Activity {
                                     spOptionEditor.commit();
 
                                 finish();
-                                /*
-                                //Load new Activity
-                                intent = new Intent(context, SectionSpinnerActivity.class);
-                                intent.putExtra("code_country", countries.get(position).getCode_country());
-
-                                // Start new Activity
-                                startActivity(intent);
-                                */
                             }
                             count++;
                         }
 
-                        @Override
-                        public void onNothingSelected(AdapterView<?> arg0) {
-                            // TODO Auto-generated method stub
-                        }
+                        public void onNothingSelected(AdapterView<?> arg0) {}
                     });
         }
     }

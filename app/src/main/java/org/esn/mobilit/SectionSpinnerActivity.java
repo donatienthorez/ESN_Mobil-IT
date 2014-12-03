@@ -17,15 +17,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * Created by Spider on 02/12/14.
- */
 public class SectionSpinnerActivity extends Activity {
 
     private static final String TAG = SectionSpinnerActivity.class.getSimpleName();
-    String code_country, code_section;
+    String code_country;
     ArrayList<String> spinnerSections;
-    ArrayList<Sections> sections;
+    ArrayList<Sections> sections_list;
     JSONObject jsonobject;
     JSONArray jsonarray;
     TextView txtName;
@@ -86,8 +83,9 @@ public class SectionSpinnerActivity extends Activity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            // Locate the WorldPopulation Class
-            sections = new ArrayList<Sections>();
+            // Create sections_list array
+            sections_list = new ArrayList<Sections>();
+
             // Create an array to populate the spinner
             spinnerSections = new ArrayList<String>();
 
@@ -102,11 +100,11 @@ public class SectionSpinnerActivity extends Activity {
                 jsonarray = jsonobject.getJSONArray("sections");
                 for (int i = 0; i < jsonarray.length(); i++) {
                     jsonobject = jsonarray.getJSONObject(i);
-                    Sections s = new Sections(  jsonobject.optString("name"),
+                    Sections sections_object = new Sections(  jsonobject.optString("name"),
                                                 jsonobject.optString("url"),
                                                 jsonobject.optString("code_country"),
                                                 jsonobject.optString("code_section"));
-                    sections.add(s);
+                    sections_list.add(sections_object);
 
                     // Populate spinner with sections names
                     spinnerSections.add(jsonobject.optString("name"));
@@ -134,13 +132,11 @@ public class SectionSpinnerActivity extends Activity {
                     .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         public void onItemSelected(AdapterView<?> arg0,
                                                    View arg1, int position, long arg3) {
-                                currentSection = sections.get(position);
+                                currentSection = sections_list.get(position);
                                 txtName.setText("Name : "
                                         + currentSection.getName());
                         }
-                        public void onNothingSelected(AdapterView<?> arg0) {
-                            // TODO Auto-generated method stub
-                        }
+                        public void onNothingSelected(AdapterView<?> arg0) {}
                     });
         }
     }

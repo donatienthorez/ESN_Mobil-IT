@@ -59,7 +59,6 @@ public class ListActivity extends Activity {
 				intent.putExtras(bundle);
 				intent.putExtra("pos", pos);
 				startActivity(intent);
-
 			}
 		});
 
