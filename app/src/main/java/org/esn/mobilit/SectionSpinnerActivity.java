@@ -34,7 +34,7 @@ public class SectionSpinnerActivity extends Activity {
             String code_country = spOptions.getString("CODE_COUNTRY", null);
 
             String url = "http://www.esnlille.fr/WebServices/Sections/getSection.php?code_country="+code_country+"&code_section="+code_section;
-
+            Log.d(TAG, url);
             JSONObject jsonobject;
             JSONArray jsonarray;
 
@@ -69,20 +69,25 @@ public class SectionSpinnerActivity extends Activity {
 
         protected void onPostExecute(Void args) {
             Log.d(TAG,"onPostExecute");
-            //Creat SharedPreferences
-            SharedPreferences.Editor spOptionEditor;
-            SharedPreferences spOptions;
 
-            //Init
-            spOptions = getSharedPreferences("section", 0);
+            if (section != null) {
+                //Creat SharedPreferences
+                SharedPreferences.Editor spOptionEditor;
+                SharedPreferences spOptions;
 
-            //Change
-            spOptionEditor = spOptions.edit();
-            spOptionEditor.putString("SECTION_WEBSITE", section.getWebsite());
-            spOptionEditor.commit();
+                //Init
+                spOptions = getSharedPreferences("section", 0);
 
-            Log.d(TAG,"SECTION:"+section.toString());
-            finish();
+                //Change
+                spOptionEditor = spOptions.edit();
+                spOptionEditor.putString("SECTION_WEBSITE", section.getWebsite());
+                spOptionEditor.commit();
+
+                Log.d(TAG, "SECTION:" + section.toString());
+                finish();
+            }else{
+                Log.d(TAG, "SECTION:null");
+            }
         }
     }
 }

@@ -13,7 +13,7 @@ public class ChoiceActivity extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //reinitPreferences();
+        reinitPreferences();
         chooseActivity();
     }
 
@@ -50,19 +50,19 @@ public class ChoiceActivity extends Activity {
                 || (code_section == null    || code_section.equalsIgnoreCase(""))
                 || (section_website == null || section_website.equalsIgnoreCase(""))){
 
-            if (code_country == null || code_country.equalsIgnoreCase("")) {
-                Log.d(TAG, "CODE_COUNTRY :null");
-                if (code_section == null || code_section.equalsIgnoreCase("")) {
+            if (code_country == null || code_country.equalsIgnoreCase("")
+                || (code_section == null    || code_section.equalsIgnoreCase("")) ) {
+
+                if (code_country == null || code_country.equalsIgnoreCase("")) {
                     Log.d(TAG, "CODE_COUNTRY && CODE_SECTION :null");
                     intent = new Intent(this, CountriesSpinnerActivity.class);
                 } else {
-                    Log.d(TAG, "CODE_COUNTRY :" + code_country);
-                    if (section_website == null || section_website.equalsIgnoreCase("")) {
+                    if (code_section == null || code_section.equalsIgnoreCase("")) {
                         Log.d(TAG, "CODE_SECTION :" + code_section);
                         Log.d(TAG, "CODE_COUNTRY :" + code_country);
-                        intent = new Intent(this, SectionSpinnerActivity.class);
-                    } else {
                         intent = new Intent(this, SectionsSpinnerActivity.class);
+                    } else {
+                        intent = new Intent(this, SectionSpinnerActivity.class);
                     }
                 }
             }else{
