@@ -13,8 +13,8 @@ public class ChoiceActivity extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        reinitPreferences();
-        //chooseActivity();
+        //reinitPreferences();
+        chooseActivity();
     }
 
     protected void onResume(){
@@ -39,19 +39,31 @@ public class ChoiceActivity extends Activity {
         spOptions = getSharedPreferences("section", 0);
         String code_section = spOptions.getString("CODE_SECTION", null);
         String code_country = spOptions.getString("CODE_COUNTRY", null);
+        String section_website = spOptions.getString("SECTION_WEBSITE", null);
         Intent intent = null;
 
-        Log.d(TAG, "CODE_SECTION :" + code_section);
-        Log.d(TAG, "CODE_COUNTRY :" + code_country);
+        Log.d(TAG, "CODE_SECTION :"     + code_section);
+        Log.d(TAG, "CODE_COUNTRY :"     + code_country);
+        Log.d(TAG, "SECTION_WEBSITE :"  + section_website);
 
-        if ((code_country == null || code_country.equalsIgnoreCase("")) || (code_section == null || code_section.equalsIgnoreCase(""))){
+        if ((code_country == null || code_country.equalsIgnoreCase(""))
+                || (code_section == null    || code_section.equalsIgnoreCase(""))
+                || (section_website == null || section_website.equalsIgnoreCase(""))){
+
             if (code_country == null || code_country.equalsIgnoreCase("")) {
                 Log.d(TAG, "CODE_COUNTRY :null");
                 if (code_section == null || code_section.equalsIgnoreCase("")) {
                     Log.d(TAG, "CODE_COUNTRY && CODE_SECTION :null");
-                    intent = new Intent(this, CountrySpinnerActivity.class);
+                    intent = new Intent(this, CountriesSpinnerActivity.class);
                 } else {
-                    intent = new Intent(this, SectionSpinnerActivity.class);
+                    Log.d(TAG, "CODE_COUNTRY :" + code_country);
+                    if (section_website == null || section_website.equalsIgnoreCase("")) {
+                        Log.d(TAG, "CODE_SECTION :" + code_section);
+                        Log.d(TAG, "CODE_COUNTRY :" + code_country);
+                        intent = new Intent(this, SectionSpinnerActivity.class);
+                    } else {
+                        intent = new Intent(this, SectionsSpinnerActivity.class);
+                    }
                 }
             }else{
                 intent = new Intent(this, SectionSpinnerActivity.class);
@@ -60,6 +72,7 @@ public class ChoiceActivity extends Activity {
         else {
             Log.d(TAG, "CODE_SECTION :" + code_section);
             Log.d(TAG, "CODE_COUNTRY :" + code_country);
+            Log.d(TAG, "SECTION_WEBSITE :" + section_website);
             intent = new Intent(this, org.esn.mobilit.SplashActivity.class);
         }
 

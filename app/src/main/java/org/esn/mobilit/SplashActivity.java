@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import org.esn.mobilit.parser.DOMParser;
 import org.esn.mobilit.parser.RSSFeed;
+import org.esn.mobilit.pojo.Section;
 
 /*
  * Links
@@ -19,7 +20,8 @@ import org.esn.mobilit.parser.RSSFeed;
 public class SplashActivity extends Activity {
     private static final String TAG = SplashActivity.class.getSimpleName();
 	private String RSSFEEDURL = "http://esnlille.fr/events/feed";
-	RSSFeed feed;
+	private RSSFeed feed;
+    private Section section;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +53,7 @@ public class SplashActivity extends Activity {
 		} else {
 			// Connected - Start parsing
 			new AsyncLoadXMLFeed().execute();
-
+            //new DownloadJSONSection().execute();
 		}
 
 	}
@@ -60,10 +62,18 @@ public class SplashActivity extends Activity {
 
 		@Override
 		protected Void doInBackground(Void... params) {
+            // Get feed url
+            /*
+            SharedPreferences.Editor spOptionEditor;
+            SharedPreferences spOptions = getSharedPreferences("section", 0);
+            String base_url = spOptions.getString("SECTION_WEBSITE", null);
+            Log.d(TAG, "URL:" + base_url);*/
+
 			// Obtain feed
 			DOMParser myParser = new DOMParser();
 			feed = myParser.parseXml(RSSFEEDURL);
 			return null;
+            //return null;
 		}
 
 		@Override
@@ -83,5 +93,4 @@ public class SplashActivity extends Activity {
 		}
 
 	}
-
 }

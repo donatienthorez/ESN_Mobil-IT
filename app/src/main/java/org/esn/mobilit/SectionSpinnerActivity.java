@@ -5,110 +5,61 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
 
-import org.esn.mobilit.pojo.Sections;
+import org.esn.mobilit.pojo.Section;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 public class SectionSpinnerActivity extends Activity {
 
-    private static final String TAG = SectionSpinnerActivity.class.getSimpleName();
-    String code_country;
-    ArrayList<String> spinnerSections;
-    ArrayList<Sections> sections_list;
-    JSONObject jsonobject;
-    JSONArray jsonarray;
-    TextView txtName;
-    Sections currentSection;
+    private static final String TAG = SectionsSpinnerActivity.class.getSimpleName();
+    private Section section;
     private SharedPreferences spOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sections_spinner);
-
-        //Init components
-        txtName = (TextView) findViewById(R.id.section_name);
         spOptions = getSharedPreferences("section", 0);
-
-        //Check if from CountrySpinnerActivity
-        Bundle datas = getIntent().getExtras();
-        if (datas == null){
-            code_country = spOptions.getString("CODE_COUNTRY", null);
-        }else{
-            code_country = datas.getString("code_country");
-        }
-
-        if (code_country != null) {
-            Log.d(TAG, "Code_country:"+code_country);
-            new DownloadJSONSections().execute();
-        }else{
-            Log.d(TAG, "Code_country:null");
-        }
-
-
-
+        new DownloadJSONSection().execute();
     }
-
-    public void chooseSection(View view) {
-        Log.d(TAG,"Entering ChooseSection");
-
-        //Creat SharedPreferences
-        SharedPreferences.Editor spOptionEditor;
-        SharedPreferences spOptions;
-
-        //Init
-        spOptions = getSharedPreferences("section", 0);
-
-        //Change
-        spOptionEditor = spOptions.edit();
-        spOptionEditor.putString("CODE_SECTION", currentSection.getCode_section());
-        spOptionEditor.putString("CODE_COUNTRY", currentSection.getCode_country());
-        spOptionEditor.commit();
-
-
-        finish();
-    }
-
 
     // Download JSON file AsyncTask for Sections
-    private class DownloadJSONSections extends AsyncTask<Void, Void, Void> {
+    private class DownloadJSONSection extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
-            // Create sections_list array
-            sections_list = new ArrayList<Sections>();
+            SharedPreferences.Editor spOptionEditor;
+            SharedPreferences spOptions = getSharedPreferences("section", 0);
+            String code_section = spOptions.getString("CODE_SECTION", null);
+            String code_country = spOptions.getString("CODE_COUNTRY", null);
 
-            // Create an array to populate the spinner
-            spinnerSections = new ArrayList<String>();
+            String url = "http://www.esnlille.fr/WebServices/Sections/getSection.php?code_country="+code_country+"&code_section="+code_section;
 
-            String url = "http://www.esnlille.fr/WebServices/Sections/getSections.php?code_country="+code_country;
+            JSONObject jsonobject;
+            JSONArray jsonarray;
+
             // JSON file URL address
             jsonobject = JSONfunctions
                     .getJSONfromURL(url);
-            Log.d(TAG,"URL:"+url);
+
             try {
-
                 // Locate the NodeList name
-                jsonarray = jsonobject.getJSONArray("sections");
-                for (int i = 0; i < jsonarray.length(); i++) {
-                    jsonobject = jsonarray.getJSONObject(i);
-                    Sections sections_object = new Sections(  jsonobject.optString("name"),
-                                                jsonobject.optString("url"),
-                                                jsonobject.optString("code_country"),
-                                                jsonobject.optString("code_section"));
-                    sections_list.add(sections_object);
+                jsonarray = jsonobject.getJSONArray("section");
+                //for (int i = 0; i < jsonarray.length(); i++) {
+                    jsonobject = jsonarray.getJSONObject(0);
+                    section = new Section(
+                            jsonobject.optString("name"),
+                            jsonobject.optString("code_section"),
+                            jsonobject.optString("code_country"),
+                            jsonobject.optString("Address"),
+                            jsonobject.optString("Telephone"),
+                            jsonobject.optString("website"),
+                            jsonobject.optString("E-Mail"),
+                            jsonobject.optString("University")
+                    );
+                //}
 
-                    // Populate spinner with sections names
-                    spinnerSections.add(jsonobject.optString("name"));
-                }
+
             } catch (Exception e) {
                 Log.e("Error", e.getMessage());
                 e.printStackTrace();
@@ -117,27 +68,21 @@ public class SectionSpinnerActivity extends Activity {
         }
 
         protected void onPostExecute(Void args) {
-            // Locate the spinner in activity_main.xml
-            Spinner spinnerSection = (Spinner) findViewById(R.id.sections_spinner);
+            Log.d(TAG,"onPostExecute");
+            //Creat SharedPreferences
+            SharedPreferences.Editor spOptionEditor;
+            SharedPreferences spOptions;
 
-            // Spinner adapter
-            spinnerSection
-                    .setAdapter(new ArrayAdapter<String>(SectionSpinnerActivity.this,
-                            android.R.layout.simple_spinner_dropdown_item,
-                            spinnerSections));
+            //Init
+            spOptions = getSharedPreferences("section", 0);
 
-            // Spinner on item click listener
+            //Change
+            spOptionEditor = spOptions.edit();
+            spOptionEditor.putString("SECTION_WEBSITE", section.getWebsite());
+            spOptionEditor.commit();
 
-            spinnerSection
-                    .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        public void onItemSelected(AdapterView<?> arg0,
-                                                   View arg1, int position, long arg3) {
-                                currentSection = sections_list.get(position);
-                                txtName.setText("Name : "
-                                        + currentSection.getName());
-                        }
-                        public void onNothingSelected(AdapterView<?> arg0) {}
-                    });
+            Log.d(TAG,"SECTION:"+section.toString());
+            finish();
         }
     }
 }

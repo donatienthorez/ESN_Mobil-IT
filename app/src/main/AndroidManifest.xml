@@ -25,7 +25,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".CountrySpinnerActivity" />
+        <activity android:name=".CountriesSpinnerActivity" />
+        <activity android:name=".SectionsSpinnerActivity" />
         <activity android:name=".SectionSpinnerActivity" />
         <activity android:name=".ListActivity" />
         <activity android:name=".DetailActivity" />

@@ -17,7 +17,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class CountrySpinnerActivity extends Activity {
+public class CountriesSpinnerActivity extends Activity {
 
     private ArrayList<String> spinnerCountries;
     private ArrayList<Countries> countries_list;
@@ -71,7 +71,7 @@ public class CountrySpinnerActivity extends Activity {
             mySpinner.setSelected(false);
             // Spinner adapter
             mySpinner
-                    .setAdapter(new ArrayAdapter<String>(CountrySpinnerActivity.this,
+                    .setAdapter(new ArrayAdapter<String>(CountriesSpinnerActivity.this,
                             android.R.layout.simple_spinner_dropdown_item,
                             spinnerCountries));
 
