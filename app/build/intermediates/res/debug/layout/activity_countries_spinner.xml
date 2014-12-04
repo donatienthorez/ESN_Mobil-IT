@@ -29,4 +29,4 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Small Text"
         android:id="@+id/name" />
-</LinearLayout><!-- From: file:/Users/Spider/AndroidStudioProjects/Simple%20RSS%20Reader/app/src/main/res/layout/activity_countries_spinner.xml -->
+</LinearLayout><!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/layout/activity_countries_spinner.xml -->
