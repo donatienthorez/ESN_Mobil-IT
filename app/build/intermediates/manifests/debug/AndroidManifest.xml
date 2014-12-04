@@ -26,10 +26,14 @@
         </activity>
         <activity android:name="org.esn.mobilit.CountriesSpinnerActivity" />
         <activity android:name="org.esn.mobilit.SectionsSpinnerActivity" />
-        <activity android:name="org.esn.mobilit.SectionSpinnerActivity" />
+        <activity android:name="org.esn.mobilit.GetSectionDetail" />
         <activity android:name="org.esn.mobilit.ListActivity" />
         <activity android:name="org.esn.mobilit.DetailActivity" />
         <activity android:name="org.esn.mobilit.SplashActivity" />
+
+        <meta-data
+            android:name="com.crashlytics.ApiKey"
+            android:value="b48b1189884f02aa4c236e3ba1a41e6894133486" />
     </application>
 
 </manifest>

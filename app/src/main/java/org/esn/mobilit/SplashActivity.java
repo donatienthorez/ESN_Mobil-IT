@@ -84,13 +84,20 @@ public class SplashActivity extends Activity {
 			bundle.putSerializable("feed", feed);
 
 			// launch List activity
-			Intent intent = new Intent(SplashActivity.this, ListActivity.class);
-			intent.putExtras(bundle);
-			startActivity(intent);
+            Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+            intent.putExtras(bundle);
 
-			// kill this activity
-			finish();
+            startActivityForResult(intent, 1);
 		}
 
 	}
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == 1) {
+            setResult(RESULT_OK);
+            finish();
+        }
+    }
 }

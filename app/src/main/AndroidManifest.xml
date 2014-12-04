@@ -27,10 +27,11 @@
 
         <activity android:name=".CountriesSpinnerActivity" />
         <activity android:name=".SectionsSpinnerActivity" />
-        <activity android:name=".SectionSpinnerActivity" />
+        <activity android:name=".GetSectionDetail" />
         <activity android:name=".ListActivity" />
         <activity android:name=".DetailActivity" />
         <activity android:name=".SplashActivity" />
+        <meta-data android:name="com.crashlytics.ApiKey" android:value="b48b1189884f02aa4c236e3ba1a41e6894133486"/>
     </application>
 
 </manifest>

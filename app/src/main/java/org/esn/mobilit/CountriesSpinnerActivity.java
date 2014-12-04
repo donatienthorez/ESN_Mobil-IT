@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import org.esn.mobilit.pojo.Countries;
 import org.json.JSONArray;
@@ -83,19 +82,6 @@ public class CountriesSpinnerActivity extends Activity {
                         public void onItemSelected(AdapterView<?> arg0,
                                                    View arg1, int position, long arg3) {
                             if(count >= 1) {
-                                // Locate the textviews in activity_main.xml
-                                TextView txtName = (TextView) findViewById(R.id.name);
-                                TextView txtCode = (TextView) findViewById(R.id.code);
-                                TextView txtUrl = (TextView) findViewById(R.id.url);
-
-                                // Set the text followed by the position
-                                txtName.setText("Name : "
-                                        + countries_list.get(position).getName());
-                                txtCode.setText("Code : "
-                                        + countries_list.get(position).getCode_country());
-                                txtUrl.setText("URL : "
-                                        + countries_list.get(position).getUrl());
-
                                 //Set currentCountry
                                 currentCountry = countries_list.get(position);
 

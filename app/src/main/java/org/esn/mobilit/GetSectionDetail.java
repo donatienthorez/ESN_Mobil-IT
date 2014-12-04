@@ -10,7 +10,7 @@ import org.esn.mobilit.pojo.Section;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class SectionSpinnerActivity extends Activity {
+public class GetSectionDetail extends Activity {
 
     private static final String TAG = SectionsSpinnerActivity.class.getSimpleName();
     private Section section;

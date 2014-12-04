@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ import android.widget.TextView;
 import org.esn.mobilit.parser.RSSFeed;
 
 public class ListActivity extends Activity {
-
+    private static final String TAG = ListActivity.class.getSimpleName();
 	Application myApp;
 	RSSFeed feed;
 	ListView lv;
@@ -69,6 +70,13 @@ public class ListActivity extends Activity {
 		super.onDestroy();
 		adapter.notifyDataSetChanged();
 	}
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            setResult(RESULT_OK);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
 	class CustomListAdapter extends BaseAdapter {
 

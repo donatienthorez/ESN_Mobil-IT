@@ -5,23 +5,15 @@
     android:orientation="vertical">
 
     <Spinner
-        android:layout_width="130dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/sections_spinner"
-        android:layout_gravity="center" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Section"
-        android:id="@+id/section_name"
         android:layout_gravity="center" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Button"
+        android:text="I choose this one"
         android:id="@+id/button"
         android:onClick="chooseSection"
         android:layout_gravity="center_horizontal" />

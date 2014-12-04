@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 
 public class ChoiceActivity extends Activity {
@@ -13,6 +15,7 @@ public class ChoiceActivity extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         reinitPreferences();
         chooseActivity();
     }
@@ -31,6 +34,7 @@ public class ChoiceActivity extends Activity {
         spOptionEditor = spOptions.edit();
         spOptionEditor.putString("CODE_SECTION", null);
         spOptionEditor.putString("CODE_COUNTRY", null);
+        spOptionEditor.putString("SECTION_WEBSITE", null);
         spOptionEditor.commit();
     }
 
@@ -54,28 +58,34 @@ public class ChoiceActivity extends Activity {
                 || (code_section == null    || code_section.equalsIgnoreCase("")) ) {
 
                 if (code_country == null || code_country.equalsIgnoreCase("")) {
-                    Log.d(TAG, "CODE_COUNTRY && CODE_SECTION :null");
+
                     intent = new Intent(this, CountriesSpinnerActivity.class);
                 } else {
                     if (code_section == null || code_section.equalsIgnoreCase("")) {
-                        Log.d(TAG, "CODE_SECTION :" + code_section);
-                        Log.d(TAG, "CODE_COUNTRY :" + code_country);
                         intent = new Intent(this, SectionsSpinnerActivity.class);
                     } else {
-                        intent = new Intent(this, SectionSpinnerActivity.class);
+                        intent = new Intent(this, GetSectionDetail.class);
                     }
                 }
             }else{
-                intent = new Intent(this, SectionSpinnerActivity.class);
+                intent = new Intent(this, GetSectionDetail.class);
             }
+
+            startActivity(intent);
         }
         else {
-            Log.d(TAG, "CODE_SECTION :" + code_section);
-            Log.d(TAG, "CODE_COUNTRY :" + code_country);
-            Log.d(TAG, "SECTION_WEBSITE :" + section_website);
-            intent = new Intent(this, org.esn.mobilit.SplashActivity.class);
-        }
+            intent = new Intent(this, SplashActivity.class);
 
-        startActivity(intent);
+            startActivityForResult(intent, 1);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == 1) {
+            setResult(RESULT_OK);
+            finish();
+        }
     }
 }

@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import org.esn.mobilit.pojo.Sections;
 import org.json.JSONArray;
@@ -25,7 +24,6 @@ public class SectionsSpinnerActivity extends Activity {
     ArrayList<Sections> sections_list;
     JSONObject jsonobject;
     JSONArray jsonarray;
-    TextView txtName;
     Sections currentSection;
     private SharedPreferences spOptions;
 
@@ -35,7 +33,6 @@ public class SectionsSpinnerActivity extends Activity {
         setContentView(R.layout.activity_sections_spinner);
 
         //Init components
-        txtName = (TextView) findViewById(R.id.section_name);
         spOptions = getSharedPreferences("section", 0);
 
         //Check if from CountrySpinnerActivity
@@ -133,8 +130,6 @@ public class SectionsSpinnerActivity extends Activity {
                         public void onItemSelected(AdapterView<?> arg0,
                                                    View arg1, int position, long arg3) {
                                 currentSection = sections_list.get(position);
-                                txtName.setText("Name : "
-                                        + currentSection.getName());
                         }
                         public void onNothingSelected(AdapterView<?> arg0) {}
                     });
