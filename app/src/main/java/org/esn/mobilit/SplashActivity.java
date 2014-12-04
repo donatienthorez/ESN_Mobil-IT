@@ -5,13 +5,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 
 import org.esn.mobilit.parser.DOMParser;
 import org.esn.mobilit.parser.RSSFeed;
-import org.esn.mobilit.pojo.Section;
 
 /*
  * Links
@@ -19,9 +20,7 @@ import org.esn.mobilit.pojo.Section;
  */
 public class SplashActivity extends Activity {
     private static final String TAG = SplashActivity.class.getSimpleName();
-	private String RSSFEEDURL = "http://esnlille.fr/events/feed";
 	private RSSFeed feed;
-    private Section section;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,17 +62,16 @@ public class SplashActivity extends Activity {
 		@Override
 		protected Void doInBackground(Void... params) {
             // Get feed url
-            /*
             SharedPreferences.Editor spOptionEditor;
             SharedPreferences spOptions = getSharedPreferences("section", 0);
             String base_url = spOptions.getString("SECTION_WEBSITE", null);
-            Log.d(TAG, "URL:" + base_url);*/
+            String event_url = base_url + "/events/feed";
+            Log.d(TAG, "URL:" + event_url);
 
 			// Obtain feed
 			DOMParser myParser = new DOMParser();
-			feed = myParser.parseXml(RSSFEEDURL);
+			feed = myParser.parseXml(event_url);
 			return null;
-            //return null;
 		}
 
 		@Override
