@@ -5,7 +5,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -126,7 +125,6 @@ public class ListActivity extends Activity {
 
 			// Set the views in the layout
             imageLoader.DisplayImage(feed.getItem(pos).getImage(), iv);
-            Log.d(TAG,feed.getItem(pos).getImage());
 			tvTitle.setText(feed.getItem(pos).getTitle());
 			tvDate.setText(feed.getItem(pos).getDate());
 
