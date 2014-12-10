@@ -2,6 +2,7 @@ package org.esn.mobilit;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.WebSettings;
 import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebSettings.PluginState;
@@ -12,7 +13,7 @@ import android.widget.TextView;
 import org.esn.mobilit.parser.RSSFeed;
 
 public class DetailActivity extends Activity {
-
+    private static final String TAG = DetailActivity.class.getSimpleName();
 	RSSFeed feed;
 	TextView title,link;
 	WebView desc;
@@ -33,7 +34,7 @@ public class DetailActivity extends Activity {
 		// Initialize the views
 		title = (TextView) findViewById(R.id.title);
         link = (TextView) findViewById(R.id.linkDetail);
-		desc = (WebView) findViewById(R.id.desc);
+ 		desc = (WebView) findViewById(R.id.desc);
 
 		// set webview properties
 		WebSettings ws = desc.getSettings();
@@ -46,8 +47,11 @@ public class DetailActivity extends Activity {
 		// Set the views
 		title.setText(feed.getItem(pos).getTitle());
         link.setText(feed.getItem(pos).getLink());
-		desc.loadDataWithBaseURL("http://www.androidcentral.com/", feed
+		desc.loadDataWithBaseURL(null, feed
 				.getItem(pos).getDescription(), "text/html", "UTF-8", null);
+
+        Log.d(TAG,feed
+                .getItem(pos).getDescription());
 	}
 
 }

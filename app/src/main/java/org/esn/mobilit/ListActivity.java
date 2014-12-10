@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.esn.mobilit.image.ImageLoader;
 import org.esn.mobilit.parser.RSSFeed;
 
 public class ListActivity extends Activity {
@@ -81,11 +83,13 @@ public class ListActivity extends Activity {
 	class CustomListAdapter extends BaseAdapter {
 
 		private LayoutInflater layoutInflater;
+        public ImageLoader imageLoader;
 
 		public CustomListAdapter(ListActivity activity) {
 
 			layoutInflater = (LayoutInflater) activity
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            imageLoader = new ImageLoader(activity.getApplicationContext());
 		}
 
 		@Override
@@ -121,12 +125,13 @@ public class ListActivity extends Activity {
 			TextView tvDate = (TextView) listItem.findViewById(R.id.date);
 
 			// Set the views in the layout
+            imageLoader.DisplayImage(feed.getItem(pos).getImage(), iv);
+            Log.d(TAG,feed.getItem(pos).getImage());
 			tvTitle.setText(feed.getItem(pos).getTitle());
 			tvDate.setText(feed.getItem(pos).getDate());
 
 			return listItem;
 		}
-
 	}
 
 }

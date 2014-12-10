@@ -1,4 +1,4 @@
-package org.esn.mobilit;
+package org.esn.mobilit.firstlaunch;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -10,6 +10,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import org.esn.mobilit.JSONfunctions;
+import org.esn.mobilit.R;
 import org.esn.mobilit.pojo.Sections;
 import org.json.JSONArray;
 import org.json.JSONObject;

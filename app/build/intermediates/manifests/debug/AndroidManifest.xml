@@ -16,7 +16,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="org.esn.mobilit.ChoiceActivity"
+            android:name="org.esn.mobilit.firstlaunch.ChoiceActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,9 +24,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="org.esn.mobilit.CountriesSpinnerActivity" />
-        <activity android:name="org.esn.mobilit.SectionsSpinnerActivity" />
-        <activity android:name="org.esn.mobilit.GetSectionDetail" />
+        <activity android:name="org.esn.mobilit.firstlaunch.CountriesSpinnerActivity" />
+        <activity android:name="org.esn.mobilit.firstlaunch.SectionsSpinnerActivity" />
+        <activity android:name="org.esn.mobilit.firstlaunch.GetSectionDetail" />
         <activity android:name="org.esn.mobilit.ListActivity" />
         <activity android:name="org.esn.mobilit.DetailActivity" />
         <activity android:name="org.esn.mobilit.SplashActivity" />

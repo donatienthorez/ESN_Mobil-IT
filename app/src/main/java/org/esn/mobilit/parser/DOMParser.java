@@ -62,7 +62,6 @@ public class DOMParser {
 							// value to the Title in the RSSItem.
 							_item.setTitle(theString);
 						}
-
 						else if ("description".equals(nodeName)) {
 							_item.setDescription(theString);
 
@@ -72,11 +71,9 @@ public class DOMParser {
 							Elements imgEle = docHtml.select("img");
 							_item.setImage(imgEle.attr("src"));
 						}
-
                         else if ("link".equals(nodeName)) {
                             _item.setLink(theString);
                         }
-
 						else if ("pubDate".equals(nodeName)) {
 
 							// We replace the plus and zero's in the date with

@@ -29,28 +29,30 @@
             android:text="@string/linkText"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textStyle="bold" />
+        
+        <ScrollView
+            android:id="@+id/sv"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/layouttitle"
+            android:layout_marginTop="10dp" >
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent" >
+
+                <WebView
+                    android:id="@+id/desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:scrollbarStyle="insideOverlay"
+                    android:text="@string/desc" />
+            </RelativeLayout>
+        </ScrollView>
     </LinearLayout>
 
 
-    <ScrollView
-        android:id="@+id/sv"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/layouttitle"
-        android:layout_marginTop="10dp" >
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent" >
-
-            <WebView
-                android:id="@+id/desc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:scrollbarStyle="insideOverlay"
-                android:text="@string/desc" />
-        </RelativeLayout>
-    </ScrollView>
 
 </RelativeLayout>

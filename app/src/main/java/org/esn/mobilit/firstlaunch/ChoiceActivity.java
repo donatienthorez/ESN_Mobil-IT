@@ -1,4 +1,4 @@
-package org.esn.mobilit;
+package org.esn.mobilit.firstlaunch;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,6 +6,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import com.crashlytics.android.Crashlytics;
+
+import org.esn.mobilit.SplashActivity;
+
 import io.fabric.sdk.android.Fabric;
 
 
@@ -16,7 +19,6 @@ public class ChoiceActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
-        reinitPreferences();
         chooseActivity();
     }
 

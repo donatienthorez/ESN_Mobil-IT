@@ -1,4 +1,4 @@
-package org.esn.mobilit;
+package org.esn.mobilit.firstlaunch;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import org.esn.mobilit.JSONfunctions;
 import org.esn.mobilit.pojo.Section;
 import org.json.JSONArray;
 import org.json.JSONObject;
