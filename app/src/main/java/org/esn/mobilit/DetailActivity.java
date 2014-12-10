@@ -1,57 +1,62 @@
 package org.esn.mobilit;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
-import android.webkit.WebSettings;
-import android.webkit.WebSettings.LayoutAlgorithm;
-import android.webkit.WebSettings.PluginState;
-import android.webkit.WebView;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 
 import org.esn.mobilit.parser.RSSFeed;
 
-public class DetailActivity extends Activity {
-    private static final String TAG = DetailActivity.class.getSimpleName();
-	RSSFeed feed;
-	TextView title,link;
-	WebView desc;
+public class DetailActivity extends FragmentActivity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.detail);
+    RSSFeed feed;
+    int pos;
+    private DescAdapter adapter;
+    private ViewPager pager;
 
-		// Enable the vertical fading edge (by default it is disabled)
-		ScrollView sv = (ScrollView) findViewById(R.id.sv);
-		sv.setVerticalFadingEdgeEnabled(true);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.detail);
 
-		// Get the feed object and the position from the Intent
-		feed = (RSSFeed) getIntent().getExtras().get("feed");
-		int pos = getIntent().getExtras().getInt("pos");
+        // Get the feed object and the position from the Intent
+        feed = (RSSFeed) getIntent().getExtras().get("feed");
+        pos = getIntent().getExtras().getInt("pos");
 
-		// Initialize the views
-		title = (TextView) findViewById(R.id.title);
-        link = (TextView) findViewById(R.id.linkDetail);
- 		desc = (WebView) findViewById(R.id.desc);
+        // Initialize the views
+        adapter = new DescAdapter(getSupportFragmentManager());
+        pager = (ViewPager) findViewById(R.id.pager);
 
-		// set webview properties
-		WebSettings ws = desc.getSettings();
-		ws.setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
-		ws.getPluginState();
-		ws.setPluginState(PluginState.ON);
-		ws.setJavaScriptEnabled(true);
-		ws.setBuiltInZoomControls(true);
+        // Set Adapter to pager:
+        pager.setAdapter(adapter);
+        pager.setCurrentItem(pos);
 
-		// Set the views
-		title.setText(feed.getItem(pos).getTitle());
-        link.setText(feed.getItem(pos).getLink());
-		desc.loadDataWithBaseURL(null, feed
-				.getItem(pos).getDescription(), "text/html", "UTF-8", null);
+    }
 
-        Log.d(TAG,feed
-                .getItem(pos).getDescription());
-	}
+    public class DescAdapter extends FragmentStatePagerAdapter {
+        public DescAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
+        @Override
+        public int getCount() {
+            return feed.getItemCount();
+        }
+
+        @Override
+        public android.support.v4.app.Fragment getItem(int position) {
+
+            DetailFragment frag = new DetailFragment();
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("feed", feed);
+            bundle.putInt("pos", position);
+            frag.setArguments(bundle);
+
+            return frag;
+
+        }
+
+    }
 }

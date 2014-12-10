@@ -1,13 +1,13 @@
 package org.esn.mobilit.image;
 
+import android.graphics.Bitmap;
+import android.util.Log;
+
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import android.graphics.Bitmap;
-import android.util.Log;
 
 public class MemoryCache {
 
@@ -21,7 +21,7 @@ public class MemoryCache {
         //use 25% of available heap size
         setLimit(Runtime.getRuntime().maxMemory()/4);
     }
-    
+
     public void setLimit(long new_limit){
         limit=new_limit;
         Log.i(TAG, "MemoryCache will use up to "+limit/1024./1024.+"MB");
@@ -50,7 +50,7 @@ public class MemoryCache {
             th.printStackTrace();
         }
     }
-    
+
     private void checkSize() {
         Log.i(TAG, "cache size="+size+" length="+cache.size());
         if(size>limit){
