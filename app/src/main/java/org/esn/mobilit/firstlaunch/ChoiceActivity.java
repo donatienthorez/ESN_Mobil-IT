@@ -19,6 +19,7 @@ public class ChoiceActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
+        reinitPreferences();
         chooseActivity();
     }
 

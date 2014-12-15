@@ -13,7 +13,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="I choose this one"
+        android:text="@string/button_choice_section"
         android:id="@+id/button"
         android:onClick="chooseSection"
         android:layout_gravity="center_horizontal" />
