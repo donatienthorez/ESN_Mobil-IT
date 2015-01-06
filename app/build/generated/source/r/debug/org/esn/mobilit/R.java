@@ -841,10 +841,10 @@ containing a value of this type.
         public static final int always=0x7f09000f;
         public static final int arrow=0x7f090047;
         public static final int beginning=0x7f09000a;
-        public static final int buttonChoose=0x7f090040;
+        public static final int buttonChoose=0x7f090041;
         public static final int checkbox=0x7f09002d;
         public static final int chooseyourcountry=0x7f09003c;
-        public static final int chooseyoursection=0x7f09003e;
+        public static final int chooseyoursection=0x7f09003f;
         public static final int collapseActionView=0x7f090011;
         public static final int countries=0x7f09003d;
         public static final int date=0x7f090048;
@@ -873,7 +873,7 @@ containing a value of this type.
         public static final int never=0x7f09000d;
         public static final int none=0x7f090009;
         public static final int normal=0x7f090000;
-        public static final int pager=0x7f090041;
+        public static final int pager=0x7f09003e;
         public static final int progressBar=0x7f09004b;
         public static final int progress_circular=0x7f090018;
         public static final int progress_horizontal=0x7f090019;
@@ -888,7 +888,7 @@ containing a value of this type.
         public static final int search_plate=0x7f090036;
         public static final int search_src_text=0x7f090037;
         public static final int search_voice_btn=0x7f09003b;
-        public static final int sections_spinner=0x7f09003f;
+        public static final int sections_spinner=0x7f090040;
         public static final int shortcut=0x7f09002e;
         public static final int showCustom=0x7f090007;
         public static final int showHome=0x7f090004;
@@ -940,9 +940,10 @@ containing a value of this type.
         public static final int detail=0x7f03001c;
         public static final int detail_fragment=0x7f03001d;
         public static final int feed_list=0x7f03001e;
-        public static final int list_item=0x7f03001f;
-        public static final int splash=0x7f030020;
-        public static final int support_simple_spinner_dropdown_item=0x7f030021;
+        public static final int list_fragment=0x7f03001f;
+        public static final int list_item=0x7f030020;
+        public static final int splash=0x7f030021;
+        public static final int support_simple_spinner_dropdown_item=0x7f030022;
     }
     public static final class menu {
         public static final int activity_main=0x7f0e0000;

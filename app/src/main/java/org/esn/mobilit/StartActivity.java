@@ -62,7 +62,7 @@ public class StartActivity extends Activity {
         else {
             intent = new Intent(this, HomeActivity.class);
             Log.d(TAG,"HomeActivity");
-            startActivityForResult(intent, 1);
+            startActivity(intent);
         }
     }
 }

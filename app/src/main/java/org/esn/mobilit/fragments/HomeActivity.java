@@ -1,40 +1,58 @@
 package org.esn.mobilit.fragments;
 
-import android.app.Activity;
+import android.app.ActionBar;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 
 import org.esn.mobilit.R;
+import org.esn.mobilit.utils.MyFragmentPagerAdapter;
 
-public class HomeActivity extends Activity {
+public class HomeActivity extends FragmentActivity implements ActionBar.TabListener {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    ViewPager               myPager;
+    MyFragmentPagerAdapter  myAdapter;
+
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_main);
+
+        myAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),4);
+
+
+        final ActionBar actionBar = getActionBar();
+
+        actionBar.setHomeButtonEnabled(false);
+
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        myPager = (ViewPager) findViewById(R.id.pager);
+        myPager.setAdapter(myAdapter);
+        myPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+
+                actionBar.setSelectedNavigationItem(position);
+            }
+        });
+
+        actionBar.addTab(actionBar.newTab().setText("Events").setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setText("News").setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setText("Partners").setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setText("Guide").setTabListener(this));
     }
 
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        return true;
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+        myPager.setCurrentItem(tab.getPosition());
+    }
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
 }
