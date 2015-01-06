@@ -1,39 +1,68 @@
 package org.esn.mobilit;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
+
+import org.esn.mobilit.fragments.HomeActivity;
+import org.esn.mobilit.utils.firstlaunch.FirstLaunchActivity;
 
 
-public class StartActivity extends ActionBarActivity {
+public class StartActivity extends Activity {
+    private static final String TAG = StartActivity.class.getSimpleName();
+    private SharedPreferences spOptions;
+    private SharedPreferences.Editor spOptionEditor;
 
-    @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.splash);
+
+        //Init vars
+        spOptions = getSharedPreferences("section", 0);
+        reinitPreferences();
+        chooseActivity();
+    }
+    protected void reinitPreferences(){
+        //Init
+        spOptions = getSharedPreferences("section", 0);
+
+        //Change
+        spOptionEditor = spOptions.edit();
+        spOptionEditor.putString("CODE_SECTION", null);
+        spOptionEditor.putString("CODE_COUNTRY", null);
+        spOptionEditor.putString("SECTION_WEBSITE", null);
+        spOptionEditor.commit();
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    protected void onResume(){
+        super.onResume();
+        chooseActivity();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    protected void chooseActivity(){
+        String section_website = spOptions.getString("SECTION_WEBSITE", null);
+        Intent intent = null;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        String code_section = spOptions.getString("CODE_SECTION", null);
+        String code_country = spOptions.getString("CODE_COUNTRY", null);
+
+        Log.d(TAG, "CODE_SECTION :"     + code_section);
+        Log.d(TAG, "CODE_COUNTRY :"     + code_country);
+        Log.d(TAG, "SECTION_WEBSITE :"  + section_website);
+
+        if ((section_website == null || section_website.equalsIgnoreCase(""))){
+            intent = new Intent(this, FirstLaunchActivity.class);
+            Log.d(TAG,"FirstLaunchActivity");
+            startActivity(intent);
         }
-
-        return super.onOptionsItemSelected(item);
+        else {
+            intent = new Intent(this, HomeActivity.class);
+            Log.d(TAG,"HomeActivity");
+            startActivityForResult(intent, 1);
+        }
     }
 }

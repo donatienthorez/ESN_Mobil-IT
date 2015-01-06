@@ -934,17 +934,21 @@ containing a value of this type.
         public static final int abc_search_view=0x7f030016;
         public static final int abc_simple_decor=0x7f030017;
         public static final int activity_countries_spinner=0x7f030018;
-        public static final int activity_sections_spinner=0x7f030019;
-        public static final int detail=0x7f03001a;
-        public static final int detail_fragment=0x7f03001b;
-        public static final int feed_list=0x7f03001c;
-        public static final int list_item=0x7f03001d;
-        public static final int splash=0x7f03001e;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001f;
+        public static final int activity_home=0x7f030019;
+        public static final int activity_main=0x7f03001a;
+        public static final int activity_sections_spinner=0x7f03001b;
+        public static final int detail=0x7f03001c;
+        public static final int detail_fragment=0x7f03001d;
+        public static final int feed_list=0x7f03001e;
+        public static final int list_item=0x7f03001f;
+        public static final int splash=0x7f030020;
+        public static final int support_simple_spinner_dropdown_item=0x7f030021;
     }
     public static final class menu {
         public static final int activity_main=0x7f0e0000;
         public static final int choice=0x7f0e0001;
+        public static final int menu_home=0x7f0e0002;
+        public static final int menu_main=0x7f0e0003;
     }
     public static final class string {
         public static final int abc_action_bar_home_description=0x7f0c0000;
@@ -968,25 +972,28 @@ containing a value of this type.
         public static final int com_crashlytics_android_build_id=0x7f0c0012;
         public static final int date=0x7f0c0013;
         public static final int desc=0x7f0c0014;
-        public static final int loading=0x7f0c0015;
-        public static final int menu_settings=0x7f0c0016;
-        public static final int pref_default_display_name=0x7f0c0017;
-        public static final int pref_description_social_recommendations=0x7f0c0018;
-        public static final int pref_header_data_sync=0x7f0c0019;
-        public static final int pref_header_general=0x7f0c001a;
-        public static final int pref_header_notifications=0x7f0c001b;
-        public static final int pref_ringtone_silent=0x7f0c001c;
-        public static final int pref_title_add_friends_to_messages=0x7f0c001d;
-        public static final int pref_title_display_name=0x7f0c001e;
-        public static final int pref_title_new_message_notifications=0x7f0c001f;
-        public static final int pref_title_ringtone=0x7f0c0020;
-        public static final int pref_title_social_recommendations=0x7f0c0021;
-        public static final int pref_title_sync_frequency=0x7f0c0022;
-        public static final int pref_title_system_sync_settings=0x7f0c0023;
-        public static final int pref_title_vibrate=0x7f0c0024;
-        public static final int title=0x7f0c0025;
-        public static final int title_activity_settings=0x7f0c0026;
-        public static final int title_detailfragment=0x7f0c0027;
+        public static final int hello_world=0x7f0c0015;
+        public static final int loading=0x7f0c0016;
+        public static final int menu_settings=0x7f0c0017;
+        public static final int pref_default_display_name=0x7f0c0018;
+        public static final int pref_description_social_recommendations=0x7f0c0019;
+        public static final int pref_header_data_sync=0x7f0c001a;
+        public static final int pref_header_general=0x7f0c001b;
+        public static final int pref_header_notifications=0x7f0c001c;
+        public static final int pref_ringtone_silent=0x7f0c001d;
+        public static final int pref_title_add_friends_to_messages=0x7f0c001e;
+        public static final int pref_title_display_name=0x7f0c001f;
+        public static final int pref_title_new_message_notifications=0x7f0c0020;
+        public static final int pref_title_ringtone=0x7f0c0021;
+        public static final int pref_title_social_recommendations=0x7f0c0022;
+        public static final int pref_title_sync_frequency=0x7f0c0023;
+        public static final int pref_title_system_sync_settings=0x7f0c0024;
+        public static final int pref_title_vibrate=0x7f0c0025;
+        public static final int title=0x7f0c0026;
+        public static final int title_activity_home=0x7f0c0027;
+        public static final int title_activity_main=0x7f0c0028;
+        public static final int title_activity_settings=0x7f0c0029;
+        public static final int title_detailfragment=0x7f0c002a;
     }
     public static final class style {
         public static final int AppTheme=0x7f0d0000;

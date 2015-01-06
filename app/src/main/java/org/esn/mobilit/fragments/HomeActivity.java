@@ -1,13 +1,13 @@
 package org.esn.mobilit.fragments;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import org.esn.mobilit.R;
 
-public class HomeActivity extends ActionBarActivity {
+public class HomeActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

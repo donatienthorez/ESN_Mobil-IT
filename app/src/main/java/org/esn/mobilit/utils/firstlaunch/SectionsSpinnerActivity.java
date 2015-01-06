@@ -52,6 +52,26 @@ public class SectionsSpinnerActivity extends Activity {
         }
     }
 
+    public void chooseSection(View view) {
+        Log.d(TAG,"Entering ChooseSection");
+
+        //Creat SharedPreferences
+        SharedPreferences.Editor spOptionEditor;
+        SharedPreferences spOptions;
+
+        //Init
+        spOptions = getSharedPreferences("section", 0);
+
+        //Change
+        spOptionEditor = spOptions.edit();
+        spOptionEditor.putString("CODE_SECTION", currentSection.getCode_section());
+        spOptionEditor.putString("CODE_COUNTRY", currentSection.getCode_country());
+        spOptionEditor.commit();
+
+
+        finish();
+    }
+
     // Download JSON file AsyncTask for Sections
     private class DownloadJSONSections extends AsyncTask<Void, Void, Void> {
 
