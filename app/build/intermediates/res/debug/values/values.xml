@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings_activity_settings.xml -->
+    <!-- From: file:/home/aymeric/Documents/Android-Studio/ESN_Mobil-IT_aymeric/app/src/main/res/values/strings_activity_settings.xml -->
     <eat-comment/>
     <string-array name="pref_example_list_titles">
         <item>Always</item>
@@ -28,7 +28,7 @@
         <item>360</item>
         <item>-1</item>
     </string-array>
-    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
+    <!-- From: file:/home/aymeric/Documents/Android-Studio/ESN_Mobil-IT_aymeric/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
     <eat-comment/>
     <attr format="reference" name="actionBarDivider"/>
     <attr format="reference" name="actionBarItemBackground"/>
@@ -135,11 +135,11 @@
     <dimen name="abc_panel_menu_list_width">296dp</dimen>
     <dimen name="abc_search_view_preferred_width">320dip</dimen>
     <dimen name="abc_search_view_text_min_width">160dip</dimen>
-    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/dimens.xml -->
+    <!-- From: file:/home/aymeric/Documents/Android-Studio/ESN_Mobil-IT_aymeric/app/src/main/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
+    <!-- From: file:/home/aymeric/Documents/Android-Studio/ESN_Mobil-IT_aymeric/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
     <eat-comment/>
     <item name="dialog_fixed_height_major" type="dimen">80%</item>
     <item name="dialog_fixed_height_minor" type="dimen">100%</item>
@@ -165,24 +165,24 @@
     <string name="abc_searchview_description_voice">Voice search</string>
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
-    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/home/aymeric/Documents/Android-Studio/ESN_Mobil-IT_aymeric/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="action_settings">Action</string>
     <string name="app_name">Erasmus Student Network</string>
     <string name="button_choice_section">Validate</string>
     <string name="chooseyourcountry">Choose your Country</string>
     <string name="chooseyoursection">Choose your ESN Section</string>
-    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/com_crashlytics_export_strings.xml -->
+    <!-- From: file:/home/aymeric/Documents/Android-Studio/ESN_Mobil-IT_aymeric/app/src/main/res/values/com_crashlytics_export_strings.xml -->
     <eat-comment/>
-    <string name="com.crashlytics.android.build_id" translatable="false">977a6fe4-94c8-49b4-995b-c70988024cbe</string>
-    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings.xml -->
+    <string name="com.crashlytics.android.build_id" translatable="false">d140bbf2-fcd2-44a6-9057-48caeda45aa0</string>
+    <!-- From: file:/home/aymeric/Documents/Android-Studio/ESN_Mobil-IT_aymeric/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="date">Date</string>
     <string name="desc">Description webview here!</string>
     <string name="hello_world">Hello world!</string>
     <string name="loading">Loading please wait …</string>
     <string name="menu_settings">Settings</string>
-    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings_activity_settings.xml -->
+    <!-- From: file:/home/aymeric/Documents/Android-Studio/ESN_Mobil-IT_aymeric/app/src/main/res/values/strings_activity_settings.xml -->
     <eat-comment/>
     <string name="pref_default_display_name">John Smith</string>
     <string name="pref_description_social_recommendations">Recommendations for people to contact based on your message history</string>
@@ -198,21 +198,21 @@
     <string name="pref_title_sync_frequency">Sync frequency</string>
     <string name="pref_title_system_sync_settings">System sync settings</string>
     <string name="pref_title_vibrate">Vibrate</string>
-    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/home/aymeric/Documents/Android-Studio/ESN_Mobil-IT_aymeric/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="title">Titre</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_activity_main">MainActivity</string>
-    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings_activity_settings.xml -->
+    <!-- From: file:/home/aymeric/Documents/Android-Studio/ESN_Mobil-IT_aymeric/app/src/main/res/values/strings_activity_settings.xml -->
     <eat-comment/>
     <string name="title_activity_settings">Settings</string>
-    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/home/aymeric/Documents/Android-Studio/ESN_Mobil-IT_aymeric/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="title_detailfragment">Titreeeee !</string>
-    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/home/aymeric/Documents/Android-Studio/ESN_Mobil-IT_aymeric/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="AppTheme" parent="android:Theme.Light"/>
-    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
+    <!-- From: file:/home/aymeric/Documents/Android-Studio/ESN_Mobil-IT_aymeric/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
     <eat-comment/>
     <style name="TextAppearance.AppCompat.Base.CompactMenu.Dialog" parent="android:TextAppearance.Medium">
         <item name="android:textColor">@android:color/primary_text_light</item>

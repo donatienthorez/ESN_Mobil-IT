@@ -258,10 +258,10 @@ int id activity_chooser_view_content 0x7f090025
 int id always 0x7f09000f
 int id arrow 0x7f090047
 int id beginning 0x7f09000a
-int id buttonChoose 0x7f090040
+int id buttonChoose 0x7f090041
 int id checkbox 0x7f09002d
 int id chooseyourcountry 0x7f09003c
-int id chooseyoursection 0x7f09003e
+int id chooseyoursection 0x7f09003f
 int id collapseActionView 0x7f090011
 int id countries 0x7f09003d
 int id date 0x7f090048
@@ -290,7 +290,7 @@ int id middle 0x7f09000b
 int id never 0x7f09000d
 int id none 0x7f090009
 int id normal 0x7f090000
-int id pager 0x7f090041
+int id pager 0x7f09003e
 int id progressBar 0x7f09004b
 int id progress_circular 0x7f090018
 int id progress_horizontal 0x7f090019
@@ -305,7 +305,7 @@ int id search_mag_icon 0x7f090035
 int id search_plate 0x7f090036
 int id search_src_text 0x7f090037
 int id search_voice_btn 0x7f09003b
-int id sections_spinner 0x7f09003f
+int id sections_spinner 0x7f090040
 int id shortcut 0x7f09002e
 int id showCustom 0x7f090007
 int id showHome 0x7f090004
@@ -353,9 +353,10 @@ int layout activity_sections_spinner 0x7f03001b
 int layout detail 0x7f03001c
 int layout detail_fragment 0x7f03001d
 int layout feed_list 0x7f03001e
-int layout list_item 0x7f03001f
-int layout splash 0x7f030020
-int layout support_simple_spinner_dropdown_item 0x7f030021
+int layout list_fragment 0x7f03001f
+int layout list_item 0x7f030020
+int layout splash 0x7f030021
+int layout support_simple_spinner_dropdown_item 0x7f030022
 int menu activity_main 0x7f0e0000
 int menu choice 0x7f0e0001
 int menu menu_home 0x7f0e0002
