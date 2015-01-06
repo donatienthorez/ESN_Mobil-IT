@@ -1,4 +1,4 @@
-package org.esn.mobilit;
+package org.esn.mobilit.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -11,8 +11,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
-import org.esn.mobilit.parser.DOMParser;
-import org.esn.mobilit.parser.RSSFeed;
+import org.esn.mobilit.R;
+import org.esn.mobilit.utils.parser.DOMParser;
+import org.esn.mobilit.utils.parser.RSSFeed;
 
 /*
  * Links

@@ -167,19 +167,19 @@
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Action</string>
     <string name="app_name">Erasmus Student Network</string>
+    <string name="button_choice_section">Validate</string>
+    <string name="chooseyourcountry">Choose your Country</string>
+    <string name="chooseyoursection">Choose your ESN Section</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/com_crashlytics_export_strings.xml -->
     <eat-comment/>
-    <string name="com.crashlytics.android.build_id" translatable="false">963ba21d-605d-42ad-a930-b9622896b5d6</string>
+    <string name="com.crashlytics.android.build_id" translatable="false">31f61869-74c1-48d6-b788-5e5827a46d42</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="date">Date goes here!</string>
-    <string name="desc">Description goes here!</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="linkLabel">Link to web: </string>
-    <string name="linkText">Link goes here!</string>
-    <string name="loading">Loading please wait…</string>
+    <string name="date">Date</string>
+    <string name="desc">Description webview here!</string>
+    <string name="loading">Loading please wait …</string>
     <string name="menu_settings">Settings</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings_activity_settings.xml -->
     <eat-comment/>
@@ -199,12 +199,13 @@
     <string name="pref_title_vibrate">Vibrate</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="title">Title goes here!</string>
-    <string name="title_activity_choice">ChoiceActivity</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title">Titre</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings_activity_settings.xml -->
     <eat-comment/>
     <string name="title_activity_settings">Settings</string>
+    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="title_detailfragment">Titreeeee !</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="AppTheme" parent="android:Theme.Light"/>

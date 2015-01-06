@@ -1,4 +1,4 @@
-package org.esn.mobilit.image;
+package org.esn.mobilit.utils.image;
 
 import java.io.InputStream;
 import java.io.OutputStream;

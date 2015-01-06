@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Erasmus Student Network</string>
     <string name="loading">Veuillez patienter …</string>
-    <string name="button_choice_section">Je choisis celle-ci</string>
+    <string name="button_choice_section">Valider</string>
     <string name="desc">La description de la webview!</string>
+    <string name="title_detailfragment">Titreeeee !</string>
+    <string name="title">Titre</string>
+    <string name="date">Date</string>
+    <string name="menu_settings">Settings</string>
+    <string name="action_settings">Action</string>
+    <string name="chooseyourcountry">Choisi ton pays</string>
+    <string name="chooseyoursection">Choisi ta section ESN</string>
 </resources>

@@ -1,4 +1,4 @@
-package org.esn.mobilit.firstlaunch;
+package org.esn.mobilit.utils.firstlaunch;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -7,12 +7,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import org.esn.mobilit.JSONfunctions;
+import org.esn.mobilit.network.JSONfunctions;
 import org.esn.mobilit.R;
-import org.esn.mobilit.pojo.Countries;
+import org.esn.mobilit.models.Countries;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -25,12 +24,15 @@ public class CountriesSpinnerActivity extends Activity {
     private JSONObject jsonobject;
     private JSONArray jsonarray;
     private Countries currentCountry;
+    private int count=0;
+    private Spinner mySpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(CountriesSpinnerActivity.class.getSimpleName(),"onCreate:");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_countries_spinner);
-
+        setContentView(R.layout.splash);
+        mySpinner = (Spinner) findViewById(R.id.countries);
         new DownloadJSONCountries().execute();
     }
 
@@ -39,6 +41,7 @@ public class CountriesSpinnerActivity extends Activity {
 
         @Override
         protected Void doInBackground(Void... params) {
+            Log.d(CountriesSpinnerActivity.class.getSimpleName(),"doInBackground:");
             countries_list = new ArrayList<Countries>();
             // Create an array to populate the spinner
             spinnerCountries = new ArrayList<String>();
@@ -66,23 +69,24 @@ public class CountriesSpinnerActivity extends Activity {
         }
 
         protected void onPostExecute(Void args) {
+            Log.d(CountriesSpinnerActivity.class.getSimpleName(),"onPostExecute:");
             // Locate the spinner in activity_main.xml
-            Spinner mySpinner = (Spinner) findViewById(R.id.countries);
+            setContentView(R.layout.activity_countries_spinner);
+            mySpinner = (Spinner) findViewById(R.id.countries);
             mySpinner.setSelected(false);
+
             // Spinner adapter
-            mySpinner
-                    .setAdapter(new ArrayAdapter<String>(CountriesSpinnerActivity.this,
-                            android.R.layout.simple_spinner_dropdown_item,
-                            spinnerCountries));
+            mySpinner.setAdapter(new SpinnerAdapter(CountriesSpinnerActivity.this,spinnerCountries));
 
             // Spinner on item click listener
             mySpinner
                     .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        int count=0;
-
                         public void onItemSelected(AdapterView<?> arg0,
                                                    View arg1, int position, long arg3) {
+                            Log.d(CountriesSpinnerActivity.class.getSimpleName(),"COUNT:"+count);
+
                             if(count >= 1) {
+
                                 //Set currentCountry
                                 currentCountry = countries_list.get(position);
 
@@ -98,12 +102,15 @@ public class CountriesSpinnerActivity extends Activity {
                                     spOptionEditor.putString("CODE_COUNTRY", currentCountry.getCode_country());
                                     spOptionEditor.commit();
 
+                                Log.d(CountriesSpinnerActivity.class.getSimpleName(),"FINISH");
                                 finish();
                             }
                             count++;
                         }
 
-                        public void onNothingSelected(AdapterView<?> arg0) {}
+                        public void onNothingSelected(AdapterView<?> arg0) {
+                            Log.d(CountriesSpinnerActivity.class.getSimpleName(),"onNothingSelected:");
+                        }
                     });
         }
     }

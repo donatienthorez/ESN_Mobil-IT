@@ -1,4 +1,4 @@
-package org.esn.mobilit.firstlaunch;
+package org.esn.mobilit.utils.firstlaunch;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -6,8 +6,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
-import org.esn.mobilit.JSONfunctions;
-import org.esn.mobilit.pojo.Section;
+import org.esn.mobilit.network.JSONfunctions;
+import org.esn.mobilit.R;
+import org.esn.mobilit.models.Section;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -20,6 +21,7 @@ public class GetSectionDetail extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.splash);
         spOptions = getSharedPreferences("section", 0);
         new DownloadJSONSection().execute();
     }

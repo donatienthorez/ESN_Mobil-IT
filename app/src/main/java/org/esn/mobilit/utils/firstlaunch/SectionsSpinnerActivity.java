@@ -1,4 +1,4 @@
-package org.esn.mobilit.firstlaunch;
+package org.esn.mobilit.utils.firstlaunch;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -7,12 +7,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import org.esn.mobilit.JSONfunctions;
+import org.esn.mobilit.network.JSONfunctions;
 import org.esn.mobilit.R;
-import org.esn.mobilit.pojo.Sections;
+import org.esn.mobilit.models.Sections;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -51,31 +50,7 @@ public class SectionsSpinnerActivity extends Activity {
         }else{
             Log.d(TAG, "Code_country:null");
         }
-
-
-
     }
-
-    public void chooseSection(View view) {
-        Log.d(TAG,"Entering ChooseSection");
-
-        //Creat SharedPreferences
-        SharedPreferences.Editor spOptionEditor;
-        SharedPreferences spOptions;
-
-        //Init
-        spOptions = getSharedPreferences("section", 0);
-
-        //Change
-        spOptionEditor = spOptions.edit();
-        spOptionEditor.putString("CODE_SECTION", currentSection.getCode_section());
-        spOptionEditor.putString("CODE_COUNTRY", currentSection.getCode_country());
-        spOptionEditor.commit();
-
-
-        finish();
-    }
-
 
     // Download JSON file AsyncTask for Sections
     private class DownloadJSONSections extends AsyncTask<Void, Void, Void> {
@@ -120,10 +95,7 @@ public class SectionsSpinnerActivity extends Activity {
             Spinner spinnerSection = (Spinner) findViewById(R.id.sections_spinner);
 
             // Spinner adapter
-            spinnerSection
-                    .setAdapter(new ArrayAdapter<String>(SectionsSpinnerActivity.this,
-                            android.R.layout.simple_spinner_dropdown_item,
-                            spinnerSections));
+            spinnerSection.setAdapter(new SpinnerAdapter(SectionsSpinnerActivity.this,spinnerSections));
 
             // Spinner on item click listener
 

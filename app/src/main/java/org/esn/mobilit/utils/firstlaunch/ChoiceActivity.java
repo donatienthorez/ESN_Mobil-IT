@@ -1,13 +1,14 @@
-package org.esn.mobilit.firstlaunch;
+package org.esn.mobilit.utils.firstlaunch;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+
 import com.crashlytics.android.Crashlytics;
 
-import org.esn.mobilit.SplashActivity;
+import org.esn.mobilit.activities.SplashActivity;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -49,19 +50,17 @@ public class ChoiceActivity extends Activity {
         String section_website = spOptions.getString("SECTION_WEBSITE", null);
         Intent intent = null;
 
-        Log.d(TAG, "CODE_SECTION :"     + code_section);
-        Log.d(TAG, "CODE_COUNTRY :"     + code_country);
-        Log.d(TAG, "SECTION_WEBSITE :"  + section_website);
+        //Log.d(TAG, "CODE_SECTION :"     + code_section);
+        //Log.d(TAG, "CODE_COUNTRY :"     + code_country);
+        //Log.d(TAG, "SECTION_WEBSITE :"  + section_website);
 
         if ((code_country == null || code_country.equalsIgnoreCase(""))
                 || (code_section == null    || code_section.equalsIgnoreCase(""))
                 || (section_website == null || section_website.equalsIgnoreCase(""))){
-
             if (code_country == null || code_country.equalsIgnoreCase("")
                 || (code_section == null    || code_section.equalsIgnoreCase("")) ) {
-
                 if (code_country == null || code_country.equalsIgnoreCase("")) {
-
+                    Log.d(TAG,"NEW LOAD");
                     intent = new Intent(this, CountriesSpinnerActivity.class);
                 } else {
                     if (code_section == null || code_section.equalsIgnoreCase("")) {
@@ -78,7 +77,6 @@ public class ChoiceActivity extends Activity {
         }
         else {
             intent = new Intent(this, SplashActivity.class);
-
             startActivityForResult(intent, 1);
         }
     }

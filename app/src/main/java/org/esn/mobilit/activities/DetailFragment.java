@@ -1,4 +1,4 @@
-package org.esn.mobilit;
+package org.esn.mobilit.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,8 +11,9 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import org.esn.mobilit.image.FileCache;
-import org.esn.mobilit.parser.RSSFeed;
+import org.esn.mobilit.R;
+import org.esn.mobilit.utils.image.FileCache;
+import org.esn.mobilit.utils.parser.RSSFeed;
 
 
 public class DetailFragment extends Fragment {

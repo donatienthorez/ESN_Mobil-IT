@@ -1,4 +1,4 @@
-package org.esn.mobilit;
+package org.esn.mobilit.activities;
 
 import android.app.Activity;
 import android.app.Application;
@@ -16,8 +16,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.esn.mobilit.image.ImageLoader;
-import org.esn.mobilit.parser.RSSFeed;
+import org.esn.mobilit.R;
+import org.esn.mobilit.utils.image.ImageLoader;
+import org.esn.mobilit.utils.parser.RSSFeed;
 
 public class ListActivity extends Activity {
     private static final String TAG = ListActivity.class.getSimpleName();

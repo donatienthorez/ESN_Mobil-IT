@@ -1,4 +1,4 @@
-package org.esn.mobilit.pojo;
+package org.esn.mobilit.models;
 
 /**
  * Created by Spider on 03/12/14.
