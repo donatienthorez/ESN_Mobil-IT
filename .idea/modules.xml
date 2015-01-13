@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ESN_Mobil-IT.iml" filepath="$PROJECT_DIR$/ESN_Mobil-IT.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ESN_Mobil-IT_aymeric.iml" filepath="$PROJECT_DIR$/ESN_Mobil-IT_aymeric.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

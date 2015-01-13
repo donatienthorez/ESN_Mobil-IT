@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         applicationId "org.esn.mobilit"
-        minSdkVersion 8
+        minSdkVersion 14
         targetSdkVersion 20
     }
 
