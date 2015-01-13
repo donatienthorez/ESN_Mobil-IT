@@ -8,25 +8,43 @@ import android.support.v4.view.ViewPager;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.utils.MyFragmentPagerAdapter;
+import org.esn.mobilit.utils.parser.RSSFeed;
 
 public class HomeActivity extends FragmentActivity implements ActionBar.TabListener {
 
     ViewPager               myPager;
     MyFragmentPagerAdapter  myAdapter;
+    RSSFeed feedEvents, feedNews, feedPartners;
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("viewpagerid" , myPager.getId() );
+    }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
-        myAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),4);
+        // Get feed form the file
+        feedEvents = (RSSFeed) getIntent().getExtras().get("feedEvents");
+        feedNews = (RSSFeed) getIntent().getExtras().get("feedNews");
+        feedPartners = (RSSFeed) getIntent().getExtras().get("feedPartners");
 
+        //Init FragmentPagerAdapter
+        MyFragmentPagerAdapter fpa = new MyFragmentPagerAdapter(getSupportFragmentManager(),4);
+        fpa.setFeedEvents(feedEvents);
+        fpa.setFeedNews(feedNews);
+        fpa.setFeedPartners(feedPartners);
+        myAdapter = fpa;
 
+        //Init ActionBar
         final ActionBar actionBar = getActionBar();
-
         actionBar.setHomeButtonEnabled(false);
-
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
+        //Init Pager
         myPager = (ViewPager) findViewById(R.id.pager);
         myPager.setAdapter(myAdapter);
         myPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -37,6 +55,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
             }
         });
 
+        //Add tabs
         actionBar.addTab(actionBar.newTab().setText("Events").setTabListener(this));
         actionBar.addTab(actionBar.newTab().setText("News").setTabListener(this));
         actionBar.addTab(actionBar.newTab().setText("Partners").setTabListener(this));

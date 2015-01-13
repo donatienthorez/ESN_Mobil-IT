@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp" >
+    android:layout_height="match_parent">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/icon"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-    </android.support.v4.view.ViewPager>
+        android:layout_height="26dip"
+        android:id="@+id/firstLine"
+        android:layout_toRightOf="@id/icon"
+        android:textSize="16sp" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="26dip"
+        android:id="@+id/secondLine"
+        android:layout_toRightOf="@id/icon"
+        android:layout_below="@id/firstLine"
+        android:textSize="12sp" />
 </RelativeLayout><!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/layout/detail.xml -->

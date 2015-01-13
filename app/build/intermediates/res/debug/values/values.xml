@@ -28,6 +28,16 @@
         <item>360</item>
         <item>-1</item>
     </string-array>
+    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string-array name="titles">
+        <item>Home</item>
+        <item>Tutorials</item>
+        <item>My Apps</item>
+        <item>OS Versions</item>
+        <item>Tools</item>
+        <item>About Us</item>
+    </string-array>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
     <eat-comment/>
     <attr format="reference" name="actionBarDivider"/>
@@ -174,7 +184,7 @@
     <string name="chooseyoursection">Choose your ESN Section</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/com_crashlytics_export_strings.xml -->
     <eat-comment/>
-    <string name="com.crashlytics.android.build_id" translatable="false">c3430a7a-d333-4c1e-a5af-80b384e91c32</string>
+    <string name="com.crashlytics.android.build_id" translatable="false">900eeec6-fd45-4841-b056-b7e9f92ec782</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="date">Date</string>

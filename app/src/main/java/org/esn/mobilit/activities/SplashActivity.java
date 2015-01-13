@@ -9,9 +9,9 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 
 import org.esn.mobilit.R;
+import org.esn.mobilit.fragments.HomeActivity;
 import org.esn.mobilit.utils.parser.DOMParser;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
@@ -21,12 +21,18 @@ import org.esn.mobilit.utils.parser.RSSFeed;
  */
 public class SplashActivity extends Activity {
     private static final String TAG = SplashActivity.class.getSimpleName();
-	private RSSFeed feed;
+	private RSSFeed feedEvents, feedNews, feedPartners;
+    private int count;
+    private Intent intent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splash);
+
+        //Init Intent Manager
+        intent = new Intent(getApplicationContext(), HomeActivity.class);
+        count = 0;
 
 		ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		if (conMgr.getActiveNetworkInfo() == null
@@ -52,13 +58,17 @@ public class SplashActivity extends Activity {
 
 		} else {
 			// Connected - Start parsing
-			new AsyncLoadXMLFeed().execute();
-            //new DownloadJSONSection().execute();
+			new AsyncLoadXMLFeedEvents().execute();
+            new AsyncLoadXMLFeedNews().execute();
+            new AsyncLoadXMLFeedPartners().execute();
 		}
 
 	}
 
-	private class AsyncLoadXMLFeed extends AsyncTask<Void, Void, Void> {
+
+
+
+	private class AsyncLoadXMLFeedEvents extends AsyncTask<Void, Void, Void> {
 
 		@Override
 		protected Void doInBackground(Void... params) {
@@ -67,11 +77,10 @@ public class SplashActivity extends Activity {
             SharedPreferences spOptions = getSharedPreferences("section", 0);
             String base_url = spOptions.getString("SECTION_WEBSITE", null);
             String event_url = base_url + "/events/feed";
-            Log.d(TAG, "URL:" + event_url);
 
 			// Obtain feed
 			DOMParser myParser = new DOMParser();
-			feed = myParser.parseXml(event_url);
+            feedEvents = myParser.parseXml(event_url);
 			return null;
 		}
 
@@ -80,16 +89,89 @@ public class SplashActivity extends Activity {
 			super.onPostExecute(result);
 
 			Bundle bundle = new Bundle();
-			bundle.putSerializable("feed", feed);
+			bundle.putSerializable("feedEvents", feedEvents);
 
-			// launch List activity
-            Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+			//Put Extra
             intent.putExtras(bundle);
 
-            startActivityForResult(intent, 1);
+            count++;
+
+            if (count == 3)
+                startActivityForResult(intent, 1);
 		}
 
 	}
+
+    private class AsyncLoadXMLFeedNews extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            // Get feed url
+            SharedPreferences.Editor spOptionEditor;
+            SharedPreferences spOptions = getSharedPreferences("section", 0);
+            String base_url = spOptions.getString("SECTION_WEBSITE", null);
+            String event_url = base_url + "/news/feed";
+
+            // Obtain feed
+            DOMParser myParser = new DOMParser();
+            feedNews = myParser.parseXml(event_url);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("feedNews", feedNews);
+
+            //Put Extra
+            intent.putExtras(bundle);
+
+            count++;
+
+            if (count == 3)
+                startActivityForResult(intent, 1);
+        }
+
+    }
+
+    private class AsyncLoadXMLFeedPartners extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            // Get feed url
+            SharedPreferences.Editor spOptionEditor;
+            SharedPreferences spOptions = getSharedPreferences("section", 0);
+            String base_url = spOptions.getString("SECTION_WEBSITE", null);
+            String event_url = base_url + "/events/partners";
+
+            // Obtain feed
+            DOMParser myParser = new DOMParser();
+            feedPartners = myParser.parseXml(event_url);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("feedPartners", feedPartners);
+
+            //Put Extra
+            intent.putExtras(bundle);
+
+            count++;
+
+            if (count == 3)
+                startActivityForResult(intent, 1);
+        }
+
+    }
+
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

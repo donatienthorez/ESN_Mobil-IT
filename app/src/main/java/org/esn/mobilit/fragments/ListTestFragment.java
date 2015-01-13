@@ -48,4 +48,6 @@ public class ListTestFragment extends ListFragment {
 
         Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
     }
+
+
 }

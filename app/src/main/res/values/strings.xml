@@ -16,4 +16,12 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_home">HomeActivity</string>
 
+    <string-array name="titles">
+        <item>Home</item>
+        <item>Tutorials</item>
+        <item>My Apps</item>
+        <item>OS Versions</item>
+        <item>Tools</item>
+        <item>About Us</item>
+    </string-array>
 </resources>

@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
-import org.esn.mobilit.fragments.HomeActivity;
+import org.esn.mobilit.activities.SplashActivity;
 import org.esn.mobilit.utils.firstlaunch.FirstLaunchActivity;
 
 
@@ -56,8 +56,8 @@ public class StartActivity extends Activity {
         }
         //Si les détails de la section ne sont pas définit
         else {
-            intent = new Intent(this, HomeActivity.class);
-            Log.d(TAG,"HomeActivity");
+            intent = new Intent(this, SplashActivity.class);
+            Log.d(TAG,"SplashActivity");
             startActivity(intent);
         }
     }

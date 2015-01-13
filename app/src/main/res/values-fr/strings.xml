@@ -11,4 +11,13 @@
     <string name="action_settings">Action</string>
     <string name="chooseyourcountry">Choisi ton pays</string>
     <string name="chooseyoursection">Choisi ta section ESN</string>
+
+    <string-array name="titles">
+        <item>Home</item>
+        <item>Tutorials</item>
+        <item>My Apps</item>
+        <item>OS Versions</item>
+        <item>Tools</item>
+        <item>About Us</item>
+    </string-array>
 </resources>

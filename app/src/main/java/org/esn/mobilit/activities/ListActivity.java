@@ -1,7 +1,6 @@
 package org.esn.mobilit.activities;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +21,6 @@ import org.esn.mobilit.utils.parser.RSSFeed;
 
 public class ListActivity extends Activity {
     private static final String TAG = ListActivity.class.getSimpleName();
-	Application myApp;
 	RSSFeed feed;
 	ListView lv;
 	CustomListAdapter adapter;
@@ -32,8 +30,6 @@ public class ListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.feed_list);
-
-		myApp = getApplication();
 
 		// Get feed form the file
 		feed = (RSSFeed) getIntent().getExtras().get("feed");
