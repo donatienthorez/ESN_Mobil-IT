@@ -22,7 +22,8 @@ public class StartActivity extends Activity {
 
         //Init vars
         spOptions = getSharedPreferences("section", 0);
-        reinitPreferences();
+        //reinitPreferences();
+
         chooseActivity();
     }
     protected void reinitPreferences(){
@@ -47,18 +48,13 @@ public class StartActivity extends Activity {
         String section_website = spOptions.getString("SECTION_WEBSITE", null);
         Intent intent = null;
 
-        String code_section = spOptions.getString("CODE_SECTION", null);
-        String code_country = spOptions.getString("CODE_COUNTRY", null);
-
-        Log.d(TAG, "CODE_SECTION :"     + code_section);
-        Log.d(TAG, "CODE_COUNTRY :"     + code_country);
-        Log.d(TAG, "SECTION_WEBSITE :"  + section_website);
-
+        //Si les détails de la section sont définit
         if ((section_website == null || section_website.equalsIgnoreCase(""))){
             intent = new Intent(this, FirstLaunchActivity.class);
             Log.d(TAG,"FirstLaunchActivity");
             startActivity(intent);
         }
+        //Si les détails de la section ne sont pas définit
         else {
             intent = new Intent(this, HomeActivity.class);
             Log.d(TAG,"HomeActivity");

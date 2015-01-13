@@ -30,9 +30,11 @@ public class CountriesSpinnerActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(CountriesSpinnerActivity.class.getSimpleName(),"onCreate:");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
         mySpinner = (Spinner) findViewById(R.id.countries);
+
         new DownloadJSONCountries().execute();
     }
 
