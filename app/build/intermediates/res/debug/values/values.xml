@@ -184,7 +184,7 @@
     <string name="chooseyoursection">Choose your ESN Section</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/com_crashlytics_export_strings.xml -->
     <eat-comment/>
-    <string name="com.crashlytics.android.build_id" translatable="false">900eeec6-fd45-4841-b056-b7e9f92ec782</string>
+    <string name="com.crashlytics.android.build_id" translatable="false">1863822a-602d-4774-9510-940b3e9e148d</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="date">Date</string>

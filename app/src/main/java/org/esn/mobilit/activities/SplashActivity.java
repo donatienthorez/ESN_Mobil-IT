@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.fragments.HomeActivity;
@@ -79,6 +80,7 @@ public class SplashActivity extends Activity {
             String event_url = base_url + "/events/feed";
 
 			// Obtain feed
+            Log.d(TAG, "Debut Parser pour events/feed");
 			DOMParser myParser = new DOMParser();
             feedEvents = myParser.parseXml(event_url);
 			return null;
@@ -110,11 +112,12 @@ public class SplashActivity extends Activity {
             SharedPreferences.Editor spOptionEditor;
             SharedPreferences spOptions = getSharedPreferences("section", 0);
             String base_url = spOptions.getString("SECTION_WEBSITE", null);
-            String event_url = base_url + "/news/feed";
+            String url = base_url + "/news/feed";
 
             // Obtain feed
+            Log.d(TAG, "Debut Parser pour " + url);
             DOMParser myParser = new DOMParser();
-            feedNews = myParser.parseXml(event_url);
+            feedNews = myParser.parseXml(url);
             return null;
         }
 
@@ -144,9 +147,10 @@ public class SplashActivity extends Activity {
             SharedPreferences.Editor spOptionEditor;
             SharedPreferences spOptions = getSharedPreferences("section", 0);
             String base_url = spOptions.getString("SECTION_WEBSITE", null);
-            String event_url = base_url + "/events/partners";
+            String event_url = base_url + "/partners/feed";
 
             // Obtain feed
+            Log.d(TAG, "Debut Parser pour partners/feed");
             DOMParser myParser = new DOMParser();
             feedPartners = myParser.parseXml(event_url);
             return null;

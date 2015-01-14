@@ -43,6 +43,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         final ActionBar actionBar = getActionBar();
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        //actionBar.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
 
         //Init Pager
         myPager = (ViewPager) findViewById(R.id.pager);
@@ -50,7 +51,6 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         myPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-
                 actionBar.setSelectedNavigationItem(position);
             }
         });

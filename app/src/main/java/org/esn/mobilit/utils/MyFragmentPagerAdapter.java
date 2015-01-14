@@ -34,13 +34,16 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 
     @Override
     public Fragment getItem(int position) {
-        //Init eventsfragment
-        ListFragment events = new ListFragment();
-        events.setFeed(feedEvents);
-        ListFragment news = new ListFragment();
-        news.setFeed(feedNews);
-        ListFragment partners = new ListFragment();
-        partners.setFeed(feedPartners);
+        //Init Fragment
+        //Events
+        ListFragment events = new ListFragment(); events.setFeed(feedEvents); events.setType(0);
+
+
+        //News
+        ListFragment news = new ListFragment(); news.setFeed(feedNews); events.setType(1);
+
+        //Partners
+        ListFragment partners = new ListFragment(); partners.setFeed(feedPartners); events.setType(2);
 
         switch (position) {
             case 0: //Events

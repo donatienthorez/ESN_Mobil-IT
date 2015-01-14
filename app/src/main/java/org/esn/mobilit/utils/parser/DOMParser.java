@@ -1,5 +1,7 @@
 package org.esn.mobilit.utils.parser;
 
+import android.util.Log;
+
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.w3c.dom.Document;
@@ -7,8 +9,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,30 +20,45 @@ import javax.xml.parsers.DocumentBuilderFactory;
 public class DOMParser {
 
 	private RSSFeed _feed = new RSSFeed();
-
+    private static final String TAG = DOMParser.class.getSimpleName();
 	public RSSFeed parseXml(String xml) {
 
 		URL url = null;
 		try {
 			url = new URL(xml);
+            Log.d(TAG, "URL : " + url);
 		} catch (MalformedURLException e1) {
 			e1.printStackTrace();
+            Log.d(TAG, "ERROR MalformedURLException : " + e1.toString());
 		}
+
+        try {
+            URLConnection urlc = url.openConnection();
+            urlc.addRequestProperty("User-Agent", "firefox");
+        }catch (IOException ioe){
+            Log.d(TAG, "ERROR IOException : Adding User-agent : " + ioe.toString());
+        }
 
 		try {
 			// Create required instances
 			DocumentBuilderFactory dbf;
 			dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = null;
 
-			// Parse the xml
-			Document doc = db.parse(new InputSource(url.openStream()));
+            try{
+                doc = db.parse(new InputSource(url.openStream()));
+            }catch (Exception e){
+                Log.d(TAG, e.toString());
+                e.printStackTrace();
+            }
+
 			doc.getDocumentElement().normalize();
 
 			// Get all <item> tags.
-			NodeList nl = doc.getElementsByTagName("item");
+			NodeList nl = doc.getElementsByTagName("item");Log.d(TAG, "6");
 			int length = nl.getLength();
-
+            Log.d(TAG, "TAILLE AVANT PARSE : " + length);
 			for (int i = 0; i < length; i++) {
 				Node currentNode = nl.item(i);
 				RSSItem _item = new RSSItem();
@@ -88,7 +107,9 @@ public class DOMParser {
 
 				// add item to the list
 				_feed.addItem(_item);
-			}
+			} // end FOR
+
+            Log.d(TAG, "TAILLE APRES PARSE : " + _feed.getItemCount());
 
 		} catch (Exception e) {
 		}
@@ -96,6 +117,7 @@ public class DOMParser {
 		// Return the final feed once all the Items are added to the RSSFeed
 		// Object(_feed).
 		return _feed;
+
 	}
 
 }
