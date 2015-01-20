@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.esn.mobilit.R;
@@ -66,18 +67,29 @@ public class SplashActivity extends Activity {
 
 	}
 
+    // PREFERENCES
+    public String getDefaults(String key) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        return preferences.getString(key, null);
+    }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(resultCode)
+        {
+            case 1:
+                setResult(1);
+                finish();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
 	private class AsyncLoadXMLFeedEvents extends AsyncTask<Void, Void, Void> {
 
 		@Override
 		protected Void doInBackground(Void... params) {
             // Get feed url
-            SharedPreferences.Editor spOptionEditor;
-            SharedPreferences spOptions = getSharedPreferences("section", 0);
-            String base_url = spOptions.getString("SECTION_WEBSITE", null);
-            String event_url = base_url + "/events/feed";
+            String event_url = getDefaults("SECTION_WEBSITE") + "/events/feed";
 
 			// Obtain feed
             Log.d(TAG, "Debut Parser pour events/feed");
@@ -109,10 +121,7 @@ public class SplashActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             // Get feed url
-            SharedPreferences.Editor spOptionEditor;
-            SharedPreferences spOptions = getSharedPreferences("section", 0);
-            String base_url = spOptions.getString("SECTION_WEBSITE", null);
-            String url = base_url + "/news/feed";
+            String url = getDefaults("SECTION_WEBSITE") + "/news/feed";
 
             // Obtain feed
             Log.d(TAG, "Debut Parser pour " + url);
@@ -144,10 +153,7 @@ public class SplashActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             // Get feed url
-            SharedPreferences.Editor spOptionEditor;
-            SharedPreferences spOptions = getSharedPreferences("section", 0);
-            String base_url = spOptions.getString("SECTION_WEBSITE", null);
-            String event_url = base_url + "/partners/feed";
+            String event_url = getDefaults("SECTION_WEBSITE") + "/partners/feed";
 
             // Obtain feed
             Log.d(TAG, "Debut Parser pour partners/feed");
@@ -175,14 +181,4 @@ public class SplashActivity extends Activity {
     }
 
 
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == 1) {
-            setResult(RESULT_OK);
-            finish();
-        }
-    }
 }

@@ -86,43 +86,31 @@ category#android.intent.category.LAUNCHER
 ADDED from AndroidManifest.xml:27:17
 	android:name
 		ADDED from AndroidManifest.xml:27:27
-activity#org.esn.mobilit.utils.firstlaunch.CountriesSpinnerActivity
+activity#org.esn.mobilit.utils.firstlaunch.FirstLaunchActivity
 ADDED from AndroidManifest.xml:30:9
 	android:name
 		ADDED from AndroidManifest.xml:30:19
-activity#org.esn.mobilit.utils.firstlaunch.SectionsSpinnerActivity
+activity#org.esn.mobilit.activities.ListActivity
 ADDED from AndroidManifest.xml:31:9
 	android:name
 		ADDED from AndroidManifest.xml:31:19
-activity#org.esn.mobilit.utils.firstlaunch.GetSectionDetail
+activity#org.esn.mobilit.activities.DetailActivity
 ADDED from AndroidManifest.xml:32:9
 	android:name
 		ADDED from AndroidManifest.xml:32:19
-activity#org.esn.mobilit.utils.firstlaunch.FirstLaunchActivity
+activity#org.esn.mobilit.activities.SplashActivity
 ADDED from AndroidManifest.xml:33:9
 	android:name
 		ADDED from AndroidManifest.xml:33:19
-activity#org.esn.mobilit.activities.ListActivity
+activity#org.esn.mobilit.fragments.HomeActivity
 ADDED from AndroidManifest.xml:34:9
+	android:label
+		ADDED from AndroidManifest.xml:34:58
 	android:name
 		ADDED from AndroidManifest.xml:34:19
-activity#org.esn.mobilit.activities.DetailActivity
-ADDED from AndroidManifest.xml:35:9
-	android:name
-		ADDED from AndroidManifest.xml:35:19
-activity#org.esn.mobilit.activities.SplashActivity
+meta-data#com.crashlytics.ApiKey
 ADDED from AndroidManifest.xml:36:9
 	android:name
-		ADDED from AndroidManifest.xml:36:19
-activity#org.esn.mobilit.fragments.HomeActivity
-ADDED from AndroidManifest.xml:37:9
-	android:label
-		ADDED from AndroidManifest.xml:37:58
-	android:name
-		ADDED from AndroidManifest.xml:37:19
-meta-data#com.crashlytics.ApiKey
-ADDED from AndroidManifest.xml:39:9
-	android:name
-		ADDED from AndroidManifest.xml:40:13
+		ADDED from AndroidManifest.xml:37:13
 	android:value
-		ADDED from AndroidManifest.xml:41:13
+		ADDED from AndroidManifest.xml:38:13

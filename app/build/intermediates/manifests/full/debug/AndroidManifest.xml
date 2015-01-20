@@ -27,9 +27,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="org.esn.mobilit.utils.firstlaunch.CountriesSpinnerActivity" />
-        <activity android:name="org.esn.mobilit.utils.firstlaunch.SectionsSpinnerActivity" />
-        <activity android:name="org.esn.mobilit.utils.firstlaunch.GetSectionDetail" />
         <activity android:name="org.esn.mobilit.utils.firstlaunch.FirstLaunchActivity" />
         <activity android:name="org.esn.mobilit.activities.ListActivity" />
         <activity android:name="org.esn.mobilit.activities.DetailActivity" />

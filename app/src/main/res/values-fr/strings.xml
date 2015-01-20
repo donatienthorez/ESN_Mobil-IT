@@ -11,13 +11,11 @@
     <string name="action_settings">Action</string>
     <string name="chooseyourcountry">Choisi ton pays</string>
     <string name="chooseyoursection">Choisi ta section ESN</string>
+    <string name="ras_section_settings">Reset preferences</string>
 
-    <string-array name="titles">
-        <item>Home</item>
-        <item>Tutorials</item>
-        <item>My Apps</item>
-        <item>OS Versions</item>
-        <item>Tools</item>
-        <item>About Us</item>
-    </string-array>
+    <string name="firstlaunch_text">Lorem ipsum dolor sit amet, consectetur
+        adipiscing elit. Aliquam viverra metus ligula, tempus finibus lorem
+        dignissim sit amet. Maecenas tempus turpis sit amet velit ultrices,
+        id viverra tortor placerat. </string>
+    <string name="start_button">Launch awesome features</string>
 </resources>
