@@ -94,7 +94,7 @@ activity#org.esn.mobilit.activities.ListActivity
 ADDED from AndroidManifest.xml:31:9
 	android:name
 		ADDED from AndroidManifest.xml:31:19
-activity#org.esn.mobilit.activities.DetailActivity
+activity#org.esn.mobilit.fragments.DetailActivity
 ADDED from AndroidManifest.xml:32:9
 	android:name
 		ADDED from AndroidManifest.xml:32:19

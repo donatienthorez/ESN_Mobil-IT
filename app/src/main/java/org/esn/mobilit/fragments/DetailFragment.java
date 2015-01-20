@@ -1,4 +1,4 @@
-package org.esn.mobilit.activities;
+package org.esn.mobilit.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,14 +12,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import org.esn.mobilit.R;
-import org.esn.mobilit.utils.image.FileCache;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
 
 public class DetailFragment extends Fragment {
 	private int fPos;
 	RSSFeed fFeed;
-    FileCache fileCache;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,10 +43,6 @@ public class DetailFragment extends Fragment {
 		desc.loadDataWithBaseURL("http://www.androidcentral.com/", fFeed
 				.getItem(fPos).getDescription(), "text/html", "UTF-8", null);
 
-        // Set imageview
-        //ImageLoader il = new ImageLoader(this.getActivity().getApplicationContext());
-        //il.DisplayImage(fFeed.getItem(fPos).getImage(), imageView);
-
         // Enable the vertical fading edge (by default it is disabled)
         ScrollView sv = (ScrollView) view.findViewById(R.id.sv);
         sv.setVerticalFadingEdgeEnabled(true);
@@ -59,7 +53,6 @@ public class DetailFragment extends Fragment {
         ws.setLightTouchEnabled(false);
         ws.setPluginState(WebSettings.PluginState.ON);
         ws.setJavaScriptEnabled(true);
-
 
 		return view;
 	}

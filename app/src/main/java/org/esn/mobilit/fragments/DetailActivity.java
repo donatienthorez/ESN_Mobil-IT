@@ -1,4 +1,4 @@
-package org.esn.mobilit.activities;
+package org.esn.mobilit.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -32,7 +32,6 @@ public class DetailActivity extends FragmentActivity {
         // Set Adapter to pager:
         pager.setAdapter(adapter);
         pager.setCurrentItem(pos);
-
     }
 
     public class DescAdapter extends FragmentStatePagerAdapter {

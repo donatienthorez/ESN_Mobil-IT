@@ -22,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.esn.mobilit.R;
-import org.esn.mobilit.activities.DetailActivity;
 import org.esn.mobilit.utils.image.ImageLoader;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
@@ -35,8 +34,6 @@ public class ListFragment extends android.support.v4.app.ListFragment {
     private CustomListAdapter adapter;
     private int type;
     private Activity currentActivity;
-    private ImageLoader imageLoader;
-    private LayoutInflater layoutInflater;
 
     public void setFeed(RSSFeed feed){
         this.feed = feed;
@@ -53,32 +50,6 @@ public class ListFragment extends android.support.v4.app.ListFragment {
         // Set an Adapter to the ListView
         adapter = new CustomListAdapter(currentActivity);
         this.setListAdapter(adapter);
-
-        /*ArrayList list = new ArrayList();
-        layoutInflater = (LayoutInflater) currentActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        imageLoader = new ImageLoader(currentActivity.getApplicationContext());
-
-        for (int i = 0; i < feed.getItemCount(); i++) {
-            HashMap hashMap = new HashMap();
-            hashMap.put("title", feed.getItem(i).getTitle());
-            hashMap.put("date", feed.getItem(i).getDate());
-            //hashMap.put("thumb", R.drawable.ic_launcher);
-
-            //Image
-            View listItem = getView();
-            listItem = layoutInflater.inflate(R.layout.list_item, null);
-            ImageView iv = (ImageView) listItem.findViewById(R.id.thumb);
-            //imageLoader.DisplayImage(feed.getItem(i).getImage(), iv);
-            hashMap.put("thumb", imageLoader.getBitmap(feed.getItem(i).getImage()));
-
-            //Add hashMap to view
-            list.add(hashMap);
-        }
-
-        String[] from = new String[]{"title", "date", "thumb"};
-        int[] to = new int[]{R.id.title, R.id.date, R.id.thumb};
-        this.setListAdapter(new SimpleAdapter(getActivity(), list, R.layout.list_item, from, to));*/
-
     }
 
     public void onActivityCreated (Bundle savedInstanceState){

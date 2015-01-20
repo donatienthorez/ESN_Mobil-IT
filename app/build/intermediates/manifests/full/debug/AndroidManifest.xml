@@ -29,7 +29,7 @@
         </activity>
         <activity android:name="org.esn.mobilit.utils.firstlaunch.FirstLaunchActivity" />
         <activity android:name="org.esn.mobilit.activities.ListActivity" />
-        <activity android:name="org.esn.mobilit.activities.DetailActivity" />
+        <activity android:name="org.esn.mobilit.fragments.DetailActivity" />
         <activity android:name="org.esn.mobilit.activities.SplashActivity" />
         <activity
             android:name="org.esn.mobilit.fragments.HomeActivity"
