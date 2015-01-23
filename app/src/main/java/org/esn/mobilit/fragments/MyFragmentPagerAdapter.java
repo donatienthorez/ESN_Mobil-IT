@@ -1,12 +1,10 @@
-package org.esn.mobilit.utils;
+package org.esn.mobilit.fragments;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
-import org.esn.mobilit.fragments.ListFragment;
-import org.esn.mobilit.fragments.ListTestFragment;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter{

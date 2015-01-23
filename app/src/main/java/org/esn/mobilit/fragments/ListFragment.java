@@ -2,7 +2,6 @@ package org.esn.mobilit.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -35,6 +34,8 @@ public class ListFragment extends android.support.v4.app.ListFragment {
     private int type;
     private Activity currentActivity;
 
+    ListFragmentItemClickListener itemClickListener;
+
     public void setFeed(RSSFeed feed){
         this.feed = feed;
     }
@@ -42,7 +43,12 @@ public class ListFragment extends android.support.v4.app.ListFragment {
         this.type = type;
     }
 
-    @Override
+    /** An interface for defining the callback method */
+    public interface ListFragmentItemClickListener {
+        /** This method will be invoked when an item in the ListFragment is clicked */
+        void onListFragmentItemClick(int position, RSSFeed feed);
+    }
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
@@ -70,27 +76,15 @@ public class ListFragment extends android.support.v4.app.ListFragment {
         return inflater.inflate(R.layout.list_fragment, container, false);
     }
 
-    @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
-
-        // actions to be performed when a list item clicked
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("feed", feed);
-        Intent intent = new Intent(currentActivity,
-                DetailActivity.class);
-        intent.putExtras(bundle);
-        intent.putExtra("pos", position);
-        startActivity(intent);
+        itemClickListener.onListFragmentItemClick(position, feed);
     }
 
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_home, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle item selection
         switch (item.getItemId()) {
@@ -120,6 +114,13 @@ public class ListFragment extends android.support.v4.app.ListFragment {
     public void onAttach(Activity activity){
         super.onAttach(activity);
         currentActivity = activity;
+
+        try{
+            /** This statement ensures that the hosting activity implements ListFragmentItemClickListener */
+            itemClickListener = (ListFragmentItemClickListener) activity;
+        }catch(Exception e){
+            Toast.makeText(activity.getBaseContext(), "Exception",Toast.LENGTH_SHORT).show();
+        }
     }
 
     // PREFERENCES

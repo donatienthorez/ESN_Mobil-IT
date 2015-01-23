@@ -1,9 +1,8 @@
 package org.esn.mobilit.fragments;
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import org.esn.mobilit.R;
@@ -13,50 +12,38 @@ public class DetailActivity extends FragmentActivity {
 
     RSSFeed feed;
     int pos;
-    private DescAdapter adapter;
     private ViewPager pager;
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail);
 
-        // Get the feed object and the position from the Intent
-        feed = (RSSFeed) getIntent().getExtras().get("feed");
-        pos = getIntent().getExtras().getInt("pos");
+        /** Getting the fragment manager for fragment related operations */
+        android.app.FragmentManager fragmentManager = getFragmentManager();
 
-        // Initialize the views
-        adapter = new DescAdapter(getSupportFragmentManager());
-        pager = (ViewPager) findViewById(R.id.pager);
+        /** Getting the fragmenttransaction object, which can be used to add, remove or replace a fragment */
+        FragmentTransaction fragmentTransacton = fragmentManager.beginTransaction();
 
-        // Set Adapter to pager:
-        pager.setAdapter(adapter);
-        pager.setCurrentItem(pos);
-    }
+        /** Instantiating the fragment CountryDetailsFragment */
+        DetailsFragment detailsFragment = new DetailsFragment();
 
-    public class DescAdapter extends FragmentStatePagerAdapter {
-        public DescAdapter(FragmentManager fm) {
-            super(fm);
-        }
+        /** Creating a bundle object to pass the data(the clicked item's position) from the activity to the fragment */
+        Bundle b = new Bundle();
 
-        @Override
-        public int getCount() {
-            return feed.getItemCount();
-        }
+        /** Setting the data to the bundle object from the Intent*/
+        b.putInt("pos", getIntent().getIntExtra("pos", 0));
+        b.putSerializable("feed", getIntent().getSerializableExtra("feed"));
 
-        @Override
-        public android.support.v4.app.Fragment getItem(int position) {
+        /** Setting the bundle object to the fragment */
+        detailsFragment.setArguments(b);
 
-            DetailFragment frag = new DetailFragment();
+        /** Adding the fragment to the fragment transaction */
+        fragmentTransacton.add(R.id.details_fragment_container, detailsFragment);
 
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("feed", feed);
-            bundle.putInt("pos", position);
-            frag.setArguments(bundle);
 
-            return frag;
-
-        }
-
+        /** Making this transaction in effect */
+        fragmentTransacton.commit();
     }
 }

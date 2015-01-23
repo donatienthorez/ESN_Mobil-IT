@@ -35,10 +35,6 @@ public class FirstLaunchActivity extends Activity {
     private LinearLayout spinners_layout;
     private Button startButton;
 
-    // Preferences
-    private SharedPreferences spOptions;
-    private SharedPreferences.Editor spOptionEditor;
-
     // Attributes for spinnerCountries
     private Spinner spinnerCountries;
     private ArrayList<String> spinnerCountries_data;
@@ -61,10 +57,7 @@ public class FirstLaunchActivity extends Activity {
         //Change layout
         setContentView(R.layout.activity_firstlaunch);
 
-        //Init vars
-        spOptions = getSharedPreferences("section", 0);
         startButton = (Button) findViewById(R.id.start_button);
-        startButton.setEnabled(false);
 
         addSpinnerCountries();
     }
@@ -73,8 +66,11 @@ public class FirstLaunchActivity extends Activity {
         Log.d(TAG, " Country : " + getDefaults("CODE_COUNTRY"));
         Log.d(TAG, " Section : " + getDefaults("CODE_SECTION"));
         Log.d(TAG, " Section Website : " + getDefaults("SECTION_WEBSITE"));
-
         Log.d(TAG, "FINISH FIRSTLAUNCHACTIVITY");
+
+        setDefaults("CODE_COUNTRY", currentCountry.getCode_country());
+        setDefaults("CODE_SECTION", currentSection.getCode_section());
+        setDefaults("SECTION_WEBSITE", sectionChoosed.getWebsite());
 
         finish();
     }
@@ -86,10 +82,12 @@ public class FirstLaunchActivity extends Activity {
         if (spinnerCountries == null) {
             // Init Spiner and load data
             spinnerCountries = new Spinner(this);
-            new DownloadJSONCountries().execute();
 
-            progressBar = new ProgressBar(this);
-            spinners_layout.addView(progressBar);
+            //new DownloadJSONCountries().execute();
+            initFrenchCountry();
+
+            //progressBar = new ProgressBar(this);
+            //spinners_layout.addView(progressBar);
         }
     }
 
@@ -109,6 +107,7 @@ public class FirstLaunchActivity extends Activity {
     protected void onResume(){
         super.onResume();
         //chooseActivity();
+        startButton = (Button) findViewById(R.id.start_button);
         addSpinnerCountries();
     }
 
@@ -126,6 +125,18 @@ public class FirstLaunchActivity extends Activity {
     }
 
     //Download JSON
+    private void initFrenchCountry(){
+        startButton.setEnabled(false);
+        countries_list = new ArrayList<Countries>();
+        spinnerCountries_data = new ArrayList<String>();
+        currentCountry = new Countries("ESN France", "https:\\/\\/galaxy.esn.org\\/section\\/FR", "FR");
+        countries_list.add(currentCountry);
+        spinnerCountries_data.add("ESN France");
+        addSpinnerSections();
+        spinnerCountries.setAdapter(new SpinnerAdapter(FirstLaunchActivity.this,spinnerCountries_data));
+        spinners_layout.addView(spinnerCountries);
+    }
+
     private class DownloadJSONCountries extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -156,6 +167,9 @@ public class FirstLaunchActivity extends Activity {
                 Log.e("Error", e.getMessage());
                 e.printStackTrace();
             }
+
+            spinnerCountries.setSelection(10, true);
+
             return null;
         }
 
@@ -175,9 +189,6 @@ public class FirstLaunchActivity extends Activity {
 
                         //Set currentCountry
                         currentCountry = countries_list.get(position);
-
-                        //Change preferences
-                        setDefaults("CODE_COUNTRY", currentCountry.getCode_country());
 
                         //Load new spinner
                         addSpinnerSections();
@@ -250,9 +261,6 @@ public class FirstLaunchActivity extends Activity {
                             //Set current Section
                             currentSection = sections_list.get(position);
 
-                            //Change preferences
-                            setDefaults("CODE_SECTION", currentSection.getCode_section());
-
                             //Get section Details
                             new DownloadJSONSection().execute();
                         }
@@ -312,8 +320,6 @@ public class FirstLaunchActivity extends Activity {
             Log.d(TAG,"onPostExecute Detail Section");
 
             if (sectionChoosed != null) {
-                setDefaults("SECTION_WEBSITE", sectionChoosed.getWebsite());
-
                 Log.d(TAG, "SECTION:" + sectionChoosed.toString());
                 startButton.setEnabled(true);
             }else{

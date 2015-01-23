@@ -2,15 +2,16 @@ package org.esn.mobilit.fragments;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
 import org.esn.mobilit.R;
-import org.esn.mobilit.utils.MyFragmentPagerAdapter;
+import org.esn.mobilit.fragments.ListFragment.ListFragmentItemClickListener;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
-public class HomeActivity extends FragmentActivity implements ActionBar.TabListener {
+public class HomeActivity extends FragmentActivity implements ActionBar.TabListener, ListFragmentItemClickListener {
 
     ViewPager               myPager;
     MyFragmentPagerAdapter  myAdapter;
@@ -75,5 +76,20 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     public void onTabUnselected(Tab tab, android.app.FragmentTransaction ft){
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void onListFragmentItemClick(int position, RSSFeed currentfeed) {
+            /** Creating an intent object to start the CountryDetailsActivity */
+            Intent intent = new Intent(this, DetailActivity.class);
+
+            /** Setting data ( the clicked item's position ) to this intent */
+            Bundle b = new Bundle();
+            b.putSerializable("feed", currentfeed);
+            b.putInt("pos", position);
+            intent.putExtras(b);
+
+            /** Starting the activity by passing the implicit intent */
+            startActivity(intent);
     }
 }

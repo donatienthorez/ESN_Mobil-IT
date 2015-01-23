@@ -122,6 +122,7 @@ public class SplashActivity extends Activity {
         protected Void doInBackground(Void... params) {
             // Get feed url
             String url = getDefaults("SECTION_WEBSITE") + "/news/feed";
+            //String url = "http://esnlille.fr/BuddySystem/test.xml";
 
             // Obtain feed
             Log.d(TAG, "Debut Parser pour " + url);
