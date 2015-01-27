@@ -240,7 +240,7 @@ public class FirstLaunchActivity extends Activity {
                     spinnerSections_data.add(jsonobject.optString("name"));
                 }
             } catch (Exception e) {
-                Log.e("Error", e.getMessage());
+                Log.d(TAG,"Error" + e.getMessage());
                 e.printStackTrace();
             }
             return null;

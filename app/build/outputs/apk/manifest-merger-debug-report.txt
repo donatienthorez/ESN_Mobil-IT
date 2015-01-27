@@ -18,6 +18,8 @@ ADDED from AndroidManifest.xml:7:5
 MERGED from com.android.support:appcompat-v7:20.0.0:16:5
 MERGED from com.android.support:support-v4:20.0.0:16:5
 MERGED from com.android.support:support-v4:20.0.0:16:5
+MERGED from com.google.android.gms:play-services:3.1.59:7:5
+MERGED from com.android.support:support-v4:20.0.0:16:5
 MERGED from com.crashlytics.sdk.android:crashlytics:2.1.0:7:5
 MERGED from com.crashlytics.sdk.android:beta:1.0.2:7:5
 MERGED from io.fabric.sdk.android:fabric:1.0.2:7:5
@@ -49,13 +51,36 @@ uses-permission#android.permission.ACCESS_WIFI_STATE
 ADDED from AndroidManifest.xml:14:5
 	android:name
 		ADDED from AndroidManifest.xml:14:22
-uses-permission#android.permission.READ_PHONE_STATE
+uses-permission#android.permission.GET_ACCOUNTS
 ADDED from AndroidManifest.xml:15:5
 	android:name
 		ADDED from AndroidManifest.xml:15:22
-application
+uses-permission#android.permission.WAKE_LOCK
+ADDED from AndroidManifest.xml:16:5
+	android:name
+		ADDED from AndroidManifest.xml:16:22
+uses-permission#android.permission.READ_PHONE_STATE
 ADDED from AndroidManifest.xml:17:5
+	android:name
+		ADDED from AndroidManifest.xml:17:22
+permission#org.esn.mobilit.permission.C2D_MESSAGE
+ADDED from AndroidManifest.xml:21:5
+	android:protectionLevel
+		ADDED from AndroidManifest.xml:22:9
+	android:name
+		ADDED from AndroidManifest.xml:21:17
+uses-permission#org.esn.mobilit.permission.C2D_MESSAGE
+ADDED from AndroidManifest.xml:23:5
+	android:name
+		ADDED from AndroidManifest.xml:23:22
+uses-permission#com.google.android.c2dm.permission.RECEIVE
+ADDED from AndroidManifest.xml:24:5
+	android:name
+		ADDED from AndroidManifest.xml:24:22
+application
+ADDED from AndroidManifest.xml:28:5
 MERGED from com.android.support:appcompat-v7:20.0.0:17:5
+MERGED from com.android.support:support-v4:20.0.0:17:5
 MERGED from com.android.support:support-v4:20.0.0:17:5
 MERGED from com.android.support:support-v4:20.0.0:17:5
 MERGED from com.crashlytics.sdk.android:crashlytics:2.1.0:13:5
@@ -65,52 +90,72 @@ MERGED from com.crashlytics.sdk.android:answers:1.0.2:11:5
 MERGED from io.fabric.sdk.android:fabric:1.0.2:11:5
 MERGED from io.fabric.sdk.android:fabric:1.0.2:11:5
 	android:label
-		ADDED from AndroidManifest.xml:19:9
+		ADDED from AndroidManifest.xml:30:9
 	android:icon
-		ADDED from AndroidManifest.xml:18:9
+		ADDED from AndroidManifest.xml:29:9
 	android:theme
-		ADDED from AndroidManifest.xml:20:9
-activity#org.esn.mobilit.StartActivity
-ADDED from AndroidManifest.xml:21:9
-	android:theme
-		ADDED from AndroidManifest.xml:23:13
-	android:name
-		ADDED from AndroidManifest.xml:22:13
-intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:24:13
-action#android.intent.action.MAIN
-ADDED from AndroidManifest.xml:25:17
-	android:name
-		ADDED from AndroidManifest.xml:25:25
-category#android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:27:17
-	android:name
-		ADDED from AndroidManifest.xml:27:27
-activity#org.esn.mobilit.utils.firstlaunch.FirstLaunchActivity
-ADDED from AndroidManifest.xml:30:9
-	android:name
-		ADDED from AndroidManifest.xml:30:19
-activity#org.esn.mobilit.activities.ListActivity
-ADDED from AndroidManifest.xml:31:9
-	android:name
-		ADDED from AndroidManifest.xml:31:19
-activity#org.esn.mobilit.fragments.DetailActivity
-ADDED from AndroidManifest.xml:32:9
-	android:name
-		ADDED from AndroidManifest.xml:32:19
-activity#org.esn.mobilit.activities.SplashActivity
+		ADDED from AndroidManifest.xml:31:9
+receiver#org.esn.mobilit.GcmBroadcastReceiver
 ADDED from AndroidManifest.xml:33:9
+	android:permission
+		ADDED from AndroidManifest.xml:34:13
 	android:name
 		ADDED from AndroidManifest.xml:33:19
+intent-filter#com.google.android.c2dm.intent.RECEIVE+com.google.android.c2dm.intent.REGISTRATION+org.esn.mobilit.android
+ADDED from AndroidManifest.xml:35:13
+action#com.google.android.c2dm.intent.RECEIVE
+ADDED from AndroidManifest.xml:36:17
+	android:name
+		ADDED from AndroidManifest.xml:36:25
+action#com.google.android.c2dm.intent.REGISTRATION
+ADDED from AndroidManifest.xml:37:17
+	android:name
+		ADDED from AndroidManifest.xml:37:25
+category#org.esn.mobilit.android
+ADDED from AndroidManifest.xml:38:17
+	android:name
+		ADDED from AndroidManifest.xml:38:27
+service#org.esn.mobilit.GcmIntentService
+ADDED from AndroidManifest.xml:41:9
+	android:name
+		ADDED from AndroidManifest.xml:41:18
+activity#org.esn.mobilit.StartActivity
+ADDED from AndroidManifest.xml:43:9
+	android:theme
+		ADDED from AndroidManifest.xml:45:13
+	android:name
+		ADDED from AndroidManifest.xml:44:13
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from AndroidManifest.xml:46:13
+action#android.intent.action.MAIN
+ADDED from AndroidManifest.xml:47:17
+	android:name
+		ADDED from AndroidManifest.xml:47:25
+category#android.intent.category.LAUNCHER
+ADDED from AndroidManifest.xml:49:17
+	android:name
+		ADDED from AndroidManifest.xml:49:27
+activity#org.esn.mobilit.utils.firstlaunch.FirstLaunchActivity
+ADDED from AndroidManifest.xml:52:9
+	android:name
+		ADDED from AndroidManifest.xml:52:19
+activity#org.esn.mobilit.fragments.DetailActivity
+ADDED from AndroidManifest.xml:53:9
+	android:name
+		ADDED from AndroidManifest.xml:53:19
+activity#org.esn.mobilit.activities.SplashActivity
+ADDED from AndroidManifest.xml:54:9
+	android:name
+		ADDED from AndroidManifest.xml:54:19
 activity#org.esn.mobilit.fragments.HomeActivity
-ADDED from AndroidManifest.xml:34:9
+ADDED from AndroidManifest.xml:55:9
 	android:label
-		ADDED from AndroidManifest.xml:34:58
+		ADDED from AndroidManifest.xml:55:58
 	android:name
-		ADDED from AndroidManifest.xml:34:19
+		ADDED from AndroidManifest.xml:55:19
 meta-data#com.crashlytics.ApiKey
-ADDED from AndroidManifest.xml:36:9
+ADDED from AndroidManifest.xml:57:9
 	android:name
-		ADDED from AndroidManifest.xml:37:13
+		ADDED from AndroidManifest.xml:58:13
 	android:value
-		ADDED from AndroidManifest.xml:38:13
+		ADDED from AndroidManifest.xml:59:13
