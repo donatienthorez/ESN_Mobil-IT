@@ -82,7 +82,7 @@ public class SplashActivity extends Activity {
 
 		} else {
             // Push for GCM
-            if (!getDefaults(REG_ID).isEmpty())
+            if (!getDefaults(REG_ID).isEmpty() && getDefaults("FROM_FIRSTLAUNCH").isEmpty())
                 count_limit = 3;
             else
                 RegisterUser();
@@ -265,9 +265,8 @@ public class SplashActivity extends Activity {
     }
 
     private void storeRegIdinSharedPref() {
-        Log.d(TAG, "REG_ID AVANT:" + getDefaults(REG_ID));
         setDefaults(REG_ID, regId);
-        Log.d(TAG, "REG_ID APRES:" + getDefaults(REG_ID));
+        setDefaults("FROM_FIRSTLAUNCH",null);
         storeRegIdinServer();
     }
 

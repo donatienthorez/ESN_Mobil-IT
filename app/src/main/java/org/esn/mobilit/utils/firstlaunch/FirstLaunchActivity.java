@@ -71,6 +71,7 @@ public class FirstLaunchActivity extends Activity {
         setDefaults("CODE_COUNTRY", currentCountry.getCode_country());
         setDefaults("CODE_SECTION", currentSection.getCode_section());
         setDefaults("SECTION_WEBSITE", sectionChoosed.getWebsite());
+        setDefaults("FROM_FIRSTLAUNCH", "1");
 
         finish();
     }
