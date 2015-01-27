@@ -10,7 +10,15 @@ public interface ApplicationConstants {
 
     // Google Project Number
     static final String GOOGLE_PROJ_ID = "1079816997";
+
     // Message Key
     static final String MSG_KEY = "m";
 
+    // Path for news event & partners
+    static final String NEWS_PATH = "/news";
+    static final String PARTNERS_PATH = "/partners";
+    static final String EVENTS_PATH = "/events";
+
+    // Path for feed
+    static final String FEED_PATH = "/feed";
 }

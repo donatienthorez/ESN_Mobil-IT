@@ -124,10 +124,10 @@ public class SplashActivity extends Activity {
 		@Override
 		protected Void doInBackground(Void... params) {
             // Get feed url
-            String event_url = getDefaults("SECTION_WEBSITE") + "/events/feed";
+            String event_url = getDefaults("SECTION_WEBSITE") + ApplicationConstants.EVENTS_PATH + ApplicationConstants.FEED_PATH;
 
 			// Obtain feed
-            Log.d(TAG, "Debut Parser pour events/feed");
+            Log.d(TAG, "Debut Parser pour " + ApplicationConstants.EVENTS_PATH + ApplicationConstants.FEED_PATH);
 			DOMParser myParser = new DOMParser();
             feedEvents = myParser.parseXml(event_url);
 			return null;
@@ -156,7 +156,7 @@ public class SplashActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             // Get feed url
-            String url = getDefaults("SECTION_WEBSITE") + "/news/feed";
+            String url = getDefaults("SECTION_WEBSITE") + ApplicationConstants.NEWS_PATH + ApplicationConstants.FEED_PATH;
             //String url = "http://esnlille.fr/BuddySystem/test.xml";
 
             // Obtain feed
@@ -189,12 +189,12 @@ public class SplashActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             // Get feed url
-            String event_url = getDefaults("SECTION_WEBSITE") + "/partners/feed";
+            String url = getDefaults("SECTION_WEBSITE") + ApplicationConstants.PARTNERS_PATH + ApplicationConstants.FEED_PATH;
 
             // Obtain feed
-            Log.d(TAG, "Debut Parser pour partners/feed");
+            Log.d(TAG, "Debut Parser pour " + url);
             DOMParser myParser = new DOMParser();
-            feedPartners = myParser.parseXml(event_url);
+            feedPartners = myParser.parseXml(url);
             return null;
         }
 
