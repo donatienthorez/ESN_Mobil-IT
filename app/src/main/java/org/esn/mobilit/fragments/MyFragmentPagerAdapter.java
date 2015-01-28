@@ -5,12 +5,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
+import org.esn.mobilit.models.SurvivalGuide;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 
     int count;
     RSSFeed feedEvents, feedNews, feedPartners;
+    SurvivalGuide survivalGuide;
 
     public MyFragmentPagerAdapter(FragmentManager fm, int count) {
         super(fm);
@@ -29,6 +31,10 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
         Log.d(MyFragmentPagerAdapter.class.getSimpleName(), "Partners feed count : " + feedPartners.getItemCount());
         this.feedPartners = feedPartners;
     }
+    public void setSurvivalGuide(SurvivalGuide survivalGuide){
+        Log.d(MyFragmentPagerAdapter.class.getSimpleName(), "SurvivalGuide categories count : " + survivalGuide.getFirstlevel().size());
+        this.survivalGuide = survivalGuide;
+    }
 
     @Override
     public Fragment getItem(int position) {
@@ -36,12 +42,14 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
         //Events
         ListFragment events = new ListFragment(); events.setFeed(feedEvents); events.setType(0);
 
-
         //News
         ListFragment news = new ListFragment(); news.setFeed(feedNews); events.setType(1);
 
         //Partners
         ListFragment partners = new ListFragment(); partners.setFeed(feedPartners); events.setType(2);
+
+        //Survival Guide
+        ListSurvivalFragment survival = new ListSurvivalFragment(); survival.setSurvivalGuide(survivalGuide);
 
         switch (position) {
             case 0: //Events
@@ -51,7 +59,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
             case 2: //Partners
                 return partners;
             case 3: //Survival Guide
-                return new ListTestFragment();
+                return survival;
             default: //Events
                 return events;
         }

@@ -42,7 +42,6 @@ public class DetailActivity extends FragmentActivity {
         /** Adding the fragment to the fragment transaction */
         fragmentTransacton.add(R.id.details_fragment_container, detailsFragment);
 
-
         /** Making this transaction in effect */
         fragmentTransacton.commit();
     }

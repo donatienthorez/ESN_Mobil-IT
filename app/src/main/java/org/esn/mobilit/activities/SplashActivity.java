@@ -23,9 +23,14 @@ import com.loopj.android.http.RequestParams;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.fragments.HomeActivity;
+import org.esn.mobilit.models.Category;
+import org.esn.mobilit.models.SurvivalGuide;
+import org.esn.mobilit.network.JSONfunctions;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.parser.DOMParser;
 import org.esn.mobilit.utils.parser.RSSFeed;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -36,6 +41,7 @@ import java.io.IOException;
 public class SplashActivity extends Activity {
     private static final String TAG = SplashActivity.class.getSimpleName();
 	private RSSFeed feedEvents, feedNews, feedPartners;
+    private SurvivalGuide survivalguide;
     private int count, count_limit;
     private Intent intent;
 
@@ -54,7 +60,7 @@ public class SplashActivity extends Activity {
 
         //Init values
         applicationContext = getApplicationContext();
-        count_limit = 4;
+        count_limit = 5;
         intent = new Intent(getApplicationContext(), HomeActivity.class);
         count = 0;
 
@@ -82,12 +88,13 @@ public class SplashActivity extends Activity {
 
 		} else {
             // Push for GCM
-            if (!getDefaults(REG_ID).isEmpty() && getDefaults("FROM_FIRSTLAUNCH").isEmpty())
-                count_limit = 3;
-            else
+            /*if (!getDefaults(REG_ID).isEmpty())
+                count_limit--;
+            else*/
                 RegisterUser();
 
 			// Connected - Start parsing
+            new DownloadJSONSurvivalGuide().execute();
 			new AsyncLoadXMLFeedEvents().execute();
             new AsyncLoadXMLFeedNews().execute();
             new AsyncLoadXMLFeedPartners().execute();
@@ -216,6 +223,83 @@ public class SplashActivity extends Activity {
 
     }
 
+    private class DownloadJSONSurvivalGuide extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            // Create survival guide array
+            survivalguide = new SurvivalGuide();
+
+            //categories_list = new ArrayList<Category>();
+            String url = ApplicationConstants.SURVIVAL_WEBSERVICE_URL + "getCategories.php?section=" + getDefaults("CODE_SECTION");
+            JSONObject jsonobject = JSONfunctions
+                    .getJSONfromURL(url);
+            try {
+                // SURVIVAL GUIDE LEVEL 1
+                JSONArray jsonarray_level1 = jsonobject.getJSONArray("categories");
+                for (int i = 0; i < jsonarray_level1.length(); i++) {
+                    JSONObject jsonobject_level1 = jsonarray_level1.getJSONObject(i);
+                    Log.d(TAG, "JSONOBJECT level 1 name  : " + jsonobject_level1.optString("name"));
+                    Category category = new Category(
+                        jsonobject_level1.optInt("id"),
+                        jsonobject_level1.optString("name"),
+                        jsonobject_level1.optString("section"),
+                        jsonobject_level1.optString("content"),
+                        jsonobject_level1.optInt("position")
+                    );
+                    survivalguide.getFirstlevel().add(category);
+
+                    // SURVIVAL GUIDE LEVEL 2
+                    JSONArray jsonarray_level2 = jsonobject_level1.getJSONArray("categories");
+                    for (int j = 0; j < jsonarray_level2.length(); j++) {
+                        JSONObject jsonobject_level2 = jsonarray_level2.getJSONObject(j);
+                        Log.d(TAG, "JSONOBJECT level 2 name  : " + jsonobject_level2.optString("name"));
+                        Category categorylvl2 = new Category(
+                                jsonobject_level1.optInt("id"),
+                                jsonobject_level1.optString("name"),
+                                jsonobject_level1.optString("section"),
+                                jsonobject_level1.optString("content"),
+                                jsonobject_level1.optInt("position")
+                        );
+                        survivalguide.getSecondlevel().add(categorylvl2);
+
+                        // SURVIVAL GUIDE LEVEL 3
+                        JSONArray jsonarray_level3 = jsonobject_level2.getJSONArray("categories");
+                        for (int k = 0; k < jsonarray_level3.length(); k++) {
+                            JSONObject jsonobject_level3 = jsonarray_level3.getJSONObject(k);
+                            Log.d(TAG, "JSONOBJECT level 3 name  : " + jsonobject_level3.optString("name"));
+                            Category categorylvl3 = new Category(
+                                    jsonobject_level1.optInt("id"),
+                                    jsonobject_level1.optString("name"),
+                                    jsonobject_level1.optString("section"),
+                                    jsonobject_level1.optString("content"),
+                                    jsonobject_level1.optInt("position")
+                            );
+                            survivalguide.getThirdlevel().add(categorylvl3);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Log.d(TAG,"Error" + e.getMessage());
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Void args) {
+            count++;
+
+            //Add new bundle
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("survivalGuide", survivalguide);
+
+            //Put Extra
+            intent.putExtras(bundle);
+
+            if (count == count_limit)
+                startActivityForResult(intent, 1);
+        }
+    }
 
 
     // GCM

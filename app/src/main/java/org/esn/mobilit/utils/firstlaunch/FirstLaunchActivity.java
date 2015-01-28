@@ -14,10 +14,12 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import org.esn.mobilit.R;
+import org.esn.mobilit.models.Category;
 import org.esn.mobilit.models.Countries;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.models.Sections;
 import org.esn.mobilit.network.JSONfunctions;
+import org.esn.mobilit.utils.ApplicationConstants;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -47,6 +49,9 @@ public class FirstLaunchActivity extends Activity {
     private ArrayList<Sections> sections_list;
     private Sections currentSection;
     private ProgressBar progressBar;
+
+    // Attributes for SurvivalGuide
+    private ArrayList<Category> categories_list;
 
     // Detail Section
     private Section sectionChoosed;
@@ -150,7 +155,7 @@ public class FirstLaunchActivity extends Activity {
             spinnerCountries_data = new ArrayList<String>();
             // JSON file URL address
             jsonobject = JSONfunctions
-                    .getJSONfromURL("http://www.esnlille.fr/WebServices/Sections/getCountries.php");
+                    .getJSONfromURL(ApplicationConstants.SECTIONS_WEBSERVICE_URL + "getCountries.php");
 
             try {
                 // Locate the NodeList name
@@ -220,7 +225,7 @@ public class FirstLaunchActivity extends Activity {
             // Create an array to populate the spinner
             spinnerSections_data = new ArrayList<String>();
 
-            String url = "http://www.esnlille.fr/WebServices/Sections/getSections.php?code_country="+currentCountry.getCode_country();
+            String url = ApplicationConstants.SECTIONS_WEBSERVICE_URL + "getSections.php?code_country="+currentCountry.getCode_country();
 
             // JSON file URL address
             jsonobject = JSONfunctions.getJSONfromURL(url);
@@ -283,7 +288,7 @@ public class FirstLaunchActivity extends Activity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            String url = "http://www.esnlille.fr/WebServices/Sections/getSection.php?code_country="+currentCountry.getCode_country()+"&code_section="+currentSection.getCode_section();
+            String url = ApplicationConstants.SECTIONS_WEBSERVICE_URL +  "getSection.php?code_country="+currentCountry.getCode_country()+"&code_section="+currentSection.getCode_section();
             Log.d(TAG, "DownloadJSONSection > doInBackground > url : " + url );
 
             JSONObject jsonobject;

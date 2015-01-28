@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.fragments.ListFragment.ListFragmentItemClickListener;
+import org.esn.mobilit.models.SurvivalGuide;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
 public class HomeActivity extends FragmentActivity implements ActionBar.TabListener, ListFragmentItemClickListener {
@@ -16,6 +17,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
     ViewPager               myPager;
     MyFragmentPagerAdapter  myAdapter;
     RSSFeed feedEvents, feedNews, feedPartners;
+    SurvivalGuide survivalGuide;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -32,12 +34,14 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         feedEvents = (RSSFeed) getIntent().getExtras().get("feedEvents");
         feedNews = (RSSFeed) getIntent().getExtras().get("feedNews");
         feedPartners = (RSSFeed) getIntent().getExtras().get("feedPartners");
+        survivalGuide = (SurvivalGuide) getIntent().getExtras().get("survivalGuide");
 
         //Init FragmentPagerAdapter
         MyFragmentPagerAdapter fpa = new MyFragmentPagerAdapter(getSupportFragmentManager(),4);
         fpa.setFeedEvents(feedEvents);
         fpa.setFeedNews(feedNews);
         fpa.setFeedPartners(feedPartners);
+        fpa.setSurvivalGuide(survivalGuide);
         myAdapter = fpa;
 
         //Init ActionBar
