@@ -6,7 +6,7 @@ package org.esn.mobilit.utils;
 public interface ApplicationConstants {
 
     // Php Application URL to store Reg ID created
-    static final String APP_SERVER_URL = "http://ixesn.fr/webservices/gcm/gcm.php?shareRegId=true";
+    static final String APP_SERVER_URL = "http://esnlille.fr/survivalGuide/includes/rest/insertRegId.php";
 
     // Google Project Number
     static final String GOOGLE_PROJ_ID = "1079816997";
