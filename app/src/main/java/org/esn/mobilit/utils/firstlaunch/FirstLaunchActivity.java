@@ -68,15 +68,15 @@ public class FirstLaunchActivity extends Activity {
     }
 
     public void launchAwesomeFeatures(View view){
-        Log.d(TAG, " Country : " + getDefaults("CODE_COUNTRY"));
-        Log.d(TAG, " Section : " + getDefaults("CODE_SECTION"));
-        Log.d(TAG, " Section Website : " + getDefaults("SECTION_WEBSITE"));
-        Log.d(TAG, "FINISH FIRSTLAUNCHACTIVITY");
-
         setDefaults("CODE_COUNTRY", currentCountry.getCode_country());
         setDefaults("CODE_SECTION", currentSection.getCode_section());
         setDefaults("SECTION_WEBSITE", sectionChoosed.getWebsite());
         setDefaults("FROM_FIRSTLAUNCH", "1");
+
+        Log.d(TAG, " Country : " + getDefaults("CODE_COUNTRY"));
+        Log.d(TAG, " Section : " + getDefaults("CODE_SECTION"));
+        Log.d(TAG, " Section Website : " + getDefaults("SECTION_WEBSITE"));
+        Log.d(TAG, "FINISH FIRSTLAUNCHACTIVITY");
 
         finish();
     }
@@ -200,9 +200,7 @@ public class FirstLaunchActivity extends Activity {
                         addSpinnerSections();
                     }
 
-                    public void onNothingSelected(AdapterView<?> arg0) {
-                        Log.d(FirstLaunchActivity.class.getSimpleName(), "onNothingSelected:");
-                    }
+                    public void onNothingSelected(AdapterView<?> arg0) {}
                 }
             );
 
@@ -229,7 +227,6 @@ public class FirstLaunchActivity extends Activity {
 
             // JSON file URL address
             jsonobject = JSONfunctions.getJSONfromURL(url);
-            Log.d(TAG,"URL:"+url);
 
             try {
                 // Locate the NodeList name
@@ -289,7 +286,6 @@ public class FirstLaunchActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             String url = ApplicationConstants.SECTIONS_WEBSERVICE_URL +  "getSection.php?code_country="+currentCountry.getCode_country()+"&code_section="+currentSection.getCode_section();
-            Log.d(TAG, "DownloadJSONSection > doInBackground > url : " + url );
 
             JSONObject jsonobject;
             JSONArray jsonarray;
@@ -316,21 +312,15 @@ public class FirstLaunchActivity extends Activity {
 
 
             } catch (Exception e) {
-                Log.e("Error", e.getMessage());
+                Log.d(TAG, "Error" + e.getMessage());
                 e.printStackTrace();
             }
             return null;
         }
 
         protected void onPostExecute(Void args) {
-            Log.d(TAG,"onPostExecute Detail Section");
-
-            if (sectionChoosed != null) {
-                Log.d(TAG, "SECTION:" + sectionChoosed.toString());
+            if (sectionChoosed != null)
                 startButton.setEnabled(true);
-            }else{
-                Log.d(TAG, "SECTION:null");
-            }
         }
     }
 }

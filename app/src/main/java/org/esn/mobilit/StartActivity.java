@@ -22,6 +22,7 @@ public class StartActivity extends Activity {
 
     protected void onResume(){
         super.onResume();
+        Log.d(TAG, "Comming back to onResume()");
         chooseActivity();
     }
 
@@ -32,6 +33,7 @@ public class StartActivity extends Activity {
     }
 
     protected void chooseActivity(){
+        Log.d(TAG, "ChooseActivity");
         String section_website = getDefaults("SECTION_WEBSITE");
 
         Log.d(TAG, " Country : " + getDefaults("CODE_COUNTRY"));

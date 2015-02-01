@@ -96,10 +96,8 @@ public class ListFragment extends android.support.v4.app.ListFragment {
                     Log.d(TAG, "currentActivity is null");
                 }
                 else {
-                    printPreferences();
                     Log.d(TAG, "RAS SECTION SETTINGS");
                     reset_section();
-                    printPreferences();
 
                     currentActivity.setResult(1);
                     currentActivity.finish();
@@ -142,11 +140,6 @@ public class ListFragment extends android.support.v4.app.ListFragment {
         setDefaults("SECTION_WEBSITE", null);
     }
 
-    public void printPreferences(){
-        Log.d(TAG, "CODE_COUNTRY :" + getDefaults("CODE_COUNTRY"));
-        Log.d(TAG, "CODE_SECTION :" + getDefaults("CODE_SECTION"));
-        Log.d(TAG, "SECTION_WEBSITE :" + getDefaults("SECTION_WEBSITE"));
-    }
 
 
 

@@ -64,7 +64,9 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         actionBar.addTab(actionBar.newTab().setText("Events").setTabListener(this));
         actionBar.addTab(actionBar.newTab().setText("News").setTabListener(this));
         actionBar.addTab(actionBar.newTab().setText("Partners").setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setText("Guide").setTabListener(this));
+
+        if (survivalGuide.getFirstlevel().size() > 0)
+            actionBar.addTab(actionBar.newTab().setText("Guide").setTabListener(this));
     }
 
     @Override
