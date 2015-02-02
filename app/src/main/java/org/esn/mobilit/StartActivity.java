@@ -71,7 +71,6 @@ public class StartActivity extends Activity {
                 finish();
             }
         }else if (requestCode == ApplicationConstants.RESULT_SPLASH_ACTIVITY) {
-            Log.d(TAG, "ici");
             if (resultCode == ApplicationConstants.RESULT_FIRST_LAUNCH){
                 Intent intent = new Intent(this, FirstLaunchActivity.class);
                 Log.d(TAG, "FirstLaunchActivity starting");
