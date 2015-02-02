@@ -12,6 +12,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -65,41 +69,41 @@ public class SplashActivity extends Activity {
         count = 0;
 
 		ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		if (conMgr.getActiveNetworkInfo() == null
-				&& !conMgr.getActiveNetworkInfo().isConnected()
-				&& !conMgr.getActiveNetworkInfo().isAvailable()) {
-			// No connectivity - Show alert
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage(
-					"Unable to reach server, \nPlease check your connectivity.")
-					.setTitle("ESN Mobil IT")
-					.setCancelable(false)
-					.setPositiveButton("Exit",
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog,
-										int id) {
-									finish();
-								}
-							});
 
-			AlertDialog alert = builder.create();
-			alert.show();
+        if (conMgr == null || conMgr.getActiveNetworkInfo() == null
+                || !conMgr.getActiveNetworkInfo().isConnected()
+                || !conMgr.getActiveNetworkInfo().isAvailable()){
 
-		} else {
+            // No connectivity - Show message and button
+            ((TextView)findViewById (R.id.textView)).setText("Erreur : Vous n'êtes pas connecté à Internet");
+            ((ProgressBar)findViewById (R.id.progressBar)).setVisibility(View.INVISIBLE);
+
+            final Button button = (Button) findViewById(R.id.button);
+            button.setVisibility(View.VISIBLE);
+
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    intent = new Intent(SplashActivity.this, SplashActivity.class);
+                    Log.d(TAG,"SplashActivity restarting");
+                    startActivityForResult(intent,ApplicationConstants.RESULT_SPLASH_ACTIVITY);
+                    finish();
+                }
+            });
+
+        }else{
             // Push for GCM
             if (getDefaults(REG_ID) != null)
                 count_limit--;
             else
                 RegisterUser();
 
-			// Connected - Start parsing
+            // Connected - Start parsing
             new DownloadJSONSurvivalGuide().execute();
-			new AsyncLoadXMLFeedEvents().execute();
+            new AsyncLoadXMLFeedEvents().execute();
             new AsyncLoadXMLFeedNews().execute();
             new AsyncLoadXMLFeedPartners().execute();
-		}
 
+        }
 	}
 
     // PREFERENCES

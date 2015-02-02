@@ -990,11 +990,12 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f090018;
         public static final int action_menu_presenter=0x7f090019;
         public static final int action_mode_close_button=0x7f090027;
-        public static final int action_settings=0x7f09004f;
+        public static final int action_settings=0x7f090050;
         public static final int activity_chooser_view_content=0x7f090028;
         public static final int always=0x7f090012;
         public static final int arrow=0x7f090049;
         public static final int beginning=0x7f09000a;
+        public static final int button=0x7f09004e;
         public static final int checkbox=0x7f090030;
         public static final int chooseyourcountry=0x7f090040;
         public static final int collapseActionView=0x7f090014;
@@ -1020,7 +1021,7 @@ containing a value of this type.
         public static final int linearLayout1=0x7f09004b;
         public static final int listMode=0x7f090001;
         public static final int list_item=0x7f09002c;
-        public static final int menu_settings=0x7f09004e;
+        public static final int menu_settings=0x7f09004f;
         public static final int middle=0x7f09000b;
         public static final int never=0x7f090010;
         public static final int none=0x7f090009;
@@ -1030,7 +1031,7 @@ containing a value of this type.
         public static final int progress_circular=0x7f09001b;
         public static final int progress_horizontal=0x7f09001c;
         public static final int radio=0x7f090032;
-        public static final int ras_section_settings=0x7f090050;
+        public static final int ras_section_settings=0x7f090051;
         public static final int satellite=0x7f09000d;
         public static final int search_badge=0x7f090035;
         public static final int search_bar=0x7f090034;

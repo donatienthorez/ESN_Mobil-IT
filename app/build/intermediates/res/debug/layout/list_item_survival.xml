@@ -37,4 +37,4 @@
         android:contentDescription="@string/app_name"
         android:src="@drawable/arrow_next" />
 
-</RelativeLayout><!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/layout/list_item_survival.xml -->
+</RelativeLayout><!-- From: file:/home/thorez/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/layout/list_item_survival.xml -->
