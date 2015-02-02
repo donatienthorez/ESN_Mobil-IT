@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.widget.ImageView;
 
 import org.esn.mobilit.R;
@@ -40,7 +39,6 @@ public class ImageLoader {
     final int stub_id = R.drawable.ic_launcher;
 
     public void DisplayImage(String url, ImageView imageView) {
-        Log.d(ImageLoader.class.getSimpleName(), "DisplayImage : " + url);
         imageViews.put(imageView, url);
         Bitmap bitmap = memoryCache.get(url);
         if (bitmap != null)

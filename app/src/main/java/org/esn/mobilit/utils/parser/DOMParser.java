@@ -26,7 +26,6 @@ public class DOMParser {
 		URL url = null;
 		try {
 			url = new URL(xml);
-            Log.d(TAG, "URL : " + url);
 		} catch (MalformedURLException e1) {
 			e1.printStackTrace();
             Log.d(TAG, "ERROR MalformedURLException : " + e1.toString());
@@ -58,7 +57,6 @@ public class DOMParser {
 			// Get all <item> tags.
 			NodeList nl = doc.getElementsByTagName("item");Log.d(TAG, "6");
 			int length = nl.getLength();
-            Log.d(TAG, "TAILLE AVANT PARSE : " + length);
 			for (int i = 0; i < length; i++) {
 				Node currentNode = nl.item(i);
 				RSSItem _item = new RSSItem();
@@ -108,8 +106,6 @@ public class DOMParser {
 				// add item to the list
 				_feed.addItem(_item);
 			} // end FOR
-
-            Log.d(TAG, "TAILLE APRES PARSE : " + _feed.getItemCount());
 
 		} catch (Exception e) {
 		}

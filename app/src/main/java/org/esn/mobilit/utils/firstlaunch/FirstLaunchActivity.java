@@ -1,6 +1,7 @@
 package org.esn.mobilit.utils.firstlaunch;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -78,6 +79,8 @@ public class FirstLaunchActivity extends Activity {
         Log.d(TAG, " Section Website : " + getDefaults("SECTION_WEBSITE"));
         Log.d(TAG, "FINISH FIRSTLAUNCHACTIVITY");
 
+        Intent returnIntent = new Intent();
+        setResult(RESULT_OK,returnIntent);
         finish();
     }
 

@@ -207,7 +207,7 @@
     <string name="chooseyoursection">Choose your ESN Section</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/com_crashlytics_export_strings.xml -->
     <eat-comment/>
-    <string name="com.crashlytics.android.build_id" translatable="false">4dbf1f6e-3ae7-4420-ad96-215f1a8a7f8a</string>
+    <string name="com.crashlytics.android.build_id" translatable="false">86c63332-2c3c-45d4-bad9-c218b13cc48e</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/3.1.59/res/values/strings.xml -->
     <eat-comment/>
     <string msgid="2523291102206661146" name="common_google_play_services_enable_button">Enable Google Play services</string>

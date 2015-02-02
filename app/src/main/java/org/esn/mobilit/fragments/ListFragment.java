@@ -2,6 +2,7 @@ package org.esn.mobilit.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.esn.mobilit.R;
+import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.image.ImageLoader;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
@@ -90,8 +92,6 @@ public class ListFragment extends android.support.v4.app.ListFragment {
         switch (item.getItemId()) {
             case R.id.ras_section_settings:
 
-                if (getActivity() == null)
-                    Log.d(TAG,"getActivity() is null");
                 if (currentActivity == null) {
                     Log.d(TAG, "currentActivity is null");
                 }
@@ -99,7 +99,8 @@ public class ListFragment extends android.support.v4.app.ListFragment {
                     Log.d(TAG, "RAS SECTION SETTINGS");
                     reset_section();
 
-                    currentActivity.setResult(1);
+                    Intent returnIntent = new Intent();
+                    currentActivity.setResult(ApplicationConstants.RESULT_FIRST_LAUNCH,returnIntent);
                     currentActivity.finish();
                 }
 
@@ -138,6 +139,7 @@ public class ListFragment extends android.support.v4.app.ListFragment {
         setDefaults("CODE_SECTION", null);
         setDefaults("CODE_COUNTRY", null);
         setDefaults("SECTION_WEBSITE", null);
+        setDefaults("regId", null);
     }
 
 

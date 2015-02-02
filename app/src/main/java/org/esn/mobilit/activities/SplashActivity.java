@@ -88,9 +88,9 @@ public class SplashActivity extends Activity {
 
 		} else {
             // Push for GCM
-            /*if (!getDefaults(REG_ID).isEmpty())
+            if (getDefaults(REG_ID) != null)
                 count_limit--;
-            else*/
+            else
                 RegisterUser();
 
 			// Connected - Start parsing
@@ -117,12 +117,37 @@ public class SplashActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(resultCode)
-        {
-            case 1:
-                setResult(1);
+        Log.d(TAG, "onActivityResult");
+
+        if (requestCode == ApplicationConstants.RESULT_SPLASH_ACTIVITY) {
+            Log.d(TAG, "RESULT SPLASH");
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                Log.d(TAG, "weird");
+            }else if (resultCode == RESULT_CANCELED){
+                // The user pressed back
+                Intent returnIntent = new Intent();
+                setResult(ApplicationConstants.RESULT_CLOSE_ALL,returnIntent);
                 finish();
+            }else if (resultCode == ApplicationConstants.RESULT_FIRST_LAUNCH){
+                Intent returnIntent = new Intent();
+                setResult(ApplicationConstants.RESULT_FIRST_LAUNCH,returnIntent);
+                finish();
+            }
         }
+
+        /*switch(resultCode)
+        {
+            case ApplicationConstants.RESULT_CLOSE_ALL:
+                setResult(ApplicationConstants.RESULT_CLOSE_ALL);
+                Log.d(TAG, "RESULT_CLOSE_ALL");
+                finish();
+            break;
+            case ApplicationConstants.RESULT_FIRST_LAUNCH:
+                Log.d(TAG, "RESULT_FIRST_LAUNCH");
+                finish();
+            break;
+        }*/
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -153,7 +178,7 @@ public class SplashActivity extends Activity {
             count++;
 
             if (count == count_limit)
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
 		}
 
 	}
@@ -186,7 +211,7 @@ public class SplashActivity extends Activity {
             count++;
 
             if (count == count_limit)
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
         }
 
     }
@@ -218,7 +243,7 @@ public class SplashActivity extends Activity {
             count++;
 
             if (count == count_limit)
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
         }
 
     }
@@ -239,7 +264,6 @@ public class SplashActivity extends Activity {
                 JSONArray jsonarray_level1 = jsonobject.getJSONArray("categories");
                 for (int i = 0; i < jsonarray_level1.length(); i++) {
                     JSONObject jsonobject_level1 = jsonarray_level1.getJSONObject(i);
-                    Log.d(TAG, "JSONOBJECT level 1 name  : " + jsonobject_level1.optString("name"));
                     Category category = new Category(
                         jsonobject_level1.optInt("id"),
                         jsonobject_level1.optString("name"),
@@ -253,7 +277,6 @@ public class SplashActivity extends Activity {
                     JSONArray jsonarray_level2 = jsonobject_level1.getJSONArray("categories");
                     for (int j = 0; j < jsonarray_level2.length(); j++) {
                         JSONObject jsonobject_level2 = jsonarray_level2.getJSONObject(j);
-                        Log.d(TAG, "JSONOBJECT level 2 name  : " + jsonobject_level2.optString("name"));
                         Category categorylvl2 = new Category(
                                 jsonobject_level1.optInt("id"),
                                 jsonobject_level1.optString("name"),
@@ -267,7 +290,6 @@ public class SplashActivity extends Activity {
                         JSONArray jsonarray_level3 = jsonobject_level2.getJSONArray("categories");
                         for (int k = 0; k < jsonarray_level3.length(); k++) {
                             JSONObject jsonobject_level3 = jsonarray_level3.getJSONObject(k);
-                            Log.d(TAG, "JSONOBJECT level 3 name  : " + jsonobject_level3.optString("name"));
                             Category categorylvl3 = new Category(
                                     jsonobject_level1.optInt("id"),
                                     jsonobject_level1.optString("name"),
@@ -297,7 +319,7 @@ public class SplashActivity extends Activity {
             intent.putExtras(bundle);
 
             if (count == count_limit)
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
         }
     }
 
@@ -372,7 +394,7 @@ public class SplashActivity extends Activity {
                         count++;
 
                         if (count == count_limit) {
-                            startActivityForResult(intent, 1);
+                            startActivityForResult(intent, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
                             finish();
                         }
                     }

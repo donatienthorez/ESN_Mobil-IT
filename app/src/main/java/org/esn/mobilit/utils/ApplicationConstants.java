@@ -29,4 +29,8 @@ public interface ApplicationConstants {
 
     //Sections webservice
     static final String SECTIONS_WEBSERVICE_URL = "http://www.esnlille.fr/WebServices/Sections/";
+
+    static final int RESULT_CLOSE_ALL = 666;
+    static final int RESULT_FIRST_LAUNCH = 57;
+    static final int RESULT_SPLASH_ACTIVITY = 420;
 }
