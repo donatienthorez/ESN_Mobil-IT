@@ -13,6 +13,7 @@ public interface ApplicationConstants {
 
     // Message Key
     static final String MSG_KEY = "m";
+    static final String SBJ_KEY = "sbj";
 
     // Path for news event & partners
     static final String NEWS_PATH = "/news";

@@ -33,24 +33,26 @@ public class GcmIntentService extends IntentService {
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
 
         String messageType = gcm.getMessageType(intent);
+        String msg = String.valueOf(extras.get(ApplicationConstants.MSG_KEY));
+        String sbj = String.valueOf(extras.get(ApplicationConstants.SBJ_KEY));
 
         if (!extras.isEmpty()) {
             if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR
                     .equals(messageType)) {
-                sendNotification("Send error: " + extras.toString());
+                sendNotification("Send error: ",  extras.toString());
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED
                     .equals(messageType)) {
-                sendNotification("Deleted messages on server: "
-                        + extras.toString());
+                sendNotification("Deleted messages on server: ",
+                         extras.toString());
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE
                     .equals(messageType)) {
-                sendNotification(String.valueOf(extras.get(ApplicationConstants.MSG_KEY)));
+                sendNotification(sbj, msg);
             }
         }
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    private void sendNotification(String msg) {
+    private void sendNotification(String sbj, String msg) {
         Intent resultIntent = new Intent(this, SplashActivity.class);
         //resultIntent.putExtra("msg", msg);
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0,
@@ -62,7 +64,7 @@ public class GcmIntentService extends IntentService {
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         mNotifyBuilder = new NotificationCompat.Builder(this)
-                .setContentTitle("News from ESN")
+                .setContentTitle(sbj)
                 .setContentText(msg)
                 .setSmallIcon(R.drawable.ic_launcher);
         // Set pending intent
