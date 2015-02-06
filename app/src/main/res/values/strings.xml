@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Erasmus Student Network</string>
+    <string name="app_name">ESN MobilIT</string>
     <string name="loading">Loading please wait …</string>
     <string name="button_choice_section">Validate</string>
     <string name="desc">Description webview here!</string>

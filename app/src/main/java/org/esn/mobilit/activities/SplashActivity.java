@@ -1,9 +1,7 @@
 package org.esn.mobilit.activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -12,7 +10,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -44,7 +45,8 @@ public class SplashActivity extends Activity {
     private SurvivalGuide survivalguide;
     private int count, count_limit;
     private Intent intent;
-
+    private TextView textView;
+    private ProgressBar progressBar;
     //GCM
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String REG_ID = "regId";
@@ -64,44 +66,86 @@ public class SplashActivity extends Activity {
         intent = new Intent(getApplicationContext(), HomeActivity.class);
         count = 0;
 
-		ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		if (conMgr.getActiveNetworkInfo() == null
-				&& !conMgr.getActiveNetworkInfo().isConnected()
-				&& !conMgr.getActiveNetworkInfo().isAvailable()) {
-			// No connectivity - Show alert
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage(
-					"Unable to reach server, \nPlease check your connectivity.")
-					.setTitle("ESN Mobil IT")
-					.setCancelable(false)
-					.setPositiveButton("Exit",
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog,
-										int id) {
-									finish();
-								}
-							});
+        //Init Elements
+        textView = ((TextView)findViewById (R.id.textView));
+        progressBar = ((ProgressBar)findViewById (R.id.progressBar));
 
-			AlertDialog alert = builder.create();
-			alert.show();
+        //Set ActionBarColor
+        getActionBar().setDisplayShowHomeEnabled(false);
+        getActionBar().setIcon(ApplicationConstants.ESNBlue);
+        getActionBar().setBackgroundDrawable(ApplicationConstants.ESNBlue);
 
-		} else {
+        ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (conMgr == null || conMgr.getActiveNetworkInfo() == null
+                || !conMgr.getActiveNetworkInfo().isConnected()
+                || !conMgr.getActiveNetworkInfo().isAvailable()){
+
+            // No connectivity - Show message and button
+            textView.setText("Erreur : Vous n'êtes pas connecté à Internet");
+            progressBar.setVisibility(View.INVISIBLE);
+
+            final Button button = (Button) findViewById(R.id.button);
+            button.setVisibility(View.VISIBLE);
+
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent i = new Intent(SplashActivity.this, SplashActivity.class);
+                    Log.d(TAG,"SplashActivity restarting");
+
+                    startActivityForResult(i, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
+                    finish();
+                }
+            });
+
+        }else{
             // Push for GCM
             if (getDefaults(REG_ID) != null)
                 count_limit--;
             else
                 RegisterUser();
 
-			// Connected - Start parsing
+            // Connected - Start parsing
             new DownloadJSONSurvivalGuide().execute();
-			new AsyncLoadXMLFeedEvents().execute();
+            new AsyncLoadXMLFeedEvents().execute();
             new AsyncLoadXMLFeedNews().execute();
             new AsyncLoadXMLFeedPartners().execute();
-		}
 
+        }
 	}
 
+    public void launchHomeActivity(){
+        if (count == count_limit) {
+
+            int total = 0;
+            total += feedEvents.getItemCount();
+            total += feedNews.getItemCount();
+            total += feedPartners.getItemCount();
+            total += survivalguide.getCategories().size();
+
+            if (total > 0) {
+                Log.d(TAG, "TOTAL ITEMS COUNT : " + total);
+                startActivityForResult(intent, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
+            }
+            else {
+                textView.setText("There is no contents for this section, please contact g33kteam@ixesn.fr");
+                progressBar.setVisibility(View.INVISIBLE);
+
+                final Button button = (Button) findViewById(R.id.button);
+                button.setVisibility(View.VISIBLE);
+
+                button.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Log.d(TAG,"SplashActivity restarting");
+                        Intent returnIntent = new Intent();
+                        setResult(ApplicationConstants.RESULT_FIRST_LAUNCH,returnIntent);
+                        finish();
+                    }
+                });
+
+            }
+        }
+    }
     // PREFERENCES
     public String getDefaults(String key) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -135,19 +179,6 @@ public class SplashActivity extends Activity {
                 finish();
             }
         }
-
-        /*switch(resultCode)
-        {
-            case ApplicationConstants.RESULT_CLOSE_ALL:
-                setResult(ApplicationConstants.RESULT_CLOSE_ALL);
-                Log.d(TAG, "RESULT_CLOSE_ALL");
-                finish();
-            break;
-            case ApplicationConstants.RESULT_FIRST_LAUNCH:
-                Log.d(TAG, "RESULT_FIRST_LAUNCH");
-                finish();
-            break;
-        }*/
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -177,8 +208,7 @@ public class SplashActivity extends Activity {
 
             count++;
 
-            if (count == count_limit)
-                startActivityForResult(intent, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
+            launchHomeActivity();
 		}
 
 	}
@@ -210,8 +240,7 @@ public class SplashActivity extends Activity {
 
             count++;
 
-            if (count == count_limit)
-                startActivityForResult(intent, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
+            launchHomeActivity();
         }
 
     }
@@ -242,8 +271,7 @@ public class SplashActivity extends Activity {
 
             count++;
 
-            if (count == count_limit)
-                startActivityForResult(intent, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
+            launchHomeActivity();
         }
 
     }
@@ -269,35 +297,38 @@ public class SplashActivity extends Activity {
                         jsonobject_level1.optString("name"),
                         jsonobject_level1.optString("section"),
                         jsonobject_level1.optString("content"),
+                        0,
                         jsonobject_level1.optInt("position")
                     );
-                    survivalguide.getFirstlevel().add(category);
+                    survivalguide.getCategories().add(category);
 
                     // SURVIVAL GUIDE LEVEL 2
                     JSONArray jsonarray_level2 = jsonobject_level1.getJSONArray("categories");
                     for (int j = 0; j < jsonarray_level2.length(); j++) {
                         JSONObject jsonobject_level2 = jsonarray_level2.getJSONObject(j);
                         Category categorylvl2 = new Category(
-                                jsonobject_level1.optInt("id"),
-                                jsonobject_level1.optString("name"),
-                                jsonobject_level1.optString("section"),
-                                jsonobject_level1.optString("content"),
-                                jsonobject_level1.optInt("position")
+                                jsonobject_level2.optInt("id"),
+                                jsonobject_level2.optString("name"),
+                                jsonobject_level2.optString("section"),
+                                jsonobject_level2.optString("content"),
+                                1,
+                                jsonobject_level2.optInt("position")
                         );
-                        survivalguide.getSecondlevel().add(categorylvl2);
+                        survivalguide.getCategories().add(categorylvl2);
 
                         // SURVIVAL GUIDE LEVEL 3
                         JSONArray jsonarray_level3 = jsonobject_level2.getJSONArray("categories");
                         for (int k = 0; k < jsonarray_level3.length(); k++) {
                             JSONObject jsonobject_level3 = jsonarray_level3.getJSONObject(k);
                             Category categorylvl3 = new Category(
-                                    jsonobject_level1.optInt("id"),
-                                    jsonobject_level1.optString("name"),
-                                    jsonobject_level1.optString("section"),
-                                    jsonobject_level1.optString("content"),
-                                    jsonobject_level1.optInt("position")
+                                    jsonobject_level3.optInt("id"),
+                                    jsonobject_level3.optString("name"),
+                                    jsonobject_level3.optString("section"),
+                                    jsonobject_level3.optString("content"),
+                                    2,
+                                    jsonobject_level3.optInt("position")
                             );
-                            survivalguide.getThirdlevel().add(categorylvl3);
+                            survivalguide.getCategories().add(categorylvl3);
                         }
                     }
                 }
@@ -318,8 +349,7 @@ public class SplashActivity extends Activity {
             //Put Extra
             intent.putExtras(bundle);
 
-            if (count == count_limit)
-                startActivityForResult(intent, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
+            launchHomeActivity();
         }
     }
 
@@ -356,15 +386,15 @@ public class SplashActivity extends Activity {
             protected void onPostExecute(String msg) {
                 if (!TextUtils.isEmpty(regId)) {
                     storeRegIdinSharedPref();
-                    Toast.makeText(
-                            applicationContext,
-                            "Registered with GCM Server successfully.\n\n"
-                                    + msg, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(
+                    //        applicationContext,
+                    //        "Registered with GCM Server successfully.\n\n"
+                    //                + msg, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(
-                            applicationContext,
-                            "Reg ID Creation Failed.\n\nEither you haven't enabled Internet or GCM server is busy right now. Make sure you enabled Internet and try registering again after some time."
-                                    + msg, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(
+                    //       applicationContext,
+                    //       "Reg ID Creation Failed.\n\nEither you haven't enabled Internet or GCM server is busy right now. Make sure you enabled Internet and try registering again after some time."
+                    //               + msg, Toast.LENGTH_LONG).show();
                 }
             }
         }.execute(null, null, null);
@@ -386,15 +416,15 @@ public class SplashActivity extends Activity {
                 new AsyncHttpResponseHandler() {
                     public void onSuccess(int statusCode, org.apache.http.Header[] headers, byte[] b) {
 
-                        Toast.makeText(applicationContext,
-                                "Reg Id shared successfully with Web App ",
-                                Toast.LENGTH_LONG).show();
-                        Intent i = new Intent(applicationContext,
-                                HomeActivity.class);
+                        //Toast.makeText(applicationContext,
+                        //        "Reg Id shared successfully with Web App ",
+                        //        Toast.LENGTH_LONG).show();
                         count++;
 
                         if (count == count_limit) {
-                            startActivityForResult(intent, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
+                            //startActivityForResult(intent, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
+                            launchHomeActivity();
+
                             finish();
                         }
                     }
@@ -402,23 +432,23 @@ public class SplashActivity extends Activity {
                     public void onFailure(int statusCode, org.apache.http.Header[] headers, byte[] b, Throwable throwable) {
                         // When Http response code is '404'
                         if (statusCode == 404) {
-                            Toast.makeText(applicationContext,
-                                    "Requested resource not found",
-                                    Toast.LENGTH_LONG).show();
+                            //    Toast.makeText(applicationContext,
+                            //        "Requested resource not found",
+                            //        Toast.LENGTH_LONG).show();
                         }
                         // When Http response code is '500'
                         else if (statusCode == 500) {
-                            Toast.makeText(applicationContext,
-                                    "Something went wrong at server end",
-                                    Toast.LENGTH_LONG).show();
+                            //Toast.makeText(applicationContext,
+                            //        "Something went wrong at server end",
+                            //        Toast.LENGTH_LONG).show();
                         }
                         // When Http response code other than 404, 500
                         else {
-                            Toast.makeText(
-                                    applicationContext,
-                                    "Unexpected Error occcured! [Most common Error: Device might "
-                                            + "not be connected to Internet or remote server is not up and running], check for other errors as well",
-                                    Toast.LENGTH_LONG).show();
+                            //Toast.makeText(
+                            //        applicationContext,
+                            //        "Unexpected Error occcured! [Most common Error: Device might "
+                            //                + "not be connected to Internet or remote server is not up and running], check for other errors as well",
+                            //        Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -432,18 +462,18 @@ public class SplashActivity extends Activity {
                 GooglePlayServicesUtil.getErrorDialog(resultCode, this,
                         PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
-                Toast.makeText(
-                        applicationContext,
-                        "This device doesn't support Play services, App will not work normally",
-                        Toast.LENGTH_LONG).show();
+                //Toast.makeText(
+                //        applicationContext,
+                //        "This device doesn't support Play services, App will not work normally",
+                //        Toast.LENGTH_LONG).show();
                 finish();
             }
             return false;
         } else {
-            Toast.makeText(
-                    applicationContext,
-                    "This device supports Play services, App will work normally",
-                    Toast.LENGTH_LONG).show();
+            //Toast.makeText(
+            //        applicationContext,
+            //        "This device supports Play services, App will work normally",
+            //        Toast.LENGTH_LONG).show();
         }
         return true;
     }

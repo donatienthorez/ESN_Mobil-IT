@@ -25,7 +25,8 @@
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleSmall"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+        />
 
         <TextView
             android:id="@+id/textView"
@@ -36,5 +37,16 @@
             android:layout_marginLeft="10dp"
             android:text="@string/loading" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/button"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Réessayer"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+    />
 
 </RelativeLayout><!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/layout/splash.xml -->

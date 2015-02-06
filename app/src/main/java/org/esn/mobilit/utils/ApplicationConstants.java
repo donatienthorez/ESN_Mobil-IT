@@ -1,9 +1,15 @@
 package org.esn.mobilit.utils;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+
 /**
  * Created by Spider on 26/01/15.
  */
 public interface ApplicationConstants {
+
+    // DESIGN
+    static final ColorDrawable ESNBlue = new ColorDrawable(Color.rgb(34,157,235));
 
     // Php Application URL to store Reg ID created
     static final String APP_SERVER_URL = "http://esnlille.fr/survivalGuide/includes/rest/insertRegId.php";

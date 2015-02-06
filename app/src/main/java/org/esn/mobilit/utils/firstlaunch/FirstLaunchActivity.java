@@ -60,6 +60,11 @@ public class FirstLaunchActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Set ActionBarColor
+        getActionBar().setDisplayShowHomeEnabled(false);
+        getActionBar().setIcon(ApplicationConstants.ESNBlue);
+        getActionBar().setBackgroundDrawable(ApplicationConstants.ESNBlue);
+
         //Change layout
         setContentView(R.layout.activity_firstlaunch);
 

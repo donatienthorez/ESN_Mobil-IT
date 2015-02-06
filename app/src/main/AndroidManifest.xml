@@ -49,10 +49,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".utils.firstlaunch.FirstLaunchActivity"/>
-        <activity android:name=".fragments.DetailActivity" />
-        <activity android:name=".activities.SplashActivity" />
-        <activity android:name=".fragments.HomeActivity" android:label="@string/title_activity_home" />
+        <activity android:name=".utils.firstlaunch.FirstLaunchActivity" android:label="@string/app_name" />
+        <activity android:name=".fragments.Satellite.DetailActivity" android:label="@string/app_name"  />
+        <activity android:name=".activities.SplashActivity" android:label="@string/app_name"  />
+        <activity android:name=".fragments.HomeActivity" android:label="@string/app_name" />
+
 
         <meta-data
             android:name="com.crashlytics.ApiKey"

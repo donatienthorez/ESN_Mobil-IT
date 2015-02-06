@@ -10,15 +10,17 @@ public class Category implements Serializable {
     private String name;
     private String section;
     private String content;
+    private int level;
     private int position;
 
 
-    public Category(int id, String name, String section, String content, int position) {
-        this.id = id;
-        this.name = name;
-        this.section = section;
-        this.content = content;
-        this.position = position;
+    public Category(int id, String name, String section, String content, int level, int position) {
+        this.id         = id;
+        this.name       = name;
+        this.section    = section;
+        this.content    = content;
+        this.level      = level;
+        this.position   = position;
     }
 
     public int getId() {
@@ -45,12 +47,24 @@ public class Category implements Serializable {
         this.section = section;
     }
 
+    public boolean hasContent(){
+        return (this.getContent().length() == 0) ? false : true;
+    }
+
     public String getContent() {
         return content;
     }
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public int getPosition() {

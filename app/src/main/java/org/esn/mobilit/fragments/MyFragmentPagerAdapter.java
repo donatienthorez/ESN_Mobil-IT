@@ -5,6 +5,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
+import org.esn.mobilit.fragments.Satellite.ListFragment;
+import org.esn.mobilit.fragments.Survival.SurvivalFragment;
 import org.esn.mobilit.models.SurvivalGuide;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
@@ -32,7 +34,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
         this.feedPartners = feedPartners;
     }
     public void setSurvivalGuide(SurvivalGuide survivalGuide){
-        Log.d(MyFragmentPagerAdapter.class.getSimpleName(), "SurvivalGuide categories count : " + survivalGuide.getFirstlevel().size());
+        Log.d(MyFragmentPagerAdapter.class.getSimpleName(), "SurvivalGuide categories count : " + survivalGuide.getCategories().size());
         this.survivalGuide = survivalGuide;
     }
 
@@ -49,19 +51,25 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
         ListFragment partners = new ListFragment(); partners.setFeed(feedPartners); events.setType(2);
 
         //Survival Guide
-        ListSurvivalFragment survival = new ListSurvivalFragment(); survival.setSurvivalGuide(survivalGuide);
+        SurvivalFragment survival = new SurvivalFragment(); survival.setSurvivalGuide(survivalGuide);
 
         switch (position) {
             case 0: //Events
-                return events;
+                if (feedEvents.getItemCount() > 0) return events;
+                else if (feedNews.getItemCount() > 0) return news;
+                else if (feedNews.getItemCount() > 0) return partners;
+                else return survival;
             case 1: //News
-                return news;
+                if (feedNews.getItemCount() > 0) return news;
+                else if (feedNews.getItemCount() > 0) return partners;
+                else return survival;
             case 2: //Partners
-                return partners;
+                if (feedNews.getItemCount() > 0) return partners;
+                else return survival;
             case 3: //Survival Guide
                 return survival;
-            default: //Events
-                return events;
+
+            default: return null;
         }
     }
 

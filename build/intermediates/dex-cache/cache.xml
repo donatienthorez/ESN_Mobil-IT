@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/libs/internal_impl-20.0.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d">
+        <dex dex="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-b1a26e2430ad4f352862c3ffb42917181d657b05.jar" />
+    </item>
+    <item
+        jar="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/3.1.59/classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="2dd7b1a9ea65bb03d9cd16df777eeaf537a1fc81">
+        <dex dex="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/pre-dexed/debug/classes-1c840c40ce3549c3b1f4e5d621b56c7ba09a5151.jar" />
+    </item>
+    <item
+        jar="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.crashlytics.sdk.android/beta/1.0.2/classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="56307e0ca49276b1252687678b996cae37cca6c8">
+        <dex dex="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/pre-dexed/debug/classes-945c71fe7c8e0566bbc37e74452e0f13a761d379.jar" />
+    </item>
+    <item
+        jar="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.crashlytics.sdk.android/answers/1.0.2/classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="ad20cbb8c8c5b10b259cef02041279d8d2251305">
+        <dex dex="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/pre-dexed/debug/classes-af6205a8fde04f0ae83b0cba04bee1c396cc40dd.jar" />
+    </item>
+    <item
+        jar="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/libs/jsoup-1.7.1.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="99351550d1fa2e8147319dbafd3f3a79d4f4c6e5">
+        <dex dex="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/pre-dexed/debug/jsoup-1.7.1-32592994a6b88554c0149035fdad3265c4dae169.jar" />
+    </item>
+    <item
+        jar="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="f21927d22fe31889ecce94dd697a2e75b137e0ef">
+        <dex dex="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/pre-dexed/debug/classes-dbab68e77cd5032c1d1393348ee23dd102abfb51.jar" />
+    </item>
+    <item
+        jar="/Users/Spider/Copy/Documents/Programmation/sdk/extras/android/m2repository/com/android/support/support-annotations/20.0.0/support-annotations-20.0.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="9d9013e9ff35fc3756411e62873c363c70c638fa">
+        <dex dex="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/pre-dexed/debug/support-annotations-20.0.0-13dfb5408a6b9702827f2ac60ebc72a989c60851.jar" />
+    </item>
+    <item
+        jar="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="8694693636ab36910c8100ce527c258ff3ebece0">
+        <dex dex="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/pre-dexed/debug/classes-a21982ae367720f1421de7cf1d20aec241c9108d.jar" />
+    </item>
+    <item
+        jar="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/libs/android-async-http-1.4.6.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="a845a88238be0b5be9d238652c1bc0605ef91f52">
+        <dex dex="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/pre-dexed/debug/android-async-http-1.4.6-2abdc71ae93b626a15fa35b366656531432b176c.jar" />
+    </item>
+    <item
+        jar="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/io.fabric.sdk.android/fabric/1.0.2/classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="8cb02ff05e575cf4b80c9ba363bd28c2f17b7e54">
+        <dex dex="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/pre-dexed/debug/classes-57ada157b93efb8a26fb356337e5bf533af73d99.jar" />
+    </item>
+    <item
+        jar="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.crashlytics.sdk.android/crashlytics/2.1.0/classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="8bf7d6a014327844ada8f63c8f1323a8d6b4e02e">
+        <dex dex="/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/pre-dexed/debug/classes-5755869733016ff75e782f465e58ea6de5598aa3.jar" />
+    </item>
+
+</items>

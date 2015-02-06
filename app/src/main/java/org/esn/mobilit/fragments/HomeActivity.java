@@ -6,10 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 
 import org.esn.mobilit.R;
-import org.esn.mobilit.fragments.ListFragment.ListFragmentItemClickListener;
+import org.esn.mobilit.fragments.Satellite.DetailActivity;
+import org.esn.mobilit.fragments.Satellite.ListFragment.ListFragmentItemClickListener;
 import org.esn.mobilit.models.SurvivalGuide;
+import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
 public class HomeActivity extends FragmentActivity implements ActionBar.TabListener, ListFragmentItemClickListener {
@@ -36,8 +39,15 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         feedPartners = (RSSFeed) getIntent().getExtras().get("feedPartners");
         survivalGuide = (SurvivalGuide) getIntent().getExtras().get("survivalGuide");
 
+        //Count numbers of available tabs
+        int totalTabs = 0;
+        if (feedEvents.getItemCount() > 0) totalTabs++;
+        if (feedNews.getItemCount() > 0) totalTabs++;
+        if (feedPartners.getItemCount() > 0) totalTabs++;
+        if (survivalGuide.getCategories().size() > 0) totalTabs++;
+
         //Init FragmentPagerAdapter
-        MyFragmentPagerAdapter fpa = new MyFragmentPagerAdapter(getSupportFragmentManager(),4);
+        MyFragmentPagerAdapter fpa = new MyFragmentPagerAdapter(getSupportFragmentManager(),totalTabs);
         fpa.setFeedEvents(feedEvents);
         fpa.setFeedNews(feedNews);
         fpa.setFeedPartners(feedPartners);
@@ -48,7 +58,9 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         final ActionBar actionBar = getActionBar();
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        //actionBar.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setIcon(ApplicationConstants.ESNBlue);
+        actionBar.setBackgroundDrawable(ApplicationConstants.ESNBlue);
 
         //Init Pager
         myPager = (ViewPager) findViewById(R.id.pager);
@@ -61,11 +73,13 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         });
 
         //Add tabs
-        actionBar.addTab(actionBar.newTab().setText("Events").setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setText("News").setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setText("Partners").setTabListener(this));
-
-        if (survivalGuide.getFirstlevel().size() > 0)
+        if (feedEvents.getItemCount() > 0)
+            actionBar.addTab(actionBar.newTab().setText("Events").setTabListener(this));
+        if (feedNews.getItemCount() > 0)
+            actionBar.addTab(actionBar.newTab().setText("News").setTabListener(this));
+        if (feedPartners.getItemCount() > 0)
+            actionBar.addTab(actionBar.newTab().setText("Partners").setTabListener(this));
+        if (survivalGuide.getCategories().size() > 0)
             actionBar.addTab(actionBar.newTab().setText("Guide").setTabListener(this));
     }
 
@@ -86,6 +100,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
     @Override
     public void onListFragmentItemClick(int position, RSSFeed currentfeed) {
+        Log.d(HomeActivity.class.getSimpleName(), "onlistFragmentItemClick RSS");
             /** Creating an intent object to start the CountryDetailsActivity */
             Intent intent = new Intent(this, DetailActivity.class);
 

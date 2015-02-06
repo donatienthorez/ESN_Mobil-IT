@@ -137,14 +137,20 @@ ADDED from AndroidManifest.xml:49:17
 		ADDED from AndroidManifest.xml:49:27
 activity#org.esn.mobilit.utils.firstlaunch.FirstLaunchActivity
 ADDED from AndroidManifest.xml:52:9
+	android:label
+		ADDED from AndroidManifest.xml:52:73
 	android:name
 		ADDED from AndroidManifest.xml:52:19
-activity#org.esn.mobilit.fragments.DetailActivity
+activity#org.esn.mobilit.fragments.Satellite.DetailActivity
 ADDED from AndroidManifest.xml:53:9
+	android:label
+		ADDED from AndroidManifest.xml:53:70
 	android:name
 		ADDED from AndroidManifest.xml:53:19
 activity#org.esn.mobilit.activities.SplashActivity
 ADDED from AndroidManifest.xml:54:9
+	android:label
+		ADDED from AndroidManifest.xml:54:61
 	android:name
 		ADDED from AndroidManifest.xml:54:19
 activity#org.esn.mobilit.fragments.HomeActivity
@@ -154,8 +160,8 @@ ADDED from AndroidManifest.xml:55:9
 	android:name
 		ADDED from AndroidManifest.xml:55:19
 meta-data#com.crashlytics.ApiKey
-ADDED from AndroidManifest.xml:57:9
+ADDED from AndroidManifest.xml:58:9
 	android:name
-		ADDED from AndroidManifest.xml:58:13
-	android:value
 		ADDED from AndroidManifest.xml:59:13
+	android:value
+		ADDED from AndroidManifest.xml:60:13

@@ -28,8 +28,7 @@
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-
+            android:layout_height="fill_parent" >
             <WebView
                 android:id="@+id/desc"
                 android:layout_width="wrap_content"
@@ -38,6 +37,7 @@
                 android:scrollbarStyle="insideOverlay"
                 android:text="@string/desc" />
         </RelativeLayout>
+
     </ScrollView>
 
 </RelativeLayout><!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/layout/detail_fragment.xml -->
