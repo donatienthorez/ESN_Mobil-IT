@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -72,8 +73,8 @@ public class SplashActivity extends Activity {
 
         //Set ActionBarColor
         getActionBar().setDisplayShowHomeEnabled(false);
-        getActionBar().setIcon(ApplicationConstants.ESNBlue);
-        getActionBar().setBackgroundDrawable(ApplicationConstants.ESNBlue);
+        getActionBar().setIcon(new ColorDrawable(ApplicationConstants.ESNBlueRGB));
+        getActionBar().setBackgroundDrawable(new ColorDrawable(ApplicationConstants.ESNBlueRGB));
 
         ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 

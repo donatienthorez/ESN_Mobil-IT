@@ -13,9 +13,12 @@
     <string name="chooseyoursection">Choisi ta section ESN</string>
     <string name="ras_section_settings">Reset preferences</string>
 
-    <string name="firstlaunch_text">Lorem ipsum dolor sit amet, consectetur
-        adipiscing elit. Aliquam viverra metus ligula, tempus finibus lorem
-        dignissim sit amet. Maecenas tempus turpis sit amet velit ultrices,
-        id viverra tortor placerat. </string>
+    <string name="chooseyour">Choose your</string>
+    <string name="country">country</string>
+    <string name="city">city</string>
+    <string name="esnsection">ESN Section</string>
+    <string name="and">and</string>
+
+    <string name="firstlaunch_text">Choisit ton <![CDATA[<font color="rgb(33,155,243)">pays</font>]]>, <![CDATA[<font color="blue">ville</font></br>]]> et <![CDATA[<font color="blue">Section ESN</font>]]>.</string>
     <string name="start_button">Launch awesome features</string>
 </resources>

@@ -183,6 +183,7 @@
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="action_settings">Action</string>
+    <string name="and">and</string>
     <string name="app_name">ESN MobilIT</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/3.1.59/res/values/strings.xml -->
     <eat-comment/>
@@ -203,11 +204,11 @@
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="button_choice_section">Validate</string>
-    <string name="chooseyourcountry">Choose your Country</string>
-    <string name="chooseyoursection">Choose your ESN Section</string>
-    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/com_crashlytics_export_strings.xml -->
+    <string name="chooseyour">Choose your</string>
+    <string name="city">city</string>
+    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/generated/res/generated/debug/values/generated.xml -->
     <eat-comment/>
-    <string name="com.crashlytics.android.build_id" translatable="false">c97b7698-c632-46cc-9c9c-693ba044226e</string>
+    <item name="com.crashlytics.android.build_id" type="string">61c50bca-a66a-4a7f-af3a-33fc69ac500f</item>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/3.1.59/res/values/strings.xml -->
     <eat-comment/>
     <string msgid="2523291102206661146" name="common_google_play_services_enable_button">Enable Google Play services</string>
@@ -227,12 +228,11 @@
     <string name="common_signin_button_text_long">Sign in with Google</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings.xml -->
     <eat-comment/>
+    <string name="country">country</string>
     <string name="date">Date</string>
     <string name="desc">Description webview here!</string>
-    <string name="firstlaunch_text">Lorem ipsum dolor sit amet, consectetur
-        adipiscing elit. Aliquam viverra metus ligula, tempus finibus lorem
-        dignissim sit amet. Maecenas tempus turpis sit amet velit ultrices,
-        id viverra tortor placerat. </string>
+    <string name="esnsection">ESN Section</string>
+    <string name="firstlaunch_text">Choose your <![CDATA[<font color="rgb(33,155,243)">country</font>]]>, <![CDATA[<font color="blue">city</font></br>]]> and <![CDATA[<font color="blue">ESN Section</font>]]>.</string>
     <string name="hello_world">Hello world!</string>
     <string name="loading">Loading please wait …</string>
     <string name="menu_settings">Settings</string>

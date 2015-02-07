@@ -10,17 +10,20 @@
     <string name="date">Date</string>
     <string name="menu_settings">Settings</string>
     <string name="action_settings">Action</string>
-    <string name="chooseyourcountry">Choose your Country</string>
-    <string name="chooseyoursection">Choose your ESN Section</string>
+
     <string name="title_activity_main">MainActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_home">ESN Mobil-IT</string>
     <string name="ras_section_settings">Reset preferences</string>
 
-    <string name="firstlaunch_text">Lorem ipsum dolor sit amet, consectetur
-        adipiscing elit. Aliquam viverra metus ligula, tempus finibus lorem
-        dignissim sit amet. Maecenas tempus turpis sit amet velit ultrices,
-        id viverra tortor placerat. </string>
+    <string name="chooseyour">Choose your</string>
+    <string name="country">country</string>
+    <string name="city">city</string>
+    <string name="esnsection">ESN Section</string>
+    <string name="and">and</string>
+
+
+    <string name="firstlaunch_text">Choose your <![CDATA[<font color="rgb(33,155,243)">country</font>]]>, <![CDATA[<font color="blue">city</font></br>]]> and <![CDATA[<font color="blue">ESN Section</font>]]>.</string>
     <string name="start_button">Launch awesome features</string>
 
 </resources>

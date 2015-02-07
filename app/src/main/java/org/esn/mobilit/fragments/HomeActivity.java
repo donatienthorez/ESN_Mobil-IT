@@ -3,6 +3,7 @@ package org.esn.mobilit.fragments;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -59,8 +60,8 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setDisplayShowHomeEnabled(false);
-        actionBar.setIcon(ApplicationConstants.ESNBlue);
-        actionBar.setBackgroundDrawable(ApplicationConstants.ESNBlue);
+        actionBar.setIcon(new ColorDrawable(ApplicationConstants.ESNBlueRGB));
+        actionBar.setBackgroundDrawable(new ColorDrawable(ApplicationConstants.ESNBlueRGB));
 
         //Init Pager
         myPager = (ViewPager) findViewById(R.id.pager);

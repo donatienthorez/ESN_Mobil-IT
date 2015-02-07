@@ -3,9 +3,14 @@ package org.esn.mobilit.utils.firstlaunch;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,6 +18,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Category;
@@ -37,6 +43,7 @@ public class FirstLaunchActivity extends Activity {
     //Layout
     private LinearLayout spinners_layout;
     private Button startButton;
+    private TextView textView;
 
     // Attributes for spinnerCountries
     private Spinner spinnerCountries;
@@ -62,14 +69,40 @@ public class FirstLaunchActivity extends Activity {
 
         //Set ActionBarColor
         getActionBar().setDisplayShowHomeEnabled(false);
-        getActionBar().setIcon(ApplicationConstants.ESNBlue);
-        getActionBar().setBackgroundDrawable(ApplicationConstants.ESNBlue);
+        getActionBar().setIcon(new ColorDrawable(ApplicationConstants.ESNBlueRGB));
+        getActionBar().setBackgroundDrawable(new ColorDrawable(ApplicationConstants.ESNBlueRGB));
 
         //Change layout
         setContentView(R.layout.activity_firstlaunch);
 
+        //Init Content
         startButton = (Button) findViewById(R.id.start_button);
+        textView    = (TextView) findViewById(R.id.chooseyourcountry);
 
+        //Set Button style
+        startButton.setBackgroundColor(ApplicationConstants.ESNBlueRGB);
+        startButton.setTextColor(Color.WHITE);
+
+        //Set text color
+        SpannableStringBuilder text = new SpannableStringBuilder();
+        text.append(getResources().getString(R.string.chooseyour) + " "); // Choose your
+
+        SpannableString countryspan = new SpannableString(getResources().getString(R.string.country));
+        countryspan.setSpan(new ForegroundColorSpan(ApplicationConstants.ESNBlueRGB), 0, countryspan.length(), 0);
+        text.append(countryspan); // Choose your country
+        text.append(", ");// Choose your country ,
+
+        SpannableString cityspan = new SpannableString(getResources().getString(R.string.city));
+        cityspan.setSpan(new ForegroundColorSpan(ApplicationConstants.ESNBlueRGB), 0, cityspan.length(), 0);
+        text.append(cityspan + " "); // Choose your country, city
+        text.append(getResources().getString(R.string.and) + " ");// Choose your country ,city and
+
+        SpannableString esnsectionspan = new SpannableString(getResources().getString(R.string.esnsection));
+        esnsectionspan.setSpan(new ForegroundColorSpan(ApplicationConstants.ESNBlueRGB), 0, esnsectionspan.length(), 0);
+        text.append(esnsectionspan); // Choose your country, city and ESN Section
+        text.append('.');// Choose your country ,city and ESN Section.
+
+        textView.setText(text, TextView.BufferType.SPANNABLE);
         addSpinnerCountries();
     }
 
@@ -99,9 +132,6 @@ public class FirstLaunchActivity extends Activity {
 
             //new DownloadJSONCountries().execute();
             initFrenchCountry();
-
-            //progressBar = new ProgressBar(this);
-            //spinners_layout.addView(progressBar);
         }
     }
 
