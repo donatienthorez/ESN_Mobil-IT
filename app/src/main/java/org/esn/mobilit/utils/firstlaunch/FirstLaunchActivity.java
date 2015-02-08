@@ -27,6 +27,7 @@ import org.esn.mobilit.models.Section;
 import org.esn.mobilit.models.Sections;
 import org.esn.mobilit.network.JSONfunctions;
 import org.esn.mobilit.utils.ApplicationConstants;
+import org.esn.mobilit.utils.Utils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -35,6 +36,9 @@ import java.util.ArrayList;
 
 public class FirstLaunchActivity extends Activity {
     private static final String TAG = FirstLaunchActivity.class.getSimpleName();
+
+    //Activity
+    private Activity currentActivity;
 
     //JSON
     private JSONObject jsonobject;
@@ -66,6 +70,9 @@ public class FirstLaunchActivity extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Init activity
+        currentActivity = this;
 
         //Set ActionBarColor
         getActionBar().setDisplayShowHomeEnabled(false);
@@ -103,6 +110,7 @@ public class FirstLaunchActivity extends Activity {
         text.append('.');// Choose your country ,city and ESN Section.
 
         textView.setText(text, TextView.BufferType.SPANNABLE);
+
         addSpinnerCountries();
     }
 
@@ -110,7 +118,6 @@ public class FirstLaunchActivity extends Activity {
         setDefaults("CODE_COUNTRY", currentCountry.getCode_country());
         setDefaults("CODE_SECTION", currentSection.getCode_section());
         setDefaults("SECTION_WEBSITE", sectionChoosed.getWebsite());
-        setDefaults("FROM_FIRSTLAUNCH", "1");
 
         Log.d(TAG, " Country : " + getDefaults("CODE_COUNTRY"));
         Log.d(TAG, " Section : " + getDefaults("CODE_SECTION"));
@@ -261,10 +268,17 @@ public class FirstLaunchActivity extends Activity {
             // Create an array to populate the spinner
             spinnerSections_data = new ArrayList<String>();
 
-            String url = ApplicationConstants.SECTIONS_WEBSERVICE_URL + "getSections.php?code_country="+currentCountry.getCode_country();
-
-            // JSON file URL address
-            jsonobject = JSONfunctions.getJSONfromURL(url);
+            if (Utils.isConnected(currentActivity)){
+                String url = ApplicationConstants.SECTIONS_WEBSERVICE_URL + "getSections.php?code_country="+currentCountry.getCode_country();
+                jsonobject = JSONfunctions.getJSONfromURL(url);
+            }
+            else{
+                try {
+                    jsonobject = new JSONObject(Utils.loadSectionsFromFile(currentActivity, currentCountry.getCode_country()));
+                }catch (Exception e){
+                    Log.d(TAG, "ERROR GETTING SECTIONS FROM FILE");
+                }
+            }
 
             try {
                 // Locate the NodeList name
@@ -323,14 +337,22 @@ public class FirstLaunchActivity extends Activity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            String url = ApplicationConstants.SECTIONS_WEBSERVICE_URL +  "getSection.php?code_country="+currentCountry.getCode_country()+"&code_section="+currentSection.getCode_section();
+            JSONObject jsonobject = null;
+            JSONArray jsonarray = null;
 
-            JSONObject jsonobject;
-            JSONArray jsonarray;
+            // JSON file URL address or cache
+            if (Utils.isConnected(currentActivity)){
+                String url = ApplicationConstants.SECTIONS_WEBSERVICE_URL +  "getSection.php?code_country="+currentCountry.getCode_country()+"&code_section="+currentSection.getCode_section();
+                jsonobject = JSONfunctions.getJSONfromURL(url);
+            }
+            else{
+                try {
+                    jsonobject = new JSONObject(Utils.loadSectionFromFile(currentActivity, currentSection.getCode_section()));
+                }catch (Exception e){
+                    Log.d(TAG, "ERROR GETTING SECTIONS FROM FILE");
+                }
+            }
 
-            // JSON file URL address
-            jsonobject = JSONfunctions
-                    .getJSONfromURL(url);
 
             try {
                 // Locate the NodeList name

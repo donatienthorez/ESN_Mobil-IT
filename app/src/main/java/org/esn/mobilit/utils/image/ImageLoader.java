@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
 import org.esn.mobilit.R;
+import org.esn.mobilit.utils.Utils;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -19,6 +19,9 @@
     <string name="esnsection">ESN Section</string>
     <string name="and">and</string>
 
+    <string name="tryingcache">No Internet connection, load from cache ...</string>
+    <string name="emptycache">You need to load data at least once with internet</string>
+
     <string name="firstlaunch_text">Choisit ton <![CDATA[<font color="rgb(33,155,243)">pays</font>]]>, <![CDATA[<font color="blue">ville</font></br>]]> et <![CDATA[<font color="blue">Section ESN</font>]]>.</string>
     <string name="start_button">Launch awesome features</string>
 </resources>

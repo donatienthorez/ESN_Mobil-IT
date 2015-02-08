@@ -10,14 +10,16 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 
 import org.esn.mobilit.R;
+import org.esn.mobilit.activities.SplashActivity;
 import org.esn.mobilit.fragments.Satellite.DetailActivity;
 import org.esn.mobilit.fragments.Satellite.ListFragment.ListFragmentItemClickListener;
 import org.esn.mobilit.models.SurvivalGuide;
 import org.esn.mobilit.utils.ApplicationConstants;
+import org.esn.mobilit.utils.image.InternalStorage;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
 public class HomeActivity extends FragmentActivity implements ActionBar.TabListener, ListFragmentItemClickListener {
-
+    private static final String TAG = SplashActivity.class.getSimpleName();
     ViewPager               myPager;
     MyFragmentPagerAdapter  myAdapter;
     RSSFeed feedEvents, feedNews, feedPartners;
@@ -27,6 +29,25 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("viewpagerid" , myPager.getId() );
+    }
+
+    // CACHE
+    public void saveObjectToCache(String key, Object o){
+        try {
+            InternalStorage.writeObject(this, key, o);
+        }catch (Exception e){
+            Log.d(TAG, "Exception saveobject: " + e);
+        }
+    }
+
+    public Object getObjectFromCache(String key){
+        Object o = null;
+        try {
+            o = InternalStorage.readObject(this, key);
+        }catch (Exception e){
+            Log.d(TAG, "Exception saveobject: " + e);
+        }
+        return o;
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -101,7 +122,6 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
     @Override
     public void onListFragmentItemClick(int position, RSSFeed currentfeed) {
-        Log.d(HomeActivity.class.getSimpleName(), "onlistFragmentItemClick RSS");
             /** Creating an intent object to start the CountryDetailsActivity */
             Intent intent = new Intent(this, DetailActivity.class);
 

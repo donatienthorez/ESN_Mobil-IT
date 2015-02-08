@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
-import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -29,6 +28,9 @@ import org.esn.mobilit.models.Category;
 import org.esn.mobilit.models.SurvivalGuide;
 import org.esn.mobilit.network.JSONfunctions;
 import org.esn.mobilit.utils.ApplicationConstants;
+import org.esn.mobilit.utils.firstlaunch.FirstLaunchActivity;
+import org.esn.mobilit.utils.image.InternalStorage;
+import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.parser.DOMParser;
 import org.esn.mobilit.utils.parser.RSSFeed;
 import org.json.JSONArray;
@@ -48,6 +50,7 @@ public class SplashActivity extends Activity {
     private Intent intent;
     private TextView textView;
     private ProgressBar progressBar;
+    private Context splashActivityContext;
     //GCM
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String REG_ID = "regId";
@@ -62,6 +65,7 @@ public class SplashActivity extends Activity {
 		setContentView(R.layout.splash);
 
         //Init values
+        splashActivityContext = getApplicationContext();
         applicationContext = getApplicationContext();
         count_limit = 5;
         intent = new Intent(getApplicationContext(), HomeActivity.class);
@@ -76,15 +80,31 @@ public class SplashActivity extends Activity {
         getActionBar().setIcon(new ColorDrawable(ApplicationConstants.ESNBlueRGB));
         getActionBar().setBackgroundDrawable(new ColorDrawable(ApplicationConstants.ESNBlueRGB));
 
-        ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (!Utils.isConnected(this)){
+            // No connectivity - Load cache
+            textView.setText(getResources().getString(R.string.tryingcache));
+            feedEvents    = (RSSFeed) getObjectFromCache("feedEvents");
+            feedNews      = (RSSFeed) getObjectFromCache("feedNews");
+            feedPartners  = (RSSFeed) getObjectFromCache("feedPartners");
+            survivalguide = (SurvivalGuide) getObjectFromCache("survivalGuide");
 
-        if (conMgr == null || conMgr.getActiveNetworkInfo() == null
-                || !conMgr.getActiveNetworkInfo().isConnected()
-                || !conMgr.getActiveNetworkInfo().isAvailable()){
-
-            // No connectivity - Show message and button
-            textView.setText("Erreur : Vous n'êtes pas connecté à Internet");
-            progressBar.setVisibility(View.INVISIBLE);
+            // Cache is empty
+            if (feedEvents == null && feedNews == null && feedPartners == null && survivalguide == null){
+                Log.d(TAG, "EMPTY CACHE");
+                textView.setText(getResources().getString(R.string.emptycache));
+                progressBar.setVisibility(View.INVISIBLE);
+            }else{ // Cache is not empty, load homeactivity
+                Log.d(TAG, "LOADED FROM CACHE");
+                //Add inputs
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("feedEvents", feedEvents);
+                bundle.putSerializable("feedNews", feedNews);
+                bundle.putSerializable("feedPartners", feedPartners);
+                bundle.putSerializable("survivalGuide", survivalguide);
+                intent.putExtras(bundle);
+                count = count_limit;
+                launchHomeActivity();
+            }
 
             final Button button = (Button) findViewById(R.id.button);
             button.setVisibility(View.VISIBLE);
@@ -111,7 +131,6 @@ public class SplashActivity extends Activity {
             new AsyncLoadXMLFeedEvents().execute();
             new AsyncLoadXMLFeedNews().execute();
             new AsyncLoadXMLFeedPartners().execute();
-
         }
 	}
 
@@ -147,6 +166,7 @@ public class SplashActivity extends Activity {
             }
         }
     }
+
     // PREFERENCES
     public String getDefaults(String key) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -160,6 +180,26 @@ public class SplashActivity extends Activity {
         editor.commit();
     }
 
+    // CACHE
+    public void saveObjectToCache(String key, Object o){
+        key = getDefaults("CODE_SECTION") + "_" + key;
+        try {
+            InternalStorage.writeObject(splashActivityContext, key, o);
+        }catch (Exception e){
+            Log.d(TAG, "Exception saveobject: " + e);
+        }
+    }
+
+    public Object getObjectFromCache(String key){
+        Object o = null;
+        key = getDefaults("CODE_SECTION") + "_" + key;
+        try {
+            o = InternalStorage.readObject(splashActivityContext, key);
+        }catch (Exception e){
+            Log.d(TAG, "Exception getobject: " + e);
+        }
+        return o;
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult");
@@ -194,6 +234,8 @@ public class SplashActivity extends Activity {
             Log.d(TAG, "Debut Parser pour " + ApplicationConstants.EVENTS_PATH + ApplicationConstants.FEED_PATH);
 			DOMParser myParser = new DOMParser();
             feedEvents = myParser.parseXml(event_url);
+
+            saveObjectToCache("feedEvents", feedEvents);
 			return null;
 		}
 
@@ -226,6 +268,7 @@ public class SplashActivity extends Activity {
             Log.d(TAG, "Debut Parser pour " + url);
             DOMParser myParser = new DOMParser();
             feedNews = myParser.parseXml(url);
+            saveObjectToCache("feedNews", feedNews);
             return null;
         }
 
@@ -257,6 +300,7 @@ public class SplashActivity extends Activity {
             Log.d(TAG, "Debut Parser pour " + url);
             DOMParser myParser = new DOMParser();
             feedPartners = myParser.parseXml(url);
+            saveObjectToCache("feedPartners", feedPartners);
             return null;
         }
 
@@ -337,6 +381,8 @@ public class SplashActivity extends Activity {
                 Log.d(TAG,"Error" + e.getMessage());
                 e.printStackTrace();
             }
+
+            saveObjectToCache("survivalGuide", survivalguide);
             return null;
         }
 

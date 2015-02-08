@@ -208,7 +208,7 @@
     <string name="city">city</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/generated/res/generated/debug/values/generated.xml -->
     <eat-comment/>
-    <item name="com.crashlytics.android.build_id" type="string">61c50bca-a66a-4a7f-af3a-33fc69ac500f</item>
+    <item name="com.crashlytics.android.build_id" type="string">fbf85c64-a012-4015-8f53-f68f1ea17721</item>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/3.1.59/res/values/strings.xml -->
     <eat-comment/>
     <string msgid="2523291102206661146" name="common_google_play_services_enable_button">Enable Google Play services</string>
@@ -231,6 +231,7 @@
     <string name="country">country</string>
     <string name="date">Date</string>
     <string name="desc">Description webview here!</string>
+    <string name="emptycache">You need to load data at least once with internet</string>
     <string name="esnsection">ESN Section</string>
     <string name="firstlaunch_text">Choose your <![CDATA[<font color="rgb(33,155,243)">country</font>]]>, <![CDATA[<font color="blue">city</font></br>]]> and <![CDATA[<font color="blue">ESN Section</font>]]>.</string>
     <string name="hello_world">Hello world!</string>
@@ -265,51 +266,7 @@
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="title_detailfragment">Titreeeee !</string>
-    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/styles.xml -->
-    <eat-comment/>
-    <style name="ActionBar.Solid.Esnmobilit" parent="@android:style/Widget.Holo.ActionBar.Solid">
-    <item name="android:background">@drawable/ab_solid_esnmobilit</item>
-    <item name="android:backgroundStacked">@drawable/ab_stacked_solid_esnmobilit</item>
-    <item name="android:backgroundSplit">@drawable/ab_bottom_solid_esnmobilit</item>
-    <item name="android:progressBarStyle">@style/ProgressBar.Esnmobilit</item>
-</style>
-    <style name="ActionBar.Transparent.Esnmobilit" parent="@android:style/Widget.Holo.ActionBar">
-    <item name="android:background">@drawable/ab_transparent_esnmobilit</item>
-    <item name="android:progressBarStyle">@style/ProgressBar.Esnmobilit</item>
-</style>
-    <style name="ActionBarTabStyle.Esnmobilit" parent="@android:style/Widget.Holo.ActionBar.TabView">
-    <item name="android:background">@drawable/tab_indicator_ab_esnmobilit</item>
-</style>
-    <style name="ActionButton.CloseMode.Esnmobilit" parent="@android:style/Widget.Holo.ActionButton.CloseMode">
-    <item name="android:background">@drawable/btn_cab_done_esnmobilit</item>
-</style>
-    <style name="AppTheme" parent="@android:style/Theme.Holo">
-    <item name="android:actionBarItemBackground">@drawable/selectable_background_esnmobilit</item>
-    <item name="android:popupMenuStyle">@style/PopupMenu.Esnmobilit</item>
-    <item name="android:dropDownListViewStyle">@style/DropDownListView.Esnmobilit</item>
-    <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Esnmobilit</item>
-    <item name="android:actionDropDownStyle">@style/DropDownNav.Esnmobilit</item>
-    <item name="android:actionBarStyle">@style/ActionBar.Transparent.Esnmobilit</item>
-    <item name="android:actionModeBackground">@drawable/cab_background_top_esnmobilit</item>
-    <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_esnmobilit</item>
-    <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Esnmobilit</item>
-
-
-</style>
-    <style name="DropDownListView.Esnmobilit" parent="@android:style/Widget.Holo.ListView.DropDown">
-    <item name="android:listSelector">@drawable/selectable_background_esnmobilit</item>
-</style>
-    <style name="DropDownNav.Esnmobilit" parent="@android:style/Widget.Holo.Spinner">
-    <item name="android:background">@drawable/spinner_background_ab_esnmobilit</item>
-    <item name="android:popupBackground">@drawable/menu_dropdown_panel_esnmobilit</item>
-    <item name="android:dropDownSelector">@drawable/selectable_background_esnmobilit</item>
-</style>
-    <style name="PopupMenu.Esnmobilit" parent="@android:style/Widget.Holo.ListPopupWindow">
-    <item name="android:popupBackground">@drawable/menu_dropdown_panel_esnmobilit</item>
-</style>
-    <style name="ProgressBar.Esnmobilit" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
-    <item name="android:progressDrawable">@drawable/progress_horizontal_esnmobilit</item>
-</style>
+    <string name="tryingcache">No Internet connection, load from cache ...</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
     <eat-comment/>
     <style name="TextAppearance.AppCompat.Base.CompactMenu.Dialog" parent="android:TextAppearance.Medium">
@@ -673,14 +630,6 @@
     </style>
     <style name="Theme.Base.AppCompat.Light.DialogWhenLarge" parent="Theme.Base.AppCompat.Light"/>
     <style name="Theme.Base.Light" parent="android:Theme.Light"/>
-    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/styles.xml -->
-    <eat-comment/>
-    <style name="Theme.Esnmobilit.Widget" parent="@android:style/Theme.Holo">
-    <item name="android:popupMenuStyle">@style/PopupMenu.Esnmobilit</item>
-    <item name="android:dropDownListViewStyle">@style/DropDownListView.Esnmobilit</item>
-</style>
-    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
-    <eat-comment/>
     <style name="Widget.AppCompat.ActionBar" parent="Widget.AppCompat.Base.ActionBar"/>
     <style name="Widget.AppCompat.ActionBar.Solid" parent="Widget.AppCompat.Base.ActionBar.Solid"/>
     <style name="Widget.AppCompat.ActionBar.TabBar" parent="Widget.AppCompat.Base.ActionBar.TabBar"/>
