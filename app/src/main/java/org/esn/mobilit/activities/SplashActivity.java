@@ -26,10 +26,10 @@ import org.esn.mobilit.R;
 import org.esn.mobilit.fragments.HomeActivity;
 import org.esn.mobilit.models.Category;
 import org.esn.mobilit.models.SurvivalGuide;
-import org.esn.mobilit.utils.network.JSONfunctions;
+import org.esn.mobilit.network.JSONfunctions;
 import org.esn.mobilit.utils.ApplicationConstants;
-import org.esn.mobilit.utils.image.InternalStorage;
 import org.esn.mobilit.utils.Utils;
+import org.esn.mobilit.utils.image.InternalStorage;
 import org.esn.mobilit.utils.parser.DOMParser;
 import org.esn.mobilit.utils.parser.RSSFeed;
 import org.json.JSONArray;
@@ -49,6 +49,7 @@ public class SplashActivity extends Activity {
     private Intent intent;
     private TextView textView;
     private ProgressBar progressBar;
+    private Context splashActivityContext;
     //GCM
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String REG_ID = "regId";
@@ -63,6 +64,7 @@ public class SplashActivity extends Activity {
 		setContentView(R.layout.splash);
 
         //Init values
+        splashActivityContext = getApplicationContext();
         applicationContext = getApplicationContext();
         count_limit = 5;
         intent = new Intent(getApplicationContext(), HomeActivity.class);
@@ -75,7 +77,6 @@ public class SplashActivity extends Activity {
         //Set ActionBarColor
         getActionBar().setDisplayShowHomeEnabled(false);
         getActionBar().setIcon(new ColorDrawable(ApplicationConstants.ESNBlueRGB));
-        getActionBar().setBackgroundDrawable(new ColorDrawable(ApplicationConstants.ESNBlueRGB));
 
         if (!Utils.isConnected(this)){
             // No connectivity - Load cache
@@ -181,7 +182,7 @@ public class SplashActivity extends Activity {
     public void saveObjectToCache(String key, Object o){
         key = getDefaults("CODE_SECTION") + "_" + key;
         try {
-            InternalStorage.writeObject(applicationContext, key, o);
+            InternalStorage.writeObject(splashActivityContext, key, o);
         }catch (Exception e){
             Log.d(TAG, "Exception saveobject: " + e);
         }
@@ -191,7 +192,7 @@ public class SplashActivity extends Activity {
         Object o = null;
         key = getDefaults("CODE_SECTION") + "_" + key;
         try {
-            o = InternalStorage.readObject(applicationContext, key);
+            o = InternalStorage.readObject(splashActivityContext, key);
         }catch (Exception e){
             Log.d(TAG, "Exception getobject: " + e);
         }

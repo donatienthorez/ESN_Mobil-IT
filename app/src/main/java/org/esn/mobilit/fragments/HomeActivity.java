@@ -7,7 +7,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.activities.SplashActivity;
@@ -15,7 +14,6 @@ import org.esn.mobilit.fragments.Satellite.DetailActivity;
 import org.esn.mobilit.fragments.Satellite.ListFragment.ListFragmentItemClickListener;
 import org.esn.mobilit.models.SurvivalGuide;
 import org.esn.mobilit.utils.ApplicationConstants;
-import org.esn.mobilit.utils.image.InternalStorage;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
 public class HomeActivity extends FragmentActivity implements ActionBar.TabListener, ListFragmentItemClickListener {
@@ -24,31 +22,6 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
     MyFragmentPagerAdapter  myAdapter;
     RSSFeed feedEvents, feedNews, feedPartners;
     SurvivalGuide survivalGuide;
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt("viewpagerid" , myPager.getId() );
-    }
-
-    // CACHE
-    public void saveObjectToCache(String key, Object o){
-        try {
-            InternalStorage.writeObject(this, key, o);
-        }catch (Exception e){
-            Log.d(TAG, "Exception saveobject: " + e);
-        }
-    }
-
-    public Object getObjectFromCache(String key){
-        Object o = null;
-        try {
-            o = InternalStorage.readObject(this, key);
-        }catch (Exception e){
-            Log.d(TAG, "Exception saveobject: " + e);
-        }
-        return o;
-    }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +55,6 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setIcon(new ColorDrawable(ApplicationConstants.ESNBlueRGB));
-        actionBar.setBackgroundDrawable(new ColorDrawable(ApplicationConstants.ESNBlueRGB));
 
         //Init Pager
         myPager = (ViewPager) findViewById(R.id.pager);
@@ -103,6 +75,12 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
             actionBar.addTab(actionBar.newTab().setText("Partners").setTabListener(this));
         if (survivalGuide.getCategories().size() > 0)
             actionBar.addTab(actionBar.newTab().setText("Guide").setTabListener(this));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("viewpagerid" , myPager.getId() );
     }
 
     @Override

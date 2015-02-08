@@ -102,6 +102,11 @@
     <color name="abc_search_url_text_normal">#7fa87f</color>
     <color name="abc_search_url_text_pressed">@android:color/black</color>
     <color name="abc_search_url_text_selected">@android:color/black</color>
+    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/color.xml -->
+    <eat-comment/>
+    <color name="aqua">#00FFFF</color>
+    <color name="black">#000000</color>
+    <color name="blue">#0000FF</color>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/3.1.59/res/values/colors.xml -->
     <eat-comment/>
     <color name="common_action_bar_splitter">#d2d2d2</color>
@@ -114,6 +119,25 @@
     <color name="common_signin_btn_light_text_disabled">#FFAAAAAA</color>
     <color name="common_signin_btn_light_text_focused">#FF737373</color>
     <color name="common_signin_btn_light_text_pressed">@android:color/white</color>
+    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/color.xml -->
+    <eat-comment/>
+    <color name="esnblue">#219DF3</color>
+    <color name="esngreen">#70B918</color>
+    <color name="esnorange">#DB6000</color>
+    <color name="esnpink">#DE007E</color>
+    <color name="fuchsia">#FF00FF</color>
+    <color name="gray">#808080</color>
+    <color name="green">#008000</color>
+    <color name="lime">#00FF00</color>
+    <color name="maroon">#800000</color>
+    <color name="navy">#000080</color>
+    <color name="olive">#808000</color>
+    <color name="purple">#800080</color>
+    <color name="red">#FF0000</color>
+    <color name="silver">#C0C0C0</color>
+    <color name="teal">#008080</color>
+    <color name="white">#FFFFFF</color>
+    <color name="yellow">#FFFF00</color>
     <declare-styleable name="ActionBar"><attr name="navigationMode"><enum name="normal" value="0"/><enum name="listMode" value="1"/><enum name="tabMode" value="2"/></attr><attr name="displayOptions"><flag name="useLogo" value="0x1"/><flag name="showHome" value="0x2"/><flag name="homeAsUp" value="0x4"/><flag name="showTitle" value="0x8"/><flag name="showCustom" value="0x10"/><flag name="disableHome" value="0x20"/></attr><attr name="title"/><attr format="string" name="subtitle"/><attr format="reference" name="titleTextStyle"/><attr format="reference" name="subtitleTextStyle"/><attr format="reference" name="icon"/><attr format="reference" name="logo"/><attr format="reference" name="divider"/><attr format="reference" name="background"/><attr format="reference|color" name="backgroundStacked"/><attr format="reference|color" name="backgroundSplit"/><attr format="reference" name="customNavigationLayout"/><attr name="height"/><attr format="reference" name="homeLayout"/><attr format="reference" name="progressBarStyle"/><attr format="reference" name="indeterminateProgressStyle"/><attr format="dimension" name="progressBarPadding"/><attr format="dimension" name="itemPadding"/></declare-styleable>
     <declare-styleable name="ActionBarLayout"><attr name="android:layout_gravity"/></declare-styleable>
     <declare-styleable name="ActionBarWindow"><attr format="boolean" name="windowActionBar"/><attr format="boolean" name="windowActionBarOverlay"/><attr format="boolean" name="windowSplitActionBar"/><attr format="dimension|fraction" name="windowFixedWidthMajor"/><attr format="dimension|fraction" name="windowFixedHeightMinor"/><attr format="dimension|fraction" name="windowFixedWidthMinor"/><attr format="dimension|fraction" name="windowFixedHeightMajor"/></declare-styleable>
@@ -208,7 +232,7 @@
     <string name="city">city</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/generated/res/generated/debug/values/generated.xml -->
     <eat-comment/>
-    <item name="com.crashlytics.android.build_id" type="string">9afa8185-3d8b-4f4c-98cf-3559c627fbcd</item>
+    <item name="com.crashlytics.android.build_id" type="string">94b29d54-fce0-4e02-aa2a-05d0125dce43</item>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/3.1.59/res/values/strings.xml -->
     <eat-comment/>
     <string msgid="2523291102206661146" name="common_google_play_services_enable_button">Enable Google Play services</string>
@@ -269,7 +293,45 @@
     <string name="tryingcache">No Internet connection, load from cache ...</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/styles.xml -->
     <eat-comment/>
-    <style name="AppTheme" parent="android:Theme.Light"/>
+    <style name="ActionBar.Solid.Esnmobilit" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
+        <item name="android:background">@drawable/ab_solid_esnmobilit</item>
+        <item name="android:titleTextStyle">@style/ActionBar.Solid.TextStyle.Esnmobilit</item>
+        <item name="android:backgroundStacked">@drawable/ab_stacked_solid_esnmobilit</item>
+        <item name="android:backgroundSplit">@drawable/ab_bottom_solid_esnmobilit</item>
+        <item name="android:progressBarStyle">@style/ProgressBar.Esnmobilit</item>
+    </style>
+    <style name="ActionBar.Solid.TextStyle.Esnmobilit" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="ActionBar.Transparent.Esnmobilit" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@drawable/ab_transparent_esnmobilit</item>
+        <item name="android:progressBarStyle">@style/ProgressBar.Esnmobilit</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="ActionBarTabStyle.Esnmobilit" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
+        <item name="android:background">@drawable/tab_indicator_ab_esnmobilit</item>
+        <item name="android:titleTextStyle">@style/ActionBar.Solid.TextStyle.Esnmobilit</item>
+    </style>
+    <style name="ActionBarTabText.white.Esnmobilit" parent="@android:style/Widget.Holo.Light.ActionBar.TabText">
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="ActionButton.CloseMode.Esnmobilit" parent="@android:style/Widget.Holo.Light.ActionButton.CloseMode">
+        <item name="android:background">@drawable/btn_cab_done_esnmobilit</item>
+    </style>
+    <style name="DropDownListView.Esnmobilit" parent="@android:style/Widget.Holo.Light.ListView.DropDown">
+        <item name="android:listSelector">@drawable/selectable_background_esnmobilit</item>
+    </style>
+    <style name="DropDownNav.Esnmobilit" parent="@android:style/Widget.Holo.Light.Spinner">
+        <item name="android:background">@drawable/spinner_background_ab_esnmobilit</item>
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_esnmobilit</item>
+        <item name="android:dropDownSelector">@drawable/selectable_background_esnmobilit</item>
+    </style>
+    <style name="PopupMenu.Esnmobilit" parent="@android:style/Widget.Holo.Light.ListPopupWindow">
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_esnmobilit</item>
+    </style>
+    <style name="ProgressBar.Esnmobilit" parent="@android:style/Widget.Holo.Light.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_horizontal_esnmobilit</item>
+    </style>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
     <eat-comment/>
     <style name="TextAppearance.AppCompat.Base.CompactMenu.Dialog" parent="android:TextAppearance.Medium">
@@ -633,6 +695,26 @@
     </style>
     <style name="Theme.Base.AppCompat.Light.DialogWhenLarge" parent="Theme.Base.AppCompat.Light"/>
     <style name="Theme.Base.Light" parent="android:Theme.Light"/>
+    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/styles.xml -->
+    <eat-comment/>
+    <style name="Theme.Esnmobilit" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_esnmobilit</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu.Esnmobilit</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Esnmobilit</item>
+        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Esnmobilit</item>
+        <item name="android:actionDropDownStyle">@style/DropDownNav.Esnmobilit</item>
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Esnmobilit</item>
+        <item name="android:actionModeBackground">@drawable/cab_background_top_esnmobilit</item>
+        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_esnmobilit</item>
+        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Esnmobilit</item>
+        <item name="android:actionBarTabTextStyle">@style/ActionBarTabText.white.Esnmobilit</item>
+    </style>
+    <style name="Theme.Esnmobilit.Widget" parent="@android:style/Theme.Holo">
+        <item name="android:popupMenuStyle">@style/PopupMenu.Esnmobilit</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Esnmobilit</item>
+    </style>
+    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
+    <eat-comment/>
     <style name="Widget.AppCompat.ActionBar" parent="Widget.AppCompat.Base.ActionBar"/>
     <style name="Widget.AppCompat.ActionBar.Solid" parent="Widget.AppCompat.Base.ActionBar.Solid"/>
     <style name="Widget.AppCompat.ActionBar.TabBar" parent="Widget.AppCompat.Base.ActionBar.TabBar"/>
