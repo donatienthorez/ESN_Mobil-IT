@@ -208,7 +208,7 @@
     <string name="city">city</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/generated/res/generated/debug/values/generated.xml -->
     <eat-comment/>
-    <item name="com.crashlytics.android.build_id" type="string">fbf85c64-a012-4015-8f53-f68f1ea17721</item>
+    <item name="com.crashlytics.android.build_id" type="string">9afa8185-3d8b-4f4c-98cf-3559c627fbcd</item>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/3.1.59/res/values/strings.xml -->
     <eat-comment/>
     <string msgid="2523291102206661146" name="common_google_play_services_enable_button">Enable Google Play services</string>
@@ -267,6 +267,9 @@
     <eat-comment/>
     <string name="title_detailfragment">Titreeeee !</string>
     <string name="tryingcache">No Internet connection, load from cache ...</string>
+    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/styles.xml -->
+    <eat-comment/>
+    <style name="AppTheme" parent="android:Theme.Light"/>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
     <eat-comment/>
     <style name="TextAppearance.AppCompat.Base.CompactMenu.Dialog" parent="android:TextAppearance.Medium">

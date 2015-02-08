@@ -1,4 +1,4 @@
-package org.esn.mobilit.network;
+package org.esn.mobilit.utils.network;
 
 import android.util.Log;
 

@@ -1,4 +1,4 @@
-package org.esn.mobilit.utils.firstlaunch;
+package org.esn.mobilit.firstlaunch;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -25,7 +25,7 @@ import org.esn.mobilit.models.Category;
 import org.esn.mobilit.models.Countries;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.models.Sections;
-import org.esn.mobilit.network.JSONfunctions;
+import org.esn.mobilit.utils.network.JSONfunctions;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 import org.json.JSONArray;
@@ -184,7 +184,7 @@ public class FirstLaunchActivity extends Activity {
         countries_list.add(currentCountry);
         spinnerCountries_data.add("ESN France");
         addSpinnerSections();
-        spinnerCountries.setAdapter(new SpinnerAdapter(FirstLaunchActivity.this,spinnerCountries_data));
+        spinnerCountries.setAdapter(new SpinnerAdapter(FirstLaunchActivity.this, spinnerCountries_data));
         spinners_layout.addView(spinnerCountries);
     }
 

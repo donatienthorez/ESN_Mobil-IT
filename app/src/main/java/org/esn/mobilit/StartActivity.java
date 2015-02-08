@@ -9,7 +9,7 @@ import android.util.Log;
 
 import org.esn.mobilit.activities.SplashActivity;
 import org.esn.mobilit.utils.ApplicationConstants;
-import org.esn.mobilit.utils.firstlaunch.FirstLaunchActivity;
+import org.esn.mobilit.firstlaunch.FirstLaunchActivity;
 
 
 public class StartActivity extends Activity {
