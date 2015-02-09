@@ -18,8 +18,8 @@
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values-fr/strings.xml -->
     <eat-comment/>
     <string name="action_settings">Action</string>
-    <string name="and">and</string>
-    <string name="app_name">Erasmus Student Network</string>
+    <string name="and">et</string>
+    <string name="app_name">ESN MobilIT</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/3.1.59/res/values-fr/strings.xml -->
     <eat-comment/>
     <string msgid="3983201110833868073" name="auth_client_needs_enabling_title">"Une application requiert l\'activation des services Google Play"</string>
@@ -30,11 +30,10 @@
     <string msgid="2534454398764507874" name="auth_client_using_bad_version_title">"Une application requiert une version valide des services Google Play"</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values-fr/strings.xml -->
     <eat-comment/>
-    <string name="button_choice_section">Valider</string>
-    <string name="chooseyour">Choose your</string>
-    <string name="chooseyourcountry">Choisi ton pays</string>
-    <string name="chooseyoursection">Choisi ta section ESN</string>
-    <string name="city">city</string>
+    <string name="btn_change">Changer de section</string>
+    <string name="btn_retry">Réessayer</string>
+    <string name="chooseyour">Choisis ton</string>
+    <string name="city">ville</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/3.1.59/res/values-fr/strings.xml -->
     <eat-comment/>
     <string msgid="4181637455539816337" name="common_google_play_services_enable_button">"Activer services Google Play"</string>
@@ -54,17 +53,15 @@
     <string msgid="2429381841831957106" name="common_signin_button_text_long">"Se connecter avec Google"</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values-fr/strings.xml -->
     <eat-comment/>
-    <string name="country">country</string>
-    <string name="date">Date</string>
-    <string name="desc">La description de la webview!</string>
-    <string name="emptycache">You need to load data at least once with internet</string>
-    <string name="esnsection">ESN Section</string>
-    <string name="firstlaunch_text">Choisit ton <![CDATA[<font color="rgb(33,155,243)">pays</font>]]>, <![CDATA[<font color="blue">ville</font></br>]]> et <![CDATA[<font color="blue">Section ESN</font>]]>.</string>
+    <string name="country">pays</string>
+    <string name="emptycache">Vous devez télécharger les données au moins une fois.</string>
+    <string name="esnsection">Section ESN</string>
     <string name="loading">Veuillez patienter …</string>
-    <string name="menu_settings">Settings</string>
-    <string name="ras_section_settings">Reset preferences</string>
-    <string name="start_button">Launch awesome features</string>
-    <string name="title">Titre</string>
-    <string name="title_detailfragment">Titreeeee !</string>
-    <string name="tryingcache">No Internet connection, load from cache ...</string>
+    <string name="ras_section_settings">Changer de section</string>
+    <string name="start_button">Démarrer</string>
+    <string name="title_events">Évènements</string>
+    <string name="title_news">Nouvelles</string>
+    <string name="title_partners">Partenaires</string>
+    <string name="title_survivalguide">Guide de Survie</string>
+    <string name="tryingcache">Chargement des données en cache ...</string>
 </resources>

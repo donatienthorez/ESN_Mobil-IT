@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -74,10 +73,6 @@ public class SplashActivity extends Activity {
         textView = ((TextView)findViewById (R.id.textView));
         progressBar = ((ProgressBar)findViewById (R.id.progressBar));
 
-        //Set ActionBarColor
-        getActionBar().setDisplayShowHomeEnabled(false);
-        getActionBar().setIcon(new ColorDrawable(ApplicationConstants.ESNBlueRGB));
-
         if (!Utils.isConnected(this)){
             // No connectivity - Load cache
             textView.setText(getResources().getString(R.string.tryingcache));
@@ -104,18 +99,28 @@ public class SplashActivity extends Activity {
                 launchHomeActivity();
             }
 
-            final Button button = (Button) findViewById(R.id.button);
-            button.setVisibility(View.VISIBLE);
-
-            button.setOnClickListener(new View.OnClickListener() {
+            final Button buttonretry = (Button) findViewById(R.id.retry);
+            buttonretry.setVisibility(View.VISIBLE);
+            buttonretry.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Intent i = new Intent(SplashActivity.this, SplashActivity.class);
                     Log.d(TAG,"SplashActivity restarting");
-
-                    startActivityForResult(i, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
+                    Intent returnIntent = new Intent();
+                    setResult(ApplicationConstants.RESULT_FIRST_LAUNCH,returnIntent);
                     finish();
                 }
             });
+
+            final Button buttonsection = (Button) findViewById(R.id.changesection);
+            buttonsection.setVisibility(View.VISIBLE);
+            buttonsection.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Log.d(TAG,"SplashActivity restarting");
+                    Intent returnIntent = new Intent();
+                    setResult(ApplicationConstants.RESULT_FIRST_LAUNCH,returnIntent);
+                    finish();
+                }
+            });
+
 
         }else{
             // Push for GCM
@@ -149,7 +154,7 @@ public class SplashActivity extends Activity {
                 textView.setText("There is no contents for this section, please contact g33kteam@ixesn.fr");
                 progressBar.setVisibility(View.INVISIBLE);
 
-                final Button button = (Button) findViewById(R.id.button);
+                final Button button = (Button) findViewById(R.id.retry);
                 button.setVisibility(View.VISIBLE);
 
                 button.setOnClickListener(new View.OnClickListener() {

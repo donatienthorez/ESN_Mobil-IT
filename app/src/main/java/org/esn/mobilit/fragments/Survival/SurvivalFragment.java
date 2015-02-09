@@ -64,10 +64,10 @@ public class SurvivalFragment extends Fragment{
 
     public String getColorByCategoryLevel(int level){
         switch (level){
-            case 0 : return "#70B918"; //VERT ESN
-            case 1 : return "#DE0018"; //ROSE ESN
-            case 2 : return "#DB6000"; //ORANGE ESN
-            default : return "#219BF3";//BLEU ESN
+            case 0 : return String.valueOf(getResources().getColor(R.color.esngreen)); //VERT ESN
+            case 1 : return String.valueOf(getResources().getColor(R.color.esnpink)); //ROSE ESN
+            case 2 : return String.valueOf(getResources().getColor(R.color.esnorange)); //ORANGE ESN
+            default : return String.valueOf(getResources().getColor(R.color.esngrey));//BLEU ESN
         }
     }
 

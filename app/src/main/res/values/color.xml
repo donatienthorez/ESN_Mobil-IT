@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Classique color -->
     <color name="white">#FFFFFF</color>
     <color name="yellow">#FFFF00</color>
     <color name="fuchsia">#FF00FF</color>
@@ -17,8 +18,11 @@
     <color name="navy">#000080</color>
     <color name="black">#000000</color>
 
+    <!-- ESN color -->
     <color name="esnblue">#219DF3</color>
     <color name="esnorange">#DB6000</color>
     <color name="esngreen">#70B918</color>
     <color name="esnpink">#DE007E</color>
+    <color name="esnpurple">#2E3192</color>
+    <color name="esngrey">#677480</color>
 </resources>

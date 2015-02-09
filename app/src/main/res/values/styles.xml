@@ -30,6 +30,18 @@
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_esnmobilit</item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Esnmobilit</item>
         <item name="android:actionBarTabTextStyle">@style/ActionBarTabText.white.Esnmobilit</item>
+        <item name="android:buttonStyle">@style/ButtonStyle.Esnmobilit</item>
+    </style>
+
+    <style name="ButtonStyle.Esnmobilit" parent="@android:style/Widget.Button">
+        <item name="android:padding">@dimen/button_padding</item>
+        <item name="android:textSize">@dimen/button_textSize</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/bouton</item>
+        <item name="android:layout_marginTop">@dimen/layout_marginTop</item>
+        <item name="android:layout_gravity">center_horizontal</item>
     </style>
 
     <style name="ActionBarTabText.white.Esnmobilit" parent="@android:style/Widget.Holo.Light.ActionBar.TabText">
@@ -78,7 +90,7 @@
     </style>
 
     <style name="ActionButton.CloseMode.Esnmobilit" parent="@android:style/Widget.Holo.Light.ActionButton.CloseMode">
-        <item name="android:background">@drawable/btn_cab_done_esnmobilit</item>
+        <item name="android:background">@drawable/bouton</item>
     </style>
 
     <!-- this style is only referenced in a Light.DarkActionBar based theme -->

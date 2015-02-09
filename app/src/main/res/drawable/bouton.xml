@@ -18,10 +18,22 @@
 -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true"
-        android:drawable="@drawable/btn_cab_done_pressed_esnmobilit" />
-    <item android:state_focused="true" android:state_enabled="true"
-        android:drawable="@drawable/btn_cab_done_focused_esnmobilit" />
-    <item android:state_enabled="true"
-        android:drawable="@drawable/btn_cab_done_default_esnmobilit" />
+    <item
+        android:state_pressed="true"
+        android:drawable="@color/esnblue" />
+
+    <item
+        android:state_focused="true"
+        android:state_enabled="true"
+        android:drawable="@color/esnblue" />
+
+    <item
+        android:state_enabled="true"
+        android:drawable="@color/esnblue" />
+
+    <!-- Not pressed and disabled -->
+    <item
+        android:state_pressed="false"
+        android:state_enabled="false"
+        android:drawable="@color/esngrey" />
 </selector>

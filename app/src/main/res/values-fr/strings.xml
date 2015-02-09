@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Erasmus Student Network</string>
-    <string name="loading">Veuillez patienter …</string>
-    <string name="button_choice_section">Valider</string>
-    <string name="desc">La description de la webview!</string>
-    <string name="title_detailfragment">Titreeeee !</string>
-    <string name="title">Titre</string>
-    <string name="date">Date</string>
-    <string name="menu_settings">Settings</string>
+    <!-- APP SETTINGS -->
+    <string name="app_name">ESN MobilIT</string>
+
+    <!-- MENU -->
     <string name="action_settings">Action</string>
-    <string name="chooseyourcountry">Choisi ton pays</string>
-    <string name="chooseyoursection">Choisi ta section ESN</string>
-    <string name="ras_section_settings">Reset preferences</string>
+    <string name="ras_section_settings">Changer de section</string>
 
-    <string name="chooseyour">Choose your</string>
-    <string name="country">country</string>
-    <string name="city">city</string>
-    <string name="esnsection">ESN Section</string>
-    <string name="and">and</string>
+    <!-- SPLASH SCREEN -->
+    <string name="tryingcache">Chargement des données en cache ...</string>
+    <string name="emptycache">Vous devez télécharger les données au moins une fois.</string>
+    <string name="loading">Veuillez patienter …</string>
+    <string name="btn_retry">Réessayer</string>
+    <string name="btn_change">Changer de section</string>
 
-    <string name="tryingcache">No Internet connection, load from cache ...</string>
-    <string name="emptycache">You need to load data at least once with internet</string>
+    <!-- FIRST LAUNCH LAYOUT -->
+    <string name="chooseyour">Choisis ton</string>
+    <string name="country">pays</string>
+    <string name="city">ta ville</string>
+    <string name="esnsection">ta Section ESN</string>
+    <string name="and">et</string>
+    <string name="start_button">Démarrer</string>
 
-    <string name="firstlaunch_text">Choisit ton <![CDATA[<font color="rgb(33,155,243)">pays</font>]]>, <![CDATA[<font color="blue">ville</font></br>]]> et <![CDATA[<font color="blue">Section ESN</font>]]>.</string>
-    <string name="start_button">Launch awesome features</string>
+    <!-- Action Bar Title -->
+    <string name="title_events">Évènements</string>
+    <string name="title_news">Nouvelles</string>
+    <string name="title_partners">Partenaires</string>
+    <string name="title_survivalguide">Guide de Survie</string>
 </resources>

@@ -33,20 +33,40 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:textSize="@dimen/button_textSize"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="10dp"
             android:text="@string/loading" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/button"
-        style="?android:attr/buttonStyleSmall"
+    <LinearLayout
+        android:id="@+id/button_linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Réessayer"
         android:layout_below="@+id/linearLayout1"
         android:layout_centerHorizontal="true"
-        android:visibility="invisible"
-    />
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/retry"
+            android:text="@string/btn_retry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            />
+
+        <Button
+            android:id="@+id/changesection"
+            android:text="@string/btn_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_below="@+id/retry"
+            android:visibility="invisible"
+            />
+    </LinearLayout>
+
+
 
 </RelativeLayout><!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/layout/splash.xml -->

@@ -3,8 +3,6 @@ package org.esn.mobilit.utils.firstlaunch;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -74,21 +72,12 @@ public class FirstLaunchActivity extends Activity {
         //Init activity
         currentActivity = this;
 
-        //Set ActionBarColor
-        getActionBar().setDisplayShowHomeEnabled(false);
-        getActionBar().setIcon(new ColorDrawable(ApplicationConstants.ESNBlueRGB));
-        getActionBar().setBackgroundDrawable(new ColorDrawable(ApplicationConstants.ESNBlueRGB));
-
         //Change layout
         setContentView(R.layout.activity_firstlaunch);
 
         //Init Content
         startButton = (Button) findViewById(R.id.start_button);
         textView    = (TextView) findViewById(R.id.chooseyourcountry);
-
-        //Set Button style
-        startButton.setBackgroundColor(ApplicationConstants.ESNBlueRGB);
-        startButton.setTextColor(Color.WHITE);
 
         //Set text color
         SpannableStringBuilder text = new SpannableStringBuilder();

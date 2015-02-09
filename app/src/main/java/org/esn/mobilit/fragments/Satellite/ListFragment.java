@@ -58,7 +58,13 @@ public class ListFragment extends android.support.v4.app.ListFragment {
         this.setListAdapter(adapter);
     }
 
+    public void onResume(){
+        super.onResume();
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+
         return inflater.inflate(R.layout.list_fragment, container, false);
     }
 
@@ -99,8 +105,6 @@ public class ListFragment extends android.support.v4.app.ListFragment {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
 
     // PREFERENCES
     public void setDefaults(String key, String value) {

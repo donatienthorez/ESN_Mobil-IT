@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <!-- APP SETTINGS -->
     <string name="app_name">ESN MobilIT</string>
-    <string name="loading">Loading please wait …</string>
-    <string name="button_choice_section">Validate</string>
-    <string name="desc">Description webview here!</string>
-    <string name="title_detailfragment">Titreeeee !</string>
-    <string name="title">Titre</string>
-    <string name="date">Date</string>
-    <string name="menu_settings">Settings</string>
+
+    <!-- MENU -->
     <string name="action_settings">Action</string>
+    <string name="ras_section_settings">Change section</string>
 
-    <string name="title_activity_main">MainActivity</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_home">ESN Mobil-IT</string>
-    <string name="ras_section_settings">Reset preferences</string>
+    <!-- SPLASH SCREEN -->
+    <string name="tryingcache">No Internet connection, load from cache ...</string>
+    <string name="emptycache">You need to load data at least once with internet</string>
+    <string name="loading">Loading please wait …</string>
+    <string name="btn_retry">Try again</string>
+    <string name="btn_change">Reset section</string>
 
+    <!-- FIRST LAUNCH LAYOUT -->
     <string name="chooseyour">Choose your</string>
     <string name="country">country</string>
     <string name="city">city</string>
     <string name="esnsection">ESN Section</string>
     <string name="and">and</string>
+    <string name="start_button">Launch</string>
 
-    <string name="tryingcache">No Internet connection, load from cache ...</string>
-    <string name="emptycache">You need to load data at least once with internet</string>
-
-    <string name="firstlaunch_text">Choose your <![CDATA[<font color="rgb(33,155,243)">country</font>]]>, <![CDATA[<font color="blue">city</font></br>]]> and <![CDATA[<font color="blue">ESN Section</font>]]>.</string>
-    <string name="start_button">Launch awesome features</string>
-
+    <!-- Action Bar Title -->
+    <string name="title_events">Events</string>
+    <string name="title_news">News</string>
+    <string name="title_partners">Partners</string>
+    <string name="title_survivalguide">Survival Guide</string>
 </resources>

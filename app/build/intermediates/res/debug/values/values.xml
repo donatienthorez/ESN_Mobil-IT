@@ -123,8 +123,10 @@
     <eat-comment/>
     <color name="esnblue">#219DF3</color>
     <color name="esngreen">#70B918</color>
+    <color name="esngrey">#677480</color>
     <color name="esnorange">#DB6000</color>
     <color name="esnpink">#DE007E</color>
+    <color name="esnpurple">#2E3192</color>
     <color name="fuchsia">#FF00FF</color>
     <color name="gray">#808080</color>
     <color name="green">#008000</color>
@@ -178,12 +180,19 @@
     <eat-comment/>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="button_padding">5dp</dimen>
+    <dimen name="button_textSize">20dp</dimen>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
     <eat-comment/>
     <item name="dialog_fixed_height_major" type="dimen">80%</item>
     <item name="dialog_fixed_height_minor" type="dimen">100%</item>
     <item name="dialog_fixed_width_major" type="dimen">320dp</item>
     <item name="dialog_fixed_width_minor" type="dimen">320dp</item>
+    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/dimens.xml -->
+    <eat-comment/>
+    <dimen name="layout_marginTop">20dp</dimen>
+    <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
+    <eat-comment/>
     <item name="action_bar_activity_content" type="id"/>
     <item name="action_menu_divider" type="id"/>
     <item name="action_menu_presenter" type="id"/>
@@ -227,12 +236,13 @@
   </string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="button_choice_section">Validate</string>
+    <string name="btn_change">Reset section</string>
+    <string name="btn_retry">Try again</string>
     <string name="chooseyour">Choose your</string>
     <string name="city">city</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/generated/res/generated/debug/values/generated.xml -->
     <eat-comment/>
-    <item name="com.crashlytics.android.build_id" type="string">94b29d54-fce0-4e02-aa2a-05d0125dce43</item>
+    <item name="com.crashlytics.android.build_id" type="string">c9c54df2-054b-46d5-9fce-26605eecaa3c</item>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/3.1.59/res/values/strings.xml -->
     <eat-comment/>
     <string msgid="2523291102206661146" name="common_google_play_services_enable_button">Enable Google Play services</string>
@@ -253,14 +263,9 @@
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="country">country</string>
-    <string name="date">Date</string>
-    <string name="desc">Description webview here!</string>
     <string name="emptycache">You need to load data at least once with internet</string>
     <string name="esnsection">ESN Section</string>
-    <string name="firstlaunch_text">Choose your <![CDATA[<font color="rgb(33,155,243)">country</font>]]>, <![CDATA[<font color="blue">city</font></br>]]> and <![CDATA[<font color="blue">ESN Section</font>]]>.</string>
-    <string name="hello_world">Hello world!</string>
     <string name="loading">Loading please wait …</string>
-    <string name="menu_settings">Settings</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings_activity_settings.xml -->
     <eat-comment/>
     <string name="pref_default_display_name">John Smith</string>
@@ -279,17 +284,17 @@
     <string name="pref_title_vibrate">Vibrate</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="ras_section_settings">Reset preferences</string>
-    <string name="start_button">Launch awesome features</string>
-    <string name="title">Titre</string>
-    <string name="title_activity_home">ESN Mobil-IT</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="ras_section_settings">Change section</string>
+    <string name="start_button">Launch</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings_activity_settings.xml -->
     <eat-comment/>
     <string name="title_activity_settings">Settings</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="title_detailfragment">Titreeeee !</string>
+    <string name="title_events">Events</string>
+    <string name="title_news">News</string>
+    <string name="title_partners">Partners</string>
+    <string name="title_survivalguide">Survival Guide</string>
     <string name="tryingcache">No Internet connection, load from cache ...</string>
     <!-- From: file:/Users/Spider/AndroidStudioProjects/ESN_Mobil-IT/app/src/main/res/values/styles.xml -->
     <eat-comment/>
@@ -316,7 +321,17 @@
         <item name="android:textColor">@color/white</item>
     </style>
     <style name="ActionButton.CloseMode.Esnmobilit" parent="@android:style/Widget.Holo.Light.ActionButton.CloseMode">
-        <item name="android:background">@drawable/btn_cab_done_esnmobilit</item>
+        <item name="android:background">@drawable/bouton</item>
+    </style>
+    <style name="ButtonStyle.Esnmobilit" parent="@android:style/Widget.Button">
+        <item name="android:padding">@dimen/button_padding</item>
+        <item name="android:textSize">@dimen/button_textSize</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/bouton</item>
+        <item name="android:layout_marginTop">@dimen/layout_marginTop</item>
+        <item name="android:layout_gravity">center_horizontal</item>
     </style>
     <style name="DropDownListView.Esnmobilit" parent="@android:style/Widget.Holo.Light.ListView.DropDown">
         <item name="android:listSelector">@drawable/selectable_background_esnmobilit</item>
@@ -708,6 +723,7 @@
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_esnmobilit</item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Esnmobilit</item>
         <item name="android:actionBarTabTextStyle">@style/ActionBarTabText.white.Esnmobilit</item>
+        <item name="android:buttonStyle">@style/ButtonStyle.Esnmobilit</item>
     </style>
     <style name="Theme.Esnmobilit.Widget" parent="@android:style/Theme.Holo">
         <item name="android:popupMenuStyle">@style/PopupMenu.Esnmobilit</item>

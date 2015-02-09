@@ -3,7 +3,6 @@ package org.esn.mobilit.fragments;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -13,7 +12,6 @@ import org.esn.mobilit.activities.SplashActivity;
 import org.esn.mobilit.fragments.Satellite.DetailActivity;
 import org.esn.mobilit.fragments.Satellite.ListFragment.ListFragmentItemClickListener;
 import org.esn.mobilit.models.SurvivalGuide;
-import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
 public class HomeActivity extends FragmentActivity implements ActionBar.TabListener, ListFragmentItemClickListener {
@@ -51,10 +49,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
         //Init ActionBar
         final ActionBar actionBar = getActionBar();
-        actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionBar.setDisplayShowHomeEnabled(false);
-        actionBar.setIcon(new ColorDrawable(ApplicationConstants.ESNBlueRGB));
 
         //Init Pager
         myPager = (ViewPager) findViewById(R.id.pager);
@@ -68,13 +63,13 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
         //Add tabs
         if (feedEvents.getItemCount() > 0)
-            actionBar.addTab(actionBar.newTab().setText("Events").setTabListener(this));
+            actionBar.addTab(actionBar.newTab().setText(getResources().getString(R.string.title_events)).setTabListener(this));
         if (feedNews.getItemCount() > 0)
-            actionBar.addTab(actionBar.newTab().setText("News").setTabListener(this));
+            actionBar.addTab(actionBar.newTab().setText(getResources().getString(R.string.title_news)).setTabListener(this));
         if (feedPartners.getItemCount() > 0)
-            actionBar.addTab(actionBar.newTab().setText("Partners").setTabListener(this));
+            actionBar.addTab(actionBar.newTab().setText(getResources().getString(R.string.title_partners)).setTabListener(this));
         if (survivalGuide.getCategories().size() > 0)
-            actionBar.addTab(actionBar.newTab().setText("Guide").setTabListener(this));
+            actionBar.addTab(actionBar.newTab().setText(getResources().getString(R.string.title_survivalguide)).setTabListener(this));
     }
 
     @Override
