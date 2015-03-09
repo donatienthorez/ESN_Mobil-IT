@@ -129,6 +129,8 @@ public class SplashActivity extends Activity {
             else
                 RegisterUser();
 
+            Log.d(TAG, "count_limit:" + count_limit);
+
             // Connected - Start parsing
             new DownloadJSONSurvivalGuide().execute();
             new AsyncLoadXMLFeedEvents().execute();
@@ -148,10 +150,11 @@ public class SplashActivity extends Activity {
 
             if (total > 0) {
                 Log.d(TAG, "TOTAL ITEMS COUNT : " + total);
-                startActivityForResult(intent, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
+                Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivityForResult(i, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
             }
             else {
-                textView.setText("There is no contents for this section, please contact g33kteam@ixesn.fr");
+                textView.setText("There is no contents for this section, please contact webmaster@esnlille.fr");
                 progressBar.setVisibility(View.INVISIBLE);
 
                 final Button button = (Button) findViewById(R.id.retry);
@@ -159,7 +162,6 @@ public class SplashActivity extends Activity {
 
                 button.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        Log.d(TAG,"SplashActivity restarting");
                         Intent returnIntent = new Intent();
                         setResult(ApplicationConstants.RESULT_FIRST_LAUNCH,returnIntent);
                         finish();
@@ -278,15 +280,7 @@ public class SplashActivity extends Activity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("feedNews", feedNews);
-
-            //Put Extra
-            intent.putExtras(bundle);
-
             count++;
-
             launchHomeActivity();
         }
 
@@ -310,15 +304,7 @@ public class SplashActivity extends Activity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("feedPartners", feedPartners);
-
-            //Put Extra
-            intent.putExtras(bundle);
-
             count++;
-
             launchHomeActivity();
         }
 
@@ -391,14 +377,6 @@ public class SplashActivity extends Activity {
 
         protected void onPostExecute(Void args) {
             count++;
-
-            //Add new bundle
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("survivalGuide", survivalguide);
-
-            //Put Extra
-            intent.putExtras(bundle);
-
             launchHomeActivity();
         }
     }

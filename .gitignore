@@ -3,4 +3,7 @@
 /.idea/workspace.xml
 /.idea/libraries
 .DS_Store
-/app/build
+/app/build/
+/app/app-release.apk
+app/manifest-merger-release-report.txt
+build/intermediates/model_data.bin

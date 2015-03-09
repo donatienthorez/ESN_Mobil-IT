@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!-- APP SETTINGS -->
-    <string name="app_name">ESN MobilIT</string>
+    <string name="app_name">ESN MobilIT BETA</string>
 
     <!-- MENU -->
     <string name="action_settings">Action</string>
@@ -27,4 +28,5 @@
     <string name="title_news">News</string>
     <string name="title_partners">Partners</string>
     <string name="title_survivalguide">Survival Guide</string>
+
 </resources>

@@ -2,20 +2,27 @@ package org.esn.mobilit.fragments;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.activities.SplashActivity;
 import org.esn.mobilit.fragments.Satellite.DetailActivity;
 import org.esn.mobilit.fragments.Satellite.ListFragment.ListFragmentItemClickListener;
 import org.esn.mobilit.models.SurvivalGuide;
+import org.esn.mobilit.utils.image.InternalStorage;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
 public class HomeActivity extends FragmentActivity implements ActionBar.TabListener, ListFragmentItemClickListener {
     private static final String TAG = SplashActivity.class.getSimpleName();
+    private Context homeActivityContext;
+
     ViewPager               myPager;
     MyFragmentPagerAdapter  myAdapter;
     RSSFeed feedEvents, feedNews, feedPartners;
@@ -23,14 +30,17 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.d(TAG, "HomeActivity OnCreate");
         setContentView(R.layout.activity_main);
 
-        // Get feed form the file
-        feedEvents = (RSSFeed) getIntent().getExtras().get("feedEvents");
-        feedNews = (RSSFeed) getIntent().getExtras().get("feedNews");
-        feedPartners = (RSSFeed) getIntent().getExtras().get("feedPartners");
-        survivalGuide = (SurvivalGuide) getIntent().getExtras().get("survivalGuide");
+        // Save context
+        homeActivityContext = getApplicationContext();
+
+        // Get feed form cache
+        feedEvents    = (RSSFeed) getObjectFromCache("feedEvents");
+        feedNews      = (RSSFeed) getObjectFromCache("feedNews");
+        feedPartners  = (RSSFeed) getObjectFromCache("feedPartners");
+        survivalGuide = (SurvivalGuide) getObjectFromCache("survivalGuide");
 
         //Count numbers of available tabs
         int totalTabs = 0;
@@ -49,7 +59,11 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
         //Init ActionBar
         final ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        try {
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        }catch(Exception e){
+            Log.d(TAG, "Exception: " + e);
+        }
 
         //Init Pager
         myPager = (ViewPager) findViewById(R.id.pager);
@@ -70,6 +84,23 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
             actionBar.addTab(actionBar.newTab().setText(getResources().getString(R.string.title_partners)).setTabListener(this));
         if (survivalGuide.getCategories().size() > 0)
             actionBar.addTab(actionBar.newTab().setText(getResources().getString(R.string.title_survivalguide)).setTabListener(this));
+    }
+
+    // PREFERENCES
+    public String getDefaults(String key) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        return preferences.getString(key, null);
+    }
+
+    public Object getObjectFromCache(String key){
+        Object o = null;
+        key = getDefaults("CODE_SECTION") + "_" + key;
+        try {
+            o = InternalStorage.readObject(homeActivityContext, key);
+        }catch (Exception e){
+            Log.d(TAG, "Exception getobject: " + e);
+        }
+        return o;
     }
 
     @Override

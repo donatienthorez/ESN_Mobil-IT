@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.esn.mobilit"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionCode="2"
+    android:versionName="0.8.9" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -15,30 +15,33 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <permission android:name="org.esn.mobilit.permission.C2D_MESSAGE"
+
+    <permission
+        android:name="org.esn.mobilit.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="org.esn.mobilit.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-
-
 
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Esnmobilit">
-
-        <receiver android:name=".GcmBroadcastReceiver"
+        android:theme="@style/Theme.Esnmobilit" >
+        <receiver
+            android:name=".GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
                 <category android:name="org.esn.mobilit.android" />
             </intent-filter>
         </receiver>
+
         <service android:name=".GcmIntentService" />
 
         <activity
-            android:name="org.esn.mobilit.StartActivity"
+            android:name=".StartActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" >
             <intent-filter>
@@ -47,18 +50,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".utils.firstlaunch.FirstLaunchActivity" android:label="@string/app_name" android:screenOrientation="portrait"/>
-        <activity android:name=".fragments.Satellite.DetailActivity" android:label="@string/app_name" android:screenOrientation="portrait" />
-        <activity android:name=".activities.SplashActivity" android:label="@string/app_name" android:screenOrientation="portrait" />
-        <activity android:name=".fragments.HomeActivity" android:label="@string/app_name" android:screenOrientation="portrait"/>
-
+        <activity
+            android:name=".utils.firstlaunch.FirstLaunchActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".fragments.Satellite.DetailActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.SplashActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".fragments.HomeActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.crashlytics.ApiKey"
             android:value="b48b1189884f02aa4c236e3ba1a41e6894133486" />
+
     </application>
-
-
 
 </manifest>
