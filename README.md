@@ -27,8 +27,8 @@ To do so, follow those steps :
 ## Step 1
 
 Install those modules : 
-Rules & Rules UI : https://www.drupal.org/project/rules
-Rules HTTP Client : https://www.drupal.org/project/rules_http_client
+* Rules & Rules UI : https://www.drupal.org/project/rules
+* Rules HTTP Client : https://www.drupal.org/project/rules_http_client
 
 ## Step 2
 
