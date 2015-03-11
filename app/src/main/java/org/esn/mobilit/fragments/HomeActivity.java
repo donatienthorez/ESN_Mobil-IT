@@ -55,6 +55,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         fpa.setFeedNews(feedNews);
         fpa.setFeedPartners(feedPartners);
         fpa.setSurvivalGuide(survivalGuide);
+        fpa.setTabsList();
         myAdapter = fpa;
 
         //Init ActionBar

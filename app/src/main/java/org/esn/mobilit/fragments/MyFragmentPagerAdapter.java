@@ -10,15 +10,19 @@ import org.esn.mobilit.fragments.Survival.SurvivalFragment;
 import org.esn.mobilit.models.SurvivalGuide;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
+import java.util.ArrayList;
+
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 
     int count;
     RSSFeed feedEvents, feedNews, feedPartners;
     SurvivalGuide survivalGuide;
+    ArrayList<String> tabs;
 
     public MyFragmentPagerAdapter(FragmentManager fm, int count) {
         super(fm);
         this.count = count;
+        this.tabs = new ArrayList<String>();
     }
 
     public void setFeedEvents(RSSFeed feedEvents){
@@ -36,6 +40,12 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
     public void setSurvivalGuide(SurvivalGuide survivalGuide){
         Log.d(MyFragmentPagerAdapter.class.getSimpleName(), "SurvivalGuide categories count : " + survivalGuide.getCategories().size());
         this.survivalGuide = survivalGuide;
+    }
+    public void setTabsList(){
+        if (feedEvents.getItemCount() > 0 ) tabs.add("Events");
+        if (feedNews.getItemCount() > 0 ) tabs.add("News");
+        if (feedPartners.getItemCount() > 0 ) tabs.add("Partners");
+        if (survivalGuide.getCategories().size() > 0 ) tabs.add("SurvivalGuide");
     }
 
     @Override
@@ -55,20 +65,51 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 
         switch (position) {
             case 0: //Events
-                if (feedEvents.getItemCount() > 0) return events;
-                else if (feedNews.getItemCount() > 0) return news;
-                else if (feedNews.getItemCount() > 0) return partners;
-                else return survival;
+                if (feedEvents.getItemCount() > 0 && tabs.contains("Events")) {
+                    tabs.remove("Events");
+                    return events;
+                }
+                else if (feedNews.getItemCount() > 0 && tabs.contains("News")) {
+                    tabs.remove("News");
+                    return news;
+                }
+                else if (feedPartners.getItemCount() > 0 && tabs.contains("Partners")) {
+                    tabs.remove("Partners");
+                    return partners;
+                }
+                else if (survivalGuide.getCategories().size() > 0 && tabs.contains("SurvivalGuide")){
+                    tabs.remove("SurvivalGuide");
+                    return survival;
+                }
             case 1: //News
-                if (feedNews.getItemCount() > 0) return news;
-                else if (feedNews.getItemCount() > 0) return partners;
-                else return survival;
+                if (feedNews.getItemCount() > 0 && tabs.contains("News")) {
+                    tabs.remove("News");
+                    return news;
+                }
+                else if (feedPartners.getItemCount() > 0 && tabs.contains("Partners")) {
+                    Log.d("FEEDPARTNERS", "contains : " + tabs.contains("Partners"));
+                    tabs.remove("Partners");
+                    Log.d("FEEDPARTNERS", "contains : " + tabs.contains("Partners"));
+                    return partners;
+                }
+                else if (survivalGuide.getCategories().size() > 0 && tabs.contains("SurvivalGuide")){
+                    tabs.remove("SurvivalGuide");
+                    return survival;
+                }
             case 2: //Partners
-                if (feedNews.getItemCount() > 0) return partners;
-                else return survival;
+                if (feedPartners.getItemCount() > 0 && tabs.contains("Partners")) {
+                    tabs.remove("Partners");
+                    return partners;
+                }
+                else if (survivalGuide.getCategories().size() > 0 && tabs.contains("SurvivalGuide")){
+                    tabs.remove("SurvivalGuide");
+                    return survival;
+                }
             case 3: //Survival Guide
-                return survival;
-
+                if (survivalGuide.getCategories().size() > 0 && tabs.contains("SurvivalGuide")){
+                    tabs.remove("SurvivalGuide");
+                    return survival;
+                }
             default: return null;
         }
     }

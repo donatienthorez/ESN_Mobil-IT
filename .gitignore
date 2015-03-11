@@ -1,9 +1,8 @@
 .gradle
 /local.properties
-/.idea/workspace.xml
-/.idea/libraries
+/.idea/
 .DS_Store
 /app/build/
 /app/app-release.apk
-app/manifest-merger-release-report.txt
-build/intermediates/model_data.bin
+/app/manifest-merger-release-report.txt
+/build/
