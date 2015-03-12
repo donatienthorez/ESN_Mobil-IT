@@ -126,8 +126,8 @@ public class FirstLaunchActivity extends Activity {
             // Init Spiner and load data
             spinnerCountries = new Spinner(this);
 
-            //new DownloadJSONCountries().execute();
-            initFrenchCountry();
+            new DownloadJSONCountries().execute();
+            //initFrenchCountry();
         }
     }
 
@@ -207,8 +207,6 @@ public class FirstLaunchActivity extends Activity {
                 Log.e("Error", e.getMessage());
                 e.printStackTrace();
             }
-
-            spinnerCountries.setSelection(10, true);
 
             return null;
         }

@@ -1,5 +1,7 @@
 package org.esn.mobilit.utils.parser;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
@@ -30,6 +32,7 @@ public class RSSFeed implements Serializable {
 
     public int getTitleID(String title){
         for(RSSItem item : this.getList()){
+            Log.d("getTitleID", title + "|" + item.getTitle());
             if (item.getTitle().equalsIgnoreCase(title)) return getList().indexOf(item);
         }
         return -1;

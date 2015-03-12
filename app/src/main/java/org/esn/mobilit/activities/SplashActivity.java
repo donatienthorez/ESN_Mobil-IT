@@ -168,9 +168,6 @@ public class SplashActivity extends Activity {
                 currentfeed = feedPartners;
             }
 
-            Log.d(TAG,"pos :" + pos);
-            Log.d(TAG,"currentfeed:" + (currentfeed.getList().size()));
-
             if (currentfeed != null && pos > 0) {
                 /** Creating an intent object to start the CountryDetailsActivity */
                 Intent intent = new Intent(this, DetailActivity.class);
@@ -185,6 +182,7 @@ public class SplashActivity extends Activity {
 
                 /** Starting the activity by passing the implicit intent */
                 startActivity(intent);
+                setResult(ApplicationConstants.RESULT_CLOSE_ALL);
                 finish();
             }
         }
