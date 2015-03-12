@@ -87,9 +87,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
                     return news;
                 }
                 else if (feedPartners.getItemCount() > 0 && tabs.contains("Partners")) {
-                    Log.d("FEEDPARTNERS", "contains : " + tabs.contains("Partners"));
                     tabs.remove("Partners");
-                    Log.d("FEEDPARTNERS", "contains : " + tabs.contains("Partners"));
                     return partners;
                 }
                 else if (survivalGuide.getCategories().size() > 0 && tabs.contains("SurvivalGuide")){

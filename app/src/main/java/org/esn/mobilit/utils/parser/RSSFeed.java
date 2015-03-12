@@ -28,4 +28,11 @@ public class RSSFeed implements Serializable {
 		return _itemcount;
 	}
 
+    public int getTitleID(String title){
+        for(RSSItem item : this.getList()){
+            if (item.getTitle().equalsIgnoreCase(title)) return getList().indexOf(item);
+        }
+        return -1;
+    }
+
 }

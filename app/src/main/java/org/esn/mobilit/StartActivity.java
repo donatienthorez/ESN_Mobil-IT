@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import org.esn.mobilit.activities.SplashActivity;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.firstlaunch.FirstLaunchActivity;
@@ -17,6 +19,7 @@ public class StartActivity extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         chooseActivity();
     }
 

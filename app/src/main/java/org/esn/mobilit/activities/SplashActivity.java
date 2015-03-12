@@ -23,6 +23,7 @@ import com.loopj.android.http.RequestParams;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.fragments.HomeActivity;
+import org.esn.mobilit.fragments.Satellite.DetailActivity;
 import org.esn.mobilit.models.Category;
 import org.esn.mobilit.models.SurvivalGuide;
 import org.esn.mobilit.network.JSONfunctions;
@@ -49,11 +50,11 @@ public class SplashActivity extends Activity {
     private TextView textView;
     private ProgressBar progressBar;
     private Context splashActivityContext;
+
     //GCM
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String REG_ID = "regId";
     GoogleCloudMessaging gcmObj;
-    Context applicationContext;
     String regId = "";
     RequestParams params = new RequestParams();
 
@@ -64,7 +65,6 @@ public class SplashActivity extends Activity {
 
         //Init values
         splashActivityContext = getApplicationContext();
-        applicationContext = getApplicationContext();
         count_limit = 5;
         intent = new Intent(getApplicationContext(), HomeActivity.class);
         count = 0;
@@ -138,6 +138,67 @@ public class SplashActivity extends Activity {
             new AsyncLoadXMLFeedPartners().execute();
         }
 	}
+
+    public void pushReceived(){
+        Log.d(TAG,"PUSH RECEIVED");
+
+        String frompushtitle = getIntent().getExtras().getString("title");
+        Log.d(TAG,"frompushtitle : " + frompushtitle);
+        if (frompushtitle.length() > 0) {
+            Log.d(TAG,"frompushtitle length: " + frompushtitle.length());
+
+            //Test if exist in previous cache
+            feedEvents = (RSSFeed) getObjectFromCache("feedEvents");
+            feedNews = (RSSFeed) getObjectFromCache("feedNews");
+            feedPartners = (RSSFeed) getObjectFromCache("feedPartners");
+            survivalguide = (SurvivalGuide) getObjectFromCache("survivalGuide");
+
+            int pos = -1;
+            RSSFeed currentfeed = null;
+            if (feedEvents.getTitleID(frompushtitle) > 0) {
+                pos = feedEvents.getTitleID(frompushtitle);
+                currentfeed = feedEvents;
+            }
+            if (feedNews.getTitleID(frompushtitle) > 0) {
+                pos = feedNews.getTitleID(frompushtitle);
+                currentfeed = feedNews;
+            }
+            if (feedPartners.getTitleID(frompushtitle) > 0) {
+                pos = feedPartners.getTitleID(frompushtitle);
+                currentfeed = feedPartners;
+            }
+
+            Log.d(TAG,"pos :" + pos);
+            Log.d(TAG,"currentfeed:" + (currentfeed.getList().size()));
+
+            if (currentfeed != null && pos > 0) {
+                /** Creating an intent object to start the CountryDetailsActivity */
+                Intent intent = new Intent(this, DetailActivity.class);
+
+                /** Setting data ( the clicked item's position ) to this intent */
+                Bundle b = new Bundle();
+                b.putSerializable("feed", currentfeed);
+                b.putInt("pos", pos);
+
+                intent.putExtras(b);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                /** Starting the activity by passing the implicit intent */
+                startActivity(intent);
+                finish();
+            }
+        }
+
+    }
+
+    public void onResume(){
+        super.onResume();
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            pushReceived();
+        }
+    }
 
     public void launchHomeActivity(){
         if (count == count_limit) {
@@ -398,7 +459,7 @@ public class SplashActivity extends Activity {
                 try {
                     if (gcmObj == null) {
                         gcmObj = GoogleCloudMessaging
-                                .getInstance(applicationContext);
+                                .getInstance(splashActivityContext);
                     }
                     regId = gcmObj
                             .register(ApplicationConstants.GOOGLE_PROJ_ID);
@@ -415,12 +476,12 @@ public class SplashActivity extends Activity {
                 if (!TextUtils.isEmpty(regId)) {
                     storeRegIdinSharedPref();
                     //Toast.makeText(
-                    //        applicationContext,
+                    //        splashActivityContext,
                     //        "Registered with GCM Server successfully.\n\n"
                     //                + msg, Toast.LENGTH_SHORT).show();
                 } else {
                     //Toast.makeText(
-                    //       applicationContext,
+                    //       splashActivityContext,
                     //       "Reg ID Creation Failed.\n\nEither you haven't enabled Internet or GCM server is busy right now. Make sure you enabled Internet and try registering again after some time."
                     //               + msg, Toast.LENGTH_LONG).show();
                 }
@@ -444,7 +505,7 @@ public class SplashActivity extends Activity {
                 new AsyncHttpResponseHandler() {
                     public void onSuccess(int statusCode, org.apache.http.Header[] headers, byte[] b) {
 
-                        //Toast.makeText(applicationContext,
+                        //Toast.makeText(splashActivityContext,
                         //        "Reg Id shared successfully with Web App ",
                         //        Toast.LENGTH_LONG).show();
                         count++;
@@ -460,20 +521,20 @@ public class SplashActivity extends Activity {
                     public void onFailure(int statusCode, org.apache.http.Header[] headers, byte[] b, Throwable throwable) {
                         // When Http response code is '404'
                         if (statusCode == 404) {
-                            //    Toast.makeText(applicationContext,
+                            //    Toast.makeText(splashActivityContext,
                             //        "Requested resource not found",
                             //        Toast.LENGTH_LONG).show();
                         }
                         // When Http response code is '500'
                         else if (statusCode == 500) {
-                            //Toast.makeText(applicationContext,
+                            //Toast.makeText(splashActivityContext,
                             //        "Something went wrong at server end",
                             //        Toast.LENGTH_LONG).show();
                         }
                         // When Http response code other than 404, 500
                         else {
                             //Toast.makeText(
-                            //        applicationContext,
+                            //        splashActivityContext,
                             //        "Unexpected Error occcured! [Most common Error: Device might "
                             //                + "not be connected to Internet or remote server is not up and running], check for other errors as well",
                             //        Toast.LENGTH_LONG).show();
@@ -491,7 +552,7 @@ public class SplashActivity extends Activity {
                         PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
                 //Toast.makeText(
-                //        applicationContext,
+                //        splashActivityContext,
                 //        "This device doesn't support Play services, App will not work normally",
                 //        Toast.LENGTH_LONG).show();
                 finish();
@@ -499,7 +560,7 @@ public class SplashActivity extends Activity {
             return false;
         } else {
             //Toast.makeText(
-            //        applicationContext,
+            //        splashActivityContext,
             //        "This device supports Play services, App will work normally",
             //        Toast.LENGTH_LONG).show();
         }

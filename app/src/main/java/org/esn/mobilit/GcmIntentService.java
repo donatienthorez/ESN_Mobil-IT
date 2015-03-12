@@ -54,7 +54,8 @@ public class GcmIntentService extends IntentService {
 
     private void sendNotification(String sbj, String msg) {
         Intent resultIntent = new Intent(this, SplashActivity.class);
-        //resultIntent.putExtra("msg", msg);
+        resultIntent.putExtra("title", msg);
+
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0,
                 resultIntent, PendingIntent.FLAG_ONE_SHOT);
 
