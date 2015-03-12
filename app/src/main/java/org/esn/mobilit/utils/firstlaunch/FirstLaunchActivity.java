@@ -77,6 +77,7 @@ public class FirstLaunchActivity extends Activity {
 
         //Init Content
         startButton = (Button) findViewById(R.id.start_button);
+        startButton.setEnabled(false);
         textView    = (TextView) findViewById(R.id.chooseyourcountry);
 
         //Set text color
@@ -251,6 +252,7 @@ public class FirstLaunchActivity extends Activity {
         protected Void doInBackground(Void... params) {
             // Create sections_list array
             sections_list = new ArrayList<Sections>();
+            startButton.setEnabled(false);
 
             // Create an array to populate the spinner
             spinnerSections_data = new ArrayList<String>();
@@ -326,7 +328,8 @@ public class FirstLaunchActivity extends Activity {
         protected Void doInBackground(Void... params) {
             JSONObject jsonobject = null;
             JSONArray jsonarray = null;
-
+            startButton.setEnabled(false);
+            
             // JSON file URL address or cache
             if (Utils.isConnected(currentActivity)){
                 String url = ApplicationConstants.SECTIONS_WEBSERVICE_URL +  "getSection.php?code_country="+currentCountry.getCode_country()+"&code_section="+currentSection.getCode_section();
