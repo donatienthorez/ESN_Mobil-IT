@@ -1,28 +1,49 @@
 package org.esn.mobilit.models;
 
+import java.io.Serializable;
+
 /**
  * Created by Spider on 02/12/14.
  */
-public class Section {
-
+public class Section implements Serializable{
+    private int    id;
+    private int    id_country;
     private String name;
+    private String url;
     private String code_section;
-    private String code_country;
-    private String Adress;
-    private String phone;
+    private String address;
     private String website;
+    private String phone;
     private String email;
-    private String univercity;
+    private String university;
 
-    public Section(String name, String code_section, String code_country, String adress, String phone, String website, String email, String univercity) {
+    public Section(int id, int id_country, String name, String url, String code_section, String address, String website, String phone, String email, String university) {
+        this.id = id;
+        this.id_country = id_country;
         this.name = name;
+        this.url = url;
         this.code_section = code_section;
-        this.code_country = code_country;
-        Adress = adress;
-        this.phone = phone;
+        this.address = address;
         this.website = website;
+        this.phone = phone;
         this.email = email;
-        this.univercity = univercity;
+        this.university = university;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId_country() {
+        return id_country;
+    }
+
+    public void setId_country(int id_country) {
+        this.id_country = id_country;
     }
 
     public String getName() {
@@ -33,6 +54,14 @@ public class Section {
         this.name = name;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public String getCode_section() {
         return code_section;
     }
@@ -41,28 +70,12 @@ public class Section {
         this.code_section = code_section;
     }
 
-    public String getCode_country() {
-        return code_country;
+    public String getAddress() {
+        return address;
     }
 
-    public void setCode_country(String code_country) {
-        this.code_country = code_country;
-    }
-
-    public String getAdress() {
-        return Adress;
-    }
-
-    public void setAdress(String adress) {
-        Adress = adress;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getWebsite() {
@@ -73,6 +86,14 @@ public class Section {
         this.website = website;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -81,25 +102,26 @@ public class Section {
         this.email = email;
     }
 
-    public String getUnivercity() {
-        return univercity;
+    public String getUniversity() {
+        return university;
     }
 
-    public void setUnivercity(String univercity) {
-        this.univercity = univercity;
+    public void setUniversity(String university) {
+        this.university = university;
     }
 
-    @Override
     public String toString() {
         return "Section{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", id_country='" + id_country + '\'' +
+                ", name='" + name + '\'' +
+                ", url='" + url + '\'' +
                 ", code_section='" + code_section + '\'' +
-                ", code_country='" + code_country + '\'' +
-                ", Adress='" + Adress + '\'' +
-                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
                 ", website='" + website + '\'' +
+                ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", univercity='" + univercity + '\'' +
+                ", university='" + university + '\'' +
                 '}';
     }
 }

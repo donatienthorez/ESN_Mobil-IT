@@ -2,16 +2,10 @@ package org.esn.mobilit.utils.firstlaunch;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -21,16 +15,17 @@ import android.widget.TextView;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Category;
 import org.esn.mobilit.models.Countries;
+import org.esn.mobilit.models.Country;
 import org.esn.mobilit.models.Section;
-import org.esn.mobilit.models.Sections;
 import org.esn.mobilit.network.JSONfunctions;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import java.util.Date;
 
 public class FirstLaunchActivity extends Activity {
     private static final String TAG = FirstLaunchActivity.class.getSimpleName();
@@ -56,12 +51,15 @@ public class FirstLaunchActivity extends Activity {
     // Attributes for spinnerSections
     private Spinner spinnerSections;
     private ArrayList<String> spinnerSections_data;
-    private ArrayList<Sections> sections_list;
-    private Sections currentSection;
+    //private ArrayList<Sections> sections_list;
+    //private Sections currentSection;
     private ProgressBar progressBar;
 
     // Attributes for SurvivalGuide
     private ArrayList<Category> categories_list;
+
+    // Other Attributes
+    private String revision;
 
     // Detail Section
     private Section sectionChoosed;
@@ -73,10 +71,21 @@ public class FirstLaunchActivity extends Activity {
         currentActivity = this;
 
         //Change layout
+        getActionBar().setIcon(R.drawable.ic_launcher);
         setContentView(R.layout.activity_firstlaunch);
+        textView    = (TextView) findViewById(R.id.chooseyourcountry);
+        textView.setText("Checking revision ...");
+
+        if (Utils.getDefaults(this, "revision") != null){
+            textView.setText("Current revision is " + Utils.getDefaults(this, "revision"));
+        }else{
+            textView.setText("No revision stored, check last revision online");
+        }
+
+        new checkLastRevision().execute();
 
         //Init Content
-        startButton = (Button) findViewById(R.id.start_button);
+        /*startButton = (Button) findViewById(R.id.start_button);
         startButton.setEnabled(false);
         textView    = (TextView) findViewById(R.id.chooseyourcountry);
 
@@ -101,17 +110,17 @@ public class FirstLaunchActivity extends Activity {
 
         textView.setText(text, TextView.BufferType.SPANNABLE);
 
-        addSpinnerCountries();
+        addSpinnerCountries();*/
     }
 
     public void launchAwesomeFeatures(View view){
-        setDefaults("CODE_COUNTRY", currentCountry.getCode_country());
-        setDefaults("CODE_SECTION", currentSection.getCode_section());
-        setDefaults("SECTION_WEBSITE", sectionChoosed.getWebsite());
+        //Utils.setDefaults(this, "CODE_COUNTRY", currentCountry.getCode_country());
+        //Utils.setDefaults(this, "CODE_SECTION", currentSection.getCode_section());
+        //Utils.setDefaults(this, "SECTION_WEBSITE", sectionChoosed.getWebsite());
 
-        Log.d(TAG, " Country : " + getDefaults("CODE_COUNTRY"));
-        Log.d(TAG, " Section : " + getDefaults("CODE_SECTION"));
-        Log.d(TAG, " Section Website : " + getDefaults("SECTION_WEBSITE"));
+        Log.d(TAG, " Country : " + Utils.getDefaults(this, "CODE_COUNTRY"));
+        Log.d(TAG, " Section : " + Utils.getDefaults(this, "CODE_SECTION"));
+        Log.d(TAG, " Section Website : " + Utils.getDefaults(this, "SECTION_WEBSITE"));
         Log.d(TAG, "FINISH FIRSTLAUNCHACTIVITY");
 
         Intent returnIntent = new Intent();
@@ -127,8 +136,7 @@ public class FirstLaunchActivity extends Activity {
             // Init Spiner and load data
             spinnerCountries = new Spinner(this);
 
-            new DownloadJSONCountries().execute();
-            //initFrenchCountry();
+            //new DownloadJSONCountries().execute();
         }
     }
 
@@ -142,235 +150,142 @@ public class FirstLaunchActivity extends Activity {
 
         // Init Spiner and load data
         spinnerSections = new Spinner(this);
-        new DownloadJSONSections().execute();
+        //new DownloadJSONSections().execute();
     }
 
     protected void onResume(){
         super.onResume();
         //chooseActivity();
-        startButton = (Button) findViewById(R.id.start_button);
-        addSpinnerCountries();
+        //startButton = (Button) findViewById(R.id.start_button);
+        //addSpinnerCountries();
     }
 
-    // PREFERENCES
-    public void setDefaults(String key, String value) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(key, value);
-        editor.commit();
-    }
-
-    public String getDefaults(String key) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        return preferences.getString(key, null);
-    }
-
-    //Download JSON
-    private void initFrenchCountry(){
-        startButton.setEnabled(false);
-        countries_list = new ArrayList<Countries>();
-        spinnerCountries_data = new ArrayList<String>();
-        currentCountry = new Countries("ESN France", "https:\\/\\/galaxy.esn.org\\/section\\/FR", "FR");
-        countries_list.add(currentCountry);
-        spinnerCountries_data.add("ESN France");
-        addSpinnerSections();
-        spinnerCountries.setAdapter(new SpinnerAdapter(FirstLaunchActivity.this,spinnerCountries_data));
-        spinners_layout.addView(spinnerCountries);
-    }
-
-    private class DownloadJSONCountries extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            // Unable button
-            startButton.setEnabled(false);
-
-            countries_list = new ArrayList<Countries>();
-            // Create an array to populate the spinner
-            spinnerCountries_data = new ArrayList<String>();
-            // JSON file URL address
-            jsonobject = JSONfunctions
-                    .getJSONfromURL(ApplicationConstants.SECTIONS_WEBSERVICE_URL + "getCountries.php");
-
-            try {
-                // Locate the NodeList name
-                jsonarray = jsonobject.getJSONArray("countries");
-                for (int i = 0; i < jsonarray.length(); i++) {
-                    jsonobject = jsonarray.getJSONObject(i);
-
-                    Countries countries_object = new Countries(jsonobject.optString("name"),jsonobject.optString("url"),jsonobject.optString("code_country"));
-                    countries_list.add(countries_object);
-
-                    // Populate spinner with country names
-                    spinnerCountries_data.add(countries_object.getName());
-                }
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        protected void onPostExecute(Void args) {
-            spinnerCountries.setSelected(false);
-
-            // Spinner adapter
-            spinnerCountries.setAdapter(new SpinnerAdapter(FirstLaunchActivity.this,spinnerCountries_data));
-
-            // Spinner on item click listener
-            spinnerCountries.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    public void onItemSelected(AdapterView<?> arg0,
-                                               View arg1, int position, long arg3) {
-
-                        startButton.setEnabled(false);
-
-                        //Set currentCountry
-                        currentCountry = countries_list.get(position);
-
-                        //Load new spinner
-                        addSpinnerSections();
-                    }
-
-                    public void onNothingSelected(AdapterView<?> arg0) {}
-                }
-            );
-
-            //Remove progressbar
-            if (progressBar != null)
-                spinners_layout.removeView(progressBar);
-
-            // Add spinner to the linear layout
-            spinners_layout.addView(spinnerCountries);
-        }
-    }
-
-    private class DownloadJSONSections extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            // Create sections_list array
-            sections_list = new ArrayList<Sections>();
-            startButton.setEnabled(false);
-
-            // Create an array to populate the spinner
-            spinnerSections_data = new ArrayList<String>();
-
-            if (Utils.isConnected(currentActivity)){
-                String url = ApplicationConstants.SECTIONS_WEBSERVICE_URL + "getSections.php?code_country="+currentCountry.getCode_country();
-                jsonobject = JSONfunctions.getJSONfromURL(url);
-            }
-            else{
-                try {
-                    jsonobject = new JSONObject(Utils.loadSectionsFromFile(currentActivity, currentCountry.getCode_country()));
-                }catch (Exception e){
-                    Log.d(TAG, "ERROR GETTING SECTIONS FROM FILE");
-                }
-            }
-
-            try {
-                // Locate the NodeList name
-                jsonarray = jsonobject.getJSONArray("sections");
-                for (int i = 0; i < jsonarray.length(); i++) {
-                    jsonobject = jsonarray.getJSONObject(i);
-                    Sections sections_object = new Sections(  jsonobject.optString("name"),
-                            jsonobject.optString("url"),
-                            jsonobject.optString("code_country"),
-                            jsonobject.optString("code_section"));
-                    sections_list.add(sections_object);
-
-                    // Populate spinner with sections names
-                    spinnerSections_data.add(jsonobject.optString("name"));
-                }
-            } catch (Exception e) {
-                Log.d(TAG,"Error" + e.getMessage());
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        protected void onPostExecute(Void args) {
-            // Spinner adapter
-            spinnerSections.setAdapter(new SpinnerAdapter(FirstLaunchActivity.this,spinnerSections_data));
-
-            // Spinner on item click listener
-            spinnerSections
-                    .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        public void onItemSelected(AdapterView<?> arg0,
-                                                   View arg1, int position, long arg3) {
-                            // Unable button
-                            startButton.setEnabled(false);
-
-                            //Set current Section
-                            currentSection = sections_list.get(position);
-
-                            //Get section Details
-                            new DownloadJSONSection().execute();
-                        }
-                        public void onNothingSelected(AdapterView<?> arg0) {}
-                    });
-
-            //Remove progressbar
-            if (progressBar != null)
-                spinners_layout.removeView(progressBar);
-
-            // Add spinner to the linear layout
-            spinners_layout.addView(spinnerSections);
-
-
-        }
-    }
-
-    private class DownloadJSONSection extends AsyncTask<Void, Void, Void> {
+    private class checkLastRevision extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
             JSONObject jsonobject = null;
             JSONArray jsonarray = null;
-            startButton.setEnabled(false);
-            
-            // JSON file URL address or cache
-            if (Utils.isConnected(currentActivity)){
-                String url = ApplicationConstants.SECTIONS_WEBSERVICE_URL +  "getSection.php?code_country="+currentCountry.getCode_country()+"&code_section="+currentSection.getCode_section();
-                jsonobject = JSONfunctions.getJSONfromURL(url);
-            }
-            else{
-                try {
-                    jsonobject = new JSONObject(Utils.loadSectionFromFile(currentActivity, currentSection.getCode_section()));
-                }catch (Exception e){
-                    Log.d(TAG, "ERROR GETTING SECTIONS FROM FILE");
-                }
-            }
 
-
+            // GET Json FROM Webservice to check the last revision
+            jsonobject = JSONfunctions.getJSONfromURL(ApplicationConstants.APP_WEBSERVICE_URL + "getRevision.php");
             try {
-                // Locate the NodeList name
-                jsonarray = jsonobject.getJSONArray("section");
-
+                jsonarray = jsonobject.getJSONArray("revision");
                 jsonobject = jsonarray.getJSONObject(0);
-                sectionChoosed = new Section(
-                        jsonobject.optString("name"),
-                        jsonobject.optString("code_section"),
-                        jsonobject.optString("code_country"),
-                        jsonobject.optString("Address"),
-                        jsonobject.optString("Telephone"),
-                        jsonobject.optString("website"),
-                        jsonobject.optString("E-Mail"),
-                        jsonobject.optString("University")
-                );
+                revision = jsonobject.optString("date");
 
-
+                if (revision.length() == 14)
+                    Log.d(TAG, "revision online = " + revision);
+                else
+                    Log.d(TAG, "error getting revision");
             } catch (Exception e) {
-                Log.d(TAG, "Error" + e.getMessage());
+                Log.e("Error", e.getMessage());
+                Log.d(TAG, "error getting revision");
                 e.printStackTrace();
             }
+
             return null;
         }
 
         protected void onPostExecute(Void args) {
-            if (sectionChoosed != null)
-                startButton.setEnabled(true);
+            if (revision != null && revision.length() == 14) {
+                String pref_revision = Utils.getDefaults(currentActivity, "revision");
+                if (pref_revision != null && pref_revision.length() == 14) {
+                    SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHiiss");
+
+                    try {
+                        Date dl_date = format.parse(revision);
+                        Date pref_date = format.parse(pref_revision);
+
+                        if (dl_date.compareTo(pref_date) < 0){
+                            Log.d(TAG, "dl_date is Greater than my pref_date");
+                            Utils.setDefaults(currentActivity, "revision", revision);
+                            new DownloadJSON().execute();
+                        }else{
+                            Log.d(TAG, "pref_date is Greater than my dl_date");
+                        }
+                    }
+                    catch(Exception e){
+                        Log.d(TAG, e.toString());
+                    }
+                }else{
+                    Log.d(TAG, "No previous revision stored, update revision");
+                    Utils.setDefaults(currentActivity, "revision", revision);
+                }
+            }
+            else{
+                Log.d(TAG, "Error getting revision onPostExecute");
+            }
+
+        }
+    }
+
+    private class DownloadJSON extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            Log.d(TAG, "getting json from online");
+
+            //Check if file revision is set
+            String pref_revision = Utils.getDefaults(currentActivity, "revision");
+            if (pref_revision != null){
+                jsonobject = JSONfunctions.getJSONfromURL(ApplicationConstants.APP_WEBSERVICE_URL + "json/" + pref_revision + ".json");
+
+                try {
+                    Countries countries = new Countries(pref_revision);
+                    JSONArray json_countries = jsonobject.getJSONArray("countries");
+                    for (int i = 0; i < json_countries.length(); i++) {
+                        JSONObject json_country = json_countries.getJSONObject(i);
+                        Country country = new Country(
+                                json_country.optInt("id"),
+                                json_country.optString("name"),
+                                json_country.optString("url"),
+                                json_country.optString("code_country"),
+                                json_country.optString("website"),
+                                json_country.optString("email")
+                        );
+                        countries.addCountry(country);
+
+                        JSONArray json_sections = json_country.getJSONArray("sections");
+                        for (int j = 0; j < json_sections.length(); j++) {
+                            JSONObject json_section = json_sections.getJSONObject(j);
+                            Section section = new Section(
+                                    json_section.optInt("id"),
+                                    json_section.optInt("id_country"),
+                                    json_section.optString("name"),
+                                    json_section.optString("url"),
+                                    json_section.optString("code_section"),
+                                    json_section.optString("address"),
+                                    json_section.optString("website"),
+                                    json_section.optString("phone"),
+                                    json_section.optString("email"),
+                                    json_section.optString("university")
+                            );
+                            country.addSection(section);
+                        }
+                    }
+
+                    if (countries.getCountries().size() > 0){
+                        Log.d(TAG, "countries downloaded = " + countries.getCountries().size());
+                        Log.d(TAG, "saving new json in cache");
+                    }
+                    else
+                        Log.d(TAG,"error getting countries");
+                } catch (Exception e) {
+                    Log.e("Error", e.getMessage());
+                    Log.d(TAG,"error getting countries");
+                    e.printStackTrace();
+                }
+
+            }else{
+                Log.d(TAG,"revision from preferences is null");
+            }
+
+            return null;
+        }
+
+        protected void onPostExecute(Void args) {
+
         }
     }
 }

@@ -12,6 +12,7 @@ public interface ApplicationConstants {
 
     // Php Application URL to store Reg ID created
     static final String APP_SERVER_URL = "http://esnlille.fr/survivalGuide/includes/rest/insertRegId.php";
+    static final String APP_WEBSERVICE_URL = "http://esnlille.odns.fr/webservices/esnmobilit/";
 
     // Google Project Number
     static final String GOOGLE_PROJ_ID = "1079816997";

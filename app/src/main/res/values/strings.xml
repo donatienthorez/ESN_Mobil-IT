@@ -2,7 +2,7 @@
 <resources>
 
     <!-- APP SETTINGS -->
-    <string name="app_name">ESN MobilIT BETA</string>
+    <string name="app_name">ESN MobilIT</string>
 
     <!-- MENU -->
     <string name="action_settings">Action</string>

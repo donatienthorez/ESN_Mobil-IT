@@ -2,15 +2,30 @@ package org.esn.mobilit.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+import android.preference.PreferenceManager;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Utils {
-    public static void CopyStream(InputStream is, OutputStream os)
-    {
+
+    // PREFERENCES
+    public static void setDefaults(Context ctx, String key, String value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
+    public static String getDefaults(Context ctx, String key) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+        return preferences.getString(key, null);
+    }
+
+    public static void CopyStream(InputStream is, OutputStream os){
         final int buffer_size=1024;
         try
         {
@@ -59,6 +74,5 @@ public class Utils {
             return null;
         }
         return json;
-
     }
 }

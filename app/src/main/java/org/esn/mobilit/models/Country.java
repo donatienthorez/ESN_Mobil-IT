@@ -1,28 +1,37 @@
 package org.esn.mobilit.models;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
 /**
  * Created by Spider on 02/12/14.
  */
-public class Country {
+public class Country implements Serializable{
 
-    private String code_country;
+    private int    id;
     private String name;
     private String url;
+    private String code_country;
+    private String website;
     private String email;
+    private ArrayList<Section> sections;
 
-    public Country(String code_country, String name, String url, String email) {
-        this.code_country = code_country;
+    public Country(int id, String name, String url, String code_country, String website, String email) {
+        this.id = id;
         this.name = name;
         this.url = url;
-        this.email = email;
-    }
-
-    public String getCode_country() {
-        return code_country;
-    }
-
-    public void setCode_country(String code_country) {
         this.code_country = code_country;
+        this.website = website;
+        this.email = email;
+        this.sections = new ArrayList<Section>();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -41,6 +50,22 @@ public class Country {
         this.url = url;
     }
 
+    public String getCode_country() {
+        return code_country;
+    }
+
+    public void setCode_country(String code_country) {
+        this.code_country = code_country;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -49,13 +74,27 @@ public class Country {
         this.email = email;
     }
 
-    @Override
+    public ArrayList<Section> getSections() {
+        return sections;
+    }
+
+    public void setSections(ArrayList<Section> sections) {
+        this.sections = sections;
+    }
+
+    public void addSection(Section section){
+        this.sections.add(section);
+    }
+
     public String toString() {
         return "Country{" +
-                "code_country='" + code_country + '\'' +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", url='" + url + '\'' +
+                ", code_country='" + code_country + '\'' +
+                ", website='" + website + '\'' +
                 ", email='" + email + '\'' +
+                ", sections=" + sections +
                 '}';
     }
 }

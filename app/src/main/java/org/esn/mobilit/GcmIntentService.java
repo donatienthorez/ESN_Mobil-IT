@@ -67,7 +67,7 @@ public class GcmIntentService extends IntentService {
         mNotifyBuilder = new NotificationCompat.Builder(this)
                 .setContentTitle(sbj)
                 .setContentText(msg)
-                .setSmallIcon(R.drawable.ic_launcher);
+                .setSmallIcon(R.drawable.ic_launcher_color);
         // Set pending intent
         mNotifyBuilder.setContentIntent(resultPendingIntent);
 

@@ -1,49 +1,44 @@
 package org.esn.mobilit.models;
 
+import java.util.ArrayList;
+
 /**
  * Created by Spider on 03/12/14.
  */
 public class Countries {
-    private String name;
-    private String url;
-    private String code_country;
 
-    public Countries(String name, String url, String code_country) {
-        this.name = name;
-        this.url = url;
-        this.code_country = code_country;
+    private ArrayList<Country> countries;
+    private String revision;
+
+    public Countries(String revision) {
+        this.countries = new ArrayList<Country>();
+        this.revision  = revision;
     }
 
-    public String getName() {
-        return name;
+    public ArrayList<Country> getCountries() {
+        return countries;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCountries(ArrayList<Country> countries) {
+        this.countries = countries;
     }
 
-    public String getUrl() {
-        return url;
+    public void addCountry(Country country){
+        this.getCountries().add(country);
+    }
+    public String getRevision() {
+        return revision;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getCode_country() {
-        return code_country;
-    }
-
-    public void setCode_country(String code_country) {
-        this.code_country = code_country;
+    public void setRevision(String revision) {
+        this.revision = revision;
     }
 
     @Override
     public String toString() {
         return "Countries{" +
-                "name='" + name + '\'' +
-                ", url='" + url + '\'' +
-                ", code_country='" + code_country + '\'' +
+                "countries=" + countries +
+                ", revision='" + revision + '\'' +
                 '}';
     }
 }

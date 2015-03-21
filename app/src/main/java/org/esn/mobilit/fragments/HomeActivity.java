@@ -30,7 +30,9 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "HomeActivity OnCreate");
+
+        //Change Layout
+        getActionBar().setIcon(R.drawable.ic_launcher);
         setContentView(R.layout.activity_main);
 
         // Save context

@@ -61,6 +61,9 @@ public class SplashActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        //Change layout
+        getActionBar().setIcon(R.drawable.ic_launcher);
 		setContentView(R.layout.splash);
 
         //Init values
