@@ -3,6 +3,8 @@ package org.esn.mobilit.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -77,6 +79,14 @@ public class SplashActivity extends Activity {
         count = 0;
 
         //Init Elements
+        TextView version = ((TextView) findViewById(R.id.version));
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            version.setText("v " + pInfo.versionName);
+        }catch(PackageManager.NameNotFoundException e){
+            version.setText("v 1.0.0");
+        }
+
         textView = ((TextView)findViewById (R.id.textView));
         progressBar = ((ProgressBar)findViewById (R.id.progressBar));
 

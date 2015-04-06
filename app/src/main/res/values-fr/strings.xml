@@ -14,13 +14,13 @@
     <string name="loading">Veuillez patienter …</string>
     <string name="btn_retry">Réessayer</string>
     <string name="btn_change">Changer de section</string>
-    <string name="load_survival_start">Téléchargement du guide de survie ...</string>
+    <string name="load_survival_start">Chargement du guide de survie ...</string>
     <string name="load_survival_end">%1$d pages chargées</string>
-    <string name="load_events_start">Téléchargement des évènements ...</string>
+    <string name="load_events_start">Chargement des évènements ...</string>
     <string name="load_events_end">%1$d évènements chargés</string>
-    <string name="load_news_start">Téléchargement des news ...</string>
+    <string name="load_news_start">Chargement des news ...</string>
     <string name="load_news_end">%1$d news chargées</string>
-    <string name="load_partners_start">Téléchargement des partenaires...</string>
+    <string name="load_partners_start">Chargement des partenaires...</string>
     <string name="load_partners_end">%1$d partnaires chargées</string>
     <string name="start_homeactivity">Chargement de l\'application ...</string>
     <string name="noitems">Il n\'y a pas de contenu pour cette section, veuillez contacter webmaster@esnlille.fr</string>
