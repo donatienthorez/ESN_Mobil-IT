@@ -12,7 +12,7 @@ public interface ApplicationConstants {
 
     // Php Application URL to store Reg ID created
     static final String APP_SERVER_URL = "http://esnlille.fr/survivalGuide/includes/rest/insertRegId.php";
-    static final String APP_WEBSERVICE_URL = "http://esnlille.odns.fr/webservices/esnmobilit/";
+    static final String APP_WEBSERVICE_URL = "http://esnlille.fr/webservices/esnmobilit/";
 
     // Google Project Number
     static final String GOOGLE_PROJ_ID = "1079816997";
@@ -22,12 +22,11 @@ public interface ApplicationConstants {
     static final String SBJ_KEY = "sbj";
 
     // Path for news event & partners
+    static final String FEED_PATH = "/feed";
     static final String NEWS_PATH = "/news";
     static final String PARTNERS_PATH = "/partners";
     static final String EVENTS_PATH = "/events";
 
-    // Path for feed
-    static final String FEED_PATH = "/feed";
 
     // Webservices
     // Survival Guide Webservice

@@ -1,11 +1,12 @@
 package org.esn.mobilit.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Spider on 03/12/14.
  */
-public class Countries {
+public class Countries implements Serializable{
 
     private ArrayList<Country> countries;
     private String revision;
@@ -15,6 +16,14 @@ public class Countries {
         this.revision  = revision;
     }
 
+    public Country getCountryFromSection(Section section){
+        for (Country c : countries){
+            if (c.getId() == section.getId_country()){
+                return c;
+            }
+        }
+        return null;
+    }
     public ArrayList<Country> getCountries() {
         return countries;
     }

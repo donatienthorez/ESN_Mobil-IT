@@ -14,6 +14,16 @@
     <string name="loading">Loading please wait …</string>
     <string name="btn_retry">Try again</string>
     <string name="btn_change">Reset section</string>
+    <string name="load_survival_start">Downloading Survival Guide ...</string>
+    <string name="load_survival_end">%1$d pages loaded</string>
+    <string name="load_events_start">Downloading Events ...</string>
+    <string name="load_events_end">%1$d events loaded</string>
+    <string name="load_news_start">Downloading News ...</string>
+    <string name="load_news_end">%1$d news loaded</string>
+    <string name="load_partners_start">Downloading Partners ...</string>
+    <string name="load_partners_end">%1$d partners loaded</string>
+    <string name="start_homeactivity">Launching app ...</string>
+    <string name="noitems">There is no contents for this section, please contact webmaster@esnlille.fr</string>
 
     <!-- FIRST LAUNCH LAYOUT -->
     <string name="chooseyour">Choose your</string>
@@ -22,6 +32,8 @@
     <string name="esnsection">ESN Section</string>
     <string name="and">and</string>
     <string name="start_button">Launch</string>
+    <string name="selectyourcountry">Select your country</string>
+    <string name="selectyoursection">Select your section</string>
 
     <!-- Action Bar Title -->
     <string name="title_events">Events</string>

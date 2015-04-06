@@ -5,12 +5,18 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
+import android.util.Log;
+
+import org.esn.mobilit.utils.image.InternalStorage;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Utils {
+
+    private static final String TAG = Utils.class.getSimpleName();
+
 
     // PREFERENCES
     public static void setDefaults(Context ctx, String key, String value) {
@@ -23,6 +29,43 @@ public class Utils {
     public static String getDefaults(Context ctx, String key) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
         return preferences.getString(key, null);
+    }
+
+
+
+    /*
+     * Save seriazable object in cache
+     * @param String key
+     * @param Obkect o
+     */
+    public static void saveObjectToCache(Context context, String key, Object o){
+        if (!key.equalsIgnoreCase("countries")) {
+            key = getDefaults(context, "CODE_SECTION") + "_" + key;
+        }
+
+        try {
+            InternalStorage.writeObject(context, key, o);
+        }catch (Exception e){
+            Log.d(TAG, "Exception saveobject: " + e);
+        }
+    }
+
+    /*
+     * Get seriazable object in cache
+     * @param String key
+     */
+    public static Object getObjectFromCache(Context context, String key){
+        Object o = null;
+        if (!key.equalsIgnoreCase("countries")) {
+            key = getDefaults(context, "CODE_SECTION") + "_" + key;
+        }
+
+        try {
+            o = InternalStorage.readObject(context, key);
+        }catch (Exception e){
+            Log.d(TAG, "Exception getObjectFromCache(" + key + "): " + e);
+        }
+        return o;
     }
 
     public static void CopyStream(InputStream is, OutputStream os){
@@ -48,9 +91,7 @@ public class Utils {
                 || !conMgr.getActiveNetworkInfo().isAvailable()) ? false : true;
     }
 
-    public static String loadCountriesFromFile(Context context){ return loadJSONFromAsset(context, "data/Countries.json"); }
-    public static String loadSectionsFromFile(Context context, String code_country){ return loadJSONFromAsset(context, "data/Country/" + code_country + ".json"); }
-    public static String loadSectionFromFile(Context context, String code_section){ return loadJSONFromAsset(context, "data/Section/" + code_section + ".json"); }
+    public static String loadCountriesFromAsset(Context context){ return loadJSONFromAsset(context, "countries.json"); }
 
     private static String loadJSONFromAsset(Context context, String file) {
         String json = null;

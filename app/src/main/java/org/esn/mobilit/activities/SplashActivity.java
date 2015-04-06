@@ -3,10 +3,8 @@ package org.esn.mobilit.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -17,10 +15,16 @@ import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.esn.mobilit.R;
 import org.esn.mobilit.fragments.HomeActivity;
 import org.esn.mobilit.fragments.Satellite.DetailActivity;
@@ -29,13 +33,14 @@ import org.esn.mobilit.models.SurvivalGuide;
 import org.esn.mobilit.network.JSONfunctions;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
-import org.esn.mobilit.utils.image.InternalStorage;
 import org.esn.mobilit.utils.parser.DOMParser;
 import org.esn.mobilit.utils.parser.RSSFeed;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Links
@@ -49,7 +54,7 @@ public class SplashActivity extends Activity {
     private Intent intent;
     private TextView textView;
     private ProgressBar progressBar;
-    private Context splashActivityContext;
+    private Context context;
 
     //GCM
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -63,11 +68,10 @@ public class SplashActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
         //Change layout
-        getActionBar().setIcon(R.drawable.ic_launcher);
 		setContentView(R.layout.splash);
 
         //Init values
-        splashActivityContext = getApplicationContext();
+        context = getApplicationContext();
         count_limit = 5;
         intent = new Intent(getApplicationContext(), HomeActivity.class);
         count = 0;
@@ -79,10 +83,10 @@ public class SplashActivity extends Activity {
         if (!Utils.isConnected(this)){
             // No connectivity - Load cache
             textView.setText(getResources().getString(R.string.tryingcache));
-            feedEvents    = (RSSFeed) getObjectFromCache("feedEvents");
-            feedNews      = (RSSFeed) getObjectFromCache("feedNews");
-            feedPartners  = (RSSFeed) getObjectFromCache("feedPartners");
-            survivalguide = (SurvivalGuide) getObjectFromCache("survivalGuide");
+            feedEvents    = (RSSFeed) Utils.getObjectFromCache(context, "feedEvents");
+            feedNews      = (RSSFeed) Utils.getObjectFromCache(context, "feedNews");
+            feedPartners  = (RSSFeed) Utils.getObjectFromCache(context, "feedPartners");
+            survivalguide = (SurvivalGuide) Utils.getObjectFromCache(context, "survivalGuide");
 
             // Cache is empty
             if (feedEvents == null && feedNews == null && feedPartners == null && survivalguide == null){
@@ -127,14 +131,19 @@ public class SplashActivity extends Activity {
 
         }else{
             // Push for GCM
-            if (getDefaults(REG_ID) != null)
+            if (Utils.getDefaults(context, REG_ID) != null) {
+                Log.d(TAG,"No need to push GCM");
                 count_limit--;
-            else
+            }
+            else {
+                Log.d(TAG,"Registering RegID");
                 RegisterUser();
+            }
 
             Log.d(TAG, "count_limit:" + count_limit);
 
             // Connected - Start parsing
+            textView.setText(R.string.load_survival_start);
             new DownloadJSONSurvivalGuide().execute();
             new AsyncLoadXMLFeedEvents().execute();
             new AsyncLoadXMLFeedNews().execute();
@@ -151,10 +160,10 @@ public class SplashActivity extends Activity {
             Log.d(TAG,"frompushtitle length: " + frompushtitle.length());
 
             //Test if exist in previous cache
-            feedEvents = (RSSFeed) getObjectFromCache("feedEvents");
-            feedNews = (RSSFeed) getObjectFromCache("feedNews");
-            feedPartners = (RSSFeed) getObjectFromCache("feedPartners");
-            survivalguide = (SurvivalGuide) getObjectFromCache("survivalGuide");
+            feedEvents = (RSSFeed) Utils.getObjectFromCache(context,"feedEvents");
+            feedNews = (RSSFeed) Utils.getObjectFromCache(context,"feedNews");
+            feedPartners = (RSSFeed) Utils.getObjectFromCache(context,"feedPartners");
+            survivalguide = (SurvivalGuide) Utils.getObjectFromCache(context,"survivalGuide");
 
             int pos = -1;
             RSSFeed currentfeed = null;
@@ -211,12 +220,13 @@ public class SplashActivity extends Activity {
             total += survivalguide.getCategories().size();
 
             if (total > 0) {
-                Log.d(TAG, "TOTAL ITEMS COUNT : " + total);
+                textView.setText(R.string.start_homeactivity);
+
                 Intent i = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivityForResult(i, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
             }
             else {
-                textView.setText("There is no contents for this section, please contact webmaster@esnlille.fr");
+                textView.setText(R.string.noitems);
                 progressBar.setVisibility(View.INVISIBLE);
 
                 final Button button = (Button) findViewById(R.id.retry);
@@ -234,39 +244,6 @@ public class SplashActivity extends Activity {
         }
     }
 
-    // PREFERENCES
-    public String getDefaults(String key) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        return preferences.getString(key, null);
-    }
-
-    public void setDefaults(String key, String value) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(key, value);
-        editor.commit();
-    }
-
-    // CACHE
-    public void saveObjectToCache(String key, Object o){
-        key = getDefaults("CODE_SECTION") + "_" + key;
-        try {
-            InternalStorage.writeObject(splashActivityContext, key, o);
-        }catch (Exception e){
-            Log.d(TAG, "Exception saveobject: " + e);
-        }
-    }
-
-    public Object getObjectFromCache(String key){
-        Object o = null;
-        key = getDefaults("CODE_SECTION") + "_" + key;
-        try {
-            o = InternalStorage.readObject(splashActivityContext, key);
-        }catch (Exception e){
-            Log.d(TAG, "Exception getobject: " + e);
-        }
-        return o;
-    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult");
@@ -295,20 +272,23 @@ public class SplashActivity extends Activity {
 		@Override
 		protected Void doInBackground(Void... params) {
             // Get feed url
-            String event_url = getDefaults("SECTION_WEBSITE") + ApplicationConstants.EVENTS_PATH + ApplicationConstants.FEED_PATH;
+            String event_url = Utils.getDefaults(context, "SECTION_WEBSITE") + ApplicationConstants.EVENTS_PATH + ApplicationConstants.FEED_PATH;
 
 			// Obtain feed
             Log.d(TAG, "Debut Parser pour " + ApplicationConstants.EVENTS_PATH + ApplicationConstants.FEED_PATH);
 			DOMParser myParser = new DOMParser();
             feedEvents = myParser.parseXml(event_url);
 
-            saveObjectToCache("feedEvents", feedEvents);
+            Utils.saveObjectToCache(context, "feedEvents", feedEvents);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
+
+            textView.setText(getResources().getString(R.string.load_events_end, feedEvents.getItemCount()));
+            textView.setText(getResources().getString(R.string.load_news_start));
 
 			Bundle bundle = new Bundle();
 			bundle.putSerializable("feedEvents", feedEvents);
@@ -328,20 +308,24 @@ public class SplashActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             // Get feed url
-            String url = getDefaults("SECTION_WEBSITE") + ApplicationConstants.NEWS_PATH + ApplicationConstants.FEED_PATH;
+            String url = Utils.getDefaults(context, "SECTION_WEBSITE") + ApplicationConstants.NEWS_PATH + ApplicationConstants.FEED_PATH;
             //String url = "http://esnlille.fr/BuddySystem/test.xml";
 
             // Obtain feed
             Log.d(TAG, "Debut Parser pour " + url);
             DOMParser myParser = new DOMParser();
             feedNews = myParser.parseXml(url);
-            saveObjectToCache("feedNews", feedNews);
+            Utils.saveObjectToCache(context, "feedNews", feedNews);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
+
+            textView.setText(getResources().getString(R.string.load_news_end, feedNews.getItemCount()));
+            textView.setText(getResources().getString(R.string.load_partners_start));
+
             count++;
             launchHomeActivity();
         }
@@ -353,19 +337,22 @@ public class SplashActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             // Get feed url
-            String url = getDefaults("SECTION_WEBSITE") + ApplicationConstants.PARTNERS_PATH + ApplicationConstants.FEED_PATH;
+            String url = Utils.getDefaults(context, "SECTION_WEBSITE") + ApplicationConstants.PARTNERS_PATH + ApplicationConstants.FEED_PATH;
 
             // Obtain feed
             Log.d(TAG, "Debut Parser pour " + url);
             DOMParser myParser = new DOMParser();
             feedPartners = myParser.parseXml(url);
-            saveObjectToCache("feedPartners", feedPartners);
+            Utils.saveObjectToCache(context, "feedPartners", feedPartners);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
+
+            textView.setText(getResources().getString(R.string.load_partners_end, feedPartners.getItemCount()));
+
             count++;
             launchHomeActivity();
         }
@@ -380,7 +367,7 @@ public class SplashActivity extends Activity {
             survivalguide = new SurvivalGuide();
 
             //categories_list = new ArrayList<Category>();
-            String url = ApplicationConstants.SURVIVAL_WEBSERVICE_URL + "getCategories.php?section=" + getDefaults("CODE_SECTION");
+            String url = ApplicationConstants.SURVIVAL_WEBSERVICE_URL + "getCategories.php?section=" + Utils.getDefaults(context, "CODE_SECTION");
             JSONObject jsonobject = JSONfunctions
                     .getJSONfromURL(url);
             try {
@@ -433,11 +420,14 @@ public class SplashActivity extends Activity {
                 e.printStackTrace();
             }
 
-            saveObjectToCache("survivalGuide", survivalguide);
+            Utils.saveObjectToCache(context, "survivalGuide", survivalguide);
             return null;
         }
 
         protected void onPostExecute(Void args) {
+            textView.setText(getResources().getString(R.string.load_survival_end, survivalguide.getCategories().size()));
+            textView.setText(getResources().getString(R.string.load_events_start));
+
             count++;
             launchHomeActivity();
         }
@@ -460,7 +450,7 @@ public class SplashActivity extends Activity {
                 try {
                     if (gcmObj == null) {
                         gcmObj = GoogleCloudMessaging
-                                .getInstance(splashActivityContext);
+                                .getInstance(context);
                     }
                     regId = gcmObj
                             .register(ApplicationConstants.GOOGLE_PROJ_ID);
@@ -475,73 +465,49 @@ public class SplashActivity extends Activity {
             @Override
             protected void onPostExecute(String msg) {
                 if (!TextUtils.isEmpty(regId)) {
-                    storeRegIdinSharedPref();
-                    //Toast.makeText(
-                    //        splashActivityContext,
-                    //        "Registered with GCM Server successfully.\n\n"
-                    //                + msg, Toast.LENGTH_SHORT).show();
+                    new postRegID().execute();
                 } else {
-                    //Toast.makeText(
-                    //       splashActivityContext,
-                    //       "Reg ID Creation Failed.\n\nEither you haven't enabled Internet or GCM server is busy right now. Make sure you enabled Internet and try registering again after some time."
-                    //               + msg, Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "onPostExecute registerInBackground failed");
                 }
             }
         }.execute(null, null, null);
     }
 
-    private void storeRegIdinSharedPref() {
-        setDefaults(REG_ID, regId);
-        setDefaults("FROM_FIRSTLAUNCH",null);
-        storeRegIdinServer();
+    private class postRegID extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost(ApplicationConstants.APP_SERVER_URL);
+            try {
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+                nameValuePairs.add(new BasicNameValuePair("regId", regId));
+                nameValuePairs.add(new BasicNameValuePair("CODE_SECTION", Utils.getDefaults(context, "CODE_SECTION")));
+                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = httpclient.execute(httppost);
+            } catch (ClientProtocolException e) {
+                Log.d(TAG,"ClientProtocolException" + e.getMessage());
+            } catch (IOException e) {
+                Log.d(TAG,"IOException" + e.getMessage());
+            }
+
+            return null;
+        }
+
+        protected void onPostExecute(Void args) {
+            Log.d(TAG,"onPostExecute");
+            storeRegIdinSharedPref();
+            count++;
+            if (count == count_limit) {
+                launchHomeActivity();
+                finish();
+            }
+        }
     }
 
-    private void storeRegIdinServer() {
-        params.put("regId", regId);
-        params.put("CODE_SECTION", getDefaults("CODE_SECTION"));
-
-        // Make RESTful webservice call using AsyncHttpClient object
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.post(ApplicationConstants.APP_SERVER_URL, params,
-                new AsyncHttpResponseHandler() {
-                    public void onSuccess(int statusCode, org.apache.http.Header[] headers, byte[] b) {
-
-                        //Toast.makeText(splashActivityContext,
-                        //        "Reg Id shared successfully with Web App ",
-                        //        Toast.LENGTH_LONG).show();
-                        count++;
-
-                        if (count == count_limit) {
-                            //startActivityForResult(intent, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
-                            launchHomeActivity();
-
-                            finish();
-                        }
-                    }
-
-                    public void onFailure(int statusCode, org.apache.http.Header[] headers, byte[] b, Throwable throwable) {
-                        // When Http response code is '404'
-                        if (statusCode == 404) {
-                            //    Toast.makeText(splashActivityContext,
-                            //        "Requested resource not found",
-                            //        Toast.LENGTH_LONG).show();
-                        }
-                        // When Http response code is '500'
-                        else if (statusCode == 500) {
-                            //Toast.makeText(splashActivityContext,
-                            //        "Something went wrong at server end",
-                            //        Toast.LENGTH_LONG).show();
-                        }
-                        // When Http response code other than 404, 500
-                        else {
-                            //Toast.makeText(
-                            //        splashActivityContext,
-                            //        "Unexpected Error occcured! [Most common Error: Device might "
-                            //                + "not be connected to Internet or remote server is not up and running], check for other errors as well",
-                            //        Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+    private void storeRegIdinSharedPref() {
+        Utils.setDefaults(context, REG_ID, regId);
     }
 
     private boolean checkPlayServices() {
@@ -553,7 +519,7 @@ public class SplashActivity extends Activity {
                         PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
                 //Toast.makeText(
-                //        splashActivityContext,
+                //        context,
                 //        "This device doesn't support Play services, App will not work normally",
                 //        Toast.LENGTH_LONG).show();
                 finish();
@@ -561,7 +527,7 @@ public class SplashActivity extends Activity {
             return false;
         } else {
             //Toast.makeText(
-            //        splashActivityContext,
+            //        context,
             //        "This device supports Play services, App will work normally",
             //        Toast.LENGTH_LONG).show();
         }
