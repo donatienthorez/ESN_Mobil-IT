@@ -10,6 +10,15 @@ public class RSSItem implements Serializable {
     private String _link = null;
 	private String _date = null;
 	private String _image = null;
+    private String _pubDate;
+
+    public String get_pubDate() {
+        return _pubDate;
+    }
+
+    public void set_pubDate(String _pubDate) {
+        this._pubDate = _pubDate;
+    }
 
     void setLink(String link) {this._link = link;}
 

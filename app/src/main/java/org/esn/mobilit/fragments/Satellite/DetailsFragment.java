@@ -12,6 +12,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import org.esn.mobilit.R;
+import org.esn.mobilit.utils.image.ImageLoader;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
 /**
@@ -41,13 +42,15 @@ public class DetailsFragment extends Fragment {
         WebView desc = (WebView) view.findViewById(R.id.desc);
 
 
-        /** Getting the bundle object passed from MainActivity ( in Landscape mode )  or from
-         *  CountryDetailsActivity ( in Portrait Mode )
-         * */
+        /* Getting the bundle object passed from MainActivity */
         Bundle b = getArguments();
 
         // Set the views
         title.setText(fFeed.getItem(fPos).getTitle());
+
+        ImageLoader imageLoader = new ImageLoader(getActivity().getApplicationContext());
+        imageLoader.DisplayImage(fFeed.getItem(fPos).getImage(), imageView);
+
         desc.loadDataWithBaseURL("http://www.androidcentral.com/", fFeed
                 .getItem(fPos).getDescription(), "text/html", "UTF-8", null);
 

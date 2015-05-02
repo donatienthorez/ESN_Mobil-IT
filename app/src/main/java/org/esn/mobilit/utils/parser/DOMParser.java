@@ -21,9 +21,11 @@ public class DOMParser {
 
 	private RSSFeed _feed = new RSSFeed();
     private static final String TAG = DOMParser.class.getSimpleName();
+
 	public RSSFeed parseXml(String xml) {
 
 		URL url = null;
+
 		try {
 			url = new URL(xml);
 		} catch (MalformedURLException e1) {
@@ -55,7 +57,7 @@ public class DOMParser {
 			doc.getDocumentElement().normalize();
 
 			// Get all <item> tags.
-			NodeList nl = doc.getElementsByTagName("item");Log.d(TAG, "6");
+			NodeList nl = doc.getElementsByTagName("item");
 			int length = nl.getLength();
 			for (int i = 0; i < length; i++) {
 				Node currentNode = nl.item(i);
@@ -80,24 +82,28 @@ public class DOMParser {
 							_item.setTitle(theString);
 						}
 						else if ("description".equals(nodeName)) {
-							_item.setDescription(theString);
-
-							// Parse the html description to get the image url
+							// Get the image url
 							String html = theString;
 							org.jsoup.nodes.Document docHtml = Jsoup.parse(html);
 							Elements imgEle = docHtml.select("img");
-							_item.setImage(imgEle.attr("src"));
+							_item.setImage(imgEle.first().attr("src"));
+
+                            //Remove image from description
+                            String description = theString.replace(imgEle.first().toString(), "");
+                            _item.setDescription(description);
+
+                            // Get the date
+                            Elements dateEle = docHtml.select("span.date-display-single");
+                            if (dateEle.size() == 1){
+                                _item.setDate(dateEle.text());
+                            }
 						}
                         else if ("link".equals(nodeName)) {
                             _item.setLink(theString);
                         }
 						else if ("pubDate".equals(nodeName)) {
-
-							// We replace the plus and zero's in the date with
-							// empty string
-							String formatedDate = theString.replace(" +0000",
-									"");
-							_item.setDate(formatedDate);
+							String formatedDate = theString.replace(" +0000","");
+							_item.set_pubDate(formatedDate);
 						}
 
 					}
@@ -113,7 +119,8 @@ public class DOMParser {
 		// Return the final feed once all the Items are added to the RSSFeed
 		// Object(_feed).
 		return _feed;
-
 	}
+
+    //private String getText()
 
 }

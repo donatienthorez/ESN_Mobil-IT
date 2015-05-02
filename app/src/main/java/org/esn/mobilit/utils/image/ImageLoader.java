@@ -28,6 +28,8 @@ public class ImageLoader {
 
     MemoryCache memoryCache = new MemoryCache();
     FileCache fileCache;
+    Bitmap bitmap;
+
     private Map<ImageView, String> imageViews = Collections
             .synchronizedMap(new WeakHashMap<ImageView, String>());
     ExecutorService executorService;
@@ -41,7 +43,7 @@ public class ImageLoader {
 
     public void DisplayImage(String url, ImageView imageView) {
         imageViews.put(imageView, url);
-        Bitmap bitmap = memoryCache.get(url);
+        bitmap = memoryCache.get(url);
         if (bitmap != null)
             imageView.setImageBitmap(bitmap);
         else {
@@ -50,9 +52,9 @@ public class ImageLoader {
         }
     }
 
-    /*public Bitmap getBitmapImage(String url){
-
-    }*/
+    public int getHeight(){
+        return (bitmap.getHeight() > 0) ? bitmap.getHeight() : -1;
+    }
 
     private void queuePhoto(String url, ImageView imageView) {
         PhotoToLoad p = new PhotoToLoad(url, imageView);
