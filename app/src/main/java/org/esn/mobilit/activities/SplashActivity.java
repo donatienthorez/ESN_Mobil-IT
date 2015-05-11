@@ -29,7 +29,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.esn.mobilit.R;
 import org.esn.mobilit.fragments.HomeActivity;
-import org.esn.mobilit.fragments.Satellite.DetailActivity;
 import org.esn.mobilit.models.Category;
 import org.esn.mobilit.models.SurvivalGuide;
 import org.esn.mobilit.network.JSONfunctions;
@@ -57,6 +56,7 @@ public class SplashActivity extends Activity {
     private TextView textView;
     private ProgressBar progressBar;
     private Context context;
+    private String pushMsg;
 
     //GCM
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -161,62 +161,13 @@ public class SplashActivity extends Activity {
         }
 	}
 
-    public void pushReceived(){
-        Log.d(TAG,"PUSH RECEIVED");
-
-        String frompushtitle = getIntent().getExtras().getString("title");
-        Log.d(TAG,"frompushtitle : " + frompushtitle);
-        if (frompushtitle.length() > 0) {
-            Log.d(TAG,"frompushtitle length: " + frompushtitle.length());
-
-            //Test if exist in previous cache
-            feedEvents = (RSSFeed) Utils.getObjectFromCache(context,"feedEvents");
-            feedNews = (RSSFeed) Utils.getObjectFromCache(context,"feedNews");
-            feedPartners = (RSSFeed) Utils.getObjectFromCache(context,"feedPartners");
-            survivalguide = (SurvivalGuide) Utils.getObjectFromCache(context,"survivalGuide");
-
-            int pos = -1;
-            RSSFeed currentfeed = null;
-            if (feedEvents.getTitleID(frompushtitle) > 0) {
-                pos = feedEvents.getTitleID(frompushtitle);
-                currentfeed = feedEvents;
-            }
-            if (feedNews.getTitleID(frompushtitle) > 0) {
-                pos = feedNews.getTitleID(frompushtitle);
-                currentfeed = feedNews;
-            }
-            if (feedPartners.getTitleID(frompushtitle) > 0) {
-                pos = feedPartners.getTitleID(frompushtitle);
-                currentfeed = feedPartners;
-            }
-
-            if (currentfeed != null && pos > 0) {
-                /** Creating an intent object to start the CountryDetailsActivity */
-                Intent intent = new Intent(this, DetailActivity.class);
-
-                /** Setting data ( the clicked item's position ) to this intent */
-                Bundle b = new Bundle();
-                b.putSerializable("feed", currentfeed);
-                b.putInt("pos", pos);
-
-                intent.putExtras(b);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                /** Starting the activity by passing the implicit intent */
-                startActivity(intent);
-                setResult(ApplicationConstants.RESULT_CLOSE_ALL);
-                finish();
-            }
-        }
-
-    }
-
     public void onResume(){
         super.onResume();
 
         Bundle extras = getIntent().getExtras();
+
         if (extras != null) {
-            pushReceived();
+            pushMsg = getIntent().getExtras().getString("title");
         }
     }
 
@@ -233,6 +184,14 @@ public class SplashActivity extends Activity {
                 textView.setText(R.string.start_homeactivity);
 
                 Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+
+                if (pushMsg != null) {
+                    i.putExtra("pushReceived", true);
+                    i.putExtra("pushMsg", pushMsg);
+                }else{
+                    i.putExtra("pushReceived", false);
+                }
+
                 startActivityForResult(i, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
             }
             else {

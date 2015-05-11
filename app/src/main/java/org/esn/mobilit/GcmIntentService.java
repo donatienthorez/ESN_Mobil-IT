@@ -54,6 +54,7 @@ public class GcmIntentService extends IntentService {
 
     private void sendNotification(String sbj, String msg) {
         Intent resultIntent = new Intent(this, SplashActivity.class);
+        resultIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         resultIntent.putExtra("title", msg);
 
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0,
