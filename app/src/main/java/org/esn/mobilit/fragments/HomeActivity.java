@@ -15,7 +15,9 @@ import android.widget.ListView;
 import org.esn.mobilit.R;
 import org.esn.mobilit.fragments.Satellite.DetailActivity;
 import org.esn.mobilit.fragments.Satellite.ListFragment.ListFragmentItemClickListener;
+import org.esn.mobilit.models.Section;
 import org.esn.mobilit.models.SurvivalGuide;
+import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.image.InternalStorage;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
@@ -32,7 +34,6 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         super.onCreate(savedInstanceState);
 
         //Change Layout
-        //getActionBar().setIcon(R.drawable.ic_launcher);
         setContentView(R.layout.activity_main);
 
         // Save context
@@ -51,8 +52,15 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         if (feedPartners.getItemCount() > 0) totalTabs++;
         if (survivalGuide.getCategories().size() > 0) totalTabs++;
 
+        try{
+            Section section = (Section) Utils.getObjectFromCache(getApplicationContext(),"section");
+            totalTabs++;
+        }catch (NullPointerException e){
+            Log.d(TAG, e.toString());
+        }
+
         //Init FragmentPagerAdapter
-        MyFragmentPagerAdapter fpa = new MyFragmentPagerAdapter(getSupportFragmentManager(), totalTabs);
+        MyFragmentPagerAdapter fpa = new MyFragmentPagerAdapter(getSupportFragmentManager(), totalTabs, this.getApplicationContext());
         fpa.setFeedEvents(feedEvents);
         fpa.setFeedNews(feedNews);
         fpa.setFeedPartners(feedPartners);
@@ -79,16 +87,49 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         });
 
         //Add tabs
-        if (feedEvents.getItemCount() > 0)
-            actionBar.addTab(actionBar.newTab().setText(getResources().getString(R.string.title_events)).setTabListener(this));
-        if (feedNews.getItemCount() > 0)
-            actionBar.addTab(actionBar.newTab().setText(getResources().getString(R.string.title_news)).setTabListener(this));
-        if (feedPartners.getItemCount() > 0)
-            actionBar.addTab(actionBar.newTab().setText(getResources().getString(R.string.title_partners)).setTabListener(this));
-        if (survivalGuide.getCategories().size() > 0)
-            actionBar.addTab(actionBar.newTab().setText(getResources().getString(R.string.title_survivalguide)).setTabListener(this));
+        initTabs();
 
         if (getIntent().getBooleanExtra("pushReceived", false)) pushReceived();
+    }
+
+    private void initTabs(){
+        if (feedEvents.getItemCount() > 0) {
+            ActionBar.Tab tabEvent = getActionBar().newTab();
+            tabEvent.setText(getResources().getString(R.string.title_events));
+            tabEvent.setTabListener(this);
+            getActionBar().addTab(tabEvent);
+        }
+
+        if (feedNews.getItemCount() > 0){
+            ActionBar.Tab tabNews = getActionBar().newTab();
+            tabNews.setText(getResources().getString(R.string.title_news));
+            tabNews.setTabListener(this);
+            getActionBar().addTab(tabNews);
+        }
+
+        if (feedPartners.getItemCount() > 0){
+            ActionBar.Tab tabPartners = getActionBar().newTab();
+            tabPartners.setText(getResources().getString(R.string.title_partners));
+            tabPartners.setTabListener(this);
+            getActionBar().addTab(tabPartners);
+        }
+
+        if (survivalGuide.getCategories().size() > 0){
+            ActionBar.Tab tabSurvivalGuide = getActionBar().newTab();
+            tabSurvivalGuide.setText(getResources().getString(R.string.title_survivalguide));
+            tabSurvivalGuide.setTabListener(this);
+            getActionBar().addTab(tabSurvivalGuide);
+        }
+
+        try{
+            Section section = (Section) Utils.getObjectFromCache(getApplicationContext(),"section");
+            ActionBar.Tab tabAbout = getActionBar().newTab();
+            tabAbout.setText(getResources().getString(R.string.title_about));
+            tabAbout.setTabListener(this);
+            getActionBar().addTab(tabAbout);
+        }catch (NullPointerException e){
+            Log.d(TAG, e.toString());
+        }
     }
 
     public void pushReceived() {

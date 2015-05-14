@@ -171,6 +171,14 @@ public class SplashActivity extends Activity {
         }
     }
 
+    public void onPause(){
+        super.onPause();
+    }
+
+    public void onStop(){
+        super.onStop();
+    }
+
     public void launchHomeActivity(){
         if (count == count_limit) {
 
@@ -336,7 +344,7 @@ public class SplashActivity extends Activity {
             survivalguide = new SurvivalGuide();
 
             //categories_list = new ArrayList<Category>();
-            String url = ApplicationConstants.SURVIVAL_WEBSERVICE_URL + "getCategories.php?section=" + Utils.getDefaults(context, "CODE_SECTION");
+            String url = ApplicationConstants.SURVIVAL_WEBSERVICE_URL + "/getCategories.php?section=" + Utils.getDefaults(context, "CODE_SECTION");
             JSONObject jsonobject = JSONfunctions
                     .getJSONfromURL(url);
             try {

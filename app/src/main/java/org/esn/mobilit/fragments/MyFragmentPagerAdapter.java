@@ -1,5 +1,6 @@
 package org.esn.mobilit.fragments;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -8,6 +9,7 @@ import android.util.Log;
 import org.esn.mobilit.fragments.Satellite.ListFragment;
 import org.esn.mobilit.fragments.Survival.SurvivalFragment;
 import org.esn.mobilit.models.SurvivalGuide;
+import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
 import java.util.ArrayList;
@@ -18,11 +20,14 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
     RSSFeed feedEvents, feedNews, feedPartners;
     SurvivalGuide survivalGuide;
     ArrayList<String> tabs;
+    Context context;
 
-    public MyFragmentPagerAdapter(FragmentManager fm, int count) {
+    public MyFragmentPagerAdapter(FragmentManager fm, int count, Context context) {
         super(fm);
-        this.count = count;
-        this.tabs = new ArrayList<String>();
+
+        this.count   = count;
+        this.tabs    = new ArrayList<String>();
+        this.context = context;
     }
 
     public void setFeedEvents(RSSFeed feedEvents){
@@ -46,6 +51,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
         if (feedNews.getItemCount() > 0 ) tabs.add("News");
         if (feedPartners.getItemCount() > 0 ) tabs.add("Partners");
         if (survivalGuide.getCategories().size() > 0 ) tabs.add("SurvivalGuide");
+        if (Utils.getObjectFromCache(context, "section") != null) tabs.add("About");
     }
 
     @Override
@@ -62,6 +68,9 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 
         //Survival Guide
         SurvivalFragment survival = new SurvivalFragment(); survival.setSurvivalGuide(survivalGuide);
+
+        //About Page
+        AboutFragment about = new AboutFragment();
 
         switch (position) {
             case 0: //Events
@@ -104,10 +113,13 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
                     return survival;
                 }
             case 3: //Survival Guide
-                if (survivalGuide.getCategories().size() > 0 && tabs.contains("SurvivalGuide")){
+                if (survivalGuide.getCategories().size() > 0 && tabs.contains("SurvivalGuide")) {
                     tabs.remove("SurvivalGuide");
                     return survival;
                 }
+            case 4: //About
+                    return about;
+
             default: return null;
         }
     }

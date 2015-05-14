@@ -214,6 +214,8 @@ public class FirstLaunchActivity extends Activity {
         Utils.setDefaults(context, "CODE_COUNTRY", current_countries.getCountryFromSection(currentSection).getCode_country());
         Utils.setDefaults(context, "CODE_SECTION", currentSection.getCode_section());
         Utils.setDefaults(context, "SECTION_WEBSITE", currentSection.getWebsite());
+        Utils.saveObjectToCache(context, "country", currentCountry);
+        Utils.saveObjectToCache(context, "section", currentSection);
 
         Intent returnIntent = new Intent();
         setResult(RESULT_OK,returnIntent);

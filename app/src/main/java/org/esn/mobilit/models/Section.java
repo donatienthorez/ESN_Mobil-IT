@@ -11,6 +11,7 @@ public class Section implements Serializable{
     private String name;
     private String url;
     private String code_section;
+    private String logo_url;
     private String address;
     private String website;
     private String phone;
@@ -23,6 +24,7 @@ public class Section implements Serializable{
         this.name = name;
         this.url = url;
         this.code_section = code_section;
+        this.logo_url = "";
         this.address = address;
         this.website = website;
         this.phone = phone;
@@ -32,10 +34,6 @@ public class Section implements Serializable{
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getId_country() {
@@ -68,6 +66,14 @@ public class Section implements Serializable{
 
     public void setCode_section(String code_section) {
         this.code_section = code_section;
+    }
+
+    public String getLogo_url() {
+        return logo_url;
+    }
+
+    public void setLogo_url(String logo_url) {
+        this.logo_url = logo_url;
     }
 
     public String getAddress() {
@@ -110,13 +116,15 @@ public class Section implements Serializable{
         this.university = university;
     }
 
+    @Override
     public String toString() {
         return "Section{" +
                 "id=" + id +
-                ", id_country='" + id_country + '\'' +
+                ", id_country=" + id_country +
                 ", name='" + name + '\'' +
                 ", url='" + url + '\'' +
                 ", code_section='" + code_section + '\'' +
+                ", logo_url='" + logo_url + '\'' +
                 ", address='" + address + '\'' +
                 ", website='" + website + '\'' +
                 ", phone='" + phone + '\'' +
