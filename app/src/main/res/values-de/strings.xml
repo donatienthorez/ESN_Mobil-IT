@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- APP SETTINGS -->
+    <string name="app_name">ESN MobilIT</string>
+
+    <!-- MENU -->
+    <string name="action_settings">Aktion</string>
+    <string name="ras_section_settings">Andere Sektion</string>
+
+    <!-- SPLASH SCREEN -->
+    <string name="tryingcache">Keine Internetverbindung. Laden aus dem Cache ...</string>
+    <string name="emptycache">Sie müssen die Daten mindestens einmal mit Internetverbindung laden.</string>
+    <string name="loading">Bitte warten Sie ...…</string>
+    <string name="btn_retry">Erneut versuchen</string>
+    <string name="btn_change">Andere Sektion</string>
+    <string name="load_survival_start">Survival Guide wird heruntergeladen ...</string>
+    <string name="load_survival_end">%1$d Geladene Seiten</string>
+    <string name="load_events_start">Events werden heruntergeladen ...</string>
+    <string name="load_events_end">%1$d Geladene Events</string>
+    <string name="load_news_start">News werden heruntergeladen ...</string>
+    <string name="load_news_end">%1$d Geladene News</string>
+    <string name="load_partners_start">Partner werden heruntergeladen...</string>
+    <string name="load_partners_end">%1$d Geladene Partner</string>
+    <string name="start_homeactivity">App wird geladen ...</string>
+    <string name="noitems">Kein Inhalt für diese Sektion verfügbar. Kontaktieren Sie webmaster@esnlille.fr</string>
+
+    <!-- FIRST LAUNCH LAYOUT -->
+    <string name="chooseyour">Wählen Sie Ihr</string>
+    <string name="country">land</string>
+    <string name="city">Ihre Stadt</string>
+    <string name="esnsection">Ihre ESN-Sektion</string>
+    <string name="and">und</string>
+    <string name="start_button">Starten</string>
+    <string name="selectyourcountry">Wählen Sie Ihr Land</string>
+    <string name="selectyoursection">Wählen Sie Ihre Sektion</string>
+
+    <!-- Action Bar Title -->
+    <string name="title_events">Évènements</string>
+    <string name="title_news">Nouvelles</string>
+    <string name="title_partners">Partner</string>
+    <string name="title_survivalguide">Survival Guide</string>
+    <string name="title_about">Über uns</string>
+</resources>

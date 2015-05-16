@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- APP SETTINGS -->
+    <string name="app_name">ESN MobilIT</string>
+
+    <!-- MENU -->
+    <string name="action_settings">Akcja</string>
+    <string name="ras_section_settings">Zmieniac sekcje</string>
+
+    <!-- SPLASH SCREEN -->
+    <string name="tryingcache">Brak Internetu ...</string>
+    <string name="emptycache">Nalezy sciagnac informacje przynajmniej jeden raz</string>
+    <string name="loading">Sciaganie, prosze czekac ...</string>
+    <string name="btn_retry">Sprobuj ponownie</string>
+    <string name="btn_change">Zmiana sekcji</string>
+    <string name="load_survival_start">Sciaganie przewodnika ...</string>
+    <string name="load_survival_end">%1$d strony sciagniete</string>
+    <string name="load_events_start">Sciaganie wydarzen ...</string>
+    <string name="load_events_end">%1$d wydarzenia sciagniete</string>
+    <string name="load_news_start">Sciaganie wiadomosci ...</string>
+    <string name="load_news_end">%1$d wiadomosci sciagniete</string>
+    <string name="load_partners_start">Sciagane partenariatu ...</string>
+    <string name="load_partners_end">%1$d partenariat sciagniety</string>
+    <string name="start_homeactivity">Sciaganie aplikacji ...</string>
+    <string name="noitems">Ta sekcja nie zawiera zadnych informacji, prosze skontaktuj sie z webmaster@esnlille.fr</string>
+
+    <!-- FIRST LAUNCH LAYOUT -->
+    <string name="chooseyour">Wybierz twoj</string>
+    <string name="country">kraj</string>
+    <string name="city">miasto</string>
+    <string name="esnsection">Sekcja ESN</string>
+    <string name="and">i</string>
+    <string name="start_button">Uruchomic</string>
+    <string name="selectyourcountry">Wybierz twoj kraj</string>
+    <string name="selectyoursection">Wybierz twoja sekcje</string>
+
+    <!-- Action Bar Title -->
+    <string name="title_events">Wydarzenia</string>
+    <string name="title_news">Wiadomosci</string>
+    <string name="title_partners">Partenariat</string>
+    <string name="title_survivalguide">Przewodnik</string>
+    <string name="title_about">O..</string>
+
+</resources>
