@@ -27,7 +27,6 @@ public interface ApplicationConstants {
     static final String PARTNERS_PATH = "/partners";
     static final String EVENTS_PATH = "/events";
 
-
     // Webservices
     // Survival Guide Webservice
     static final String SURVIVAL_WEBSERVICE_URL = "http://esnlille.fr/survivalGuide/json/";

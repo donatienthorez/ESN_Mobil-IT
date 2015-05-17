@@ -54,7 +54,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
         try{
             Section section = (Section) Utils.getObjectFromCache(getApplicationContext(),"section");
-            totalTabs++;
+            if (section != null) totalTabs++;
         }catch (NullPointerException e){
             Log.d(TAG, e.toString());
         }
@@ -123,10 +123,14 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
         try{
             Section section = (Section) Utils.getObjectFromCache(getApplicationContext(),"section");
-            ActionBar.Tab tabAbout = getActionBar().newTab();
-            tabAbout.setText(getResources().getString(R.string.title_about));
-            tabAbout.setTabListener(this);
-            getActionBar().addTab(tabAbout);
+
+            if (section != null){
+                ActionBar.Tab tabAbout = getActionBar().newTab();
+                tabAbout.setText(getResources().getString(R.string.title_about));
+                tabAbout.setTabListener(this);
+                getActionBar().addTab(tabAbout);
+            }
+
         }catch (NullPointerException e){
             Log.d(TAG, e.toString());
         }
