@@ -24,10 +24,8 @@ import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.image.ImageLoader;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
-/**
- * Created by Spider on 06/01/15.
- */
-public class ListFragment extends android.support.v4.app.ListFragment {
+public class ListFragment extends android.support.v4.app.ListFragment
+{
     private static final String TAG = ListFragment.class.getSimpleName();
     private RSSFeed feed;
     private CustomListAdapter adapter;
