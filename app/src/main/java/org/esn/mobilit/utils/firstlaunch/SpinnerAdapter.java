@@ -8,9 +8,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by Spider on 15/12/14.
- */
 public class SpinnerAdapter extends ArrayAdapter<String> {
 
     public SpinnerAdapter(Context context, ArrayList<String> datas) {

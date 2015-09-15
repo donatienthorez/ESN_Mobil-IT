@@ -2,9 +2,6 @@ package org.esn.mobilit.utils;
 
 import android.graphics.Color;
 
-/**
- * Created by Spider on 26/01/15.
- */
 public interface ApplicationConstants {
 
     // DESIGN

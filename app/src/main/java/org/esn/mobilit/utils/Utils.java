@@ -17,7 +17,6 @@ public class Utils {
 
     private static final String TAG = Utils.class.getSimpleName();
 
-
     // PREFERENCES
     public static void setDefaults(Context ctx, String key, String value) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -30,8 +29,6 @@ public class Utils {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
         return preferences.getString(key, null);
     }
-
-
 
     /*
      * Save seriazable object in cache

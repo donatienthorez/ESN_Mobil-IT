@@ -1,5 +1,6 @@
 package org.esn.mobilit.fragments.Satellite;
 
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -17,7 +18,7 @@ public class DetailActivity extends FragmentActivity {
         setContentView(R.layout.detail);
 
         /** Getting the fragment manager for fragment related operations */
-        android.app.FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager();
 
         /** Getting the fragmenttransaction object, which can be used to add, remove or replace a fragment */
         FragmentTransaction fragmentTransacton = fragmentManager.beginTransaction();
