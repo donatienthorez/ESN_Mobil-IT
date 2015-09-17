@@ -103,7 +103,7 @@ public class DOMParser {
                         }
 						else if ("pubDate".equals(nodeName)) {
 							String formatedDate = theString.replace(" +0000","");
-							_item.setPubDate(formatedDate);
+							_item.set_pubDate(formatedDate);
 						}
 
 					}

@@ -13,14 +13,20 @@ import org.esn.mobilit.activities.SplashActivity;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.firstlaunch.FirstLaunchActivity;
 
-public class StartActivity extends Activity
-{
+
+public class StartActivity extends Activity {
     private static final String TAG = StartActivity.class.getSimpleName();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         chooseActivity();
+    }
+
+    protected void onResume(){
+        super.onResume();
+        Log.d(TAG, "Comming back to onResume()");
+        //chooseActivity();
     }
 
     // PREFERENCES
@@ -77,6 +83,20 @@ public class StartActivity extends Activity
                 finish();
             }
         }
+
+
+
+        /*switch(resultCode)
+        {
+            case ApplicationConstants.RESULT_CLOSE_ALL:
+                setResult(ApplicationConstants.RESULT_CLOSE_ALL);
+                Log.d(TAG, "onActivityResult -> FINISH");
+                finish();
+            break;
+            case ApplicationConstants.RESULT_FIRST_LAUNCH:
+
+            break;
+        }*/
         super.onActivityResult(requestCode, resultCode, data);
     }
 }

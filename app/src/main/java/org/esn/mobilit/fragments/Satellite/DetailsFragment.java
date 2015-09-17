@@ -15,6 +15,9 @@ import org.esn.mobilit.R;
 import org.esn.mobilit.utils.image.ImageLoader;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
+/**
+ * Created by Spider on 23/01/15.
+ */
 public class DetailsFragment extends Fragment {
 
     private int fPos;

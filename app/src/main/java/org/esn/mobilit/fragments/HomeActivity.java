@@ -22,7 +22,6 @@ import org.esn.mobilit.utils.image.InternalStorage;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
 public class HomeActivity extends FragmentActivity implements ActionBar.TabListener, ListFragmentItemClickListener {
-
     private static final String TAG = HomeActivity.class.getSimpleName();
     private Context homeActivityContext;
 
@@ -40,7 +39,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         // Save context
         homeActivityContext = getApplicationContext();
 
-        // Get feed from cache
+        // Get feed form cache
         feedEvents = (RSSFeed) getObjectFromCache("feedEvents");
         feedNews = (RSSFeed) getObjectFromCache("feedNews");
         feedPartners = (RSSFeed) getObjectFromCache("feedPartners");
@@ -56,17 +55,12 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         try{
             Section section = (Section) Utils.getObjectFromCache(getApplicationContext(),"section");
             if (section != null) totalTabs++;
-        } catch (NullPointerException e){
+        }catch (NullPointerException e){
             Log.d(TAG, e.toString());
         }
 
         //Init FragmentPagerAdapter
-        MyFragmentPagerAdapter fpa = new MyFragmentPagerAdapter(
-                getSupportFragmentManager(),
-                totalTabs,
-                this.getApplicationContext()
-        );
-
+        MyFragmentPagerAdapter fpa = new MyFragmentPagerAdapter(getSupportFragmentManager(), totalTabs, this.getApplicationContext());
         fpa.setFeedEvents(feedEvents);
         fpa.setFeedNews(feedNews);
         fpa.setFeedPartners(feedPartners);
@@ -95,8 +89,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         //Add tabs
         initTabs();
 
-        if (getIntent().getBooleanExtra("pushReceived", false))
-            pushReceived();
+        if (getIntent().getBooleanExtra("pushReceived", false)) pushReceived();
     }
 
     private void initTabs(){
@@ -227,5 +220,20 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
         /** Starting the activity by passing the implicit intent */
         startActivity(intent);
+    }
+
+    public void onPause() {
+        super.onPause();  // Always call the superclass method first
+        Log.d(TAG, "PAUSE");
+    }
+
+    public void onStop(){
+        super.onStop();  // Always call the superclass method first
+        Log.d(TAG, "STOP");
+    }
+
+    public void onDestroy(){
+        super.onDestroy();
+        Log.d(TAG, "DESTROY");
     }
 }

@@ -14,6 +14,9 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import org.esn.mobilit.activities.SplashActivity;
 import org.esn.mobilit.utils.ApplicationConstants;
 
+/**
+ * Created by Spider on 26/01/15.
+ */
 public class GcmIntentService extends IntentService {
     // Sets an ID for the notification, so it can be updated
     public static final int notifyID = 9001;
@@ -22,6 +25,7 @@ public class GcmIntentService extends IntentService {
     public GcmIntentService() {
         super("GcmIntentService");
     }
+
 
     @Override
     protected void onHandleIntent(Intent intent) {

@@ -64,6 +64,7 @@ public class AboutFragment extends android.support.v4.app.Fragment {
             }
         });
 
+
         return view;
     }
 

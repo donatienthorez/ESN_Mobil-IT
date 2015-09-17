@@ -29,12 +29,15 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.esn.mobilit.R;
 import org.esn.mobilit.fragments.HomeActivity;
-import org.esn.mobilit.services.FeedService;
+import org.esn.mobilit.models.Category;
 import org.esn.mobilit.models.SurvivalGuide;
 import org.esn.mobilit.network.JSONfunctions;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.parser.DOMParser;
+import org.esn.mobilit.utils.parser.RSSFeed;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,15 +49,14 @@ import java.util.List;
  */
 public class SplashActivity extends Activity {
     private static final String TAG = SplashActivity.class.getSimpleName();
-
+	private RSSFeed feedEvents, feedNews, feedPartners;
+    private SurvivalGuide survivalguide;
     private int count, count_limit;
     private Intent intent;
     private TextView textView;
     private ProgressBar progressBar;
     private Context context;
     private String pushMsg;
-
-    private FeedService feedService;
 
     //GCM
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -71,20 +73,17 @@ public class SplashActivity extends Activity {
 		setContentView(R.layout.splash);
 
         //Init values
-        this.context = getApplicationContext();
+        context = getApplicationContext();
         count_limit = 5;
         intent = new Intent(getApplicationContext(), HomeActivity.class);
         count = 0;
-
-        this.feedService = new FeedService(context);
-
 
         //Init Elements
         TextView version = ((TextView) findViewById(R.id.version));
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             version.setText("v " + pInfo.versionName);
-        } catch(PackageManager.NameNotFoundException e){
+        }catch(PackageManager.NameNotFoundException e){
             version.setText("v 1.0.0");
         }
 
@@ -94,20 +93,24 @@ public class SplashActivity extends Activity {
         if (!Utils.isConnected(this)){
             // No connectivity - Load cache
             textView.setText(getResources().getString(R.string.tryingcache));
-            feedService.getRssFeedFromCache();
+            feedEvents    = (RSSFeed) Utils.getObjectFromCache(context, "feedEvents");
+            feedNews      = (RSSFeed) Utils.getObjectFromCache(context, "feedNews");
+            feedPartners  = (RSSFeed) Utils.getObjectFromCache(context, "feedPartners");
+            survivalguide = (SurvivalGuide) Utils.getObjectFromCache(context, "survivalGuide");
 
-            if(feedService.emptyFeeds()){
+            // Cache is empty
+            if (feedEvents == null && feedNews == null && feedPartners == null && survivalguide == null){
                 Log.d(TAG, "EMPTY CACHE");
                 textView.setText(getResources().getString(R.string.emptycache));
                 progressBar.setVisibility(View.INVISIBLE);
-            } else {
+            }else{ // Cache is not empty, load homeactivity
                 Log.d(TAG, "LOADED FROM CACHE");
-//                //Add inputs
+                //Add inputs
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("feedEvents", feedService.getFeedEvents());
-                bundle.putSerializable("feedNews", feedService.getFeedNews());
-                bundle.putSerializable("feedPartners", feedService.getFeedPartners());
-                bundle.putSerializable("survivalGuide", feedService.getSurvivalguide());
+                bundle.putSerializable("feedEvents", feedEvents);
+                bundle.putSerializable("feedNews", feedNews);
+                bundle.putSerializable("feedPartners", feedPartners);
+                bundle.putSerializable("survivalGuide", survivalguide);
                 intent.putExtras(bundle);
                 count = count_limit;
                 launchHomeActivity();
@@ -134,6 +137,7 @@ public class SplashActivity extends Activity {
                     finish();
                 }
             });
+
 
         }else{
             // Push for GCM
@@ -167,14 +171,22 @@ public class SplashActivity extends Activity {
         }
     }
 
+    public void onPause(){
+        super.onPause();
+    }
+
+    public void onStop(){
+        super.onStop();
+    }
+
     public void launchHomeActivity(){
         if (count == count_limit) {
 
             int total = 0;
-            total += feedService.getFeedEvents().getItemCount();
-            total += feedService.getFeedNews().getItemCount();
-            total += feedService.getFeedPartners().getItemCount();
-            total += feedService.getSurvivalguide().getCategories().size();
+            total += feedEvents.getItemCount();
+            total += feedNews.getItemCount();
+            total += feedPartners.getItemCount();
+            total += survivalguide.getCategories().size();
 
             if (total > 0) {
                 textView.setText(R.string.start_homeactivity);
@@ -242,9 +254,9 @@ public class SplashActivity extends Activity {
 			// Obtain feed
             Log.d(TAG, "Debut Parser pour " + ApplicationConstants.EVENTS_PATH + ApplicationConstants.FEED_PATH);
 			DOMParser myParser = new DOMParser();
-            feedService.setFeedEvents(myParser.parseXml(event_url));
+            feedEvents = myParser.parseXml(event_url);
 
-            Utils.saveObjectToCache(context, "feedEvents", feedService.getFeedEvents());
+            Utils.saveObjectToCache(context, "feedEvents", feedEvents);
 			return null;
 		}
 
@@ -252,11 +264,11 @@ public class SplashActivity extends Activity {
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
 
-            textView.setText(getResources().getString(R.string.load_events_end, feedService.getFeedEvents().getItemCount()));
+            textView.setText(getResources().getString(R.string.load_events_end, feedEvents.getItemCount()));
             textView.setText(getResources().getString(R.string.load_news_start));
 
 			Bundle bundle = new Bundle();
-			bundle.putSerializable("feedEvents", feedService.getFeedEvents());
+			bundle.putSerializable("feedEvents", feedEvents);
 
 			//Put Extra
             intent.putExtras(bundle);
@@ -279,8 +291,8 @@ public class SplashActivity extends Activity {
             // Obtain feed
             Log.d(TAG, "Debut Parser pour " + url);
             DOMParser myParser = new DOMParser();
-            feedService.setFeedNews(myParser.parseXml(url));
-            Utils.saveObjectToCache(context, "feedNews", feedService.getFeedNews());
+            feedNews = myParser.parseXml(url);
+            Utils.saveObjectToCache(context, "feedNews", feedNews);
             return null;
         }
 
@@ -288,7 +300,7 @@ public class SplashActivity extends Activity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
 
-            textView.setText(getResources().getString(R.string.load_news_end, feedService.getFeedNews().getItemCount()));
+            textView.setText(getResources().getString(R.string.load_news_end, feedNews.getItemCount()));
             textView.setText(getResources().getString(R.string.load_partners_start));
 
             count++;
@@ -307,8 +319,8 @@ public class SplashActivity extends Activity {
             // Obtain feed
             Log.d(TAG, "Debut Parser pour " + url);
             DOMParser myParser = new DOMParser();
-            feedService.setFeedPartners(myParser.parseXml(url));
-            Utils.saveObjectToCache(context, "feedPartners", feedService.getFeedPartners());
+            feedPartners = myParser.parseXml(url);
+            Utils.saveObjectToCache(context, "feedPartners", feedPartners);
             return null;
         }
 
@@ -316,7 +328,7 @@ public class SplashActivity extends Activity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
 
-            textView.setText(getResources().getString(R.string.load_partners_end, feedService.getFeedPartners().getItemCount()));
+            textView.setText(getResources().getString(R.string.load_partners_end, feedPartners.getItemCount()));
 
             count++;
             launchHomeActivity();
@@ -329,19 +341,68 @@ public class SplashActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             // Create survival guide array
-            SurvivalGuide survivalguide = JSONfunctions.getSurvivalGuide(
-                    ApplicationConstants.SURVIVAL_WEBSERVICE_URL +
-                    "/getCategories.php?section=" +
-                    Utils.getDefaults(context, "CODE_SECTION")
-            );
+            survivalguide = new SurvivalGuide();
 
-            feedService.setSurvivalguide(survivalguide);
-            Utils.saveObjectToCache(context, "survivalGuide", feedService.getSurvivalguide());
+            //categories_list = new ArrayList<Category>();
+            String url = ApplicationConstants.SURVIVAL_WEBSERVICE_URL + "/getCategories.php?section=" + Utils.getDefaults(context, "CODE_SECTION");
+            JSONObject jsonobject = JSONfunctions
+                    .getJSONfromURL(url);
+            try {
+                // SURVIVAL GUIDE LEVEL 1
+                JSONArray jsonarray_level1 = jsonobject.getJSONArray("categories");
+                for (int i = 0; i < jsonarray_level1.length(); i++) {
+                    JSONObject jsonobject_level1 = jsonarray_level1.getJSONObject(i);
+                    Category category = new Category(
+                        jsonobject_level1.optInt("id"),
+                        jsonobject_level1.optString("name"),
+                        jsonobject_level1.optString("section"),
+                        jsonobject_level1.optString("content"),
+                        0,
+                        jsonobject_level1.optInt("position")
+                    );
+                    survivalguide.getCategories().add(category);
+
+                    // SURVIVAL GUIDE LEVEL 2
+                    JSONArray jsonarray_level2 = jsonobject_level1.getJSONArray("categories");
+                    for (int j = 0; j < jsonarray_level2.length(); j++) {
+                        JSONObject jsonobject_level2 = jsonarray_level2.getJSONObject(j);
+                        Category categorylvl2 = new Category(
+                                jsonobject_level2.optInt("id"),
+                                jsonobject_level2.optString("name"),
+                                jsonobject_level2.optString("section"),
+                                jsonobject_level2.optString("content"),
+                                1,
+                                jsonobject_level2.optInt("position")
+                        );
+                        survivalguide.getCategories().add(categorylvl2);
+
+                        // SURVIVAL GUIDE LEVEL 3
+                        JSONArray jsonarray_level3 = jsonobject_level2.getJSONArray("categories");
+                        for (int k = 0; k < jsonarray_level3.length(); k++) {
+                            JSONObject jsonobject_level3 = jsonarray_level3.getJSONObject(k);
+                            Category categorylvl3 = new Category(
+                                    jsonobject_level3.optInt("id"),
+                                    jsonobject_level3.optString("name"),
+                                    jsonobject_level3.optString("section"),
+                                    jsonobject_level3.optString("content"),
+                                    2,
+                                    jsonobject_level3.optInt("position")
+                            );
+                            survivalguide.getCategories().add(categorylvl3);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Log.d(TAG,"Error" + e.getMessage());
+                e.printStackTrace();
+            }
+
+            Utils.saveObjectToCache(context, "survivalGuide", survivalguide);
             return null;
         }
 
         protected void onPostExecute(Void args) {
-            textView.setText(getResources().getString(R.string.load_survival_end, feedService.getSurvivalguide().getCategories().size()));
+            textView.setText(getResources().getString(R.string.load_survival_end, survivalguide.getCategories().size()));
             textView.setText(getResources().getString(R.string.load_events_start));
 
             count++;
