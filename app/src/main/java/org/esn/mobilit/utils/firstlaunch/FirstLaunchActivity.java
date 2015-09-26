@@ -62,27 +62,16 @@ public class FirstLaunchActivity extends Activity {
         setContentView(R.layout.activity_firstlaunch);
         initContent();
 
-        if (Utils.getDefaults(this, "revision") != null){
-            Log.d(TAG,"Current revision is " + Utils.getDefaults(this, "revision"));
-        }else{
-            Log.d(TAG, "No revision stored, check last revision online");
-        }
-
         //Check last revision and download new json if not up to date
         if (Utils.isConnected(context)){
             new checkLastRevision().execute();
         }
 
-
         cache_countries = (Countries) Utils.getObjectFromCache(context, "countries");
         if (cache_countries != null){
-            Log.d(TAG, "cache_countries revision is " + cache_countries.getRevision());
-            Log.d(TAG, "starting loading from previous revision");
             initCountriesSpinner();
         }else{
-            Log.d(TAG, "cache_countries is null");
             if (!Utils.isConnected(context)){
-                Log.d(TAG, "Internet is off, getting datas from assets");
                 try{
                     JSONObject jsonobject = new JSONObject(Utils.loadCountriesFromAsset(context));
                     getCountriesFromJSON(jsonobject);
@@ -92,11 +81,6 @@ public class FirstLaunchActivity extends Activity {
                 }
             }
         }
-    }
-
-    protected void onResume(){
-        super.onResume();
-        Log.d(TAG, "Coming back to onResume");
     }
 
     private void initContent(){
@@ -140,11 +124,6 @@ public class FirstLaunchActivity extends Activity {
 
         ArrayList<String> datas = new ArrayList<String>();
         current_countries = (json_countries != null) ? json_countries : cache_countries;
-        if (json_countries != null){
-            Log.d(TAG, "current_countries is from json_countries");
-        }else{
-            Log.d(TAG, "current_countries is from cache_countries");
-        }
 
         //Add dummy string
         datas.add(getResources().getString(R.string.selectyourcountry));
@@ -206,10 +185,6 @@ public class FirstLaunchActivity extends Activity {
     }
 
     public void launchHomeActivity(View view){
-        Log.d(TAG, " Country : " + currentCountry.getCode_country());
-        Log.d(TAG, " Section : " + currentSection.getCode_section());
-        Log.d(TAG, " Section Website : " + currentSection.getWebsite());
-
         //Load new parameters
         Utils.setDefaults(context, "CODE_COUNTRY", current_countries.getCountryFromSection(currentSection).getCode_country());
         Utils.setDefaults(context, "CODE_SECTION", currentSection.getCode_section());
@@ -240,10 +215,6 @@ public class FirstLaunchActivity extends Activity {
                 jsonobject = jsonarray.getJSONObject(0);
                 revision = jsonobject.optString("date");
 
-                if (revision.length() == 14)
-                    Log.d(TAG, "revision online = " + revision);
-                else
-                    Log.d(TAG, "error getting revision");
             } catch (Exception e) {
                 Log.d(TAG, "error getting revision : " + e.getMessage());
             }
@@ -266,7 +237,6 @@ public class FirstLaunchActivity extends Activity {
                             new DownloadJSON().execute();
                         }else{
                             if (pref_date.compareTo(dl_date) == 0){
-                                Log.d(TAG, "same revision, nothing to do here");
 
                                 // Fix onResume error
                                 if (cache_countries == null)
@@ -278,12 +248,8 @@ public class FirstLaunchActivity extends Activity {
                         Log.d(TAG, e.toString());
                     }
                 }else{
-                    Log.d(TAG, "No previous revision stored, update revision");
                     new DownloadJSON().execute();
                 }
-            }
-            else{
-                Log.d(TAG, "Error getting revision onPostExecute");
             }
         }
     }
@@ -295,13 +261,9 @@ public class FirstLaunchActivity extends Activity {
             JSONObject jsonobject = null;
             JSONArray jsonarray = null;
 
-            Log.d(TAG, "getting json from online");
-
             if (revision != null){
                 jsonobject = JSONfunctions.getJSONfromURL(ApplicationConstants.APP_WEBSERVICE_URL + "json/" + revision + ".json");
                 getCountriesFromJSON(jsonobject);
-            }else{
-                Log.d(TAG,"revision from preferences is null");
             }
 
             return null;
@@ -349,30 +311,22 @@ public class FirstLaunchActivity extends Activity {
                 }
             }
         } catch (Exception e) {
-            Log.e("Error", e.getMessage());
-            Log.d(TAG,"error getting countries");
             e.printStackTrace();
         }
     }
 
     private void savingNewCountries(){
         if (json_countries != null && json_countries.getCountries().size() > 0){
-            Log.d(TAG, "countries downloaded = " + json_countries.getCountries().size());
             try {
-                Log.d(TAG, "saving new json in cache");
                 Utils.saveObjectToCache(context, "countries", json_countries);
                 Utils.setDefaults(context, "revision", json_countries.getRevision());
 
                 Countries new_cache_countries = (Countries) Utils.getObjectFromCache(context, "countries");
-                Log.d(TAG, "new cache_countries revision is " + new_cache_countries.getRevision());
 
                 initCountriesSpinner();
             }catch (Exception e){
                 Log.d(TAG, "Exception saving object to cache :" + e);
             }
-        }
-        else{
-            Log.d(TAG,"error getting countries");
         }
     }
 }

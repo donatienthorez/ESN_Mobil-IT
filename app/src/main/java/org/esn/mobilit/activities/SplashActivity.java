@@ -101,8 +101,7 @@ public class SplashActivity extends Activity {
                 textView.setText(getResources().getString(R.string.emptycache));
                 progressBar.setVisibility(View.INVISIBLE);
             } else {
-                Log.d(TAG, "LOADED FROM CACHE");
-//                //Add inputs
+                // Load from cache
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("feedEvents", feedService.getFeedEvents());
                 bundle.putSerializable("feedNews", feedService.getFeedNews());
@@ -117,7 +116,6 @@ public class SplashActivity extends Activity {
             buttonretry.setVisibility(View.VISIBLE);
             buttonretry.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Log.d(TAG,"SplashActivity restarting");
                     Intent returnIntent = new Intent();
                     setResult(ApplicationConstants.RESULT_FIRST_LAUNCH,returnIntent);
                     finish();
@@ -128,7 +126,6 @@ public class SplashActivity extends Activity {
             buttonsection.setVisibility(View.VISIBLE);
             buttonsection.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Log.d(TAG,"SplashActivity restarting");
                     Intent returnIntent = new Intent();
                     setResult(ApplicationConstants.RESULT_FIRST_LAUNCH,returnIntent);
                     finish();
@@ -138,15 +135,13 @@ public class SplashActivity extends Activity {
         }else{
             // Push for GCM
             if (Utils.getDefaults(context, REG_ID) != null) {
-                Log.d(TAG,"No need to push GCM");
+                // No need to push GCM
                 count_limit--;
             }
             else {
-                Log.d(TAG,"Registering RegID");
-                RegisterUser();
+                // Registering RegID
+                registerUser();
             }
-
-            Log.d(TAG, "count_limit:" + count_limit);
 
             // Connected - Start parsing
             textView.setText(R.string.load_survival_start);
@@ -214,18 +209,12 @@ public class SplashActivity extends Activity {
         Log.d(TAG, "onActivityResult");
 
         if (requestCode == ApplicationConstants.RESULT_SPLASH_ACTIVITY) {
-            Log.d(TAG, "RESULT SPLASH");
-            // Make sure the request was successful
-            if (resultCode == RESULT_OK) {
-                Log.d(TAG, "weird");
-            }else if (resultCode == RESULT_CANCELED){
-                // The user pressed back
-                Intent returnIntent = new Intent();
-                setResult(ApplicationConstants.RESULT_CLOSE_ALL,returnIntent);
+            Intent returnIntent = new Intent();
+            if (resultCode == RESULT_CANCELED){
+                setResult(ApplicationConstants.RESULT_CLOSE_ALL, returnIntent);
                 finish();
-            }else if (resultCode == ApplicationConstants.RESULT_FIRST_LAUNCH){
-                Intent returnIntent = new Intent();
-                setResult(ApplicationConstants.RESULT_FIRST_LAUNCH,returnIntent);
+            } else if (resultCode == ApplicationConstants.RESULT_FIRST_LAUNCH){
+                setResult(ApplicationConstants.RESULT_FIRST_LAUNCH, returnIntent);
                 finish();
             }
         }
@@ -240,7 +229,6 @@ public class SplashActivity extends Activity {
             String event_url = Utils.getDefaults(context, "SECTION_WEBSITE") + ApplicationConstants.EVENTS_PATH + ApplicationConstants.FEED_PATH;
 
 			// Obtain feed
-            Log.d(TAG, "Debut Parser pour " + ApplicationConstants.EVENTS_PATH + ApplicationConstants.FEED_PATH);
 			DOMParser myParser = new DOMParser();
             feedService.setFeedEvents(myParser.parseXml(event_url));
 
@@ -260,9 +248,7 @@ public class SplashActivity extends Activity {
 
 			//Put Extra
             intent.putExtras(bundle);
-
             count++;
-
             launchHomeActivity();
 		}
 
@@ -277,7 +263,6 @@ public class SplashActivity extends Activity {
             //String url = "http://esnlille.fr/BuddySystem/test.xml";
 
             // Obtain feed
-            Log.d(TAG, "Debut Parser pour " + url);
             DOMParser myParser = new DOMParser();
             feedService.setFeedNews(myParser.parseXml(url));
             Utils.saveObjectToCache(context, "feedNews", feedService.getFeedNews());
@@ -305,7 +290,6 @@ public class SplashActivity extends Activity {
             String url = Utils.getDefaults(context, "SECTION_WEBSITE") + ApplicationConstants.PARTNERS_PATH + ApplicationConstants.FEED_PATH;
 
             // Obtain feed
-            Log.d(TAG, "Debut Parser pour " + url);
             DOMParser myParser = new DOMParser();
             feedService.setFeedPartners(myParser.parseXml(url));
             Utils.saveObjectToCache(context, "feedPartners", feedService.getFeedPartners());
@@ -331,8 +315,8 @@ public class SplashActivity extends Activity {
             // Create survival guide array
             SurvivalGuide survivalguide = JSONfunctions.getSurvivalGuide(
                     ApplicationConstants.SURVIVAL_WEBSERVICE_URL +
-                    "/getCategories.php?section=" +
-                    Utils.getDefaults(context, "CODE_SECTION")
+                            "/getCategories.php?section=" +
+                            Utils.getDefaults(context, "CODE_SECTION")
             );
 
             feedService.setSurvivalguide(survivalguide);
@@ -351,9 +335,8 @@ public class SplashActivity extends Activity {
 
 
     // GCM
-    public void RegisterUser() {
+    public void registerUser() {
         if (checkPlayServices()) {
-            Log.d(TAG,"RegisterUser : check OK");
             registerInBackground();
         }
     }
@@ -382,8 +365,6 @@ public class SplashActivity extends Activity {
             protected void onPostExecute(String msg) {
                 if (!TextUtils.isEmpty(regId)) {
                     new postRegID().execute();
-                } else {
-                    Log.d(TAG, "onPostExecute registerInBackground failed");
                 }
             }
         }.execute(null, null, null);
@@ -412,7 +393,6 @@ public class SplashActivity extends Activity {
         }
 
         protected void onPostExecute(Void args) {
-            Log.d(TAG,"onPostExecute");
             storeRegIdinSharedPref();
             count++;
             if (count == count_limit) {
@@ -441,13 +421,7 @@ public class SplashActivity extends Activity {
                 finish();
             }
             return false;
-        } else {
-            //Toast.makeText(
-            //        context,
-            //        "This device supports Play services, App will work normally",
-            //        Toast.LENGTH_LONG).show();
         }
         return true;
     }
-
 }

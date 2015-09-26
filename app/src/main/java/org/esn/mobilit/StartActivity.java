@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
@@ -30,38 +29,29 @@ public class StartActivity extends Activity
     }
 
     protected void chooseActivity(){
-        Log.d(TAG, "ChooseActivity");
         String section_website = getDefaults("SECTION_WEBSITE");
 
-        Log.d(TAG, " Country : " + getDefaults("CODE_COUNTRY"));
-        Log.d(TAG, " Section : " + getDefaults("CODE_SECTION"));
-        Log.d(TAG, " Section Website : " + getDefaults("SECTION_WEBSITE"));
         Intent intent = null;
 
-        //Si les détails de la section sont définit
+        // Si les détails de la section sont définit
         if ((section_website == null || section_website.equalsIgnoreCase(""))){
             intent = new Intent(this, FirstLaunchActivity.class);
-            Log.d(TAG,"FirstLaunchActivity starting");
             startActivityForResult(intent, ApplicationConstants.RESULT_FIRST_LAUNCH);
         }
-        //Si les détails de la section ne sont pas définit
+        // Si les détails de la section ne sont pas définit
         else {
             intent = new Intent(this, SplashActivity.class);
-            Log.d(TAG,"SplashActivity starting");
             startActivityForResult(intent,ApplicationConstants.RESULT_SPLASH_ACTIVITY);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult");
-
         if (requestCode == ApplicationConstants.RESULT_FIRST_LAUNCH) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
                 // The user set the params.
                 Intent intent = new Intent(this, SplashActivity.class);
-                Log.d(TAG,"SplashActivity starting");
                 startActivityForResult(intent, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
             }else if (resultCode == RESULT_CANCELED){
                 // The user pressed back
@@ -70,7 +60,6 @@ public class StartActivity extends Activity
         }else if (requestCode == ApplicationConstants.RESULT_SPLASH_ACTIVITY) {
             if (resultCode == ApplicationConstants.RESULT_FIRST_LAUNCH){
                 Intent intent = new Intent(this, FirstLaunchActivity.class);
-                Log.d(TAG, "FirstLaunchActivity starting");
                 startActivityForResult(intent, ApplicationConstants.RESULT_FIRST_LAUNCH);
             }
             else{

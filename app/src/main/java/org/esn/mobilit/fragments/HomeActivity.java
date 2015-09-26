@@ -146,8 +146,6 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
     public void pushReceived() {
         String pushMsg = getIntent().getStringExtra("pushMsg");
 
-        Log.d(TAG, "pushTitle length: " + pushMsg.length());
-
         int pos = -1;
         RSSFeed currentfeed = null;
         ListView lv = null;

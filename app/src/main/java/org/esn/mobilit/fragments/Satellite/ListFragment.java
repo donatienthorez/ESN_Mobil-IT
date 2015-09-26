@@ -56,13 +56,7 @@ public class ListFragment extends android.support.v4.app.ListFragment
         this.setListAdapter(adapter);
     }
 
-    public void onResume(){
-        super.onResume();
-    }
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-
         return inflater.inflate(R.layout.list_fragment, container, false);
     }
 
@@ -91,9 +85,7 @@ public class ListFragment extends android.support.v4.app.ListFragment
         switch (item.getItemId()) {
             case R.id.ras_section_settings:
                 if (currentActivity != null) {
-                    Log.d(TAG, "RAS SECTION SETTINGS");
                     reset_section();
-
                     Intent returnIntent = new Intent();
                     currentActivity.setResult(ApplicationConstants.RESULT_FIRST_LAUNCH,returnIntent);
                     currentActivity.finish();
@@ -118,8 +110,6 @@ public class ListFragment extends android.support.v4.app.ListFragment
         setDefaults("SECTION_WEBSITE", null);
         setDefaults("regId", null);
     }
-
-
 
 
 

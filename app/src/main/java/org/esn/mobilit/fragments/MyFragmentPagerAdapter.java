@@ -25,7 +25,6 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 
     public MyFragmentPagerAdapter(FragmentManager fm, int count, Context context) {
         super(fm);
-
         this.count   = count;
         this.tabs    = new ArrayList<String>();
         this.context = context;

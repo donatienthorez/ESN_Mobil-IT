@@ -20,9 +20,6 @@ import org.esn.mobilit.utils.image.ImageLoader;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-/**
- * Created by Spider on 13/05/15.
- */
 public class AboutFragment extends android.support.v4.app.Fragment {
     private Section section;
     private ImageLoader imageLoader;

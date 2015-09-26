@@ -83,7 +83,8 @@ public class Utils {
 
     public static boolean isConnected(Activity activity){
         ConnectivityManager conMgr = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-        return (conMgr == null || conMgr.getActiveNetworkInfo() == null
+        return (
+                conMgr == null || conMgr.getActiveNetworkInfo() == null
                 || !conMgr.getActiveNetworkInfo().isConnected()
                 || !conMgr.getActiveNetworkInfo().isAvailable()) ? false : true;
     }

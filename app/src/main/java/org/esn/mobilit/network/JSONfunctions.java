@@ -91,7 +91,7 @@ public class JSONfunctions {
                     createSurvivalGuide(jsonobjectLvl, survivalguide, level+1);
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e("log_tag", "Error parsing data " + e.toString());
         }
     }
 }
