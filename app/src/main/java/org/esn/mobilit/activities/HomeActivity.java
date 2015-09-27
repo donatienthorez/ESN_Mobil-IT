@@ -1,4 +1,4 @@
-package org.esn.mobilit.fragments;
+package org.esn.mobilit.activities;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -13,7 +13,7 @@ import android.util.Log;
 import android.widget.ListView;
 
 import org.esn.mobilit.R;
-import org.esn.mobilit.fragments.Satellite.DetailActivity;
+import org.esn.mobilit.fragments.MyFragmentPagerAdapter;
 import org.esn.mobilit.fragments.Satellite.ListFragment.ListFragmentItemClickListener;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.models.SurvivalGuide;

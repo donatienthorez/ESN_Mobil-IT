@@ -1,4 +1,4 @@
-package org.esn.mobilit;
+package org.esn.mobilit.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,7 +8,7 @@ import android.preference.PreferenceManager;
 
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
-import org.esn.mobilit.activities.SplashActivity;
+
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.firstlaunch.FirstLaunchActivity;
 

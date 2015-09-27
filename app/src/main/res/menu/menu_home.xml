@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="org.esn.mobilit.fragments.HomeActivity">
+    tools:context="org.esn.mobilit.activities.HomeActivity">
 
     <item android:id="@+id/ras_section_settings"
         android:title="@string/ras_section_settings"

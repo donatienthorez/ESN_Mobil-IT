@@ -1,4 +1,4 @@
-package org.esn.mobilit.fragments.Satellite;
+package org.esn.mobilit.activities;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 import org.esn.mobilit.R;
+import org.esn.mobilit.fragments.Satellite.DetailsFragment;
 
 public class DetailActivity extends FragmentActivity {
 

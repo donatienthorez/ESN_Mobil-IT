@@ -28,7 +28,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.esn.mobilit.R;
-import org.esn.mobilit.fragments.HomeActivity;
 import org.esn.mobilit.services.FeedService;
 import org.esn.mobilit.models.SurvivalGuide;
 import org.esn.mobilit.network.JSONfunctions;
