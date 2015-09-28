@@ -28,12 +28,13 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.esn.mobilit.R;
+import org.esn.mobilit.tasks.feed.AsyncLoadXMLFeedEvents;
+import org.esn.mobilit.tasks.feed.AsyncLoadXMLFeedNews;
+import org.esn.mobilit.tasks.feed.AsyncLoadXMLFeedPartners;
+import org.esn.mobilit.tasks.feed.AsyncLoadXMLSurvivalGuide;
 import org.esn.mobilit.services.FeedService;
-import org.esn.mobilit.models.SurvivalGuide;
-import org.esn.mobilit.network.JSONfunctions;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
-import org.esn.mobilit.utils.parser.DOMParser;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,6 +55,23 @@ public class SplashActivity extends Activity {
     private String pushMsg;
 
     private FeedService feedService;
+
+    public FeedService getFeedService() {
+        return feedService;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public TextView getTextView() {
+        return textView;
+    }
+
+    public void incrementCount()
+    {
+        this.count++;
+    }
 
     //GCM
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -144,10 +162,10 @@ public class SplashActivity extends Activity {
 
             // Connected - Start parsing
             textView.setText(R.string.load_survival_start);
-            new DownloadJSONSurvivalGuide().execute();
-            new AsyncLoadXMLFeedEvents().execute();
-            new AsyncLoadXMLFeedNews().execute();
-            new AsyncLoadXMLFeedPartners().execute();
+            new AsyncLoadXMLSurvivalGuide(this).execute();
+            new AsyncLoadXMLFeedEvents(this).execute();
+            new AsyncLoadXMLFeedNews(this).execute();
+            new AsyncLoadXMLFeedPartners(this).execute();
         }
 	}
 
@@ -219,119 +237,6 @@ public class SplashActivity extends Activity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-	private class AsyncLoadXMLFeedEvents extends AsyncTask<Void, Void, Void> {
-
-		@Override
-		protected Void doInBackground(Void... params) {
-            // Get feed url
-            String event_url = Utils.getDefaults(context, "SECTION_WEBSITE") + ApplicationConstants.EVENTS_PATH + ApplicationConstants.FEED_PATH;
-
-			// Obtain feed
-			DOMParser myParser = new DOMParser();
-            feedService.setFeedEvents(myParser.parseXml(event_url));
-
-            Utils.saveObjectToCache(context, "feedEvents", feedService.getFeedEvents());
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-
-            textView.setText(getResources().getString(R.string.load_events_end, feedService.getFeedEvents().getItemCount()));
-            textView.setText(getResources().getString(R.string.load_news_start));
-
-			Bundle bundle = new Bundle();
-			bundle.putSerializable("feedEvents", feedService.getFeedEvents());
-
-			//Put Extra
-            intent.putExtras(bundle);
-            count++;
-            launchHomeActivity();
-		}
-
-	}
-
-    private class AsyncLoadXMLFeedNews extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            // Get feed url
-            String url = Utils.getDefaults(context, "SECTION_WEBSITE") + ApplicationConstants.NEWS_PATH + ApplicationConstants.FEED_PATH;
-            //String url = "http://esnlille.fr/BuddySystem/test.xml";
-
-            // Obtain feed
-            DOMParser myParser = new DOMParser();
-            feedService.setFeedNews(myParser.parseXml(url));
-            Utils.saveObjectToCache(context, "feedNews", feedService.getFeedNews());
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-
-            textView.setText(getResources().getString(R.string.load_news_end, feedService.getFeedNews().getItemCount()));
-            textView.setText(getResources().getString(R.string.load_partners_start));
-
-            count++;
-            launchHomeActivity();
-        }
-
-    }
-
-    private class AsyncLoadXMLFeedPartners extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            // Get feed url
-            String url = Utils.getDefaults(context, "SECTION_WEBSITE") + ApplicationConstants.PARTNERS_PATH + ApplicationConstants.FEED_PATH;
-
-            // Obtain feed
-            DOMParser myParser = new DOMParser();
-            feedService.setFeedPartners(myParser.parseXml(url));
-            Utils.saveObjectToCache(context, "feedPartners", feedService.getFeedPartners());
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-
-            textView.setText(getResources().getString(R.string.load_partners_end, feedService.getFeedPartners().getItemCount()));
-
-            count++;
-            launchHomeActivity();
-        }
-
-    }
-
-    private class DownloadJSONSurvivalGuide extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            // Create survival guide array
-            SurvivalGuide survivalguide = JSONfunctions.getSurvivalGuide(
-                    ApplicationConstants.SURVIVAL_WEBSERVICE_URL +
-                            "/getCategories.php?section=" +
-                            Utils.getDefaults(context, "CODE_SECTION")
-            );
-
-            feedService.setSurvivalguide(survivalguide);
-            Utils.saveObjectToCache(context, "survivalGuide", feedService.getSurvivalguide());
-            return null;
-        }
-
-        protected void onPostExecute(Void args) {
-            textView.setText(getResources().getString(R.string.load_survival_end, feedService.getSurvivalguide().getCategories().size()));
-            textView.setText(getResources().getString(R.string.load_events_start));
-
-            count++;
-            launchHomeActivity();
-        }
-    }
-
 
     // GCM
     public void registerUser() {
