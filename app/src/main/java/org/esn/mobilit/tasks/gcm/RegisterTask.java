@@ -10,17 +10,17 @@ import org.esn.mobilit.utils.ApplicationConstants;
 
 import java.io.IOException;
 
-public class Register extends AsyncTask<Void, Void, String> {
+public class RegisterTask extends AsyncTask<Void, Void, String> {
 
     SplashActivity activity;
     String regId;
     GoogleCloudMessaging gcmObj;
 
 
-    public Register(SplashActivity activity) {
+    public RegisterTask(SplashActivity activity) {
         this.activity = activity;
         this.regId = "";
-        this.gcmObj = activity.getGcmObj();
+        this.gcmObj = activity.getGcmService().getGcmObj();
     }
 
     @Override
@@ -29,10 +29,10 @@ public class Register extends AsyncTask<Void, Void, String> {
         try {
             if (gcmObj == null) {
                 gcmObj = GoogleCloudMessaging.getInstance(activity.getContext());
-                activity.setGcmObj(gcmObj);
+                activity.getGcmService().setGcmObj(gcmObj);
             }
             regId = gcmObj.register(ApplicationConstants.GOOGLE_PROJ_ID);
-            activity.setRegId(regId);
+            activity.getGcmService().setRegId(regId);
             msg = "Registration ID :" + regId;
 
         } catch (IOException ex) {

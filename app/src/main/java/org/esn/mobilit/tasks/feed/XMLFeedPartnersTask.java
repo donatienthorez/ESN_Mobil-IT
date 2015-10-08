@@ -12,7 +12,7 @@ import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.parser.DOMParser;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
-public class AsyncLoadXMLFeedPartners extends AsyncTask<Void, Void, Void> {
+public class XMLFeedPartnersTask extends AsyncTask<Void, Void, Void> {
 
     SplashActivity activity;
     Context context;
@@ -21,7 +21,7 @@ public class AsyncLoadXMLFeedPartners extends AsyncTask<Void, Void, Void> {
     FeedService feedService;
     RSSFeed partners;
 
-    public AsyncLoadXMLFeedPartners(SplashActivity activity) {
+    public XMLFeedPartnersTask(SplashActivity activity) {
         this.activity = activity;
         this.context = activity.getContext();
         this.resources = activity.getResources();

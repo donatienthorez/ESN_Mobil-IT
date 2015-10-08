@@ -12,33 +12,32 @@ import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.parser.DOMParser;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
-public class AsyncLoadXMLFeedEvents extends AsyncTask<Void, Void, Void> {
+public class XMLFeedNewsTask extends AsyncTask<Void, Void, Void> {
 
     SplashActivity activity;
     Context context;
     Resources resources;
 
     FeedService feedService;
-    RSSFeed events;
+    RSSFeed news;
 
-    public AsyncLoadXMLFeedEvents(SplashActivity activity) {
+    public XMLFeedNewsTask(SplashActivity activity) {
         this.activity = activity;
         this.context = activity.getContext();
         this.resources = activity.getResources();
         this.feedService = activity.getFeedService();
-        this.events = new RSSFeed();
+        this.news = new RSSFeed();
     }
 
     @Override
     protected Void doInBackground(Void... params) {
         // Get feed url
-        String url = Utils.getDefaults(activity.getContext(), "SECTION_WEBSITE") + ApplicationConstants.EVENTS_PATH + ApplicationConstants.FEED_PATH;
+        String url = Utils.getDefaults(activity.getContext(), "SECTION_WEBSITE") + ApplicationConstants.NEWS_PATH + ApplicationConstants.FEED_PATH;
 
-        // Obtain feed
         DOMParser myParser = new DOMParser();
-        this.events = myParser.parseXml(url);
-        feedService.setFeedEvents(this.events);
-        Utils.saveObjectToCache(this.context, "feedEvents", this.events);
+        this.news = myParser.parseXml(url);
+        feedService.setFeedNews(this.news);
+        Utils.saveObjectToCache(activity.getContext(), "feedNews", this.news);
 
         return null;
     }
@@ -47,10 +46,11 @@ public class AsyncLoadXMLFeedEvents extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
 
-        activity.getTextView().setText(this.resources.getString(R.string.load_events_end, events.getItemCount()));
-        activity.getTextView().setText(this.resources.getString(R.string.load_news_start));
+        activity.getTextView().setText(resources.getString(R.string.load_news_end, this.news.getItemCount()));
+        activity.getTextView().setText(resources.getString(R.string.load_partners_start));
 
         activity.incrementCount();
         activity.launchHomeActivity();
     }
+
 }

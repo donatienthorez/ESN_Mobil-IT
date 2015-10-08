@@ -34,7 +34,7 @@ public class PostRegID extends AsyncTask<Void, Void, Void> {
         HttpPost httppost = new HttpPost(ApplicationConstants.APP_SERVER_URL);
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-            nameValuePairs.add(new BasicNameValuePair("regId", activity.getRegId()));
+            nameValuePairs.add(new BasicNameValuePair("regId", activity.getGcmService().getRegId()));
             nameValuePairs.add(new BasicNameValuePair("CODE_SECTION", Utils.getDefaults(activity.getContext(), "CODE_SECTION")));
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
@@ -49,7 +49,7 @@ public class PostRegID extends AsyncTask<Void, Void, Void> {
     }
 
     protected void onPostExecute(Void args) {
-        this.activity.storeRegIdinSharedPref();
+        this.activity.getGcmService().storeRegIdinSharedPref();
         this.activity.incrementCount();
 
         if (this.activity.count == this.activity.count_limit) {

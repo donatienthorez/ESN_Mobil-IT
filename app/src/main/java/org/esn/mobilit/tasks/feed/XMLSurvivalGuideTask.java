@@ -12,7 +12,7 @@ import org.esn.mobilit.services.FeedService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 
-public class AsyncLoadXMLSurvivalGuide extends AsyncTask<Void, Void, Void> {
+public class XMLSurvivalGuideTask extends AsyncTask<Void, Void, Void> {
 
     SplashActivity activity;
     Context context;
@@ -21,7 +21,7 @@ public class AsyncLoadXMLSurvivalGuide extends AsyncTask<Void, Void, Void> {
     FeedService feedService;
     SurvivalGuide survivalGuide;
 
-    public AsyncLoadXMLSurvivalGuide(SplashActivity activity) {
+    public XMLSurvivalGuideTask(SplashActivity activity) {
         this.activity = activity;
         this.context = activity.getContext();
         this.resources = activity.getResources();

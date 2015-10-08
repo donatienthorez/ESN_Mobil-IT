@@ -6,24 +6,18 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.loopj.android.http.RequestParams;
-
 import org.esn.mobilit.R;
-import org.esn.mobilit.tasks.feed.AsyncLoadXMLFeedEvents;
-import org.esn.mobilit.tasks.feed.AsyncLoadXMLFeedNews;
-import org.esn.mobilit.tasks.feed.AsyncLoadXMLFeedPartners;
-import org.esn.mobilit.tasks.feed.AsyncLoadXMLSurvivalGuide;
+import org.esn.mobilit.services.GCMService;
+import org.esn.mobilit.tasks.feed.XMLFeedEventsTask;
+import org.esn.mobilit.tasks.feed.XMLFeedNewsTask;
+import org.esn.mobilit.tasks.feed.XMLFeedPartnersTask;
+import org.esn.mobilit.tasks.feed.XMLSurvivalGuideTask;
 import org.esn.mobilit.services.FeedService;
-import org.esn.mobilit.tasks.gcm.Register;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 
@@ -32,17 +26,19 @@ public class SplashActivity extends Activity {
 
     public int count, count_limit;
     private Intent intent;
-    private TextView textView;
     private ProgressBar progressBar;
     private Context context;
     private String pushMsg;
-
     private FeedService feedService;
 
+    private GCMService gcmService;
     public FeedService getFeedService() {
         return feedService;
     }
 
+    public GCMService getGcmService(){
+        return gcmService;
+    }
     public Context getContext() {
         return context;
     }
@@ -51,61 +47,32 @@ public class SplashActivity extends Activity {
         return textView;
     }
 
-    public void incrementCount()
-    {
+    public void incrementCount() {
         this.count++;
     }
 
-    //GCM
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    public static final String REG_ID = "regId";
-    GoogleCloudMessaging gcmObj;
-    String regId = "";
-    RequestParams params = new RequestParams();
-
-    public String getRegId() {
-        return regId;
-    }
-
-    public void setRegId(String regId) {
-        this.regId = regId;
-    }
-
-    public GoogleCloudMessaging getGcmObj() {
-        return gcmObj;
-    }
-
-    public void setGcmObj(GoogleCloudMessaging gcmObj) {
-        this.gcmObj = gcmObj;
-    }
+    private TextView textView;
+    private TextView version;
+    private Button buttonSection;
+    private Button buttonRetry;
 
     @Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         //Change layout
-		setContentView(R.layout.splash);
+        setContentView(R.layout.splash);
+
+        initView();
 
         //Init values
-        this.context = getApplicationContext();
+        context = getApplicationContext();
+        intent = new Intent(context, HomeActivity.class);
         count_limit = 5;
-        intent = new Intent(getApplicationContext(), HomeActivity.class);
         count = 0;
 
         this.feedService = new FeedService(context);
-
-
-        //Init Elements
-        TextView version = ((TextView) findViewById(R.id.version));
-        try {
-            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            version.setText("v " + pInfo.versionName);
-        } catch(PackageManager.NameNotFoundException e){
-            version.setText("v 1.0.0");
-        }
-
-        textView = ((TextView)findViewById (R.id.textView));
-        progressBar = ((ProgressBar)findViewById (R.id.progressBar));
+        this.gcmService = new GCMService(context, this);
 
         if (!Utils.isConnected(this)){
             // No connectivity - Load cache
@@ -113,7 +80,6 @@ public class SplashActivity extends Activity {
             feedService.getRssFeedFromCache();
 
             if(feedService.emptyFeeds()){
-                Log.d(TAG, "EMPTY CACHE");
                 textView.setText(getResources().getString(R.string.emptycache));
                 progressBar.setVisibility(View.INVISIBLE);
             } else {
@@ -127,55 +93,61 @@ public class SplashActivity extends Activity {
                 count = count_limit;
                 launchHomeActivity();
             }
-
-            final Button buttonretry = (Button) findViewById(R.id.retry);
-            buttonretry.setVisibility(View.VISIBLE);
-            buttonretry.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent returnIntent = new Intent();
-                    setResult(ApplicationConstants.RESULT_FIRST_LAUNCH,returnIntent);
-                    finish();
-                }
-            });
-
-            final Button buttonsection = (Button) findViewById(R.id.changesection);
-            buttonsection.setVisibility(View.VISIBLE);
-            buttonsection.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent returnIntent = new Intent();
-                    setResult(ApplicationConstants.RESULT_FIRST_LAUNCH,returnIntent);
-                    finish();
-                }
-            });
+            buttonRetry.setVisibility(View.VISIBLE);
+            buttonSection.setVisibility(View.VISIBLE);
 
         }else{
-            // Push for GCM
-            if (Utils.getDefaults(context, REG_ID) != null) {
-                // No need to push GCM
-                count_limit--;
-            }
-            else {
-                // Registering RegID
-                registerUser();
-            }
+
+            gcmService.pushForGcm();
 
             // Connected - Start parsing
             textView.setText(R.string.load_survival_start);
-            new AsyncLoadXMLSurvivalGuide(this).execute();
-            new AsyncLoadXMLFeedEvents(this).execute();
-            new AsyncLoadXMLFeedNews(this).execute();
-            new AsyncLoadXMLFeedPartners(this).execute();
+            new XMLSurvivalGuideTask(this).execute();
+            new XMLFeedEventsTask(this).execute();
+            new XMLFeedNewsTask(this).execute();
+            new XMLFeedPartnersTask(this).execute();
         }
-	}
+    }
 
-    public void onResume(){
-        super.onResume();
+    public void initView(){
+        //Init Elements
+        version = (TextView) findViewById(R.id.version);
+        textView = ((TextView) findViewById (R.id.textView));
+        progressBar = ((ProgressBar) findViewById (R.id.progressBar));
 
-        Bundle extras = getIntent().getExtras();
-
-        if (extras != null) {
-            pushMsg = getIntent().getExtras().getString("title");
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            System.out.println(version);
+            version.setText("v " + pInfo.versionName);
+        } catch(PackageManager.NameNotFoundException e){
+            version.setText("v 1.0.0");
         }
+
+        buttonRetry = (Button) findViewById(R.id.retry);
+        buttonRetry.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent returnIntent = new Intent();
+                setResult(ApplicationConstants.RESULT_FIRST_LAUNCH,returnIntent);
+                finish();
+            }
+        });
+        buttonRetry.setVisibility(View.INVISIBLE);
+
+        buttonSection = (Button) findViewById(R.id.changesection);
+        buttonSection.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent returnIntent = new Intent();
+                setResult(ApplicationConstants.RESULT_FIRST_LAUNCH, returnIntent);
+                finish();
+            }
+        });
+        buttonSection.setVisibility(View.INVISIBLE);
+    }
+
+    public void retry(){
+        textView.setText(R.string.noitems);
+        progressBar.setVisibility(View.INVISIBLE);
+        buttonRetry.setVisibility(View.VISIBLE);
     }
 
     public void launchHomeActivity(){
@@ -198,32 +170,26 @@ public class SplashActivity extends Activity {
                 }else{
                     i.putExtra("pushReceived", false);
                 }
-
                 startActivityForResult(i, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
             }
             else {
-                textView.setText(R.string.noitems);
-                progressBar.setVisibility(View.INVISIBLE);
-
-                final Button button = (Button) findViewById(R.id.retry);
-                button.setVisibility(View.VISIBLE);
-
-                button.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        Intent returnIntent = new Intent();
-                        setResult(ApplicationConstants.RESULT_FIRST_LAUNCH,returnIntent);
-                        finish();
-                    }
-                });
-
+                this.retry();
             }
+        }
+    }
+
+    public void onResume(){
+        super.onResume();
+
+        Bundle extras = getIntent().getExtras();
+
+        if (extras != null) {
+            pushMsg = getIntent().getExtras().getString("title");
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult");
-
         if (requestCode == ApplicationConstants.RESULT_SPLASH_ACTIVITY) {
             Intent returnIntent = new Intent();
             if (resultCode == RESULT_CANCELED){
@@ -235,35 +201,5 @@ public class SplashActivity extends Activity {
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    // GCM
-    public void registerUser() {
-        if (checkPlayServices()) {
-            new Register(this);
-        }
-    }
-
-    public void storeRegIdinSharedPref() {
-        Utils.setDefaults(context, REG_ID, regId);
-    }
-
-    private boolean checkPlayServices() {
-        int resultCode = GooglePlayServicesUtil
-                .isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            } else {
-                //Toast.makeText(
-                //        context,
-                //        "This device doesn't support Play services, App will not work normally",
-                //        Toast.LENGTH_LONG).show();
-                finish();
-            }
-            return false;
-        }
-        return true;
     }
 }
