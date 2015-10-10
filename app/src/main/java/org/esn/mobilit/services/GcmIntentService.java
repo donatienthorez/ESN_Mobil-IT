@@ -1,4 +1,4 @@
-package org.esn.mobilit;
+package org.esn.mobilit.services;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -11,6 +11,8 @@ import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import org.esn.mobilit.GcmBroadcastReceiver;
+import org.esn.mobilit.R;
 import org.esn.mobilit.activities.SplashActivity;
 import org.esn.mobilit.utils.ApplicationConstants;
 
