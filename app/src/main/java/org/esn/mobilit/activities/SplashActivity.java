@@ -29,18 +29,10 @@ public class SplashActivity extends Activity {
     private ProgressBar progressBar;
     private Context context;
     private String pushMsg;
-    private FeedService feedService;
 
     private GCMService gcmService;
-    public FeedService getFeedService() {
-        return feedService;
-    }
-
     public GCMService getGcmService(){
         return gcmService;
-    }
-    public Context getContext() {
-        return context;
     }
 
     public TextView getTextView() {
@@ -71,24 +63,23 @@ public class SplashActivity extends Activity {
         count_limit = 5;
         count = 0;
 
-        this.feedService = new FeedService(context);
         this.gcmService = new GCMService(context, this);
 
         if (!Utils.isConnected(this)){
             // No connectivity - Load cache
             textView.setText(getResources().getString(R.string.tryingcache));
-            feedService.getRssFeedFromCache();
+            FeedService.getInstance().getRssFeedFromCache();
 
-            if(feedService.emptyFeeds()){
+            if(FeedService.getInstance().emptyFeeds()){
                 textView.setText(getResources().getString(R.string.emptycache));
                 progressBar.setVisibility(View.INVISIBLE);
             } else {
                 // Load from cache
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("feedEvents", feedService.getFeedEvents());
-                bundle.putSerializable("feedNews", feedService.getFeedNews());
-                bundle.putSerializable("feedPartners", feedService.getFeedPartners());
-                bundle.putSerializable("survivalGuide", feedService.getSurvivalguide());
+                bundle.putSerializable("feedEvents", FeedService.getInstance().getFeedEvents());
+                bundle.putSerializable("feedNews", FeedService.getInstance().getFeedNews());
+                bundle.putSerializable("feedPartners", FeedService.getInstance().getFeedPartners());
+                bundle.putSerializable("survivalGuide", FeedService.getInstance().getSurvivalguide());
                 intent.putExtras(bundle);
                 count = count_limit;
                 launchHomeActivity();
@@ -154,10 +145,10 @@ public class SplashActivity extends Activity {
         if (count == count_limit) {
 
             int total = 0;
-            total += feedService.getFeedEvents().getItemCount();
-            total += feedService.getFeedNews().getItemCount();
-            total += feedService.getFeedPartners().getItemCount();
-            total += feedService.getSurvivalguide().getCategories().size();
+            total += FeedService.getInstance().getFeedEvents().getItemCount();
+            total += FeedService.getInstance().getFeedNews().getItemCount();
+            total += FeedService.getInstance().getFeedPartners().getItemCount();
+            total += FeedService.getInstance().getSurvivalguide().getCategories().size();
 
             if (total > 0) {
                 textView.setText(R.string.start_homeactivity);
