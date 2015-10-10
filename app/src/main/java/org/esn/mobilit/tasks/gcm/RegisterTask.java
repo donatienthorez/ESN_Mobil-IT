@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class RegisterTask extends AsyncTask<Void, Void, String> {
 
-    Callback callback;
+    Callback<Object> callback;
 
     public RegisterTask(Callback callback) {
         this.callback = callback;
@@ -42,6 +42,10 @@ public class RegisterTask extends AsyncTask<Void, Void, String> {
     protected void onPostExecute(String msg) {
         if (!TextUtils.isEmpty(GCMService.getInstance().getRegId())) {
             new PostRegID(callback).execute();
+        }
+        else
+        {
+            callback.onSuccess(null);
         }
     }
 }

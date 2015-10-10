@@ -86,6 +86,8 @@ public class SplashActivity extends Activity {
 
             // Connected - Start parsing
             textView.setText(R.string.loading);
+
+            launcherService.resetCount();
             gcmService.pushForGcm(this, callbackGCMConstructor());
             new XMLFeedNewsTask(callbackFeedConstructor(R.string.load_news_end)).execute();
             new XMLFeedEventsTask(callbackFeedConstructor(R.string.load_events_end)).execute();

@@ -27,13 +27,17 @@ public class GCMService {
         return instance;
     }
 
-    public void pushForGcm(Activity activity, Callback callback)
+    public void pushForGcm(Activity activity, Callback<Object> callback)
     {
         if (Utils.getDefaults(MobilITApplication.getContext(), REG_ID) == null) {
+
             // Registering RegID
             if (checkPlayServices(activity)) {
                 new RegisterTask(callback).execute();
             }
+        }
+        else {
+            callback.onSuccess(null);
         }
     }
     public void storeRegIdinSharedPref() {
