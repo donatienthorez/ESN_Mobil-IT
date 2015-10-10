@@ -1,7 +1,6 @@
 package org.esn.mobilit.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -11,6 +10,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.services.GCMService;
 import org.esn.mobilit.tasks.feed.XMLFeedEventsTask;
@@ -20,24 +20,13 @@ import org.esn.mobilit.tasks.feed.XMLSurvivalGuideTask;
 import org.esn.mobilit.services.FeedService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
+import org.esn.mobilit.utils.parser.RSSFeed;
 
 public class SplashActivity extends Activity {
-    private static final String TAG = SplashActivity.class.getSimpleName();
 
     public int count, count_limit;
     private Intent intent;
-    private ProgressBar progressBar;
-    private Context context;
     private String pushMsg;
-
-    private GCMService gcmService;
-    public GCMService getGcmService(){
-        return gcmService;
-    }
-
-    public TextView getTextView() {
-        return textView;
-    }
 
     public void incrementCount() {
         this.count++;
@@ -47,6 +36,7 @@ public class SplashActivity extends Activity {
     private TextView version;
     private Button buttonSection;
     private Button buttonRetry;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,13 +47,9 @@ public class SplashActivity extends Activity {
 
         initView();
 
-        //Init values
-        context = getApplicationContext();
-        intent = new Intent(context, HomeActivity.class);
+        intent = new Intent(MobilITApplication.getContext(), HomeActivity.class);
         count_limit = 5;
         count = 0;
-
-        this.gcmService = new GCMService(context, this);
 
         if (!Utils.isConnected(this)){
             // No connectivity - Load cache
@@ -81,7 +67,6 @@ public class SplashActivity extends Activity {
                 bundle.putSerializable("feedPartners", FeedService.getInstance().getFeedPartners());
                 bundle.putSerializable("survivalGuide", FeedService.getInstance().getSurvivalguide());
                 intent.putExtras(bundle);
-                count = count_limit;
                 launchHomeActivity();
             }
             buttonRetry.setVisibility(View.VISIBLE);
@@ -89,14 +74,16 @@ public class SplashActivity extends Activity {
 
         }else{
 
-            gcmService.pushForGcm();
+            GCMService.getInstance().pushForGcm(this, callbackGCMConstructor());
+            // on success :
+            this.incrementCount();
 
             // Connected - Start parsing
-            textView.setText(R.string.load_survival_start);
-            new XMLSurvivalGuideTask(this).execute();
-            new XMLFeedEventsTask(this).execute();
-            new XMLFeedNewsTask(this).execute();
-            new XMLFeedPartnersTask(this).execute();
+            textView.setText(R.string.loading);
+            new XMLFeedNewsTask(callbackFeedConstructor(R.string.load_news_end)).execute();
+            new XMLFeedEventsTask(callbackFeedConstructor(R.string.load_events_end)).execute();
+            new XMLFeedPartnersTask(callbackFeedConstructor(R.string.load_partners_end)).execute();
+            new XMLSurvivalGuideTask(callbackSurvivalGuideConstructor(R.string.load_survival_end)).execute();
         }
     }
 
@@ -108,7 +95,6 @@ public class SplashActivity extends Activity {
 
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            System.out.println(version);
             version.setText("v " + pInfo.versionName);
         } catch(PackageManager.NameNotFoundException e){
             version.setText("v 1.0.0");
@@ -118,7 +104,7 @@ public class SplashActivity extends Activity {
         buttonRetry.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent returnIntent = new Intent();
-                setResult(ApplicationConstants.RESULT_FIRST_LAUNCH,returnIntent);
+                setResult(ApplicationConstants.RESULT_FIRST_LAUNCH, returnIntent);
                 finish();
             }
         });
@@ -141,31 +127,77 @@ public class SplashActivity extends Activity {
         buttonRetry.setVisibility(View.VISIBLE);
     }
 
-    public void launchHomeActivity(){
-        if (count == count_limit) {
-
-            int total = 0;
-            total += FeedService.getInstance().getFeedEvents().getItemCount();
-            total += FeedService.getInstance().getFeedNews().getItemCount();
-            total += FeedService.getInstance().getFeedPartners().getItemCount();
-            total += FeedService.getInstance().getSurvivalguide().getCategories().size();
-
-            if (total > 0) {
-                textView.setText(R.string.start_homeactivity);
-
-                Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-
-                if (pushMsg != null) {
-                    i.putExtra("pushReceived", true);
-                    i.putExtra("pushMsg", pushMsg);
-                }else{
-                    i.putExtra("pushReceived", false);
+    public Callback callbackFeedConstructor(final int stringId){
+        return new Callback() {
+            @Override
+            public void onSuccess(Object result) {
+                textView.setText(getResources().getString(stringId, ((RSSFeed) result).getItemCount()));
+                incrementCount();
+                if (count == count_limit) {
+                    launchHomeActivity();
                 }
-                startActivityForResult(i, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
             }
-            else {
-                this.retry();
+            @Override
+            public void onFailure(Exception ex) {
             }
+        };
+    }
+
+    public Callback callbackSurvivalGuideConstructor(final int stringId){
+        return new Callback() {
+            @Override
+            public void onSuccess(Object result) {
+                textView.setText(getResources().getString(stringId));
+                incrementCount();
+                if (count == count_limit) {
+                    launchHomeActivity();
+                }
+            }
+
+            @Override
+            public void onFailure(Exception ex) {
+            }
+        };
+    }
+
+    public Callback callbackGCMConstructor(){
+        return new Callback() {
+            @Override
+            public void onSuccess(Object result) {
+                incrementCount();
+                if (count == count_limit) {
+                    launchHomeActivity();
+                }
+            }
+
+            @Override
+            public void onFailure(Exception ex) {
+            }
+        };
+    }
+
+    public void launchHomeActivity(){
+        int total = 0;
+        total += FeedService.getInstance().getFeedEvents().getItemCount();
+        total += FeedService.getInstance().getFeedNews().getItemCount();
+        total += FeedService.getInstance().getFeedPartners().getItemCount();
+        total += FeedService.getInstance().getSurvivalguide().getCategories().size();
+
+        if (total > 0) {
+            textView.setText(R.string.start_homeactivity);
+
+            Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+
+            if (pushMsg != null) {
+                i.putExtra("pushReceived", true);
+                i.putExtra("pushMsg", pushMsg);
+            }else{
+                i.putExtra("pushReceived", false);
+            }
+            startActivityForResult(i, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
+        }
+        else {
+            this.retry();
         }
     }
 

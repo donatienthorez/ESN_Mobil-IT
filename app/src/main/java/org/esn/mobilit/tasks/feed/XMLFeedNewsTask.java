@@ -1,56 +1,42 @@
 package org.esn.mobilit.tasks.feed;
 
-import android.content.Context;
-import android.content.res.Resources;
 import android.os.AsyncTask;
-
-import org.esn.mobilit.R;
-import org.esn.mobilit.activities.SplashActivity;
+import org.esn.mobilit.MobilITApplication;
+import org.esn.mobilit.activities.Callback;
 import org.esn.mobilit.services.FeedService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.parser.DOMParser;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
-public class XMLFeedNewsTask extends AsyncTask<Void, Void, Void> {
+public class XMLFeedNewsTask extends AsyncTask<Void, Void, Callback> {
 
-    SplashActivity activity;
-    Context context;
-    Resources resources;
-
-    FeedService feedService;
+    Callback<RSSFeed> callback;
     RSSFeed news;
 
-    public XMLFeedNewsTask(SplashActivity activity) {
-        this.activity = activity;
-        this.context = activity.getContext();
-        this.resources = activity.getResources();
-        this.feedService = activity.getFeedService();
-        this.news = new RSSFeed();
+    public XMLFeedNewsTask(Callback callback)
+    {
+        this.callback = callback;
     }
 
     @Override
-    protected Void doInBackground(Void... params) {
+    protected Callback doInBackground(Void... params) {
         // Get feed url
-        String url = Utils.getDefaults(activity.getContext(), "SECTION_WEBSITE") + ApplicationConstants.NEWS_PATH + ApplicationConstants.FEED_PATH;
+        String url = Utils.getDefaults(MobilITApplication.getContext(), "SECTION_WEBSITE")
+                   + ApplicationConstants.NEWS_PATH
+                   + ApplicationConstants.FEED_PATH;
 
         DOMParser myParser = new DOMParser();
         this.news = myParser.parseXml(url);
-        feedService.setFeedNews(this.news);
-        Utils.saveObjectToCache(activity.getContext(), "feedNews", this.news);
+        FeedService.getInstance().setFeedNews(news);
+        Utils.saveObjectToCache(MobilITApplication.getContext(), "feedNews", news);
 
-        return null;
+        return callback;
     }
 
     @Override
-    protected void onPostExecute(Void result) {
-        super.onPostExecute(result);
-
-        activity.getTextView().setText(resources.getString(R.string.load_news_end, this.news.getItemCount()));
-        activity.getTextView().setText(resources.getString(R.string.load_partners_start));
-
-        activity.incrementCount();
-        activity.launchHomeActivity();
+    protected void onPostExecute(Callback callback) {
+        super.onPostExecute(callback);
+        this.callback.onSuccess(this.news);
     }
-
 }

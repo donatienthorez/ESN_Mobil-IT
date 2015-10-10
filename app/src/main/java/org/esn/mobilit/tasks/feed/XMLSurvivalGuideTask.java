@@ -1,51 +1,42 @@
 package org.esn.mobilit.tasks.feed;
 
-import android.content.Context;
-import android.content.res.Resources;
 import android.os.AsyncTask;
 
-import org.esn.mobilit.R;
-import org.esn.mobilit.activities.SplashActivity;
+import org.esn.mobilit.MobilITApplication;
+import org.esn.mobilit.activities.Callback;
 import org.esn.mobilit.models.SurvivalGuide;
 import org.esn.mobilit.network.JSONfunctions;
 import org.esn.mobilit.services.FeedService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 
-public class XMLSurvivalGuideTask extends AsyncTask<Void, Void, Void> {
+public class XMLSurvivalGuideTask extends AsyncTask<Void, Void, Callback> {
 
-    SplashActivity activity;
-    Context context;
-    Resources resources;
-
-    FeedService feedService;
+    Callback<SurvivalGuide> callback;
     SurvivalGuide survivalGuide;
 
-    public XMLSurvivalGuideTask(SplashActivity activity) {
-        this.activity = activity;
-        this.context = activity.getContext();
-        this.resources = activity.getResources();
-        this.feedService = activity.getFeedService();
-        this.survivalGuide = new SurvivalGuide();
+    public XMLSurvivalGuideTask(Callback callback) {
+        this.callback = callback;
     }
 
     @Override
-    protected Void doInBackground(Void... params) {
+    protected Callback doInBackground(Void... params) {
 
-        String url = ApplicationConstants.SURVIVAL_WEBSERVICE_URL + "/getCategories.php?section=" + Utils.getDefaults(context, "CODE_SECTION");
+        String url = ApplicationConstants.SURVIVAL_WEBSERVICE_URL
+                + "/getCategories.php?section="
+                + Utils.getDefaults(MobilITApplication.getContext(), "CODE_SECTION");
 
         this.survivalGuide = JSONfunctions.getSurvivalGuide(url);
 
-        feedService.setSurvivalguide(survivalGuide);
-        Utils.saveObjectToCache(context, "survivalGuide", survivalGuide);
-        return null;
+        FeedService.getInstance().setSurvivalguide(survivalGuide);
+        Utils.saveObjectToCache(MobilITApplication.getContext(), "survivalGuide", survivalGuide);
+
+        return callback;
     }
 
-    protected void onPostExecute(Void args) {
-        activity.getTextView().setText(resources.getString(R.string.load_survival_end, survivalGuide.getCategories().size()));
-        activity.getTextView().setText(resources.getString(R.string.load_events_start));
-
-        activity.incrementCount();
-        activity.launchHomeActivity();
+    @Override
+    protected void onPostExecute(Callback callback) {
+        super.onPostExecute(callback);
+        this.callback.onSuccess(this.survivalGuide);
     }
 }
