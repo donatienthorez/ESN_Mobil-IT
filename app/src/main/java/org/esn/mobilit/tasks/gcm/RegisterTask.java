@@ -5,35 +5,32 @@ import android.text.TextUtils;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import org.esn.mobilit.MobilITApplication;
+import org.esn.mobilit.activities.Callback;
 import org.esn.mobilit.activities.SplashActivity;
+import org.esn.mobilit.services.GCMService;
 import org.esn.mobilit.utils.ApplicationConstants;
 
 import java.io.IOException;
 
 public class RegisterTask extends AsyncTask<Void, Void, String> {
 
-    SplashActivity activity;
-    String regId;
-    GoogleCloudMessaging gcmObj;
+    Callback callback;
 
-
-    public RegisterTask(SplashActivity activity) {
-        this.activity = activity;
-        this.regId = "";
-        this.gcmObj = activity.getGcmService().getGcmObj();
+    public RegisterTask(Callback callback) {
+        this.callback = callback;
     }
 
     @Override
     protected String doInBackground(Void... params) {
         String msg = "";
         try {
-            if (gcmObj == null) {
-                gcmObj = GoogleCloudMessaging.getInstance(activity.getContext());
-                activity.getGcmService().setGcmObj(gcmObj);
+            if (GCMService.getInstance().getGcmObj() == null) {
+                GoogleCloudMessaging gcmObj = GoogleCloudMessaging.getInstance(MobilITApplication.getContext());
+                GCMService.getInstance().setGcmObj(gcmObj);
             }
-            regId = gcmObj.register(ApplicationConstants.GOOGLE_PROJ_ID);
-            activity.getGcmService().setRegId(regId);
-            msg = "Registration ID :" + regId;
+            String regId = GCMService.getInstance().getGcmObj().register(ApplicationConstants.GOOGLE_PROJ_ID);
+            GCMService.getInstance().setRegId(regId);
 
         } catch (IOException ex) {
             msg = "Error :" + ex.getMessage();
@@ -43,8 +40,8 @@ public class RegisterTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String msg) {
-        if (!TextUtils.isEmpty(regId)) {
-            new PostRegID(activity).execute();
+        if (!TextUtils.isEmpty(GCMService.getInstance().getRegId())) {
+            new PostRegID(callback).execute();
         }
     }
 }
