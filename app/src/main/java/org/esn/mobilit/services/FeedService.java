@@ -29,13 +29,24 @@ public class FeedService
         return feedEvents == null && feedNews == null && feedPartners == null && survivalguide == null;
     }
 
-    public void getRssFeedFromCache()
+    public void getFeedsFromCache()
     {
         feedEvents    = (RSSFeed) Utils.getObjectFromCache(MobilITApplication.getContext(), "feedEvents");
         feedNews      = (RSSFeed) Utils.getObjectFromCache(MobilITApplication.getContext(), "feedNews");
         feedPartners  = (RSSFeed) Utils.getObjectFromCache(MobilITApplication.getContext(), "feedPartners");
         survivalguide = (SurvivalGuide) Utils.getObjectFromCache(MobilITApplication.getContext(), "survivalGuide");
     }
+
+    public int getTotalItems(){
+        int total = 0;
+        total += FeedService.getInstance().getFeedEvents().getItemCount();
+        total += FeedService.getInstance().getFeedNews().getItemCount();
+        total += FeedService.getInstance().getFeedPartners().getItemCount();
+        total += FeedService.getInstance().getSurvivalguide().getCategories().size();
+
+        return total;
+    }
+
 
     public RSSFeed getFeedEvents() {
         return feedEvents;

@@ -17,6 +17,7 @@ import org.esn.mobilit.fragments.MyFragmentPagerAdapter;
 import org.esn.mobilit.fragments.Satellite.ListFragment.ListFragmentItemClickListener;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.models.SurvivalGuide;
+import org.esn.mobilit.services.GCMService;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.image.InternalStorage;
 import org.esn.mobilit.utils.parser.RSSFeed;
@@ -95,8 +96,9 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         //Add tabs
         initTabs();
 
-        if (getIntent().getBooleanExtra("pushReceived", false))
+        if(! GCMService.getInstance().getPushMsg().equals("")) {
             pushReceived();
+        }
     }
 
     private void initTabs(){
@@ -144,7 +146,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
     public void pushReceived() {
-        String pushMsg = getIntent().getStringExtra("pushMsg");
+        String pushMsg = GCMService.getInstance().getPushMsg();
 
         int pos = -1;
         RSSFeed currentfeed = null;

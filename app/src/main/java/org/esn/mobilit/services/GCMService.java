@@ -17,6 +17,7 @@ public class GCMService {
     public static final String REG_ID = "regId";
     GoogleCloudMessaging gcmObj;
     String regId = "";
+    private String pushMsg = "";
 
     private static GCMService instance;
     public static GCMService getInstance(){
@@ -66,5 +67,13 @@ public class GCMService {
 
     public void setGcmObj(GoogleCloudMessaging gcmObj) {
         this.gcmObj = gcmObj;
+    }
+
+    public String getPushMsg() {
+        return pushMsg;
+    }
+
+    public void setPushMsg(String pushMsg) {
+        this.pushMsg = pushMsg;
     }
 }
