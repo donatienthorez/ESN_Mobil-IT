@@ -6,66 +6,66 @@ import java.io.Serializable;
  * Created by Spider on 02/12/14.
  */
 public class Section implements Serializable{
-    private int    id;
-    private int    id_country;
-    private String name;
-    private String url;
-    private String code_section;
+    private int    sid;
+    private int    sid_country;
+    private String sname;
+    private String surl;
+    private String scode_section;
     private String logo_url;
-    private String address;
-    private String website;
-    private String phone;
-    private String email;
-    private String university;
+    private String saddress;
+    private String swebsite;
+    private String sphone;
+    private String semail;
+    private String suniversity;
 
     public Section(int id, int id_country, String name, String url, String code_section, String address, String website, String phone, String email, String university) {
-        this.id = id;
-        this.id_country = id_country;
-        this.name = name;
-        this.url = url;
-        this.code_section = code_section;
+        this.sid = id;
+        this.sid_country = id_country;
+        this.sname = name;
+        this.surl = url;
+        this.scode_section = code_section;
         this.logo_url = "";
-        this.address = address;
-        this.website = website;
-        this.phone = phone;
-        this.email = email;
-        this.university = university;
+        this.saddress = address;
+        this.swebsite = website;
+        this.sphone = phone;
+        this.semail = email;
+        this.suniversity = university;
     }
 
     public int getId() {
-        return id;
+        return sid;
     }
 
     public int getId_country() {
-        return id_country;
+        return sid_country;
     }
 
     public void setId_country(int id_country) {
-        this.id_country = id_country;
+        this.sid_country = id_country;
     }
 
     public String getName() {
-        return name;
+        return sname;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.sname = name;
     }
 
     public String getUrl() {
-        return url;
+        return surl;
     }
 
     public void setUrl(String url) {
-        this.url = url;
+        this.surl = url;
     }
 
     public String getCode_section() {
-        return code_section;
+        return scode_section;
     }
 
     public void setCode_section(String code_section) {
-        this.code_section = code_section;
+        this.scode_section = code_section;
     }
 
     public String getLogo_url() {
@@ -77,59 +77,59 @@ public class Section implements Serializable{
     }
 
     public String getAddress() {
-        return address;
+        return saddress;
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        this.saddress = address;
     }
 
     public String getWebsite() {
-        return website;
+        return swebsite;
     }
 
     public void setWebsite(String website) {
-        this.website = website;
+        this.swebsite = website;
     }
 
     public String getPhone() {
-        return phone;
+        return sphone;
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        this.sphone = phone;
     }
 
     public String getEmail() {
-        return email;
+        return semail;
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.semail = email;
     }
 
     public String getUniversity() {
-        return university;
+        return suniversity;
     }
 
     public void setUniversity(String university) {
-        this.university = university;
+        this.suniversity = university;
     }
 
     @Override
     public String toString() {
         return "Section{" +
-                "id=" + id +
-                ", id_country=" + id_country +
-                ", name='" + name + '\'' +
-                ", url='" + url + '\'' +
-                ", code_section='" + code_section + '\'' +
+                "id=" + sid +
+                ", id_country=" + sid_country +
+                ", name='" + sname + '\'' +
+                ", url='" + surl + '\'' +
+                ", code_section='" + scode_section + '\'' +
                 ", logo_url='" + logo_url + '\'' +
-                ", address='" + address + '\'' +
-                ", website='" + website + '\'' +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
-                ", university='" + university + '\'' +
+                ", address='" + saddress + '\'' +
+                ", website='" + swebsite + '\'' +
+                ", phone='" + sphone + '\'' +
+                ", email='" + semail + '\'' +
+                ", university='" + suniversity + '\'' +
                 '}';
     }
 }
