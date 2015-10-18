@@ -2,7 +2,6 @@ package org.esn.mobilit.utils.firstlaunch;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -22,15 +21,10 @@ import org.esn.mobilit.R;
 import org.esn.mobilit.models.Countries;
 import org.esn.mobilit.models.Country;
 import org.esn.mobilit.models.Section;
-import org.esn.mobilit.network.JSONfunctions;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import retrofit.RetrofitError;
 
@@ -38,7 +32,7 @@ public class FirstLaunchActivity extends Activity {
     private static final String TAG = FirstLaunchActivity.class.getSimpleName();
 
     //Layout
-    private LinearLayout spinners_layout;
+    private LinearLayout spinnersLayout;
     private Button startButton;
     private TextView textView;
     private ProgressBar progressBar;
@@ -81,15 +75,18 @@ public class FirstLaunchActivity extends Activity {
         progressBar = ((ProgressBar)findViewById (R.id.progressBar));
         progressBar.setVisibility(View.VISIBLE);
 
+        spinnersLayout = (LinearLayout) findViewById(R.id.spinners_layout);
+        spinnerCountries = new Spinner(this);
+
         textView    = (TextView) findViewById(R.id.chooseyourcountry);
 
         //Set text color
         SpannableStringBuilder text = new SpannableStringBuilder();
         text.append(getResources().getString(R.string.chooseyour) + " "); // Choose your
 
-        SpannableString countryspan = new SpannableString(getResources().getString(R.string.country));
-        countryspan.setSpan(new ForegroundColorSpan(ApplicationConstants.ESNBlueRGB), 0, countryspan.length(), 0);
-        text.append(countryspan); // Choose your country
+        SpannableString countrySpan = new SpannableString(getResources().getString(R.string.country));
+        countrySpan.setSpan(new ForegroundColorSpan(ApplicationConstants.ESNBlueRGB), 0, countrySpan.length(), 0);
+        text.append(countrySpan); // Choose your country
         text.append(", ");// Choose your country ,
 
         SpannableString cityspan = new SpannableString(getResources().getString(R.string.city));
@@ -97,22 +94,15 @@ public class FirstLaunchActivity extends Activity {
         text.append(cityspan + " "); // Choose your country, city
         text.append(getResources().getString(R.string.and) + " ");// Choose your country ,city and
 
-        SpannableString esnsectionspan = new SpannableString(getResources().getString(R.string.esnsection));
-        esnsectionspan.setSpan(new ForegroundColorSpan(ApplicationConstants.ESNBlueRGB), 0, esnsectionspan.length(), 0);
-        text.append(esnsectionspan); // Choose your country, city and ESN Section
+        SpannableString esnSectionSpan = new SpannableString(getResources().getString(R.string.esnsection));
+        esnSectionSpan.setSpan(new ForegroundColorSpan(ApplicationConstants.ESNBlueRGB), 0, esnSectionSpan.length(), 0);
+        text.append(esnSectionSpan); // Choose your country, city and ESN Section
         text.append('.');// Choose your country ,city and ESN Section.
 
         textView.setText(text, TextView.BufferType.SPANNABLE);
     }
 
     private void initCountriesSpinner(){
-        spinners_layout = (LinearLayout) findViewById(R.id.spinners_layout);
-        if (spinnerCountries != null) {
-            spinners_layout.removeView(spinnerSections);
-        }
-
-        spinnerCountries = new Spinner(this);
-
         ArrayList<String> datas = new ArrayList<String>();
 
         //Add dummy string
@@ -136,13 +126,13 @@ public class FirstLaunchActivity extends Activity {
                 }
         );
         progressBar.setVisibility(View.INVISIBLE);
-        spinners_layout.addView(spinnerCountries);
+        spinnersLayout.addView(spinnerCountries);
     }
 
     private void initSectionsSpinner(){
         progressBar.setVisibility(View.VISIBLE);
         if (spinnerSections != null) {
-            spinners_layout.removeView(spinnerSections);
+            spinnersLayout.removeView(spinnerSections);
         }
 
         spinnerSections = new Spinner(this);
@@ -172,7 +162,7 @@ public class FirstLaunchActivity extends Activity {
                 }
         );
         progressBar.setVisibility(View.INVISIBLE);
-        spinners_layout.addView(spinnerSections);
+        spinnersLayout.addView(spinnerSections);
     }
 
     public void launchHomeActivity(View view){

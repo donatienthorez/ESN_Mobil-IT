@@ -36,7 +36,7 @@ public class MobilITApplication extends Application {
 
     public interface CountriesService{
         @GET("/webservices/esnmobilit//json/{revision}.json")
-        void getCountries(@Path("revision") String revision,Callback<Countries> callback);
+        void getCountries(@Path("revision") String revision, Callback<Countries> callback);
     }
 
     @Override
@@ -74,25 +74,21 @@ public class MobilITApplication extends Application {
     }
 
     public static void getCountries(final NetworkCallback<Countries> callback) {
-        if (countries != null){
-            callback.onSuccess(countries);
-        } else {
-            getRevision(new NetworkCallback<String>() {
-                @Override
-                public void onSuccess(String result) {
-                    try {
-                        initCountries(callback);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+        getRevision(new NetworkCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    initCountries(callback);
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
+            }
 
-                @Override
-                public void onFailure(RetrofitError error) {
+            @Override
+            public void onFailure(RetrofitError error) {
 
-                }
-            });
-        }
+            }
+        });
     }
 
     public static void initCountries(NetworkCallback<Countries> callback) throws ParseException{
