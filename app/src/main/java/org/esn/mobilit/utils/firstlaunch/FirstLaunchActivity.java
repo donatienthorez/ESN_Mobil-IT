@@ -21,6 +21,7 @@ import org.esn.mobilit.R;
 import org.esn.mobilit.models.Countries;
 import org.esn.mobilit.models.Country;
 import org.esn.mobilit.models.Section;
+import org.esn.mobilit.services.CountriesService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 
@@ -53,7 +54,7 @@ public class FirstLaunchActivity extends Activity {
         initContent();
 
         if (Utils.isConnected(this)){
-            MobilITApplication.getCountries(new NetworkCallback<Countries>() {
+            CountriesService.getCountries(new NetworkCallback<Countries>() {
                 @Override
                 public void onSuccess(Countries result) {
                     countries = result;
