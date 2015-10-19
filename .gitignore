@@ -7,3 +7,4 @@
 /app/app-release.apk
 /app/manifest-merger-release-report.txt
 /build/
+app/app.iml
