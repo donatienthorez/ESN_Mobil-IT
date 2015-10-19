@@ -1,47 +1,39 @@
 package org.esn.mobilit.fragments;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 
+import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.fragments.Satellite.ListFragment;
 import org.esn.mobilit.fragments.Survival.SurvivalFragment;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.models.SurvivalGuide;
+import org.esn.mobilit.services.FeedService;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
 import java.util.ArrayList;
 
-public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
+public class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
 
     int count;
-    RSSFeed feedEvents, feedNews, feedPartners;
     Section section;
-    SurvivalGuide survivalGuide;
     ArrayList<String> tabs;
-    Context context;
+    FeedService feedService;
+    RSSFeed feedEvents, feedNews, feedPartners;
+    SurvivalGuide survivalGuide;
 
-    public MyFragmentPagerAdapter(FragmentManager fm, int count, Context context) {
+    public FragmentPagerAdapter(FragmentManager fm, int count) {
         super(fm);
         this.count   = count;
         this.tabs    = new ArrayList<String>();
-        this.context = context;
-        this.section = (Section) Utils.getObjectFromCache(context, "section");
-    }
+        this.section = (Section) Utils.getObjectFromCache(MobilITApplication.getContext(), "section");
+        this.feedService = FeedService.getInstance();
+        this.feedEvents = feedService.getFeedEvents();
+        this.feedNews = feedService.getFeedNews();
+        this.feedPartners = feedService.getFeedPartners();
+        this.survivalGuide = feedService.getSurvivalguide();
 
-    public void setFeedEvents(RSSFeed feedEvents){
-        this.feedEvents = feedEvents;
-    }
-    public void setFeedNews(RSSFeed feedNews){
-        this.feedNews = feedNews;
-    }
-    public void setFeedPartners(RSSFeed feedPartners){
-        this.feedPartners = feedPartners;
-    }
-    public void setSurvivalGuide(SurvivalGuide survivalGuide){
-        this.survivalGuide = survivalGuide;
     }
 
     public void setTabsList(){

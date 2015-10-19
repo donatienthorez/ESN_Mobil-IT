@@ -47,6 +47,16 @@ public class FeedService
         return total;
     }
 
+    public int getTotalTabs(){
+        int totalTabs = 0;
+        if (feedEvents.getItemCount() > 0) totalTabs++;
+        if (feedNews.getItemCount() > 0) totalTabs++;
+        if (feedPartners.getItemCount() > 0) totalTabs++;
+        if (survivalguide.getCategories().size() > 0) totalTabs++;
+
+        return totalTabs;
+    }
+
 
     public RSSFeed getFeedEvents() {
         return feedEvents;

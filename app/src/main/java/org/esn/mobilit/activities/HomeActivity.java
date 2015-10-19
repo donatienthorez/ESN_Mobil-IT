@@ -2,7 +2,6 @@ package org.esn.mobilit.activities;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,11 +11,12 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.widget.ListView;
 
+import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
-import org.esn.mobilit.fragments.MyFragmentPagerAdapter;
+import org.esn.mobilit.fragments.FragmentPagerAdapter;
 import org.esn.mobilit.fragments.Satellite.ListFragment.ListFragmentItemClickListener;
 import org.esn.mobilit.models.Section;
-import org.esn.mobilit.models.SurvivalGuide;
+import org.esn.mobilit.services.FeedService;
 import org.esn.mobilit.services.GCMService;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.image.InternalStorage;
@@ -25,12 +25,11 @@ import org.esn.mobilit.utils.parser.RSSFeed;
 public class HomeActivity extends FragmentActivity implements ActionBar.TabListener, ListFragmentItemClickListener {
 
     private static final String TAG = HomeActivity.class.getSimpleName();
-    private Context homeActivityContext;
 
     ViewPager myPager;
-    MyFragmentPagerAdapter myAdapter;
-    RSSFeed feedEvents, feedNews, feedPartners;
-    SurvivalGuide survivalGuide;
+    FragmentPagerAdapter myAdapter;
+
+    FeedService feedService;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,40 +37,22 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         //Change Layout
         setContentView(R.layout.activity_main);
 
-        // Save context
-        homeActivityContext = getApplicationContext();
-
-        // Get feed from cache
-        feedEvents = (RSSFeed) getObjectFromCache("feedEvents");
-        feedNews = (RSSFeed) getObjectFromCache("feedNews");
-        feedPartners = (RSSFeed) getObjectFromCache("feedPartners");
-        survivalGuide = (SurvivalGuide) getObjectFromCache("survivalGuide");
-
-        //Count numbers of available tabs
-        int totalTabs = 0;
-        if (feedEvents.getItemCount() > 0) totalTabs++;
-        if (feedNews.getItemCount() > 0) totalTabs++;
-        if (feedPartners.getItemCount() > 0) totalTabs++;
-        if (survivalGuide.getCategories().size() > 0) totalTabs++;
+        feedService = FeedService.getInstance();
+        int totalTabs = feedService.getTotalTabs();
 
         try{
-            Section section = (Section) Utils.getObjectFromCache(getApplicationContext(),"section");
+            Section section = (Section) Utils.getObjectFromCache(getApplicationContext(), "section");
             if (section != null) totalTabs++;
         } catch (NullPointerException e){
             Log.d(TAG, e.toString());
         }
 
         //Init FragmentPagerAdapter
-        MyFragmentPagerAdapter fpa = new MyFragmentPagerAdapter(
+        FragmentPagerAdapter fpa = new FragmentPagerAdapter(
                 getSupportFragmentManager(),
-                totalTabs,
-                this.getApplicationContext()
+                totalTabs
         );
 
-        fpa.setFeedEvents(feedEvents);
-        fpa.setFeedNews(feedNews);
-        fpa.setFeedPartners(feedPartners);
-        fpa.setSurvivalGuide(survivalGuide);
         fpa.setTabsList();
         myAdapter = fpa;
 
@@ -102,28 +83,28 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
     private void initTabs(){
-        if (feedEvents.getItemCount() > 0) {
+        if (feedService.getFeedEvents().getItemCount() > 0) {
             ActionBar.Tab tabEvent = getActionBar().newTab();
             tabEvent.setText(getResources().getString(R.string.title_events));
             tabEvent.setTabListener(this);
             getActionBar().addTab(tabEvent);
         }
 
-        if (feedNews.getItemCount() > 0){
+        if (feedService.getFeedNews().getItemCount() > 0){
             ActionBar.Tab tabNews = getActionBar().newTab();
             tabNews.setText(getResources().getString(R.string.title_news));
             tabNews.setTabListener(this);
             getActionBar().addTab(tabNews);
         }
 
-        if (feedPartners.getItemCount() > 0){
+        if (feedService.getFeedPartners().getItemCount() > 0){
             ActionBar.Tab tabPartners = getActionBar().newTab();
             tabPartners.setText(getResources().getString(R.string.title_partners));
             tabPartners.setTabListener(this);
             getActionBar().addTab(tabPartners);
         }
 
-        if (survivalGuide.getCategories().size() > 0){
+        if (feedService.getSurvivalguide().getCategories().size() > 0){
             ActionBar.Tab tabSurvivalGuide = getActionBar().newTab();
             tabSurvivalGuide.setText(getResources().getString(R.string.title_survivalguide));
             tabSurvivalGuide.setTabListener(this);
@@ -151,17 +132,17 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         int pos = -1;
         RSSFeed currentfeed = null;
         ListView lv = null;
-        if (feedEvents.getPositionFromTitle(pushMsg) > 0) {
-            pos = feedEvents.getPositionFromTitle(pushMsg);
-            currentfeed = feedEvents;
+        if (feedService.getFeedEvents().getPositionFromTitle(pushMsg) > 0) {
+            pos = feedService.getFeedEvents().getPositionFromTitle(pushMsg);
+            currentfeed = feedService.getFeedEvents();
         }
-        if (feedNews.getPositionFromTitle(pushMsg) > 0) {
-            pos = feedNews.getPositionFromTitle(pushMsg);
-            currentfeed = feedNews;
+        if (feedService.getFeedNews().getPositionFromTitle(pushMsg) > 0) {
+            pos = feedService.getFeedNews().getPositionFromTitle(pushMsg);
+            currentfeed = feedService.getFeedNews();
         }
-        if (feedPartners.getPositionFromTitle(pushMsg) > 0) {
-            pos = feedPartners.getPositionFromTitle(pushMsg);
-            currentfeed = feedPartners;
+        if (feedService.getFeedPartners().getPositionFromTitle(pushMsg) > 0) {
+            pos = feedService.getFeedPartners().getPositionFromTitle(pushMsg);
+            currentfeed = feedService.getFeedPartners();
         }
 
         if (currentfeed != null && pos > 0) {
@@ -186,7 +167,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         Object o = null;
         key = getDefaults("CODE_SECTION") + "_" + key;
         try {
-            o = InternalStorage.readObject(homeActivityContext, key);
+            o = InternalStorage.readObject(MobilITApplication.getContext(), key);
         } catch (Exception e) {
             Log.d(TAG, "Exception getobject: " + e);
         }
