@@ -27,16 +27,19 @@ import org.esn.mobilit.utils.firstlaunch.SpinnerAdapter;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit.RetrofitError;
 
 public class FirstLaunchActivity extends Activity {
+
     private static final String TAG = FirstLaunchActivity.class.getSimpleName();
 
     //Layout
-    private LinearLayout spinnersLayout;
-    private Button startButton;
-    private TextView textView;
-    private ProgressBar progressBar;
+    @Bind(R.id.spinnersLayout) private LinearLayout spinnersLayout;
+    @Bind(R.id.startButton)    private Button startButton;
+    @Bind(R.id.chooseCountry)        private TextView textView;
+    @Bind(R.id.progressBar)     private ProgressBar progressBar;
 
     // Attributes for spinnerCountries
     private Countries countries;
@@ -51,6 +54,7 @@ public class FirstLaunchActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_firstlaunch);
+
         initContent();
 
         if (Utils.isConnected(this)){
@@ -70,16 +74,14 @@ public class FirstLaunchActivity extends Activity {
     }
 
     private void initContent(){
-        startButton = (Button) findViewById(R.id.start_button);
+        // Load Butterknife
+        ButterKnife.bind(this);
+
         startButton.setEnabled(false);
         startButton.setVisibility(View.INVISIBLE);
-        progressBar = ((ProgressBar)findViewById (R.id.progressBar));
         progressBar.setVisibility(View.VISIBLE);
 
-        spinnersLayout = (LinearLayout) findViewById(R.id.spinners_layout);
         spinnerCountries = new Spinner(this);
-
-        textView    = (TextView) findViewById(R.id.chooseyourcountry);
 
         //Set text color
         SpannableStringBuilder text = new SpannableStringBuilder();
