@@ -1,4 +1,4 @@
-package org.esn.mobilit.utils.firstlaunch;
+package org.esn.mobilit.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,7 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.NetworkCallback;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Countries;
@@ -24,6 +23,7 @@ import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.CountriesService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
+import org.esn.mobilit.utils.firstlaunch.SpinnerAdapter;
 
 import java.util.ArrayList;
 
