@@ -86,12 +86,16 @@ public class CountriesService {
                 countries = result;
                 Utils.saveObjectToCache(MobilITApplication.getContext(), "countries", countries);
                 Utils.setDefaults(MobilITApplication.getContext(), "revision", countries.getRevision());
-                callback.onSuccess(countries);
+                if(callback != null) {
+                    callback.onSuccess(countries);
+                }
             }
 
             @Override
             public void failure(RetrofitError error) {
-                callback.onFailure(error);
+                if(callback != null) {
+                    callback.onFailure(error);
+                }
             }
         });
     }

@@ -38,10 +38,10 @@ public class FirstLaunchActivity extends Activity {
     private static final String TAG = FirstLaunchActivity.class.getSimpleName();
 
     //Layout
-    @Bind(R.id.spinnersLayout) private LinearLayout spinnersLayout;
-    @Bind(R.id.startButton)    private Button startButton;
-    @Bind(R.id.chooseCountry)        private TextView textView;
-    @Bind(R.id.progressBar)     private ProgressBar progressBar;
+    @Bind(R.id.spinnersLayout) public LinearLayout spinnersLayout;
+    @Bind(R.id.startButton)    public Button startButton;
+    @Bind(R.id.chooseCountry)  public TextView textView;
+    @Bind(R.id.progressBar)    public ProgressBar progressBar;
 
     // Attributes for spinnerCountries
     private Country currentCountry;
