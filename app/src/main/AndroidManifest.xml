@@ -53,7 +53,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".utils.firstlaunch.FirstLaunchActivity"
+            android:name=".activities.FirstLaunchActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity

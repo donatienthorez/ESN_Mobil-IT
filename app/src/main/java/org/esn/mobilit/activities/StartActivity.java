@@ -10,7 +10,6 @@ import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
 
 import org.esn.mobilit.utils.ApplicationConstants;
-import org.esn.mobilit.utils.firstlaunch.FirstLaunchActivity;
 
 public class StartActivity extends Activity
 {
