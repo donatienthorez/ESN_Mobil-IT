@@ -147,7 +147,6 @@ public class FirstLaunchActivity extends Activity {
         datas.add(getResources().getString(R.string.selectyoursection));
         for(Section section : currentCountry.getSections()){
             datas.add(section.getName());
-            Log.d("section ",section.getName());
         }
 
         spinnerSections.setSelection(0);
@@ -157,7 +156,6 @@ public class FirstLaunchActivity extends Activity {
                     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
                         if (position != 0) {
                             currentSection = currentCountry.getSections().get(position-1);
-                            Log.d(TAG, "currentSection selected is " + currentCountry.getSections().get(position-1).getName());
                             startButton.setEnabled(true);
                             startButton.setVisibility(View.VISIBLE);
                         }
