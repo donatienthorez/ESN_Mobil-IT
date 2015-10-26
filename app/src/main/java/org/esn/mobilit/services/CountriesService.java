@@ -38,6 +38,10 @@ public class CountriesService {
         void getCountries(@Path("revision") String revision, Callback<Countries> callback);
     }
 
+    public static Countries getCountries(){
+        getCountries(null);
+        return countries;
+    }
 
     public static void getCountries(final NetworkCallback<Countries> callback) {
         RevisionService.getRevision(new NetworkCallback<String>() {

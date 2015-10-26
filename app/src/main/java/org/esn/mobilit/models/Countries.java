@@ -28,6 +28,10 @@ public class Countries implements Serializable{
         return countries;
     }
 
+    public Country getCountry(int pos) {
+        return countries.get(pos);
+    }
+
     public void setCountries(ArrayList<Country> countries) {
         this.countries = countries;
     }

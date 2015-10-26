@@ -50,11 +50,11 @@ public class Country implements Serializable{
         this.url = url;
     }
 
-    public String getCode_country() {
+    public String getCodeCountry() {
         return code_country;
     }
 
-    public void setCode_country(String code_country) {
+    public void setCodeCountry(String code_country) {
         this.code_country = code_country;
     }
 

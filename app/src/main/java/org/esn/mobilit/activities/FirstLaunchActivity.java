@@ -19,6 +19,7 @@ import org.esn.mobilit.NetworkCallback;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Countries;
 import org.esn.mobilit.models.Country;
+import org.esn.mobilit.models.RevisionList;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.CountriesService;
 import org.esn.mobilit.utils.ApplicationConstants;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class FirstLaunchActivity extends Activity {
 
@@ -42,7 +44,6 @@ public class FirstLaunchActivity extends Activity {
     @Bind(R.id.progressBar)     private ProgressBar progressBar;
 
     // Attributes for spinnerCountries
-    private Countries countries;
     private Country currentCountry;
     private Section currentSection;
 
@@ -61,7 +62,6 @@ public class FirstLaunchActivity extends Activity {
             CountriesService.getCountries(new NetworkCallback<Countries>() {
                 @Override
                 public void onSuccess(Countries result) {
-                    countries = result;
                     initCountriesSpinner();
                 }
 
@@ -87,18 +87,20 @@ public class FirstLaunchActivity extends Activity {
         SpannableStringBuilder text = new SpannableStringBuilder();
         text.append(getResources().getString(R.string.chooseyour) + " "); // Choose your
 
+        ForegroundColorSpan blue = new ForegroundColorSpan(ApplicationConstants.ESNBlueRGB);
+
         SpannableString countrySpan = new SpannableString(getResources().getString(R.string.country));
-        countrySpan.setSpan(new ForegroundColorSpan(ApplicationConstants.ESNBlueRGB), 0, countrySpan.length(), 0);
+        countrySpan.setSpan(blue, 0, countrySpan.length(), 0);
         text.append(countrySpan); // Choose your country
         text.append(", ");// Choose your country ,
 
         SpannableString cityspan = new SpannableString(getResources().getString(R.string.city));
-        cityspan.setSpan(new ForegroundColorSpan(ApplicationConstants.ESNBlueRGB), 0, cityspan.length(), 0);
+        cityspan.setSpan(blue, 0, cityspan.length(), 0);
         text.append(cityspan + " "); // Choose your country, city
         text.append(getResources().getString(R.string.and) + " ");// Choose your country ,city and
 
         SpannableString esnSectionSpan = new SpannableString(getResources().getString(R.string.esnsection));
-        esnSectionSpan.setSpan(new ForegroundColorSpan(ApplicationConstants.ESNBlueRGB), 0, esnSectionSpan.length(), 0);
+        esnSectionSpan.setSpan(blue, 0, esnSectionSpan.length(), 0);
         text.append(esnSectionSpan); // Choose your country, city and ESN Section
         text.append('.');// Choose your country ,city and ESN Section.
 
@@ -110,18 +112,17 @@ public class FirstLaunchActivity extends Activity {
 
         //Add dummy string
         datas.add(getResources().getString(R.string.selectyourcountry));
-        for(Country country : countries.getCountries()){
+        for(Country country : CountriesService.getCountries().getCountries()){
             datas.add(country.getName());
         }
 
         spinnerCountries.setSelection(0);
-        spinnerCountries.setAdapter(new SpinnerAdapter(FirstLaunchActivity.this,datas));
+        spinnerCountries.setAdapter(new SpinnerAdapter(FirstLaunchActivity.this, datas));
         spinnerCountries.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
                         if (position != 0) {
-                            currentCountry = countries.getCountries().get(position-1);
-                            Log.d(TAG, "currentCountry selected is " + currentCountry.getName());
+                            currentCountry = CountriesService.getCountries().getCountry(position - 1);
                             initSectionsSpinner();
                         }
                     }
@@ -170,7 +171,13 @@ public class FirstLaunchActivity extends Activity {
 
     public void launchHomeActivity(View view){
         //Load new parameters
-        Utils.setDefaults(this, "CODE_COUNTRY", countries.getCountryFromSection(currentSection).getCode_country());
+        Utils.setDefaults(
+                this,
+                "CODE_COUNTRY",
+                CountriesService.getCountries()
+                                .getCountryFromSection(currentSection)
+                                .getCodeCountry()
+        );
         Utils.setDefaults(this, "CODE_SECTION", currentSection.getCode_section());
         Utils.setDefaults(this, "SECTION_WEBSITE", currentSection.getWebsite());
         Utils.saveObjectToCache(this, "country", currentCountry);
