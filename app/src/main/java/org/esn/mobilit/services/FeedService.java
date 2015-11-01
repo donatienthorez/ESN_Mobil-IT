@@ -39,10 +39,10 @@ public class FeedService
 
     public int getTotalItems(){
         int total = 0;
-        total += FeedService.getInstance().getFeedEvents().getItemCount();
-        total += FeedService.getInstance().getFeedNews().getItemCount();
-        total += FeedService.getInstance().getFeedPartners().getItemCount();
-        total += FeedService.getInstance().getSurvivalguide().getCategories().size();
+        total += feedEvents.getItemCount();
+        total += feedNews.getItemCount();
+        total += feedPartners.getItemCount();
+        total += survivalguide.getCategories().size();
 
         return total;
     }

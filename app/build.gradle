@@ -16,10 +16,10 @@ repositories {
 
 android {
     compileSdkVersion 16
-    buildToolsVersion "20.0.0"
+    buildToolsVersion "21.0.0"
 
     defaultConfig {
-        applicationId "org.esn.mobilit"
+        applicationId "org.esn.mobilIT"
         minSdkVersion 14
         targetSdkVersion 20
     }
@@ -43,5 +43,10 @@ dependencies {
         transitive = true;
     }
     compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile('com.squareup.retrofit:converter-simplexml:1.9.0') {
+        exclude group: 'xpp3', module: 'xpp3'
+        exclude group:'stax', module:'stax-api'
+        exclude group:'stax', module:'stax'
+    }
     compile 'com.google.code.gson:gson:2.2.4'
 }

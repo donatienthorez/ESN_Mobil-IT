@@ -5,14 +5,18 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.esn.mobilit.NetworkCallback;
 import org.esn.mobilit.R;
+import org.esn.mobilit.models.RSS.RSS;
 import org.esn.mobilit.services.GCMService;
 import org.esn.mobilit.services.LauncherService;
+import org.esn.mobilit.services.NewsService;
 import org.esn.mobilit.tasks.feed.XMLFeedEventsTask;
 import org.esn.mobilit.tasks.feed.XMLFeedNewsTask;
 import org.esn.mobilit.tasks.feed.XMLFeedPartnersTask;
@@ -25,6 +29,7 @@ import org.esn.mobilit.utils.parser.RSSFeed;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit.RetrofitError;
 
 public class SplashActivity extends Activity {
 
@@ -77,7 +82,9 @@ public class SplashActivity extends Activity {
                 textView.setText(getResources().getString(R.string.emptycache));
                 progressBar.setVisibility(View.INVISIBLE);
             } else {
-                launchHomeActivity();
+                if(launcherService.launchHomeActivity()) {
+                    launchHomeActivity();
+                }
             }
             buttonRetry.setVisibility(View.VISIBLE);
             buttonSection.setVisibility(View.VISIBLE);
@@ -89,7 +96,24 @@ public class SplashActivity extends Activity {
 
             launcherService.resetCount();
             gcmService.pushForGcm(this, callbackGCMConstructor());
-            new XMLFeedNewsTask(callbackFeedConstructor(R.string.load_news_end)).execute();
+
+            NewsService.getNews(new NetworkCallback<RSS>() {
+                @Override
+                public void onSuccess(RSS result) {
+                    textView.setText(getResources().getString(R.string.load_news_end));
+                    launcherService.incrementCount();
+                    if(launcherService.launchHomeActivity()) {
+                        launchHomeActivity();
+                    }
+                }
+
+                @Override
+                public void onFailure(RetrofitError error) {
+                    System.out.println(error);
+                }
+            });
+
+//            new XMLFeedNewsTask(callbackFeedConstructor(R.string.load_news_end)).execute();
             new XMLFeedEventsTask(callbackFeedConstructor(R.string.load_events_end)).execute();
             new XMLFeedPartnersTask(callbackFeedConstructor(R.string.load_partners_end)).execute();
             new XMLSurvivalGuideTask(callbackSurvivalGuideConstructor(R.string.load_survival_end)).execute();
@@ -106,6 +130,7 @@ public class SplashActivity extends Activity {
         return new Callback() {
             @Override
             public void onSuccess(Object result) {
+                System.out.println(getResources().getString(stringId, ((RSSFeed) result).getItemCount()));
                 textView.setText(getResources().getString(stringId, ((RSSFeed) result).getItemCount()));
                 launcherService.incrementCount();
                 if(launcherService.launchHomeActivity()) {
@@ -123,6 +148,7 @@ public class SplashActivity extends Activity {
         return new Callback() {
             @Override
             public void onSuccess(Object result) {
+                System.out.println(getResources().getString(stringId));
                 textView.setText(getResources().getString(stringId));
                 launcherService.incrementCount();
                 if(launcherService.launchHomeActivity()) {
@@ -141,6 +167,7 @@ public class SplashActivity extends Activity {
         return new Callback() {
             @Override
             public void onSuccess(Object result) {
+                System.out.println("GCM OK");
                 launcherService.incrementCount();
                 if(launcherService.launchHomeActivity()) {
                     launchHomeActivity();
@@ -149,6 +176,7 @@ public class SplashActivity extends Activity {
 
             @Override
             public void onFailure(Exception ex) {
+                System.out.println("GCM FAIL");
                 //TODO
             }
         };
