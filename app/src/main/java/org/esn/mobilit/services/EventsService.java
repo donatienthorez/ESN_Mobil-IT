@@ -16,17 +16,17 @@ import retrofit.client.Response;
 import retrofit.converter.SimpleXMLConverter;
 import retrofit.http.GET;
 
-public class NewsService {
+public class EventsService {
 
-    private static NewsService instance;
-    private static RSS news;
-    private static final String TAG = "NewsService";
+    private static EventsService instance;
+    private static RSS events;
+    private static final String TAG = "EventsService";
 
-    private NewsService() {
-        instance = new NewsService();
+    private EventsService() {
+        instance = new EventsService();
     }
 
-    public static NewsService getInstance() {
+    public static EventsService getInstance() {
         return instance;
     }
 
@@ -35,33 +35,33 @@ public class NewsService {
             .setConverter(new SimpleXMLConverter())
             .build();
 
-    private interface NewsServiceInterface{
-        @GET(ApplicationConstants.NEWS_PATH + ApplicationConstants.FEED_PATH)
-        void getNews(Callback<RSS> callback);
+    private interface EventsServiceInterface{
+        @GET(ApplicationConstants.EVENTS_PATH + ApplicationConstants.FEED_PATH)
+        void getEvents(Callback<RSS> callback);
     }
 
-    public static RSS getNews(final NetworkCallback<RSS> callback) {
+    public static RSS getEvents(final NetworkCallback<RSS> callback) {
         try{
-            initNews(callback);
+            initEvents(callback);
         } catch (ParseException e){
             e.printStackTrace();
         }
-        return news;
+        return events;
     }
 
-    public static void initNews(final NetworkCallback<RSS> callback) throws ParseException{
-        NewsServiceInterface newService = restAdapter.create(NewsServiceInterface.class);
-        newService.getNews(new Callback<RSS>() {
+    public static void initEvents(final NetworkCallback<RSS> callback) throws ParseException{
+        EventsServiceInterface eventsService = restAdapter.create(EventsServiceInterface.class);
+        eventsService.getEvents(new Callback<RSS>() {
             @Override
-            public void success(RSS news, Response response) {
-                news.getRSSChannel().moveImage();
-                FeedService.getInstance().setFeedNews(new RSSFeed(news.getRSSChannel().getList()));
+            public void success(RSS events, Response response) {
+                events.getRSSChannel().moveImage();
+                FeedService.getInstance().setFeedEvents(new RSSFeed(events.getRSSChannel().getList()));
                 Utils.saveObjectToCache(
                         MobilITApplication.getContext(),
-                        "feedNews",
-                        new RSSFeed(news.getRSSChannel().getList())
+                        "feedEvents",
+                        new RSSFeed(events.getRSSChannel().getList())
                 );
-                callback.onSuccess(news);
+                callback.onSuccess(events);
             }
 
             @Override

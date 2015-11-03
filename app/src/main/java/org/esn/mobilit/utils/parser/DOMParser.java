@@ -125,13 +125,12 @@ public class DOMParser {
 	public static void moveImage(RSSItem item){
         org.jsoup.nodes.Document docHtml = Jsoup.parse(item.getDescription());
         Elements imgEle = docHtml.select("img");
-        item.setImage(imgEle.first().attr("src"));
+        if(imgEle != null && imgEle.first() != null){
+            item.setImage(imgEle.first().attr("src"));
 
-        //Remove image from description
-        String description = item.getDescription().replace(imgEle.first().toString(), "");
-        item.setDescription(description);
+            //Remove image from description
+            String description = item.getDescription().replace(imgEle.first().toString(), "");
+            item.setDescription(description);
+        }
     }
-
-    //private String getText()
-
 }

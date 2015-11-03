@@ -39,7 +39,6 @@ public class RSSItem implements Serializable {
 		this.setDate(null);
 		this.setImage(null);
 		this.setPubDate(null);
-
 	}
 
     public String getPubDate() {

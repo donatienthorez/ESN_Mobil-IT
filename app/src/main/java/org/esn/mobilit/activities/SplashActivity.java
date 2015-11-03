@@ -14,9 +14,11 @@ import android.widget.TextView;
 import org.esn.mobilit.NetworkCallback;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.RSS.RSS;
+import org.esn.mobilit.services.EventsService;
 import org.esn.mobilit.services.GCMService;
 import org.esn.mobilit.services.LauncherService;
 import org.esn.mobilit.services.NewsService;
+import org.esn.mobilit.services.PartnersService;
 import org.esn.mobilit.tasks.feed.XMLFeedEventsTask;
 import org.esn.mobilit.tasks.feed.XMLFeedNewsTask;
 import org.esn.mobilit.tasks.feed.XMLFeedPartnersTask;
@@ -102,20 +104,58 @@ public class SplashActivity extends Activity {
                 public void onSuccess(RSS result) {
                     textView.setText(getResources().getString(R.string.load_news_end));
                     launcherService.incrementCount();
-                    if(launcherService.launchHomeActivity()) {
+                    if (launcherService.launchHomeActivity()) {
                         launchHomeActivity();
                     }
                 }
 
                 @Override
                 public void onFailure(RetrofitError error) {
-                    System.out.println(error);
+                    launcherService.incrementCount();
+                    if (launcherService.launchHomeActivity()) {
+                        launchHomeActivity();
+                    }
                 }
             });
 
-//            new XMLFeedNewsTask(callbackFeedConstructor(R.string.load_news_end)).execute();
-            new XMLFeedEventsTask(callbackFeedConstructor(R.string.load_events_end)).execute();
-            new XMLFeedPartnersTask(callbackFeedConstructor(R.string.load_partners_end)).execute();
+            EventsService.getEvents(new NetworkCallback<RSS>() {
+                @Override
+                public void onSuccess(RSS result) {
+                    textView.setText(getResources().getString(R.string.load_events_end));
+                    launcherService.incrementCount();
+                    if (launcherService.launchHomeActivity()) {
+                        launchHomeActivity();
+                    }
+                }
+
+                @Override
+                public void onFailure(RetrofitError error) {
+                    launcherService.incrementCount();
+                    if (launcherService.launchHomeActivity()) {
+                        launchHomeActivity();
+                    }
+                }
+            });
+
+            PartnersService.getPartners(new NetworkCallback<RSS>() {
+                @Override
+                public void onSuccess(RSS result) {
+                    textView.setText(getResources().getString(R.string.load_partners_end));
+                    launcherService.incrementCount();
+                    if (launcherService.launchHomeActivity()) {
+                        launchHomeActivity();
+                    }
+                }
+
+                @Override
+                public void onFailure(RetrofitError error) {
+                    launcherService.incrementCount();
+                    if (launcherService.launchHomeActivity()) {
+                        launchHomeActivity();
+                    }
+                }
+            });
+
             new XMLSurvivalGuideTask(callbackSurvivalGuideConstructor(R.string.load_survival_end)).execute();
         }
     }
@@ -124,24 +164,6 @@ public class SplashActivity extends Activity {
         textView.setText(R.string.noitems);
         progressBar.setVisibility(View.INVISIBLE);
         buttonRetry.setVisibility(View.VISIBLE);
-    }
-
-    public Callback callbackFeedConstructor(final int stringId){
-        return new Callback() {
-            @Override
-            public void onSuccess(Object result) {
-                System.out.println(getResources().getString(stringId, ((RSSFeed) result).getItemCount()));
-                textView.setText(getResources().getString(stringId, ((RSSFeed) result).getItemCount()));
-                launcherService.incrementCount();
-                if(launcherService.launchHomeActivity()) {
-                    launchHomeActivity();
-                }
-            }
-            @Override
-            public void onFailure(Exception ex) {
-                //TODO
-            }
-        };
     }
 
     public Callback callbackSurvivalGuideConstructor(final int stringId){
@@ -158,7 +180,10 @@ public class SplashActivity extends Activity {
 
             @Override
             public void onFailure(Exception ex) {
-                //TODO
+                launcherService.incrementCount();
+                if(launcherService.launchHomeActivity()) {
+                    launchHomeActivity();
+                }
             }
         };
     }

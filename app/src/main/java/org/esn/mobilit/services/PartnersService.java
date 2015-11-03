@@ -16,17 +16,17 @@ import retrofit.client.Response;
 import retrofit.converter.SimpleXMLConverter;
 import retrofit.http.GET;
 
-public class NewsService {
+public class PartnersService {
 
-    private static NewsService instance;
-    private static RSS news;
+    private static PartnersService instance;
+    private static RSS partners;
     private static final String TAG = "NewsService";
 
-    private NewsService() {
-        instance = new NewsService();
+    private PartnersService() {
+        instance = new PartnersService();
     }
 
-    public static NewsService getInstance() {
+    public static PartnersService getInstance() {
         return instance;
     }
 
@@ -35,33 +35,33 @@ public class NewsService {
             .setConverter(new SimpleXMLConverter())
             .build();
 
-    private interface NewsServiceInterface{
-        @GET(ApplicationConstants.NEWS_PATH + ApplicationConstants.FEED_PATH)
+    private interface PartnersServiceInterface{
+        @GET(ApplicationConstants.PARTNERS_PATH + ApplicationConstants.FEED_PATH)
         void getNews(Callback<RSS> callback);
     }
 
-    public static RSS getNews(final NetworkCallback<RSS> callback) {
+    public static RSS getPartners(final NetworkCallback<RSS> callback) {
         try{
-            initNews(callback);
+            initPartners(callback);
         } catch (ParseException e){
             e.printStackTrace();
         }
-        return news;
+        return partners;
     }
 
-    public static void initNews(final NetworkCallback<RSS> callback) throws ParseException{
-        NewsServiceInterface newService = restAdapter.create(NewsServiceInterface.class);
-        newService.getNews(new Callback<RSS>() {
+    public static void initPartners(final NetworkCallback<RSS> callback) throws ParseException{
+        PartnersServiceInterface partnersService = restAdapter.create(PartnersServiceInterface.class);
+        partnersService.getNews(new Callback<RSS>() {
             @Override
-            public void success(RSS news, Response response) {
-                news.getRSSChannel().moveImage();
-                FeedService.getInstance().setFeedNews(new RSSFeed(news.getRSSChannel().getList()));
+            public void success(RSS partners, Response response) {
+                partners.getRSSChannel().moveImage();
+                FeedService.getInstance().setFeedPartners(new RSSFeed(partners.getRSSChannel().getList()));
                 Utils.saveObjectToCache(
                         MobilITApplication.getContext(),
-                        "feedNews",
-                        new RSSFeed(news.getRSSChannel().getList())
+                        "feedPartners",
+                        new RSSFeed(partners.getRSSChannel().getList())
                 );
-                callback.onSuccess(news);
+                callback.onSuccess(partners);
             }
 
             @Override

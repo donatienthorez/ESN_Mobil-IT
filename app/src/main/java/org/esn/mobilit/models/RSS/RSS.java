@@ -8,7 +8,7 @@ import org.simpleframework.xml.Root;
 public class RSS {
 
     @Element(name = "channel", required= true)
-    public Channel channel;
+    public RSSChannel RSSChannel;
 
     @Attribute(name = "version", required = false)
     public String version;
@@ -19,7 +19,7 @@ public class RSS {
     @Attribute(name = "dc", required = false)
     public String dc;
 
-    public Channel getChannel() {
-        return channel;
+    public RSSChannel getRSSChannel() {
+        return RSSChannel;
     }
 }

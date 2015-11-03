@@ -39,20 +39,20 @@ public class FeedService
 
     public int getTotalItems(){
         int total = 0;
-        total += feedEvents.getItemCount();
-        total += feedNews.getItemCount();
-        total += feedPartners.getItemCount();
-        total += survivalguide.getCategories().size();
+        total += feedEvents != null? feedEvents.getItemCount() : 0;
+        total += feedNews != null ? feedNews.getItemCount() : 0;
+        total += feedPartners != null ? feedPartners.getItemCount() : 0;
+        total += survivalguide != null ? survivalguide.getCategories().size() : 0;
 
         return total;
     }
 
     public int getTotalTabs(){
         int totalTabs = 0;
-        if (feedEvents.getItemCount() > 0) totalTabs++;
-        if (feedNews.getItemCount() > 0) totalTabs++;
-        if (feedPartners.getItemCount() > 0) totalTabs++;
-        if (survivalguide.getCategories().size() > 0) totalTabs++;
+        if (feedEvents != null && feedEvents.getItemCount() > 0) totalTabs++;
+        if (feedNews != null && feedNews.getItemCount() > 0) totalTabs++;
+        if (feedPartners != null && feedPartners.getItemCount() > 0) totalTabs++;
+        if (survivalguide != null && survivalguide.getCategories().size() > 0) totalTabs++;
 
         return totalTabs;
     }

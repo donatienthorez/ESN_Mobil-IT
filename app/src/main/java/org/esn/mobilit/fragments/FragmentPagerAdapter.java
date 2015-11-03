@@ -37,10 +37,10 @@ public class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAd
     }
 
     public void setTabsList(){
-        if (feedEvents.getItemCount() > 0 ) tabs.add("Events");
-        if (feedNews.getItemCount() > 0 ) tabs.add("News");
-        if (feedPartners.getItemCount() > 0 ) tabs.add("Partners");
-        if (survivalGuide.getCategories().size() > 0 ) tabs.add("SurvivalGuide");
+        if (feedEvents != null && feedEvents.getItemCount() > 0 ) tabs.add("Events");
+        if (feedNews != null && feedNews.getItemCount() > 0 ) tabs.add("News");
+        if (feedPartners != null && feedPartners.getItemCount() > 0 ) tabs.add("Partners");
+        if (survivalGuide != null && survivalGuide.getCategories().size() > 0 ) tabs.add("SurvivalGuide");
         if (section != null) tabs.add("About");
     }
 
@@ -64,19 +64,19 @@ public class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAd
 
         switch (position) {
             case 0: //Events
-                if (feedEvents.getItemCount() > 0 && tabs.contains("Events")) {
+                if (feedEvents != null && feedEvents.getItemCount() > 0 && tabs.contains("Events")) {
                     tabs.remove("Events");
                     return events;
                 }
-                else if (feedNews.getItemCount() > 0 && tabs.contains("News")) {
+                else if (feedNews != null && feedNews.getItemCount() > 0 && tabs.contains("News")) {
                     tabs.remove("News");
                     return news;
                 }
-                else if (feedPartners.getItemCount() > 0 && tabs.contains("Partners")) {
+                else if (feedPartners != null && feedPartners.getItemCount() > 0 && tabs.contains("Partners")) {
                     tabs.remove("Partners");
                     return partners;
                 }
-                else if (survivalGuide.getCategories().size() > 0 && tabs.contains("SurvivalGuide")){
+                else if (survivalGuide != null && survivalGuide.getCategories().size() > 0 && tabs.contains("SurvivalGuide")){
                     tabs.remove("SurvivalGuide");
                     return survival;
                 }
@@ -85,15 +85,15 @@ public class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAd
                     return about;
                 }
             case 1: //News
-                if (feedNews.getItemCount() > 0 && tabs.contains("News")) {
+                if (feedNews != null && feedNews.getItemCount() > 0 && tabs.contains("News")) {
                     tabs.remove("News");
                     return news;
                 }
-                else if (feedPartners.getItemCount() > 0 && tabs.contains("Partners")) {
+                else if (feedPartners != null && feedPartners.getItemCount() > 0 && tabs.contains("Partners")) {
                     tabs.remove("Partners");
                     return partners;
                 }
-                else if (survivalGuide.getCategories().size() > 0 && tabs.contains("SurvivalGuide")){
+                else if (survivalGuide != null && survivalGuide.getCategories().size() > 0 && tabs.contains("SurvivalGuide")){
                     tabs.remove("SurvivalGuide");
                     return survival;
                 }
@@ -102,11 +102,11 @@ public class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAd
                     return about;
                 }
             case 2: //Partners
-                if (feedPartners.getItemCount() > 0 && tabs.contains("Partners")) {
+                if (feedPartners != null && feedPartners.getItemCount() > 0 && tabs.contains("Partners")) {
                     tabs.remove("Partners");
                     return partners;
                 }
-                else if (survivalGuide.getCategories().size() > 0 && tabs.contains("SurvivalGuide")){
+                else if (survivalGuide != null && survivalGuide.getCategories().size() > 0 && tabs.contains("SurvivalGuide")){
                     tabs.remove("SurvivalGuide");
                     return survival;
                 }

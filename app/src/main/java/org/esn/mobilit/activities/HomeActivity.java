@@ -2,6 +2,7 @@ package org.esn.mobilit.activities;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -83,28 +84,28 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
     private void initTabs(){
-        if (feedService.getFeedEvents().getItemCount() > 0) {
+        if (feedService.getFeedEvents() != null && feedService.getFeedEvents().getItemCount() > 0) {
             ActionBar.Tab tabEvent = getActionBar().newTab();
             tabEvent.setText(getResources().getString(R.string.title_events));
             tabEvent.setTabListener(this);
             getActionBar().addTab(tabEvent);
         }
 
-        if (feedService.getFeedNews().getItemCount() > 0){
+        if (feedService.getFeedNews() != null && feedService.getFeedNews().getItemCount() > 0){
             ActionBar.Tab tabNews = getActionBar().newTab();
             tabNews.setText(getResources().getString(R.string.title_news));
             tabNews.setTabListener(this);
             getActionBar().addTab(tabNews);
         }
 
-        if (feedService.getFeedPartners().getItemCount() > 0){
+        if (feedService.getFeedPartners() != null && feedService.getFeedPartners().getItemCount() > 0){
             ActionBar.Tab tabPartners = getActionBar().newTab();
             tabPartners.setText(getResources().getString(R.string.title_partners));
             tabPartners.setTabListener(this);
             getActionBar().addTab(tabPartners);
         }
 
-        if (feedService.getSurvivalguide().getCategories().size() > 0){
+        if (feedService.getSurvivalguide() != null && feedService.getSurvivalguide().getCategories().size() > 0){
             ActionBar.Tab tabSurvivalGuide = getActionBar().newTab();
             tabSurvivalGuide.setText(getResources().getString(R.string.title_survivalguide));
             tabSurvivalGuide.setTabListener(this);
@@ -181,17 +182,17 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
     @Override
-    public void onTabSelected(Tab tab, android.app.FragmentTransaction ft) {
+    public void onTabSelected(Tab tab, FragmentTransaction ft) {
         myPager.setCurrentItem(tab.getPosition());
     }
 
     @Override
-    public void onTabReselected(Tab tab, android.app.FragmentTransaction ft) {
+    public void onTabReselected(Tab tab, FragmentTransaction ft) {
         // TODO Auto-generated method stub
     }
 
     @Override
-    public void onTabUnselected(Tab tab, android.app.FragmentTransaction ft) {
+    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
         // TODO Auto-generated method stub
     }
 
@@ -202,8 +203,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
         /** Setting data ( the clicked item's position ) to this intent */
         Bundle b = new Bundle();
-        b.putSerializable("feed", currentfeed);
-        b.putInt("pos", position);
+        b.putSerializable("feed", currentfeed.getItem(position));
         intent.putExtras(b);
 
         /** Starting the activity by passing the implicit intent */

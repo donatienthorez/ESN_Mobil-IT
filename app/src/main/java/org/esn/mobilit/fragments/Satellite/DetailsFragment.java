@@ -12,19 +12,18 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import org.esn.mobilit.R;
+import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.utils.image.ImageLoader;
 import org.esn.mobilit.utils.parser.RSSFeed;
 
 public class DetailsFragment extends Fragment {
 
-    private int fPos;
-    RSSFeed fFeed;
+    RSSItem fFeed;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        fFeed = (RSSFeed) getArguments().getSerializable("feed");
-        fPos = getArguments().getInt("pos");
+        fFeed = (RSSItem) getArguments().getSerializable("feed");
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,13 +42,18 @@ public class DetailsFragment extends Fragment {
         Bundle b = getArguments();
 
         // Set the views
-        title.setText(fFeed.getItem(fPos).getTitle());
+        title.setText(fFeed.getTitle());
 
         ImageLoader imageLoader = new ImageLoader(getActivity().getApplicationContext());
-        imageLoader.DisplayImage(fFeed.getItem(fPos).getImage(), imageView);
+        imageLoader.DisplayImage(fFeed.getImage(), imageView);
 
-        desc.loadDataWithBaseURL("http://www.androidcentral.com/", fFeed
-                .getItem(fPos).getDescription(), "text/html", "UTF-8", null);
+        desc.loadDataWithBaseURL("" +
+                "http://www.androidcentral.com/",
+                fFeed.getDescription(),
+                "text/html",
+                "UTF-8",
+                null
+        );
 
         // Enable the vertical fading edge (by default it is disabled)
         ScrollView sv = (ScrollView) view.findViewById(R.id.sv);
