@@ -99,7 +99,6 @@ public class SplashActivity extends Activity {
                 @Override
                 public void onSuccess(RSS result) {
                     textView.setText(getResources().getString(R.string.load_news_end));
-                    System.out.println("news OK");
                     launcherService.incrementCount();
                     if (launcherService.launchHomeActivity()) {
                         launchHomeActivity();
@@ -108,7 +107,6 @@ public class SplashActivity extends Activity {
 
                 @Override
                 public void onFailure(RetrofitError error) {
-                    System.out.println("news FAIL");
                     launcherService.incrementCount();
                     if (launcherService.launchHomeActivity()) {
                         launchHomeActivity();
@@ -120,7 +118,6 @@ public class SplashActivity extends Activity {
                 @Override
                 public void onSuccess(RSS result) {
                     textView.setText(getResources().getString(R.string.load_events_end));
-                    System.out.println("events OK");
                     launcherService.incrementCount();
                     if (launcherService.launchHomeActivity()) {
                         launchHomeActivity();
@@ -129,8 +126,6 @@ public class SplashActivity extends Activity {
 
                 @Override
                 public void onFailure(RetrofitError error) {
-                    System.out.println("events FAIL");
-                    System.out.println(error);
                     launcherService.incrementCount();
                     if (launcherService.launchHomeActivity()) {
                         launchHomeActivity();
@@ -142,7 +137,6 @@ public class SplashActivity extends Activity {
                 @Override
                 public void onSuccess(RSS result) {
                     textView.setText(getResources().getString(R.string.load_partners_end));
-                    System.out.println("partners OK");
 
                     launcherService.incrementCount();
                     if (launcherService.launchHomeActivity()) {
@@ -152,7 +146,6 @@ public class SplashActivity extends Activity {
 
                 @Override
                 public void onFailure(RetrofitError error) {
-                    System.out.println("partners FAIL");
                     launcherService.incrementCount();
                     if (launcherService.launchHomeActivity()) {
                         launchHomeActivity();
@@ -174,7 +167,6 @@ public class SplashActivity extends Activity {
         return new Callback() {
             @Override
             public void onSuccess(Object result) {
-                System.out.println(getResources().getString(stringId));
                 textView.setText(getResources().getString(stringId));
                 launcherService.incrementCount();
                 if(launcherService.launchHomeActivity()) {
@@ -196,7 +188,6 @@ public class SplashActivity extends Activity {
         return new Callback() {
             @Override
             public void onSuccess(Object result) {
-                System.out.println("GCM OK");
                 launcherService.incrementCount();
                 if(launcherService.launchHomeActivity()) {
                     launchHomeActivity();
@@ -205,7 +196,6 @@ public class SplashActivity extends Activity {
 
             @Override
             public void onFailure(Exception ex) {
-                System.out.println("GCM FAIL");
                 //TODO
             }
         };
