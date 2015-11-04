@@ -52,10 +52,6 @@ public class ImageLoader {
         }
     }
 
-    public int getHeight(){
-        return (bitmap.getHeight() > 0) ? bitmap.getHeight() : -1;
-    }
-
     private void queuePhoto(String url, ImageView imageView) {
         PhotoToLoad p = new PhotoToLoad(url, imageView);
         executorService.submit(new PhotosLoader(p));
@@ -196,5 +192,4 @@ public class ImageLoader {
         memoryCache.clear();
         fileCache.clear();
     }
-
 }

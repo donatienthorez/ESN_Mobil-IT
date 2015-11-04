@@ -38,10 +38,11 @@ public class AboutFragment extends android.support.v4.app.Fragment {
 
         logo = (ImageView) view.findViewById(R.id.section_logo);
 
-        if (section.getLogo_url().equalsIgnoreCase(""))
+        if (section.getLogo_url() == null || section.getLogo_url().equalsIgnoreCase("")) {
             new DownloadSectionLogo().execute();
-        else
+        } else {
             imageLoader.DisplayImage(ApplicationConstants.LOGOINSERTER_URL + "assets/img/logos_large/" + section.getLogo_url(), logo);
+        }
 
         TextView name  = (TextView)  view.findViewById(R.id.section_name);
         name.setText(section.getName());

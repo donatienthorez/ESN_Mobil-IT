@@ -1,23 +1,24 @@
 package org.esn.mobilit.utils.parser;
 
+import org.esn.mobilit.models.RSS.RSSItem;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
-public class RSSFeed implements Serializable {
+public class RSSFeedParser implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private int itemcount = 0;
+
 	private List<RSSItem> itemlist;
 
-	public RSSFeed() {
+	public RSSFeedParser() {
 		itemlist = new Vector<RSSItem>(0);
 	}
 
-	public void addItem(RSSItem item) {
-		itemlist.add(item);
-		itemcount++;
-	}
+    public RSSFeedParser(List<RSSItem> itemlist){
+        this.itemlist = itemlist;
+    }
 
 	public RSSItem getItem(int location) {
 		return itemlist.get(location);
@@ -26,8 +27,9 @@ public class RSSFeed implements Serializable {
     public List<RSSItem> getList(){
 		return itemlist;
 	}
+
 	public int getItemCount() {
-		return itemcount;
+		return getList().size();
 	}
 
     public int getPositionFromTitle(String title){

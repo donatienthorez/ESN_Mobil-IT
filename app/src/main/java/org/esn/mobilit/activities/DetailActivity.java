@@ -31,7 +31,6 @@ public class DetailActivity extends FragmentActivity {
         Bundle b = new Bundle();
 
         /** Setting the data to the bundle object from the Intent*/
-        b.putInt("pos", getIntent().getIntExtra("pos", 0));
         b.putSerializable("feed", getIntent().getSerializableExtra("feed"));
 
         /** Setting the bundle object to the fragment */

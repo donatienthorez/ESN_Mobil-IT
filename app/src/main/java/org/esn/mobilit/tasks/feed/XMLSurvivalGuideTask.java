@@ -3,10 +3,10 @@ package org.esn.mobilit.tasks.feed;
 import android.os.AsyncTask;
 
 import org.esn.mobilit.MobilITApplication;
-import org.esn.mobilit.activities.Callback;
+import org.esn.mobilit.utils.callbacks.Callback;
 import org.esn.mobilit.models.SurvivalGuide;
 import org.esn.mobilit.network.JSONfunctions;
-import org.esn.mobilit.services.FeedService;
+import org.esn.mobilit.services.feeds.FeedService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 

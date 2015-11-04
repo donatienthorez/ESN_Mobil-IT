@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
-import org.esn.mobilit.services.GcmIntentService;
+import org.esn.mobilit.services.gcm.GcmIntentService;
 
 public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 

@@ -9,7 +9,6 @@ import android.util.Log;
 
 import org.esn.mobilit.utils.image.InternalStorage;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -87,31 +86,5 @@ public class Utils {
                 conMgr == null || conMgr.getActiveNetworkInfo() == null
                 || !conMgr.getActiveNetworkInfo().isConnected()
                 || !conMgr.getActiveNetworkInfo().isAvailable()) ? false : true;
-    }
-
-    public static String loadCountriesFromAsset(Context context){ return loadJSONFromAsset(context, "countries.json"); }
-
-    private static String loadJSONFromAsset(Context context, String file) {
-        String json = null;
-        try {
-
-            InputStream is = context.getAssets().open(file);
-
-            int size = is.available();
-
-            byte[] buffer = new byte[size];
-
-            is.read(buffer);
-
-            is.close();
-
-            json = new String(buffer, "UTF-8");
-
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
     }
 }

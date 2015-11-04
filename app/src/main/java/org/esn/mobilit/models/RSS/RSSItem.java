@@ -1,16 +1,39 @@
-package org.esn.mobilit.utils.parser;
+package org.esn.mobilit.models.RSS;
+
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 import java.io.Serializable;
 
+@Root(name="item")
 public class RSSItem implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	@Element(name = "title")
 	private String title;
+
+	@Element(name = "description")
 	private String description;
+
+	@Element(name = "link")
     private String link;
+
+	@Element(name = "pubDate")
+	private String pubDate;
+
+	@Element(name = "creator")
+	private String creator;
+
+	@Element(name = "guid")
+	private String guid;
+
+	@Element(name = "comments", required = false)
+	private String comments;
+
 	private String date;
 	private String image;
-    private String pubDate;
+
 
 	public RSSItem(){
 		this.setTitle(null);
@@ -19,7 +42,6 @@ public class RSSItem implements Serializable {
 		this.setDate(null);
 		this.setImage(null);
 		this.setPubDate(null);
-
 	}
 
     public String getPubDate() {
@@ -30,23 +52,23 @@ public class RSSItem implements Serializable {
         this.pubDate = pubDate;
     }
 
-    void setLink(String link) {
+    public void setLink(String link) {
 		this.link = link;
 	}
 
-	void setTitle(String title) {
+	public void setTitle(String title) {
 		this.title = title;
 	}
 
-	void setDescription(String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
-	void setDate(String pubdate) {
+	public void setDate(String pubdate) {
 		date = pubdate;
 	}
 
-	void setImage(String image) {
+	public void setImage(String image) {
 		this.image = image;
 	}
 

@@ -1,4 +1,4 @@
-package org.esn.mobilit.services;
+package org.esn.mobilit.services.gcm;
 
 import android.app.IntentService;
 import android.app.Notification;

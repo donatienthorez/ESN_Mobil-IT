@@ -40,7 +40,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".services.GcmIntentService" />
+        <service android:name=".services.gcm.GcmIntentService" />
 
         <activity
             android:name=".activities.StartActivity"
