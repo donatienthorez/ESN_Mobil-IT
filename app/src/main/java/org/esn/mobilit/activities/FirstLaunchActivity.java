@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -15,23 +14,21 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.esn.mobilit.NetworkCallback;
+import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Countries;
 import org.esn.mobilit.models.Country;
-import org.esn.mobilit.models.RevisionList;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.CountriesService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
-import org.esn.mobilit.utils.firstlaunch.SpinnerAdapter;
+import org.esn.mobilit.adapters.SpinnerAdapter;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class FirstLaunchActivity extends Activity {
 

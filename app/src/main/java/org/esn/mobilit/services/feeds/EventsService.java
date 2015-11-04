@@ -1,11 +1,11 @@
-package org.esn.mobilit.services;
+package org.esn.mobilit.services.feeds;
 
 import org.esn.mobilit.MobilITApplication;
-import org.esn.mobilit.NetworkCallback;
+import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.models.RSS.RSS;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
-import org.esn.mobilit.utils.parser.RSSFeed;
+import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 import java.text.ParseException;
 
@@ -55,11 +55,11 @@ public class EventsService {
             @Override
             public void success(RSS events, Response response) {
                 events.getRSSChannel().moveImage();
-                FeedService.getInstance().setFeedEvents(new RSSFeed(events.getRSSChannel().getList()));
+                FeedService.getInstance().setFeedEvents(new RSSFeedParser(events.getRSSChannel().getList()));
                 Utils.saveObjectToCache(
                         MobilITApplication.getContext(),
                         "feedEvents",
-                        new RSSFeed(events.getRSSChannel().getList())
+                        new RSSFeedParser(events.getRSSChannel().getList())
                 );
                 callback.onSuccess(events);
             }

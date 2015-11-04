@@ -1,4 +1,4 @@
-package org.esn.mobilit;
+package org.esn.mobilit.utils.callbacks;
 
 import retrofit.RetrofitError;
 

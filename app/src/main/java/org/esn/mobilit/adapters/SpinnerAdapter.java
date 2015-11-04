@@ -1,4 +1,4 @@
-package org.esn.mobilit.utils.firstlaunch;
+package org.esn.mobilit.adapters;
 
 import android.content.Context;
 import android.view.View;

@@ -6,9 +6,8 @@ import android.text.TextUtils;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.esn.mobilit.MobilITApplication;
-import org.esn.mobilit.activities.Callback;
-import org.esn.mobilit.activities.SplashActivity;
-import org.esn.mobilit.services.GCMService;
+import org.esn.mobilit.utils.callbacks.Callback;
+import org.esn.mobilit.services.gcm.GCMService;
 import org.esn.mobilit.utils.ApplicationConstants;
 
 import java.io.IOException;

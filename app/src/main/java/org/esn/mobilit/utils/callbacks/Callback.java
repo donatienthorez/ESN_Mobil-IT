@@ -1,4 +1,4 @@
-package org.esn.mobilit.activities;
+package org.esn.mobilit.utils.callbacks;
 
 public interface Callback<T> {
     void onSuccess(T result);

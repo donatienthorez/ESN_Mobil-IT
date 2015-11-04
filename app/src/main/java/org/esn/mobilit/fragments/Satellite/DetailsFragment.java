@@ -14,7 +14,6 @@ import android.widget.TextView;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.utils.image.ImageLoader;
-import org.esn.mobilit.utils.parser.RSSFeed;
 
 public class DetailsFragment extends Fragment {
 

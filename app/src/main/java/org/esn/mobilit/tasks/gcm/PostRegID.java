@@ -12,9 +12,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.esn.mobilit.MobilITApplication;
-import org.esn.mobilit.activities.Callback;
-import org.esn.mobilit.activities.SplashActivity;
-import org.esn.mobilit.services.GCMService;
+import org.esn.mobilit.utils.callbacks.Callback;
+import org.esn.mobilit.services.gcm.GCMService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 

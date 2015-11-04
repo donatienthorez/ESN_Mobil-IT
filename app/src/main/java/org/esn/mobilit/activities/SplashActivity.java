@@ -5,28 +5,24 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.esn.mobilit.NetworkCallback;
+import org.esn.mobilit.utils.callbacks.Callback;
+import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.RSS.RSS;
-import org.esn.mobilit.services.EventsService;
-import org.esn.mobilit.services.GCMService;
+import org.esn.mobilit.services.feeds.EventsService;
+import org.esn.mobilit.services.gcm.GCMService;
 import org.esn.mobilit.services.LauncherService;
-import org.esn.mobilit.services.NewsService;
-import org.esn.mobilit.services.PartnersService;
-import org.esn.mobilit.tasks.feed.XMLFeedEventsTask;
-import org.esn.mobilit.tasks.feed.XMLFeedNewsTask;
-import org.esn.mobilit.tasks.feed.XMLFeedPartnersTask;
+import org.esn.mobilit.services.feeds.NewsService;
+import org.esn.mobilit.services.feeds.PartnersService;
 import org.esn.mobilit.tasks.feed.XMLSurvivalGuideTask;
-import org.esn.mobilit.services.FeedService;
+import org.esn.mobilit.services.feeds.FeedService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
-import org.esn.mobilit.utils.parser.RSSFeed;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -103,6 +99,7 @@ public class SplashActivity extends Activity {
                 @Override
                 public void onSuccess(RSS result) {
                     textView.setText(getResources().getString(R.string.load_news_end));
+                    System.out.println("news OK");
                     launcherService.incrementCount();
                     if (launcherService.launchHomeActivity()) {
                         launchHomeActivity();
@@ -111,6 +108,7 @@ public class SplashActivity extends Activity {
 
                 @Override
                 public void onFailure(RetrofitError error) {
+                    System.out.println("news FAIL");
                     launcherService.incrementCount();
                     if (launcherService.launchHomeActivity()) {
                         launchHomeActivity();
@@ -122,6 +120,7 @@ public class SplashActivity extends Activity {
                 @Override
                 public void onSuccess(RSS result) {
                     textView.setText(getResources().getString(R.string.load_events_end));
+                    System.out.println("events OK");
                     launcherService.incrementCount();
                     if (launcherService.launchHomeActivity()) {
                         launchHomeActivity();
@@ -130,6 +129,8 @@ public class SplashActivity extends Activity {
 
                 @Override
                 public void onFailure(RetrofitError error) {
+                    System.out.println("events FAIL");
+                    System.out.println(error);
                     launcherService.incrementCount();
                     if (launcherService.launchHomeActivity()) {
                         launchHomeActivity();
@@ -141,6 +142,8 @@ public class SplashActivity extends Activity {
                 @Override
                 public void onSuccess(RSS result) {
                     textView.setText(getResources().getString(R.string.load_partners_end));
+                    System.out.println("partners OK");
+
                     launcherService.incrementCount();
                     if (launcherService.launchHomeActivity()) {
                         launchHomeActivity();
@@ -149,6 +152,7 @@ public class SplashActivity extends Activity {
 
                 @Override
                 public void onFailure(RetrofitError error) {
+                    System.out.println("partners FAIL");
                     launcherService.incrementCount();
                     if (launcherService.launchHomeActivity()) {
                         launchHomeActivity();

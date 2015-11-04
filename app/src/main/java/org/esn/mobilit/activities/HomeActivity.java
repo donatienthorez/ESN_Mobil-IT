@@ -14,14 +14,14 @@ import android.widget.ListView;
 
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
-import org.esn.mobilit.fragments.FragmentPagerAdapter;
+import org.esn.mobilit.adapters.FragmentPagerAdapter;
 import org.esn.mobilit.fragments.Satellite.ListFragment.ListFragmentItemClickListener;
 import org.esn.mobilit.models.Section;
-import org.esn.mobilit.services.FeedService;
-import org.esn.mobilit.services.GCMService;
+import org.esn.mobilit.services.feeds.FeedService;
+import org.esn.mobilit.services.gcm.GCMService;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.image.InternalStorage;
-import org.esn.mobilit.utils.parser.RSSFeed;
+import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 public class HomeActivity extends FragmentActivity implements ActionBar.TabListener, ListFragmentItemClickListener {
 
@@ -131,7 +131,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         String pushMsg = GCMService.getInstance().getPushMsg();
 
         int pos = -1;
-        RSSFeed currentfeed = null;
+        RSSFeedParser currentfeed = null;
         ListView lv = null;
         if (feedService.getFeedEvents().getPositionFromTitle(pushMsg) > 0) {
             pos = feedService.getFeedEvents().getPositionFromTitle(pushMsg);
@@ -197,7 +197,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
     @Override
-    public void onListFragmentItemClick(int position, RSSFeed currentfeed) {
+    public void onListFragmentItemClick(int position, RSSFeedParser currentfeed) {
         /** Creating an intent object to start the CountryDetailsActivity */
         Intent intent = new Intent(this, DetailActivity.class);
 

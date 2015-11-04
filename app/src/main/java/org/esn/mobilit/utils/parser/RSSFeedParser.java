@@ -6,23 +6,19 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
-public class RSSFeed implements Serializable {
+public class RSSFeedParser implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private List<RSSItem> itemlist;
 
-	public RSSFeed() {
+	public RSSFeedParser() {
 		itemlist = new Vector<RSSItem>(0);
 	}
 
-    public RSSFeed(List<RSSItem> itemlist){
+    public RSSFeedParser(List<RSSItem> itemlist){
         this.itemlist = itemlist;
     }
-
-	public void addItem(RSSItem item) {
-		itemlist.add(item);
-	}
 
 	public RSSItem getItem(int location) {
 		return itemlist.get(location);

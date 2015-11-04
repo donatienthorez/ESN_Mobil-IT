@@ -1,17 +1,15 @@
-package org.esn.mobilit.services;
-
-import android.content.Context;
+package org.esn.mobilit.services.feeds;
 
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.models.SurvivalGuide;
 import org.esn.mobilit.utils.Utils;
-import org.esn.mobilit.utils.parser.RSSFeed;
+import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 public class FeedService
 {
     private static FeedService instance;
 
-    private RSSFeed feedEvents, feedNews, feedPartners;
+    private RSSFeedParser feedEvents, feedNews, feedPartners;
     private SurvivalGuide survivalguide;
 
     private FeedService(){
@@ -31,9 +29,9 @@ public class FeedService
 
     public void getFeedsFromCache()
     {
-        feedEvents    = (RSSFeed) Utils.getObjectFromCache(MobilITApplication.getContext(), "feedEvents");
-        feedNews      = (RSSFeed) Utils.getObjectFromCache(MobilITApplication.getContext(), "feedNews");
-        feedPartners  = (RSSFeed) Utils.getObjectFromCache(MobilITApplication.getContext(), "feedPartners");
+        feedEvents    = (RSSFeedParser) Utils.getObjectFromCache(MobilITApplication.getContext(), "feedEvents");
+        feedNews      = (RSSFeedParser) Utils.getObjectFromCache(MobilITApplication.getContext(), "feedNews");
+        feedPartners  = (RSSFeedParser) Utils.getObjectFromCache(MobilITApplication.getContext(), "feedPartners");
         survivalguide = (SurvivalGuide) Utils.getObjectFromCache(MobilITApplication.getContext(), "survivalGuide");
     }
 
@@ -58,27 +56,27 @@ public class FeedService
     }
 
 
-    public RSSFeed getFeedEvents() {
+    public RSSFeedParser getFeedEvents() {
         return feedEvents;
     }
 
-    public void setFeedEvents(RSSFeed feedEvents) {
+    public void setFeedEvents(RSSFeedParser feedEvents) {
         this.feedEvents = feedEvents;
     }
 
-    public RSSFeed getFeedNews() {
+    public RSSFeedParser getFeedNews() {
         return feedNews;
     }
 
-    public void setFeedNews(RSSFeed feedNews) {
+    public void setFeedNews(RSSFeedParser feedNews) {
         this.feedNews = feedNews;
     }
 
-    public RSSFeed getFeedPartners() {
+    public RSSFeedParser getFeedPartners() {
         return feedPartners;
     }
 
-    public void setFeedPartners(RSSFeed feedPartners) {
+    public void setFeedPartners(RSSFeedParser feedPartners) {
         this.feedPartners = feedPartners;
     }
 

@@ -1,16 +1,17 @@
-package org.esn.mobilit.fragments;
+package org.esn.mobilit.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import org.esn.mobilit.MobilITApplication;
+import org.esn.mobilit.fragments.AboutFragment;
 import org.esn.mobilit.fragments.Satellite.ListFragment;
 import org.esn.mobilit.fragments.Survival.SurvivalFragment;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.models.SurvivalGuide;
-import org.esn.mobilit.services.FeedService;
+import org.esn.mobilit.services.feeds.FeedService;
 import org.esn.mobilit.utils.Utils;
-import org.esn.mobilit.utils.parser.RSSFeed;
+import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 import java.util.ArrayList;
 
@@ -20,7 +21,7 @@ public class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAd
     Section section;
     ArrayList<String> tabs;
     FeedService feedService;
-    RSSFeed feedEvents, feedNews, feedPartners;
+    RSSFeedParser feedEvents, feedNews, feedPartners;
     SurvivalGuide survivalGuide;
 
     public FragmentPagerAdapter(FragmentManager fm, int count) {

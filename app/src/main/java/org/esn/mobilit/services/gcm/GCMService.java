@@ -1,4 +1,4 @@
-package org.esn.mobilit.services;
+package org.esn.mobilit.services.gcm;
 
 import android.app.Activity;
 
@@ -7,7 +7,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.esn.mobilit.MobilITApplication;
-import org.esn.mobilit.activities.Callback;
+import org.esn.mobilit.utils.callbacks.Callback;
 import org.esn.mobilit.tasks.gcm.RegisterTask;
 import org.esn.mobilit.utils.Utils;
 

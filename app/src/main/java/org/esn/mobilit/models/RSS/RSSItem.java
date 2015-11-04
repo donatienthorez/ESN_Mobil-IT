@@ -28,6 +28,9 @@ public class RSSItem implements Serializable {
 	@Element(name = "guid")
 	private String guid;
 
+	@Element(name = "comments", required = false)
+	private String comments;
+
 	private String date;
 	private String image;
 

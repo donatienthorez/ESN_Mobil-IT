@@ -1,7 +1,7 @@
 package org.esn.mobilit.services;
 
 import org.esn.mobilit.MobilITApplication;
-import org.esn.mobilit.NetworkCallback;
+import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.models.Countries;
 import org.esn.mobilit.utils.DateConvertor;
 import org.esn.mobilit.utils.Utils;

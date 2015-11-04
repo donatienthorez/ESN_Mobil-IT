@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,19 +21,19 @@ import android.widget.Toast;
 import org.esn.mobilit.R;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.image.ImageLoader;
-import org.esn.mobilit.utils.parser.RSSFeed;
+import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 public class ListFragment extends android.support.v4.app.ListFragment
 {
     private static final String TAG = ListFragment.class.getSimpleName();
-    private RSSFeed feed;
+    private RSSFeedParser feed;
     private CustomListAdapter adapter;
     private int type;
     private Activity currentActivity;
 
     ListFragmentItemClickListener itemClickListener;
 
-    public void setFeed(RSSFeed feed){
+    public void setFeed(RSSFeedParser feed){
         this.feed = feed;
     }
     public void setType(int type){
@@ -44,7 +43,7 @@ public class ListFragment extends android.support.v4.app.ListFragment
     /** An interface for defining the callback method */
     public interface ListFragmentItemClickListener {
         /** This method will be invoked when an item in the ListFragment is clicked */
-        void onListFragmentItemClick(int position, RSSFeed feed);
+        void onListFragmentItemClick(int position, RSSFeedParser feed);
     }
 
     public void onCreate(Bundle savedInstanceState) {
