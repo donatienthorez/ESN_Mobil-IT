@@ -17,17 +17,14 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
     public View getView(int position, View convertView,ViewGroup parent) {
 
         View v = super.getView(position, convertView, parent);
-
         ((TextView) v).setTextSize(16);
 
         return v;
-
     }
 
     public View getDropDownView(int position, View convertView,ViewGroup parent) {
 
         View v = super.getDropDownView(position, convertView,parent);
         return v;
-
     }
 }
