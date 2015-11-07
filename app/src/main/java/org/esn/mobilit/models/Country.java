@@ -3,9 +3,6 @@ package org.esn.mobilit.models;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/**
- * Created by Spider on 02/12/14.
- */
 public class Country implements Serializable{
 
     private int    id;
