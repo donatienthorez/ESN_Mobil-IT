@@ -2,7 +2,6 @@ package org.esn.mobilit.fragments;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,14 +17,11 @@ import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Abouts;
 import org.esn.mobilit.models.Section;
-import org.esn.mobilit.network.JSONfunctions;
 import org.esn.mobilit.services.AboutService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.image.ImageLoader;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import retrofit.RetrofitError;
 
@@ -58,8 +54,9 @@ public class AboutFragment extends android.support.v4.app.Fragment {
 
                     String url = ApplicationConstants.LOGOINSERTER_URL + "assets/img/logos/" + section.getLogo_url();
                     Glide.with(MobilITApplication.getContext())
-                           .load(url)
-                           .into(logo);
+                         .load(url)
+                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                         .into(logo);
                 }
 
                 @Override
@@ -69,6 +66,7 @@ public class AboutFragment extends android.support.v4.app.Fragment {
         } else {
             Glide.with(MobilITApplication.getContext())
                     .load(url)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .into(logo);
         }
 
