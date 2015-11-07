@@ -201,6 +201,7 @@ public class SplashActivity extends Activity {
     }
 
     public void launchHomeActivity(){
+        feedService.getFeedsFromCache();
         if (feedService.getTotalItems() > 0) {
             textView.setText(R.string.start_homeactivity);
             Intent i = new Intent(getApplicationContext(), HomeActivity.class);

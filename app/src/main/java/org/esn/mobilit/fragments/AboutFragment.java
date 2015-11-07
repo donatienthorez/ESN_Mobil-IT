@@ -43,7 +43,7 @@ public class AboutFragment extends android.support.v4.app.Fragment {
         View view = inflater.inflate(R.layout.about_fragment, container, false);
 
         logo = (ImageView) view.findViewById(R.id.section_logo);
-        String url = ApplicationConstants.LOGOINSERTER_URL + "assets/img/logos/" + section.getLogo_url();
+        final String url = ApplicationConstants.LOGOINSERTER_URL + "assets/img/logos/" + section.getLogo_url();
 
         if (section.getLogo_url() == null || section.getLogo_url().equalsIgnoreCase("")) {
             AboutService.getAbout(new NetworkCallback<Abouts>() {
@@ -51,21 +51,22 @@ public class AboutFragment extends android.support.v4.app.Fragment {
                 public void onSuccess(Abouts result) {
                     section.setLogo_url(result.getAbout().getLogoPath());
                     Utils.saveObjectToCache(getActivity(), "section", section);
-
-                    String url = ApplicationConstants.LOGOINSERTER_URL + "assets/img/logos/" + section.getLogo_url();
                     Glide.with(MobilITApplication.getContext())
                          .load(url)
+                         .placeholder(R.drawable.logo_small)
                          .diskCacheStrategy(DiskCacheStrategy.RESULT)
                          .into(logo);
                 }
 
                 @Override
                 public void onFailure(RetrofitError error) {
+                    logo.setImageResource(R.drawable.logo_small);
                 }
             });
         } else {
             Glide.with(MobilITApplication.getContext())
                     .load(url)
+                    .placeholder(R.drawable.logo_small)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .into(logo);
         }
