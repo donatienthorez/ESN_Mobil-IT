@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="40dp"
+    android:paddingRight="40dp"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp">
 
     <TextView
         android:id="@+id/section_name"
@@ -14,12 +20,10 @@
 
     <ImageView
         android:id="@+id/section_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minHeight="150dp"
-        android:minWidth="300dp"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center"/>
+        android:layout_width="fill_parent"
+        android:layout_height="120dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"/>
 
     <TextView
         android:id="@+id/section_email"
@@ -38,7 +42,7 @@
         android:layout_height="wrap_content"
         android:autoLink="phone"
         android:layout_gravity="center"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:textSize="16dp" />
 
     <TextView
@@ -55,11 +59,9 @@
         android:id="@+id/section_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:autoLink="map"
-        android:layout_marginTop="10dp"
-        android:textSize="16dp" />
-
-
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:textSize="16dp"/>
 
 </LinearLayout>

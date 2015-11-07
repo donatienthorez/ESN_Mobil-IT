@@ -156,7 +156,7 @@ public class ListFragment extends android.support.v4.app.ListFragment
             TextView tvDate = (TextView) listItem.findViewById(R.id.date);
 
             // Set the views in the layout
-            imageLoader.DisplayImage(feed.getItem(pos).getImage(), iv);
+            imageLoader.displayImage(feed.getItem(pos).getImage(), iv);
             tvTitle.setText(feed.getItem(pos).getTitle());
             tvDate.setText(feed.getItem(pos).getDate());
 

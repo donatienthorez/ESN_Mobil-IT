@@ -2,9 +2,6 @@ package org.esn.mobilit.models;
 
 import java.io.Serializable;
 
-/**
- * Created by Spider on 02/12/14.
- */
 public class Section implements Serializable{
     private int    sid;
     private int    sid_country;

@@ -44,7 +44,7 @@ public class DetailsFragment extends Fragment {
         title.setText(fFeed.getTitle());
 
         ImageLoader imageLoader = new ImageLoader(getActivity().getApplicationContext());
-        imageLoader.DisplayImage(fFeed.getImage(), imageView);
+        imageLoader.displayImage(fFeed.getImage(), imageView);
 
         desc.loadDataWithBaseURL("" +
                 "http://www.androidcentral.com/",
