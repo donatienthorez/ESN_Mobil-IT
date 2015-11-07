@@ -28,7 +28,7 @@
         android:icon="@drawable/ic_launcher_color"
         android:label="@string/app_name"
         android:theme="@style/Theme.Esnmobilit"
-        android:name="MobilITApplication" >
+        android:name=".MobilITApplication">
         <receiver
             android:name=".GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >

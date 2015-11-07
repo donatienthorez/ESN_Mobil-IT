@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.utils.image.InternalStorage;
 
 import java.io.InputStream;
@@ -17,15 +18,15 @@ public class Utils {
     private static final String TAG = Utils.class.getSimpleName();
 
     // PREFERENCES
-    public static void setDefaults(Context ctx, String key, String value) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+    public static void setDefaults(String key, String value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MobilITApplication.getContext());
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(key, value);
         editor.commit();
     }
 
-    public static String getDefaults(Context ctx, String key) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+    public static String getDefaults(String key) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MobilITApplication.getContext());
         return preferences.getString(key, null);
     }
 
@@ -34,13 +35,13 @@ public class Utils {
      * @param String key
      * @param Obkect o
      */
-    public static void saveObjectToCache(Context context, String key, Object o){
+    public static void saveObjectToCache(String key, Object o){
         if (!key.equalsIgnoreCase("countries")) {
-            key = getDefaults(context, "CODE_SECTION") + "_" + key;
+            key = getDefaults("CODE_SECTION") + "_" + key;
         }
 
         try {
-            InternalStorage.writeObject(context, key, o);
+            InternalStorage.writeObject(key, o);
         }catch (Exception e){
             Log.d(TAG, "Exception saveobject: " + e);
         }
@@ -50,34 +51,18 @@ public class Utils {
      * Get seriazable object in cache
      * @param String key
      */
-    public static Object getObjectFromCache(Context context, String key){
+    public static Object getObjectFromCache(String key){
         Object o = null;
         if (!key.equalsIgnoreCase("countries")) {
-            key = getDefaults(context, "CODE_SECTION") + "_" + key;
+            key = getDefaults("CODE_SECTION") + "_" + key;
         }
 
         try {
-            o = InternalStorage.readObject(context, key);
+            o = InternalStorage.readObject(key);
         }catch (Exception e){
             Log.d(TAG, "Exception getObjectFromCache(" + key + "): " + e);
         }
         return o;
-    }
-
-    public static void CopyStream(InputStream is, OutputStream os){
-        final int buffer_size=1024;
-        try
-        {
-            byte[] bytes=new byte[buffer_size];
-            for(;;)
-            {
-                int count=is.read(bytes, 0, buffer_size);
-                if(count==-1)
-                    break;
-                os.write(bytes, 0, count);
-            }
-        }
-        catch(Exception ex){}
     }
 
     public static boolean isConnected(Activity activity){

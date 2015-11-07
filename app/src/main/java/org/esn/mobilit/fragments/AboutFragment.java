@@ -21,21 +21,18 @@ import org.esn.mobilit.services.AboutService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
-import org.esn.mobilit.utils.image.ImageLoader;
 
 import retrofit.RetrofitError;
 
 public class AboutFragment extends android.support.v4.app.Fragment {
 
     private Section section;
-    private ImageLoader imageLoader;
     private ImageView logo;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        section = (Section) Utils.getObjectFromCache(getActivity().getBaseContext(), "section");
-        imageLoader = new ImageLoader(getActivity().getApplicationContext());
+        section = (Section) Utils.getObjectFromCache("section");
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,7 +47,7 @@ public class AboutFragment extends android.support.v4.app.Fragment {
                 @Override
                 public void onSuccess(Abouts result) {
                     section.setLogo_url(result.getAbout().getLogoPath());
-                    Utils.saveObjectToCache(getActivity(), "section", section);
+                    Utils.saveObjectToCache("section", section);
                     Glide.with(MobilITApplication.getContext())
                          .load(url)
                          .placeholder(R.drawable.logo_small)

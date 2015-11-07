@@ -29,7 +29,7 @@ public class GCMService {
 
     public void pushForGcm(Activity activity, Callback<Object> callback)
     {
-        if (Utils.getDefaults(MobilITApplication.getContext(), REG_ID) == null) {
+        if (Utils.getDefaults(REG_ID) == null) {
 
             // Registering RegID
             if (checkPlayServices(activity)) {
@@ -41,7 +41,7 @@ public class GCMService {
         }
     }
     public void storeRegIdinSharedPref() {
-        Utils.setDefaults(MobilITApplication.getContext(), REG_ID, regId);
+        Utils.setDefaults(REG_ID, regId);
     }
 
     private boolean checkPlayServices(Activity activity) {
