@@ -34,7 +34,7 @@ public class CountriesService {
             .build();
 
     private interface CountriesServiceInterface{
-        @GET("/webservices/esnmobilit//json/{revision}.json")
+        @GET("/webservices/esnmobilit/json/{revision}.json")
         void getCountries(@Path("revision") String revision, Callback<Countries> callback);
     }
 

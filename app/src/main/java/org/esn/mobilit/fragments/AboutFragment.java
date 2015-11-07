@@ -2,7 +2,6 @@ package org.esn.mobilit.fragments;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,16 +10,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
+import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
+import org.esn.mobilit.models.Abouts;
 import org.esn.mobilit.models.Section;
-import org.esn.mobilit.network.JSONfunctions;
+import org.esn.mobilit.services.AboutService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
+import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.image.ImageLoader;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
+import retrofit.RetrofitError;
 
 public class AboutFragment extends android.support.v4.app.Fragment {
+
     private Section section;
     private ImageLoader imageLoader;
     private ImageView logo;
@@ -37,11 +43,32 @@ public class AboutFragment extends android.support.v4.app.Fragment {
         View view = inflater.inflate(R.layout.about_fragment, container, false);
 
         logo = (ImageView) view.findViewById(R.id.section_logo);
+        final String url = ApplicationConstants.LOGOINSERTER_URL + "assets/img/logos/" + section.getLogo_url();
 
         if (section.getLogo_url() == null || section.getLogo_url().equalsIgnoreCase("")) {
-            new DownloadSectionLogo().execute();
+            AboutService.getAbout(new NetworkCallback<Abouts>() {
+                @Override
+                public void onSuccess(Abouts result) {
+                    section.setLogo_url(result.getAbout().getLogoPath());
+                    Utils.saveObjectToCache(getActivity(), "section", section);
+                    Glide.with(MobilITApplication.getContext())
+                         .load(url)
+                         .placeholder(R.drawable.logo_small)
+                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                         .into(logo);
+                }
+
+                @Override
+                public void onFailure(RetrofitError error) {
+                    logo.setImageResource(R.drawable.logo_small);
+                }
+            });
         } else {
-            imageLoader.DisplayImage(ApplicationConstants.LOGOINSERTER_URL + "assets/img/logos_large/" + section.getLogo_url(), logo);
+            Glide.with(MobilITApplication.getContext())
+                    .load(url)
+                    .placeholder(R.drawable.logo_small)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .into(logo);
         }
 
         TextView name  = (TextView)  view.findViewById(R.id.section_name);
@@ -63,35 +90,5 @@ public class AboutFragment extends android.support.v4.app.Fragment {
         });
 
         return view;
-    }
-
-    private class DownloadSectionLogo extends AsyncTask<Void, Void, Boolean> {
-
-        protected Boolean doInBackground(Void... params) {
-            String url = ApplicationConstants.LOGOINSERTER_URL + "rest/getPath.php?code_section=" + section.getCode_section();
-            JSONObject jsonobject = JSONfunctions.getJSONfromURL(url);
-
-            try {
-                JSONArray jsonArray = jsonobject.getJSONArray("section");
-                JSONObject jsonObject = jsonArray.getJSONObject(0);
-                Log.d("About :", jsonObject.optString("logopath"));
-                section.setLogo_url(jsonObject.optString("logopath"));
-
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return false;
-        }
-
-        protected void onPostExecute(Boolean result) {
-            if (result) {
-                Utils.saveObjectToCache(getActivity(), "section", section);
-                imageLoader.DisplayImage(ApplicationConstants.LOGOINSERTER_URL + "assets/img/logos_large/" + section.getLogo_url(), logo);
-            }else{
-                logo.setImageResource(R.drawable.logo_small);
-            }
-        }
     }
 }

@@ -72,17 +72,14 @@ public class SplashActivity extends Activity {
         }
 
         if (!Utils.isConnected(this)){
-            // No connectivity - Load cache
-            textView.setText(getResources().getString(R.string.tryingcache));
-            feedService.getFeedsFromCache();
-
+            FeedService.getInstance().getFeedsFromCache();
             if(feedService.emptyFeeds()){
                 textView.setText(getResources().getString(R.string.emptycache));
                 progressBar.setVisibility(View.INVISIBLE);
             } else {
-                if(launcherService.launchHomeActivity()) {
-                    launchHomeActivity();
-                }
+                // No connectivity - Load cache
+                textView.setText(getResources().getString(R.string.tryingcache));
+                launchHomeActivity();
             }
             buttonRetry.setVisibility(View.VISIBLE);
             buttonSection.setVisibility(View.VISIBLE);
@@ -127,7 +124,7 @@ public class SplashActivity extends Activity {
                 @Override
                 public void onFailure(RetrofitError error) {
                     launcherService.incrementCount();
-                    if (launcherService.launchHomeActivity()) {
+                    if (launcherService.getInstance().launchHomeActivity()) {
                         launchHomeActivity();
                     }
                 }
@@ -137,7 +134,6 @@ public class SplashActivity extends Activity {
                 @Override
                 public void onSuccess(RSS result) {
                     textView.setText(getResources().getString(R.string.load_partners_end));
-
                     launcherService.incrementCount();
                     if (launcherService.launchHomeActivity()) {
                         launchHomeActivity();
@@ -168,7 +164,7 @@ public class SplashActivity extends Activity {
             @Override
             public void onSuccess(Object result) {
                 textView.setText(getResources().getString(stringId));
-                launcherService.incrementCount();
+                launcherService.getInstance().incrementCount();
                 if(launcherService.launchHomeActivity()) {
                     launchHomeActivity();
                 }
@@ -176,7 +172,7 @@ public class SplashActivity extends Activity {
 
             @Override
             public void onFailure(Exception ex) {
-                launcherService.incrementCount();
+                launcherService.getInstance().incrementCount();
                 if(launcherService.launchHomeActivity()) {
                     launchHomeActivity();
                 }
@@ -188,7 +184,7 @@ public class SplashActivity extends Activity {
         return new Callback() {
             @Override
             public void onSuccess(Object result) {
-                launcherService.incrementCount();
+                launcherService.getInstance().incrementCount();
                 if(launcherService.launchHomeActivity()) {
                     launchHomeActivity();
                 }
@@ -196,12 +192,16 @@ public class SplashActivity extends Activity {
 
             @Override
             public void onFailure(Exception ex) {
-                //TODO
+                launcherService.getInstance().incrementCount();
+                if(launcherService.launchHomeActivity()) {
+                    launchHomeActivity();
+                }
             }
         };
     }
 
     public void launchHomeActivity(){
+        feedService.getFeedsFromCache();
         if (feedService.getTotalItems() > 0) {
             textView.setText(R.string.start_homeactivity);
             Intent i = new Intent(getApplicationContext(), HomeActivity.class);
