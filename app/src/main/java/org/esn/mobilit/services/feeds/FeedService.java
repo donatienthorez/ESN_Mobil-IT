@@ -1,13 +1,12 @@
 package org.esn.mobilit.services.feeds;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.models.SurvivalGuide;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 public class FeedService
 {
-    private static FeedService instance;
+    private static volatile FeedService instance;
 
     private RSSFeedParser feedEvents, feedNews, feedPartners;
     private SurvivalGuide survivalguide;
@@ -29,10 +28,10 @@ public class FeedService
 
     public void getFeedsFromCache()
     {
-        feedEvents    = (RSSFeedParser) Utils.getObjectFromCache(MobilITApplication.getContext(), "feedEvents");
-        feedNews      = (RSSFeedParser) Utils.getObjectFromCache(MobilITApplication.getContext(), "feedNews");
-        feedPartners  = (RSSFeedParser) Utils.getObjectFromCache(MobilITApplication.getContext(), "feedPartners");
-        survivalguide = (SurvivalGuide) Utils.getObjectFromCache(MobilITApplication.getContext(), "survivalGuide");
+        feedEvents    = (RSSFeedParser) Utils.getObjectFromCache("feedEvents");
+        feedNews      = (RSSFeedParser) Utils.getObjectFromCache("feedNews");
+        feedPartners  = (RSSFeedParser) Utils.getObjectFromCache("feedPartners");
+        survivalguide = (SurvivalGuide) Utils.getObjectFromCache("survivalGuide");
     }
 
     public int getTotalItems(){

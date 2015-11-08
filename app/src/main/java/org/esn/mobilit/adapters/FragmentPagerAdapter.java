@@ -28,7 +28,7 @@ public class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAd
         super(fm);
         this.count   = count;
         this.tabs    = new ArrayList<String>();
-        this.section = (Section) Utils.getObjectFromCache(MobilITApplication.getContext(), "section");
+        this.section = (Section) Utils.getObjectFromCache("section");
         this.feedService = FeedService.getInstance();
         this.feedEvents = feedService.getFeedEvents();
         this.feedNews = feedService.getFeedNews();

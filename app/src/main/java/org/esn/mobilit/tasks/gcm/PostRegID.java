@@ -39,7 +39,7 @@ public class PostRegID extends AsyncTask<Void, Void, Void> {
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
             nameValuePairs.add(new BasicNameValuePair("regId", GCMService.getInstance().getRegId()));
-            nameValuePairs.add(new BasicNameValuePair("CODE_SECTION", Utils.getDefaults(MobilITApplication.getContext(), "CODE_SECTION")));
+            nameValuePairs.add(new BasicNameValuePair("CODE_SECTION", Utils.getDefaults("CODE_SECTION")));
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
             HttpResponse response = httpclient.execute(httppost);

@@ -24,12 +24,12 @@ public class XMLSurvivalGuideTask extends AsyncTask<Void, Void, Callback> {
 
         String url = ApplicationConstants.SURVIVAL_WEBSERVICE_URL
                 + "/getCategories.php?section="
-                + Utils.getDefaults(MobilITApplication.getContext(), "CODE_SECTION");
+                + Utils.getDefaults("CODE_SECTION");
 
         this.survivalGuide = JSONfunctions.getSurvivalGuide(url);
 
         FeedService.getInstance().setSurvivalguide(survivalGuide);
-        Utils.saveObjectToCache(MobilITApplication.getContext(), "survivalGuide", survivalGuide);
+        Utils.saveObjectToCache("survivalGuide", survivalGuide);
 
         return callback;
     }
