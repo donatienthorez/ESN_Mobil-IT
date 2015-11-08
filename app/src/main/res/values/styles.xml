@@ -31,6 +31,7 @@
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Esnmobilit</item>
         <item name="android:actionBarTabTextStyle">@style/ActionBarTabText.white.Esnmobilit</item>
         <item name="android:buttonStyle">@style/ButtonStyle.Esnmobilit</item>
+        <item name="android:windowAnimationStyle">@null</item>
     </style>
 
     <style name="ButtonStyle.Esnmobilit" parent="@android:style/Widget.Button">

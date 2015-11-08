@@ -1,6 +1,5 @@
 package org.esn.mobilit.services.feeds;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.models.RSS.RSS;
 import org.esn.mobilit.utils.ApplicationConstants;
@@ -31,7 +30,7 @@ public class EventsService {
     }
 
     private static RestAdapter restAdapter = new RestAdapter.Builder()
-            .setEndpoint(Utils.getDefaults(MobilITApplication.getContext(), "SECTION_WEBSITE"))
+            .setEndpoint(Utils.getDefaults("SECTION_WEBSITE"))
             .setConverter(new SimpleXMLConverter())
             .build();
 
@@ -56,8 +55,8 @@ public class EventsService {
             public void success(RSS events, Response response) {
                 events.getRSSChannel().moveImage();
                 FeedService.getInstance().setFeedEvents(new RSSFeedParser(events.getRSSChannel().getList()));
+
                 Utils.saveObjectToCache(
-                        MobilITApplication.getContext(),
                         "feedEvents",
                         new RSSFeedParser(events.getRSSChannel().getList())
                 );

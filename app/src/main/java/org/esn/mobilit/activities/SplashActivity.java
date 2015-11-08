@@ -10,6 +10,12 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
+import org.esn.mobilit.MobilITApplication;
+import org.esn.mobilit.models.Abouts;
+import org.esn.mobilit.models.Section;
+import org.esn.mobilit.services.AboutService;
 import org.esn.mobilit.utils.callbacks.Callback;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.R;
@@ -91,6 +97,30 @@ public class SplashActivity extends Activity {
 
             launcherService.resetCount();
             gcmService.pushForGcm(this, callbackGCMConstructor());
+
+            final Section section = (Section) Utils.getObjectFromCache("section");
+            final String url = ApplicationConstants.LOGOINSERTER_URL + "assets/img/logos/" + section.getLogo_url();
+
+            if (section.getLogo_url() == null || section.getLogo_url().equalsIgnoreCase("")) {
+                AboutService.getAbout(new NetworkCallback<Abouts>() {
+                    @Override
+                    public void onSuccess(Abouts result) {
+                        section.setLogo_url(result.getAbout().getLogoPath());
+                        Utils.saveObjectToCache("section", section);
+                        Glide.with(MobilITApplication.getContext())
+                                .load(url)
+                                .downloadOnly(150, 250);
+                    }
+
+                    @Override
+                    public void onFailure(RetrofitError error) {
+                    }
+                });
+            } else {
+                Glide.with(MobilITApplication.getContext())
+                        .load(url)
+                        .downloadOnly(150, 250);
+            }
 
             NewsService.getNews(new NetworkCallback<RSS>() {
                 @Override

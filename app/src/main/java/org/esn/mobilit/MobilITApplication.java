@@ -21,7 +21,7 @@ public class MobilITApplication extends Application {
     }
 
     public static Section getSectionFromCache(){
-        return (Section) Utils.getObjectFromCache(context, "section");
+        return (Section) Utils.getObjectFromCache("section");
     }
 }
 

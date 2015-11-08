@@ -11,9 +11,12 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
+import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.RSS.RSSItem;
-import org.esn.mobilit.utils.image.ImageLoader;
 
 public class DetailsFragment extends Fragment {
 
@@ -43,8 +46,12 @@ public class DetailsFragment extends Fragment {
         // Set the views
         title.setText(fFeed.getTitle());
 
-        ImageLoader imageLoader = new ImageLoader(getActivity().getApplicationContext());
-        imageLoader.displayImage(fFeed.getImage(), imageView);
+        Glide.with(MobilITApplication.getContext())
+                .load(fFeed.getImage())
+                .placeholder(R.drawable.default_list_item)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .fitCenter()
+                .into(imageView);
 
         desc.loadDataWithBaseURL("" +
                 "http://www.androidcentral.com/",
