@@ -12,16 +12,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.esn.mobilit.R;
+import org.esn.mobilit.adapters.CustomListAdapter;
 import org.esn.mobilit.utils.ApplicationConstants;
-import org.esn.mobilit.utils.image.ImageLoader;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
+
 
 public class ListFragment extends android.support.v4.app.ListFragment
 {
@@ -50,8 +48,12 @@ public class ListFragment extends android.support.v4.app.ListFragment
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
+
+        LayoutInflater layoutInflater = (LayoutInflater) currentActivity
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
         // Set an Adapter to the ListView
-        adapter = new CustomListAdapter(currentActivity);
+        adapter = new CustomListAdapter(feed, layoutInflater);
         this.setListAdapter(adapter);
     }
 
@@ -109,59 +111,4 @@ public class ListFragment extends android.support.v4.app.ListFragment
         setDefaults("SECTION_WEBSITE", null);
         setDefaults("regId", null);
     }
-
-
-
-
-    class CustomListAdapter extends BaseAdapter {
-
-        private LayoutInflater layoutInflater;
-        public ImageLoader imageLoader;
-
-        public CustomListAdapter(Activity activity) {
-
-            layoutInflater = (LayoutInflater) activity
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            imageLoader = new ImageLoader(activity.getApplicationContext());
-        }
-
-        @Override
-        public int getCount() {
-            return feed.getItemCount();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            // Inflate the item layout and set the views
-            View listItem = convertView;
-            int pos = position;
-            if (listItem == null) {
-                listItem = layoutInflater.inflate(R.layout.list_item, null);
-            }
-
-            // Initialize the views in the layout
-            ImageView iv = (ImageView) listItem.findViewById(R.id.thumb);
-            TextView tvTitle = (TextView) listItem.findViewById(R.id.title);
-            TextView tvDate = (TextView) listItem.findViewById(R.id.date);
-
-            // Set the views in the layout
-            imageLoader.displayImage(feed.getItem(pos).getImage(), iv);
-            tvTitle.setText(feed.getItem(pos).getTitle());
-            tvDate.setText(feed.getItem(pos).getDate());
-
-            return listItem;
-        }
-    }
-
 }

@@ -63,10 +63,10 @@ public class CountriesService {
 
     public static void initCountries(NetworkCallback<Countries> callback) throws ParseException{
         Date revisionDate = DateConvertor.getDate(RevisionService.getRevision(), "yyyyMMddHHmmss");
-        String prefDateString = Utils.getDefaults(MobilITApplication.getContext(), "revision");
+        String prefDateString = Utils.getDefaults("revision");
         if (prefDateString!=null) {
-            Date prefDate = DateConvertor.getDate(Utils.getDefaults(MobilITApplication.getContext(), "revision"), "yyyyMMddHHmmss");
-            Countries cacheCountries = (Countries) Utils.getObjectFromCache(MobilITApplication.getContext(), "countries");
+            Date prefDate = DateConvertor.getDate(Utils.getDefaults("revision"), "yyyyMMddHHmmss");
+            Countries cacheCountries = (Countries) Utils.getObjectFromCache("countries");
             if (cacheCountries == null || prefDate.compareTo(revisionDate) < 0) {
                 makeCountriesRequest(callback);
             } else {
@@ -84,8 +84,8 @@ public class CountriesService {
             @Override
             public void success(Countries result, Response response) {
                 countries = result;
-                Utils.saveObjectToCache(MobilITApplication.getContext(), "countries", countries);
-                Utils.setDefaults(MobilITApplication.getContext(), "revision", countries.getRevision());
+                Utils.saveObjectToCache("countries", countries);
+                Utils.setDefaults("revision", countries.getRevision());
                 if(callback != null) {
                     callback.onSuccess(countries);
                 }

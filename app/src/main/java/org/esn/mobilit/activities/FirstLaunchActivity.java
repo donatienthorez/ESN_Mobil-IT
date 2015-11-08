@@ -167,16 +167,15 @@ public class FirstLaunchActivity extends Activity {
     public void launchHomeActivity(View view){
         //Load new parameters
         Utils.setDefaults(
-                this,
                 "CODE_COUNTRY",
                 CountriesService.getCountries()
                                 .getCountryFromSection(currentSection)
                                 .getCodeCountry()
         );
-        Utils.setDefaults(this, "CODE_SECTION", currentSection.getCode_section());
-        Utils.setDefaults(this, "SECTION_WEBSITE", currentSection.getWebsite());
-        Utils.saveObjectToCache(this, "country", currentCountry);
-        Utils.saveObjectToCache(this, "section", currentSection);
+        Utils.setDefaults("CODE_SECTION", currentSection.getCode_section());
+        Utils.setDefaults("SECTION_WEBSITE", currentSection.getWebsite());
+        Utils.saveObjectToCache("country", currentCountry);
+        Utils.saveObjectToCache("section", currentSection);
 
         Intent returnIntent = new Intent();
         setResult(RESULT_OK,returnIntent);

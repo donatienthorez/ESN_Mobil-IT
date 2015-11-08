@@ -12,7 +12,6 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.widget.ListView;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.adapters.FragmentPagerAdapter;
 import org.esn.mobilit.fragments.Satellite.ListFragment.ListFragmentItemClickListener;
@@ -42,7 +41,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         int totalTabs = feedService.getTotalTabs();
 
         try{
-            Section section = (Section) Utils.getObjectFromCache(getApplicationContext(), "section");
+            Section section = (Section) Utils.getObjectFromCache("section");
             if (section != null) totalTabs++;
         } catch (NullPointerException e){
             Log.d(TAG, e.toString());
@@ -113,7 +112,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         }
 
         try{
-            Section section = (Section) Utils.getObjectFromCache(getApplicationContext(),"section");
+            Section section = (Section) Utils.getObjectFromCache("section");
 
             if (section != null){
                 ActionBar.Tab tabAbout = getActionBar().newTab();
@@ -168,7 +167,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         Object o = null;
         key = getDefaults("CODE_SECTION") + "_" + key;
         try {
-            o = InternalStorage.readObject(MobilITApplication.getContext(), key);
+            o = InternalStorage.readObject(key);
         } catch (Exception e) {
             Log.d(TAG, "Exception getobject: " + e);
         }
