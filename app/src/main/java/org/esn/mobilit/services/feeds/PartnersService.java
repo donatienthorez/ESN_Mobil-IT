@@ -1,6 +1,7 @@
 package org.esn.mobilit.services.feeds;
 
 import org.esn.mobilit.MobilITApplication;
+import android.util.Log;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.models.RSS.RSS;
 import org.esn.mobilit.utils.ApplicationConstants;
@@ -20,7 +21,6 @@ public class PartnersService {
 
     private static PartnersService instance;
     private static RSS partners;
-    private static final String TAG = "NewsService";
 
     private PartnersService() {
         instance = new PartnersService();
