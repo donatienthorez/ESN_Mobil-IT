@@ -1,5 +1,7 @@
 package org.esn.mobilit.services;
 
+import android.util.Log;
+
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.models.About;
 import org.esn.mobilit.models.Abouts;
@@ -18,6 +20,7 @@ public class AboutService {
 
     private static AboutService instance;
     private static About about;
+    private final static String TAG = "AboutService";
 
     private AboutService(){
         instance = new AboutService();
@@ -50,12 +53,15 @@ public class AboutService {
         aboutService.getAbout(MobilITApplication.getSectionFromCache().getCode_section(), new Callback<Abouts>() {
             @Override
             public void success(Abouts abouts, Response response) {
-                about = abouts.getAbout();
-                callback.onSuccess(abouts);
+                if(abouts != null && abouts.hasAbout()) {
+                    about = abouts.getAbout();
+                    callback.onSuccess(abouts);
+                }
             }
 
             @Override
             public void failure(RetrofitError error) {
+                Log.d(TAG, error.toString());
                 callback.onFailure(error);
             }
         });

@@ -19,7 +19,6 @@ public class PartnersService {
 
     private static PartnersService instance;
     private static RSS partners;
-    private static final String TAG = "NewsService";
 
     private PartnersService() {
         instance = new PartnersService();
