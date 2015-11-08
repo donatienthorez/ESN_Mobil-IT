@@ -4,9 +4,11 @@ import com.bumptech.glide.Glide;
 
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.utils.parser.DOMParser;
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.Text;
 
 import java.util.List;
 
@@ -16,8 +18,8 @@ public class RSSChannel {
     @Element(name = "title", required = false)
     private String title;
 
-    @Element(name = "link", required = false)
-    private String link;
+    @ElementList(entry = "link", inline = true, required = false)
+    private List<Link> links;
 
     @Element(name = "description", required = false)
     private String description;
@@ -41,5 +43,19 @@ public class RSSChannel {
                     .load(item.getImage())
                     .downloadOnly(150, 250);
         }
+    }
+
+    public static class Link {
+        @Attribute(required = false)
+        public String href;
+
+        @Attribute(required = false)
+        public String rel;
+
+        @Attribute(name = "type", required = false)
+        public String contentType;
+
+        @Text(required = false)
+        public String link;
     }
 }

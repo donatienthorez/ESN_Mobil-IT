@@ -6,11 +6,17 @@ import android.text.TextUtils;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.esn.mobilit.MobilITApplication;
+import org.esn.mobilit.services.gcm.PostRegService;
 import org.esn.mobilit.utils.callbacks.Callback;
 import org.esn.mobilit.services.gcm.GCMService;
 import org.esn.mobilit.utils.ApplicationConstants;
+import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 import java.io.IOException;
+import java.text.ParseException;
+
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class RegisterTask extends AsyncTask<Void, Void, String> {
 
@@ -40,7 +46,24 @@ public class RegisterTask extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(String msg) {
         if (!TextUtils.isEmpty(GCMService.getInstance().getRegId())) {
-            new PostRegID(callback).execute();
+            try {
+                PostRegService.registerId(
+                        new NetworkCallback<Response>() {
+
+                            @Override
+                            public void onSuccess(Response result) {
+                                callback.onSuccess(null);
+                            }
+
+                            @Override
+                            public void onFailure(RetrofitError error) {
+                                callback.onSuccess(error);
+                            }
+                        }
+                );
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         else
         {
