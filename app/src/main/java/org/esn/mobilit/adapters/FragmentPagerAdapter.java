@@ -3,11 +3,9 @@ package org.esn.mobilit.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.fragments.AboutFragment;
 import org.esn.mobilit.fragments.Satellite.ListFragment;
 import org.esn.mobilit.fragments.Survival.SurvivalFragment;
-import org.esn.mobilit.models.Section;
 import org.esn.mobilit.models.SurvivalGuide;
 import org.esn.mobilit.services.feeds.FeedService;
 import org.esn.mobilit.utils.Utils;
@@ -17,124 +15,64 @@ import java.util.ArrayList;
 
 public class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
 
-    int count;
-    Section section;
-    ArrayList<String> tabs;
+    ArrayList<Fragment> fragmentsList;
     FeedService feedService;
     RSSFeedParser feedEvents, feedNews, feedPartners;
     SurvivalGuide survivalGuide;
 
-    public FragmentPagerAdapter(FragmentManager fm, int count) {
+    public FragmentPagerAdapter(FragmentManager fm) {
         super(fm);
-        this.count   = count;
-        this.tabs    = new ArrayList<String>();
-        this.section = (Section) Utils.getObjectFromCache("section");
+        this.fragmentsList = new ArrayList<Fragment>();
         this.feedService = FeedService.getInstance();
         this.feedEvents = feedService.getFeedEvents();
         this.feedNews = feedService.getFeedNews();
         this.feedPartners = feedService.getFeedPartners();
         this.survivalGuide = feedService.getSurvivalguide();
-
+        this.setTabsList();
     }
 
     public void setTabsList(){
-        if (feedEvents != null && feedEvents.getItemCount() > 0 ) tabs.add("Events");
-        if (feedNews != null && feedNews.getItemCount() > 0 ) tabs.add("News");
-        if (feedPartners != null && feedPartners.getItemCount() > 0 ) tabs.add("Partners");
-        if (survivalGuide != null && survivalGuide.getCategories().size() > 0 ) tabs.add("SurvivalGuide");
-        if (section != null) tabs.add("About");
-    }
+        if (feedEvents != null && feedEvents.getItemCount() > 0) {
+            ListFragment events = new ListFragment();
+            events.setFeed(feedEvents);
+            fragmentsList.add(events);
+        }
 
-    @Override
-    public Fragment getItem(int position) {
-        //Init Fragment
-        //Events
-        ListFragment events = new ListFragment(); events.setFeed(feedEvents); events.setType(0);
+        if (feedNews != null && feedNews.getItemCount() > 0) {
+            ListFragment news = new ListFragment();
+            news.setFeed(feedNews);
+            fragmentsList.add(news);
+        }
 
-        //News
-        ListFragment news = new ListFragment(); news.setFeed(feedNews); events.setType(1);
+        if (feedPartners != null && feedPartners.getItemCount() > 0 ) {
+            //Partners
+            ListFragment partners = new ListFragment();
+            partners.setFeed(feedPartners);
+            fragmentsList.add(partners);
+        }
 
-        //Partners
-        ListFragment partners = new ListFragment(); partners.setFeed(feedPartners); events.setType(2);
+        if (survivalGuide != null && survivalGuide.getCategories().size() > 0 ) {
+            //Survival Guide
+            SurvivalFragment survival = new SurvivalFragment();
+            survival.setSurvivalGuide(survivalGuide);
 
-        //Survival Guide
-        SurvivalFragment survival = new SurvivalFragment(); survival.setSurvivalGuide(survivalGuide);
+            fragmentsList.add(survival);
+        }
 
-        //About Page
-        AboutFragment about = new AboutFragment();
-
-        switch (position) {
-            case 0: //Events
-                if (feedEvents != null && feedEvents.getItemCount() > 0 && tabs.contains("Events")) {
-                    tabs.remove("Events");
-                    return events;
-                }
-                else if (feedNews != null && feedNews.getItemCount() > 0 && tabs.contains("News")) {
-                    tabs.remove("News");
-                    return news;
-                }
-                else if (feedPartners != null && feedPartners.getItemCount() > 0 && tabs.contains("Partners")) {
-                    tabs.remove("Partners");
-                    return partners;
-                }
-                else if (survivalGuide != null && survivalGuide.getCategories().size() > 0 && tabs.contains("SurvivalGuide")){
-                    tabs.remove("SurvivalGuide");
-                    return survival;
-                }
-                else if (section != null && tabs.contains("About")){
-                    tabs.remove("About");
-                    return about;
-                }
-            case 1: //News
-                if (feedNews != null && feedNews.getItemCount() > 0 && tabs.contains("News")) {
-                    tabs.remove("News");
-                    return news;
-                }
-                else if (feedPartners != null && feedPartners.getItemCount() > 0 && tabs.contains("Partners")) {
-                    tabs.remove("Partners");
-                    return partners;
-                }
-                else if (survivalGuide != null && survivalGuide.getCategories().size() > 0 && tabs.contains("SurvivalGuide")){
-                    tabs.remove("SurvivalGuide");
-                    return survival;
-                }
-                else if (section != null && tabs.contains("About")){
-                    tabs.remove("About");
-                    return about;
-                }
-            case 2: //Partners
-                if (feedPartners != null && feedPartners.getItemCount() > 0 && tabs.contains("Partners")) {
-                    tabs.remove("Partners");
-                    return partners;
-                }
-                else if (survivalGuide != null && survivalGuide.getCategories().size() > 0 && tabs.contains("SurvivalGuide")){
-                    tabs.remove("SurvivalGuide");
-                    return survival;
-                }
-                else if (section != null && tabs.contains("About")){
-                    tabs.remove("About");
-                    return about;
-                }
-            case 3: //Survival Guide
-                if (survivalGuide.getCategories().size() > 0 && tabs.contains("SurvivalGuide")) {
-                    tabs.remove("SurvivalGuide");
-                    return survival;
-                }
-                else if (section != null && tabs.contains("About")){
-                    tabs.remove("About");
-                    return about;
-                }
-            case 4: //About
-                if (section != null && tabs.contains("About")){
-                    tabs.remove("About");
-                    return about;
-                }
-            default: return null;
+        if (Utils.getObjectFromCache("section") != null) {
+            //About Page
+            AboutFragment about = new AboutFragment();
+            fragmentsList.add(about);
         }
     }
 
     @Override
+    public Fragment getItem(int position) {
+        return fragmentsList.get(position);
+    }
+
+    @Override
     public int getCount() {
-        return count;
+        return fragmentsList.size();
     }
 }

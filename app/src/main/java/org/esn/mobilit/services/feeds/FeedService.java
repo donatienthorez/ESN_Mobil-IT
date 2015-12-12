@@ -1,15 +1,19 @@
 package org.esn.mobilit.services.feeds;
 
+import android.util.Log;
+
 import org.esn.mobilit.models.SurvivalGuide;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 public class FeedService
 {
-    private static volatile FeedService instance;
+    private static FeedService instance;
 
     private RSSFeedParser feedEvents, feedNews, feedPartners;
     private SurvivalGuide survivalguide;
+    private static final String TAG = "FeedService";
+
 
     private FeedService(){
     }
@@ -43,17 +47,6 @@ public class FeedService
 
         return total;
     }
-
-    public int getTotalTabs(){
-        int totalTabs = 0;
-        if (feedEvents != null && feedEvents.getItemCount() > 0) totalTabs++;
-        if (feedNews != null && feedNews.getItemCount() > 0) totalTabs++;
-        if (feedPartners != null && feedPartners.getItemCount() > 0) totalTabs++;
-        if (survivalguide != null && survivalguide.getCategories().size() > 0) totalTabs++;
-
-        return totalTabs;
-    }
-
 
     public RSSFeedParser getFeedEvents() {
         return feedEvents;
