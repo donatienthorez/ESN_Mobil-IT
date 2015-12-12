@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.adapters.CustomListAdapter;
+import org.esn.mobilit.services.feeds.FeedService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
@@ -26,16 +28,13 @@ public class ListFragment extends android.support.v4.app.ListFragment
     private static final String TAG = ListFragment.class.getSimpleName();
     private RSSFeedParser feed;
     private CustomListAdapter adapter;
-    private int type;
     private Activity currentActivity;
+    private LayoutInflater layoutInflater;
 
     ListFragmentItemClickListener itemClickListener;
 
     public void setFeed(RSSFeedParser feed){
         this.feed = feed;
-    }
-    public void setType(int type){
-        this.type = type;
     }
 
     /** An interface for defining the callback method */
@@ -48,8 +47,7 @@ public class ListFragment extends android.support.v4.app.ListFragment
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-
-        LayoutInflater layoutInflater = (LayoutInflater) currentActivity
+        layoutInflater = (LayoutInflater) currentActivity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // Set an Adapter to the ListView

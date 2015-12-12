@@ -28,11 +28,6 @@ public class PartnersService {
         return instance;
     }
 
-    private static RestAdapter restAdapter = new RestAdapter.Builder()
-            .setEndpoint(Utils.getDefaults("SECTION_WEBSITE"))
-            .setConverter(new SimpleXMLConverter())
-            .build();
-
     private interface PartnersServiceInterface{
         @GET(ApplicationConstants.PARTNERS_PATH + ApplicationConstants.FEED_PATH)
         void getNews(Callback<RSS> callback);
@@ -48,7 +43,13 @@ public class PartnersService {
     }
 
     public static void initPartners(final NetworkCallback<RSS> callback) throws ParseException{
-        PartnersServiceInterface partnersService = restAdapter.create(PartnersServiceInterface.class);
+        PartnersServiceInterface partnersService = new RestAdapter
+                .Builder()
+                .setEndpoint(Utils.getDefaults("SECTION_WEBSITE"))
+                .setConverter(new SimpleXMLConverter())
+                .build()
+                .create(PartnersServiceInterface.class);
+
         partnersService.getNews(new Callback<RSS>() {
             @Override
             public void success(RSS partners, Response response) {

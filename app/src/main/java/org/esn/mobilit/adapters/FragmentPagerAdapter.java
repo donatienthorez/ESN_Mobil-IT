@@ -49,16 +49,21 @@ public class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAd
     public Fragment getItem(int position) {
         //Init Fragment
         //Events
-        ListFragment events = new ListFragment(); events.setFeed(feedEvents); events.setType(0);
+        ListFragment events = new ListFragment();
+        feedEvents = FeedService.getInstance().getFeedEvents();
+        events.setFeed(feedEvents);
 
         //News
-        ListFragment news = new ListFragment(); news.setFeed(feedNews); events.setType(1);
+        ListFragment news = new ListFragment();
+        news.setFeed(feedNews);
 
         //Partners
-        ListFragment partners = new ListFragment(); partners.setFeed(feedPartners); events.setType(2);
+        ListFragment partners = new ListFragment();
+        partners.setFeed(feedPartners);
 
         //Survival Guide
-        SurvivalFragment survival = new SurvivalFragment(); survival.setSurvivalGuide(survivalGuide);
+        SurvivalFragment survival = new SurvivalFragment();
+        survival.setSurvivalGuide(survivalGuide);
 
         //About Page
         AboutFragment about = new AboutFragment();

@@ -6,7 +6,7 @@ import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 public class FeedService
 {
-    private static volatile FeedService instance;
+    private static FeedService instance;
 
     private RSSFeedParser feedEvents, feedNews, feedPartners;
     private SurvivalGuide survivalguide;

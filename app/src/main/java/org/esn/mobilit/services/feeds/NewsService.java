@@ -29,11 +29,6 @@ public class NewsService {
         return instance;
     }
 
-    private static RestAdapter restAdapter = new RestAdapter.Builder()
-            .setEndpoint(Utils.getDefaults("SECTION_WEBSITE"))
-            .setConverter(new SimpleXMLConverter())
-            .build();
-
     private interface NewsServiceInterface{
         @GET(ApplicationConstants.NEWS_PATH + ApplicationConstants.FEED_PATH)
         void getNews(Callback<RSS> callback);
@@ -49,7 +44,13 @@ public class NewsService {
     }
 
     public static void initNews(final NetworkCallback<RSS> callback) throws ParseException{
-        NewsServiceInterface newService = restAdapter.create(NewsServiceInterface.class);
+        NewsServiceInterface newService = new RestAdapter
+                .Builder()
+                .setEndpoint(Utils.getDefaults("SECTION_WEBSITE"))
+                .setConverter(new SimpleXMLConverter())
+                .build()
+                .create(NewsServiceInterface.class);
+
         newService.getNews(new Callback<RSS>() {
             @Override
             public void success(RSS news, Response response) {

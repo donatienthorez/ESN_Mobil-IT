@@ -29,11 +29,6 @@ public class EventsService {
         return instance;
     }
 
-    private static RestAdapter restAdapter = new RestAdapter.Builder()
-            .setEndpoint(Utils.getDefaults("SECTION_WEBSITE"))
-            .setConverter(new SimpleXMLConverter())
-            .build();
-
     private interface EventsServiceInterface{
         @GET(ApplicationConstants.EVENTS_PATH + ApplicationConstants.FEED_PATH)
         void getEvents(Callback<RSS> callback);
@@ -49,7 +44,13 @@ public class EventsService {
     }
 
     public static void initEvents(final NetworkCallback<RSS> callback) throws ParseException{
-        EventsServiceInterface eventsService = restAdapter.create(EventsServiceInterface.class);
+        EventsServiceInterface eventsService =
+                new RestAdapter.Builder()
+                        .setEndpoint(Utils.getDefaults("SECTION_WEBSITE"))
+                        .setConverter(new SimpleXMLConverter())
+                        .build()
+                        .create(EventsServiceInterface.class);
+
         eventsService.getEvents(new Callback<RSS>() {
             @Override
             public void success(RSS events, Response response) {
