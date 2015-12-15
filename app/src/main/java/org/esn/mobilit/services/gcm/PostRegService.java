@@ -3,8 +3,10 @@ package org.esn.mobilit.services.gcm;
 import android.util.Log;
 
 import org.esn.mobilit.models.Section;
+import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
+import org.simpleframework.xml.util.Cache;
 
 import java.text.ParseException;
 
@@ -42,7 +44,7 @@ public class PostRegService {
 
     public static void registerId(final NetworkCallback<Response> callback) throws ParseException {
         PostRegServiceInterface postRegService = restAdapter.create(PostRegServiceInterface.class);
-        Section section = (Section) Utils.getObjectFromCache("section");
+        Section section = (Section) CacheService.getObjectFromCache("section");
         postRegService.registerId(
                 GCMService.getInstance().getRegId(),
                 section.getCode_section(),

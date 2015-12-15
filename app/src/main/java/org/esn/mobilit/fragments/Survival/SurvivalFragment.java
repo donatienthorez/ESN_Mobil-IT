@@ -2,9 +2,7 @@ package org.esn.mobilit.fragments.Survival;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.util.Log;
@@ -19,20 +17,14 @@ import android.widget.TextView;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Category;
 import org.esn.mobilit.models.SurvivalGuide;
+import org.esn.mobilit.renderers.SurvivalGuideRenderer;
+import org.esn.mobilit.services.PreferencesService;
+import org.esn.mobilit.services.feeds.FeedService;
 import org.esn.mobilit.utils.ApplicationConstants;
 
-/**
- * Created by aymeric on 06/01/15.
- */
 public class SurvivalFragment extends Fragment{
     private static final String TAG = SurvivalFragment.class.getSimpleName();
-    private SurvivalGuide survivalGuide;
     private Activity currentActivity;
-
-    public void setSurvivalGuide(SurvivalGuide survivalGuide){
-        this.survivalGuide = survivalGuide;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +39,7 @@ public class SurvivalFragment extends Fragment{
         // Set the Text to try this out
         TextView t = (TextView) myInflatedView.findViewById(R.id.survivalContent);
 
-
+        SurvivalGuide survivalGuide = FeedService.getInstance().getSurvivalguide();
         String survivalContent = "", title, content;
 
         for (Category category : survivalGuide.getCategories()){
@@ -56,6 +48,8 @@ public class SurvivalFragment extends Fragment{
 
             survivalContent += title + content;
         }
+
+//        String survivalContent = SurvivalGuideRenderer.getInstance().renderSurvivalGuide();
 
         t.setText(Html.fromHtml(survivalContent), TextView.BufferType.SPANNABLE);
 
@@ -87,7 +81,7 @@ public class SurvivalFragment extends Fragment{
             case R.id.ras_section_settings:
                 if (currentActivity != null) {
                     Log.d(TAG, "RAS SECTION SETTINGS");
-                    reset_section();
+                    PreferencesService.resetSection();
 
                     Intent returnIntent = new Intent();
                     currentActivity.setResult(ApplicationConstants.RESULT_FIRST_LAUNCH,returnIntent);
@@ -97,20 +91,5 @@ public class SurvivalFragment extends Fragment{
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    // PREFERENCES
-    public void setDefaults(String key, String value) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(currentActivity);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(key, value);
-        editor.commit();
-    }
-
-    public void reset_section(){
-        setDefaults("CODE_SECTION", null);
-        setDefaults("CODE_COUNTRY", null);
-        setDefaults("SECTION_WEBSITE", null);
-        setDefaults("regId", null);
     }
 }

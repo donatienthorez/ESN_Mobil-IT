@@ -1,4 +1,4 @@
-package org.esn.mobilit.utils.image;
+package org.esn.mobilit.utils.storage;
 
 import android.content.Context;
 

@@ -5,6 +5,8 @@ import android.util.Log;
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.models.About;
 import org.esn.mobilit.models.Abouts;
+import org.esn.mobilit.models.Section;
+import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 import java.text.ParseException;
@@ -27,6 +29,9 @@ public class AboutService {
     }
 
     public static AboutService getInstance(){
+        if (instance == null){
+            instance = new AboutService();
+        }
         return instance;
     }
 
@@ -50,7 +55,7 @@ public class AboutService {
 
     public static void initAbout(final NetworkCallback<Abouts> callback) throws ParseException{
         AboutServiceInterface aboutService = restAdapter.create(AboutServiceInterface.class);
-        aboutService.getAbout(MobilITApplication.getSectionFromCache().getCode_section(), new Callback<Abouts>() {
+        aboutService.getAbout(((Section) CacheService.getObjectFromCache("section")).getCode_section(), new Callback<Abouts>() {
             @Override
             public void success(Abouts abouts, Response response) {
                 if(abouts != null && abouts.hasAbout()) {

@@ -7,20 +7,21 @@ import org.esn.mobilit.fragments.AboutFragment;
 import org.esn.mobilit.fragments.Satellite.ListFragment;
 import org.esn.mobilit.fragments.Survival.SurvivalFragment;
 import org.esn.mobilit.models.SurvivalGuide;
+import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.feeds.FeedService;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 import java.util.ArrayList;
 
-public class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
+public class PagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
 
     ArrayList<Fragment> fragmentsList;
     FeedService feedService;
     RSSFeedParser feedEvents, feedNews, feedPartners;
     SurvivalGuide survivalGuide;
 
-    public FragmentPagerAdapter(FragmentManager fm) {
+    public PagerAdapter(FragmentManager fm) {
         super(fm);
         this.fragmentsList = new ArrayList<Fragment>();
         this.feedService = FeedService.getInstance();
@@ -54,12 +55,11 @@ public class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAd
         if (survivalGuide != null && survivalGuide.getCategories().size() > 0 ) {
             //Survival Guide
             SurvivalFragment survival = new SurvivalFragment();
-            survival.setSurvivalGuide(survivalGuide);
 
             fragmentsList.add(survival);
         }
 
-        if (Utils.getObjectFromCache("section") != null) {
+        if (CacheService.getObjectFromCache("section") != null) {
             //About Page
             AboutFragment about = new AboutFragment();
             fragmentsList.add(about);

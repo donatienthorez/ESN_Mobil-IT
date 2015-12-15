@@ -14,6 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.esn.mobilit.services.CacheService;
+import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Countries;
@@ -55,7 +57,7 @@ public class FirstLaunchActivity extends Activity {
 
         initContent();
 
-        if (Utils.isConnected(this)){
+        if (Utils.isConnected()){
             CountriesService.getCountries(new NetworkCallback<Countries>() {
                 @Override
                 public void onSuccess(Countries result) {
@@ -166,16 +168,17 @@ public class FirstLaunchActivity extends Activity {
 
     public void launchHomeActivity(View view){
         //Load new parameters
-        Utils.setDefaults(
+        PreferencesService.setDefaults(
                 "CODE_COUNTRY",
                 CountriesService.getCountries()
-                                .getCountryFromSection(currentSection)
-                                .getCodeCountry()
+                        .getCountryFromSection(currentSection)
+                        .getCodeCountry()
         );
-        Utils.setDefaults("CODE_SECTION", currentSection.getCode_section());
-        Utils.setDefaults("SECTION_WEBSITE", currentSection.getWebsite());
-        Utils.saveObjectToCache("country", currentCountry);
-        Utils.saveObjectToCache("section", currentSection);
+        PreferencesService.setDefaults("CODE_SECTION", currentSection.getCode_section());
+        PreferencesService.setDefaults("SECTION_WEBSITE", currentSection.getWebsite());
+
+        CacheService.saveObjectToCache("country", currentCountry);
+        CacheService.saveObjectToCache("section", currentSection);
 
         Intent returnIntent = new Intent();
         setResult(RESULT_OK,returnIntent);
