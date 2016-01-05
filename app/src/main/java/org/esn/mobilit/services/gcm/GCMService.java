@@ -7,6 +7,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.esn.mobilit.MobilITApplication;
+import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.utils.callbacks.Callback;
 import org.esn.mobilit.tasks.gcm.RegisterTask;
 import org.esn.mobilit.utils.Utils;
@@ -29,7 +30,7 @@ public class GCMService {
 
     public void pushForGcm(Activity activity, Callback<Object> callback)
     {
-        if (Utils.getDefaults(REG_ID) == null) {
+        if (PreferencesService.getDefaults(REG_ID) == null) {
 
             // Registering RegID
             if (checkPlayServices(activity)) {
@@ -41,7 +42,7 @@ public class GCMService {
         }
     }
     public void storeRegIdinSharedPref() {
-        Utils.setDefaults(REG_ID, regId);
+        PreferencesService.setDefaults(REG_ID, regId);
     }
 
     private boolean checkPlayServices(Activity activity) {

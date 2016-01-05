@@ -10,12 +10,12 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 
 import org.esn.mobilit.R;
-import org.esn.mobilit.adapters.FragmentPagerAdapter;
+import org.esn.mobilit.adapters.PagerAdapter;
 import org.esn.mobilit.fragments.Satellite.ListFragment.ListFragmentItemClickListener;
 import org.esn.mobilit.models.Section;
+import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.feeds.FeedService;
 import org.esn.mobilit.services.gcm.GCMService;
-import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 public class HomeActivity extends FragmentActivity implements ActionBar.TabListener, ListFragmentItemClickListener {
@@ -23,7 +23,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
     private static final String TAG = HomeActivity.class.getSimpleName();
 
     ViewPager viewPager;
-    FragmentPagerAdapter pagerAdapter;
+    PagerAdapter pagerAdapter;
 
     FeedService feedService;
 
@@ -35,8 +35,8 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
         feedService = FeedService.getInstance();
 
-        //Init FragmentPagerAdapter
-        pagerAdapter = new FragmentPagerAdapter(
+        //Init PagerAdapter
+        pagerAdapter = new PagerAdapter(
                 getSupportFragmentManager()
         );
 
@@ -96,7 +96,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         }
 
         try{
-            Section section = (Section) Utils.getObjectFromCache("section");
+            Section section = (Section) CacheService.getObjectFromCache("section");
 
             if (section != null){
                 ActionBar.Tab tabAbout = getActionBar().newTab();

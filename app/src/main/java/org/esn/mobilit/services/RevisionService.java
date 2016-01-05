@@ -19,7 +19,10 @@ public class RevisionService {
     }
 
     public static RevisionService getInstance(){
-            return instance;
+        if (instance == null){
+            instance = new RevisionService();
+        }
+        return instance;
     }
 
     private static RestAdapter restAdapter = new RestAdapter.Builder()

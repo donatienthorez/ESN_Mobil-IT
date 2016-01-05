@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Section;
+import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 
@@ -29,7 +30,7 @@ public class AboutFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.about_fragment, container, false);
 
-        final Section section = (Section) Utils.getObjectFromCache("section");
+        final Section section = (Section) CacheService.getObjectFromCache("section");
         final String url = ApplicationConstants.LOGOINSERTER_URL + "assets/img/logos/" + section.getLogo_url();
 
         ImageView logo = (ImageView) view.findViewById(R.id.section_logo);

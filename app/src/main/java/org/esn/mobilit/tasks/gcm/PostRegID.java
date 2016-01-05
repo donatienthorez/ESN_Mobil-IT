@@ -12,6 +12,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.esn.mobilit.MobilITApplication;
+import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.utils.callbacks.Callback;
 import org.esn.mobilit.services.gcm.GCMService;
 import org.esn.mobilit.utils.ApplicationConstants;
@@ -39,7 +40,7 @@ public class PostRegID extends AsyncTask<Void, Void, Void> {
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
             nameValuePairs.add(new BasicNameValuePair("regId", GCMService.getInstance().getRegId()));
-            nameValuePairs.add(new BasicNameValuePair("CODE_SECTION", Utils.getDefaults("CODE_SECTION")));
+            nameValuePairs.add(new BasicNameValuePair("CODE_SECTION", PreferencesService.getDefaults("CODE_SECTION")));
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
             HttpResponse response = httpclient.execute(httppost);

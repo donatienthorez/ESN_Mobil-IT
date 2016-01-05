@@ -1,7 +1,5 @@
 package org.esn.mobilit.adapters;
 
-import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +14,12 @@ import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
-public class CustomListAdapter extends BaseAdapter {
+public class ListAdapter extends BaseAdapter {
 
     private LayoutInflater layoutInflater;
     private RSSFeedParser feed;
 
-    public CustomListAdapter(RSSFeedParser feed, LayoutInflater layoutInflater) {
+    public ListAdapter(RSSFeedParser feed, LayoutInflater layoutInflater) {
         this.feed = feed;
         this.layoutInflater = layoutInflater;
     }

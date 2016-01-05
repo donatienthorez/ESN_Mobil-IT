@@ -16,6 +16,7 @@ import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.models.Abouts;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.AboutService;
+import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.utils.callbacks.Callback;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.R;
@@ -77,7 +78,7 @@ public class SplashActivity extends Activity {
             version.setText("v 1.0.0");
         }
 
-        if (!Utils.isConnected(this)){
+        if (!Utils.isConnected()){
             FeedService.getInstance().getFeedsFromCache();
             if(feedService.emptyFeeds()){
                 textView.setText(getResources().getString(R.string.emptycache));
@@ -98,7 +99,7 @@ public class SplashActivity extends Activity {
             launcherService.resetCount();
             gcmService.pushForGcm(this, callbackGCMConstructor());
 
-            final Section section = (Section) Utils.getObjectFromCache("section");
+            final Section section = (Section) CacheService.getObjectFromCache("section");
             final String url = ApplicationConstants.LOGOINSERTER_URL + "assets/img/logos/" + section.getLogo_url();
 
             if (section.getLogo_url() == null || section.getLogo_url().equalsIgnoreCase("")) {
@@ -106,7 +107,7 @@ public class SplashActivity extends Activity {
                     @Override
                     public void onSuccess(Abouts result) {
                         section.setLogo_url(result.getAbout().getLogoPath());
-                        Utils.saveObjectToCache("section", section);
+                        CacheService.saveObjectToCache("section", section);
                         Glide.with(MobilITApplication.getContext())
                                 .load(url)
                                 .downloadOnly(150, 250);

@@ -1,5 +1,7 @@
 package org.esn.mobilit.services.feeds;
 
+import org.esn.mobilit.services.CacheService;
+import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.models.RSS.RSS;
 import org.esn.mobilit.utils.ApplicationConstants;
@@ -25,6 +27,9 @@ public class PartnersService {
     }
 
     public static PartnersService getInstance() {
+        if (instance == null){
+            instance = new PartnersService();
+        }
         return instance;
     }
 
@@ -45,7 +50,7 @@ public class PartnersService {
     public static void initPartners(final NetworkCallback<RSS> callback) throws ParseException{
         PartnersServiceInterface partnersService = new RestAdapter
                 .Builder()
-                .setEndpoint(Utils.getDefaults("SECTION_WEBSITE"))
+                .setEndpoint(PreferencesService.getDefaults("SECTION_WEBSITE"))
                 .setConverter(new SimpleXMLConverter())
                 .build()
                 .create(PartnersServiceInterface.class);
@@ -55,7 +60,7 @@ public class PartnersService {
             public void success(RSS partners, Response response) {
                 partners.getRSSChannel().moveImage();
                 FeedService.getInstance().setFeedPartners(new RSSFeedParser(partners.getRSSChannel().getList()));
-                Utils.saveObjectToCache(
+                CacheService.saveObjectToCache(
                         "feedPartners",
                         new RSSFeedParser(partners.getRSSChannel().getList())
                 );

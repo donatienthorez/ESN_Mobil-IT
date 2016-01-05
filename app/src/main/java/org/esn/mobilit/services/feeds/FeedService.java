@@ -3,6 +3,7 @@ package org.esn.mobilit.services.feeds;
 import android.util.Log;
 
 import org.esn.mobilit.models.SurvivalGuide;
+import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
@@ -32,10 +33,10 @@ public class FeedService
 
     public void getFeedsFromCache()
     {
-        feedEvents    = (RSSFeedParser) Utils.getObjectFromCache("feedEvents");
-        feedNews      = (RSSFeedParser) Utils.getObjectFromCache("feedNews");
-        feedPartners  = (RSSFeedParser) Utils.getObjectFromCache("feedPartners");
-        survivalguide = (SurvivalGuide) Utils.getObjectFromCache("survivalGuide");
+        feedEvents    = (RSSFeedParser) CacheService.getObjectFromCache("feedEvents");
+        feedNews      = (RSSFeedParser) CacheService.getObjectFromCache("feedNews");
+        feedPartners  = (RSSFeedParser) CacheService.getObjectFromCache("feedPartners");
+        survivalguide = (SurvivalGuide) CacheService.getObjectFromCache("survivalGuide");
     }
 
     public int getTotalItems(){
