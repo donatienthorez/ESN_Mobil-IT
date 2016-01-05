@@ -15,7 +15,7 @@
     <string name="btn_retry">Réessayer</string>
     <string name="btn_change">Changer de section</string>
     <string name="load_survival_start">Chargement du guide de survie ...</string>
-    <string name="load_survival_end">%1$d pages chargées</string>
+    <string name="load_survival_end">SurvivalGuide chargé</string>
     <string name="load_events_start">Chargement des évènements ...</string>
     <string name="load_events_end">%1$d évènements chargés</string>
     <string name="load_news_start">Chargement des news ...</string>

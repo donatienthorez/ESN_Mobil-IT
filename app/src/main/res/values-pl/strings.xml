@@ -15,7 +15,7 @@
     <string name="btn_retry">Sprobuj ponownie</string>
     <string name="btn_change">Zmiana sekcji</string>
     <string name="load_survival_start">Sciaganie przewodnika ...</string>
-    <string name="load_survival_end">%1$d strony sciagniete</string>
+    <string name="load_survival_end">SurvivalGuide downloaded</string>
     <string name="load_events_start">Sciaganie wydarzen ...</string>
     <string name="load_events_end">%1$d wydarzenia sciagniete</string>
     <string name="load_news_start">Sciaganie wiadomosci ...</string>

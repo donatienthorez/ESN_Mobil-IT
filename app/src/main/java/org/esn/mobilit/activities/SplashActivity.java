@@ -126,7 +126,7 @@ public class SplashActivity extends Activity {
             NewsService.getNews(new NetworkCallback<RSS>() {
                 @Override
                 public void onSuccess(RSS result) {
-                    textView.setText(getResources().getString(R.string.load_news_end));
+                    textView.setText(getResources().getString(R.string.load_news_end, result.getListSize()));
                     launcherService.incrementCount();
                     if (launcherService.launchHomeActivity()) {
                         launchHomeActivity();
@@ -145,7 +145,7 @@ public class SplashActivity extends Activity {
             EventsService.getEvents(new NetworkCallback<RSS>() {
                 @Override
                 public void onSuccess(RSS result) {
-                    textView.setText(getResources().getString(R.string.load_events_end));
+                    textView.setText(getResources().getString(R.string.load_events_end, result.getListSize()));
                     launcherService.incrementCount();
                     if (launcherService.launchHomeActivity()) {
                         launchHomeActivity();
@@ -164,7 +164,7 @@ public class SplashActivity extends Activity {
             PartnersService.getPartners(new NetworkCallback<RSS>() {
                 @Override
                 public void onSuccess(RSS result) {
-                    textView.setText(getResources().getString(R.string.load_partners_end));
+                    textView.setText(getResources().getString(R.string.load_partners_end, result.getListSize()));
                     launcherService.incrementCount();
                     if (launcherService.launchHomeActivity()) {
                         launchHomeActivity();

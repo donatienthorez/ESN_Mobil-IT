@@ -15,7 +15,7 @@
     <string name="btn_retry">Try again</string>
     <string name="btn_change">Reset section</string>
     <string name="load_survival_start">Downloading Survival Guide ...</string>
-    <string name="load_survival_end">%1$d pages loaded</string>
+    <string name="load_survival_end">SurvivalGuide downloaded</string>
     <string name="load_events_start">Downloading Events ...</string>
     <string name="load_events_end">%1$d events loaded</string>
     <string name="load_news_start">Downloading News ...</string>

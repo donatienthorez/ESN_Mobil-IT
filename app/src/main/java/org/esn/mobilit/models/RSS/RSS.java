@@ -22,4 +22,8 @@ public class RSS {
     public RSSChannel getRSSChannel() {
         return RSSChannel;
     }
+
+    public int getListSize(){
+        return this.getRSSChannel().getList().size();
+    }
 }
