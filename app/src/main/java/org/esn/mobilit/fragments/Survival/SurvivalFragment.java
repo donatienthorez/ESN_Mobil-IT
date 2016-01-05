@@ -15,11 +15,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.esn.mobilit.R;
-import org.esn.mobilit.models.Category;
-import org.esn.mobilit.models.SurvivalGuide;
 import org.esn.mobilit.renderers.SurvivalGuideRenderer;
 import org.esn.mobilit.services.PreferencesService;
-import org.esn.mobilit.services.feeds.FeedService;
 import org.esn.mobilit.utils.ApplicationConstants;
 
 public class SurvivalFragment extends Fragment{
@@ -39,30 +36,12 @@ public class SurvivalFragment extends Fragment{
         // Set the Text to try this out
         TextView t = (TextView) myInflatedView.findViewById(R.id.survivalContent);
 
-        SurvivalGuide survivalGuide = FeedService.getInstance().getSurvivalguide();
-        String survivalContent = "", title, content;
-
-        for (Category category : survivalGuide.getCategories()){
-            title = "<h" + (category.getLevel()+1) + "><font color='" + getColorByCategoryLevel(category.getLevel()) + "'>" + category.getName() + "</font><h" + (category.getLevel()+1) + "><br/>";
-            content = "<p><font color='" +getColorByCategoryLevel(3)+ "'>" + category.getContent() + "</font></<br/>";
-
-            survivalContent += title + content;
-        }
-
-//        String survivalContent = SurvivalGuideRenderer.getInstance().renderSurvivalGuide();
-
+        SurvivalGuideRenderer sgr = new SurvivalGuideRenderer();
+        String survivalContent = sgr.renderSurvivalGuide();
         t.setText(Html.fromHtml(survivalContent), TextView.BufferType.SPANNABLE);
 
-        return myInflatedView;
-    }
 
-    public String getColorByCategoryLevel(int level){
-        switch (level){
-            case 0 : return String.valueOf(getResources().getColor(R.color.esngreen)); //VERT ESN
-            case 1 : return String.valueOf(getResources().getColor(R.color.esnpink)); //ROSE ESN
-            case 2 : return String.valueOf(getResources().getColor(R.color.esnorange)); //ORANGE ESN
-            default : return String.valueOf(getResources().getColor(R.color.esngrey));//BLEU ESN
-        }
+        return myInflatedView;
     }
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

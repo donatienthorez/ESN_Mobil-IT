@@ -8,24 +8,11 @@ import org.esn.mobilit.services.feeds.FeedService;
 
 public class SurvivalGuideRenderer {
 
-    private static SurvivalGuideRenderer instance;
-    private final static String TAG = "SurvivalGuideRenderer";
-
-    private SurvivalGuideRenderer(){
-        instance = new SurvivalGuideRenderer();
-    }
-
-    public static SurvivalGuideRenderer getInstance(){
-        if (instance == null){
-            instance = new SurvivalGuideRenderer();
-        }
-        return instance;
-    }
-
     public String renderSurvivalGuide(){
         String survivalContent = "", title, content;
+        SurvivalGuide survivalGuide = FeedService.getInstance().getSurvivalguide();
 
-        for (Category category : FeedService.getInstance().getSurvivalguide().getCategories()){
+        for (Category category : survivalGuide.getCategories()){
             title = "<h" + (category.getLevel()+1) + "><font color='"
                     + getColorByCategoryLevel(category.getLevel()) + "'>"
                     + category.getName() + "</font><h" + (category.getLevel()+1)
@@ -47,5 +34,4 @@ public class SurvivalGuideRenderer {
             default : return String.valueOf(MobilITApplication.getContext().getResources().getColor(R.color.esngrey));//BLEU ESN
         }
     }
-
 }
