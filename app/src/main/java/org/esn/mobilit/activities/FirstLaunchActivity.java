@@ -3,9 +3,7 @@ package org.esn.mobilit.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -14,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.esn.mobilit.renderers.HomepageRenderer;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
@@ -22,7 +21,6 @@ import org.esn.mobilit.models.Countries;
 import org.esn.mobilit.models.Country;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.CountriesService;
-import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.adapters.SpinnerAdapter;
 
@@ -82,27 +80,9 @@ public class FirstLaunchActivity extends Activity {
 
         spinnerCountries = new Spinner(this);
 
-        //Set text color
-        SpannableStringBuilder text = new SpannableStringBuilder();
-        text.append(getResources().getString(R.string.chooseyour) + " "); // Choose your
-
-        ForegroundColorSpan blue = new ForegroundColorSpan(ApplicationConstants.ESNBlueRGB);
-
-        SpannableString countrySpan = new SpannableString(getResources().getString(R.string.country));
-        countrySpan.setSpan(blue, 0, countrySpan.length(), 0);
-        text.append(countrySpan); // Choose your country
-        text.append(", ");// Choose your country ,
-
-        SpannableString cityspan = new SpannableString(getResources().getString(R.string.city));
-        cityspan.setSpan(blue, 0, cityspan.length(), 0);
-        text.append(cityspan + " "); // Choose your country, city
-        text.append(getResources().getString(R.string.and) + " ");// Choose your country ,city and
-
-        SpannableString esnSectionSpan = new SpannableString(getResources().getString(R.string.esnsection));
-        esnSectionSpan.setSpan(blue, 0, esnSectionSpan.length(), 0);
-        text.append(esnSectionSpan); // Choose your country, city and ESN Section
-        text.append('.');// Choose your country ,city and ESN Section.
-
+        //Set text
+        HomepageRenderer homepageRenderer = new HomepageRenderer();
+        SpannableStringBuilder text = homepageRenderer.renderHomepageText();
         textView.setText(text, TextView.BufferType.SPANNABLE);
     }
 
