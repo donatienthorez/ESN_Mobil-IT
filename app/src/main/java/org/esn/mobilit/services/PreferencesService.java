@@ -33,9 +33,9 @@ public class PreferencesService {
     }
 
     public static void resetSection(){
-        setDefaults("CODE_SECTION", null);
-        setDefaults("CODE_COUNTRY", null);
-        setDefaults("SECTION_WEBSITE", null);
+        setDefaults("code_section", null);
+        PreferencesService.setDefaults("code_country", null);
+        setDefaults("section_website", null);
         setDefaults("regId", null);
     }
 }

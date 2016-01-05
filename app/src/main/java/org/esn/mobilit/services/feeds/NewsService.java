@@ -51,7 +51,7 @@ public class NewsService {
     public static void initNews(final NetworkCallback<RSS> callback) throws ParseException{
         NewsServiceInterface newService = new RestAdapter
                 .Builder()
-                .setEndpoint(PreferencesService.getDefaults("SECTION_WEBSITE"))
+                .setEndpoint(PreferencesService.getDefaults("section_website"))
                 .setConverter(new SimpleXMLConverter())
                 .build()
                 .create(NewsServiceInterface.class);

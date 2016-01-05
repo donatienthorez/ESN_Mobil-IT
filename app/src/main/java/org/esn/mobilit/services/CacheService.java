@@ -30,7 +30,7 @@ public class CacheService {
     public static Object getObjectFromCache(String key){
         Object o = null;
         if (!key.equalsIgnoreCase("countries")) {
-            key = PreferencesService.getDefaults("CODE_SECTION") + "_" + key;
+            key = PreferencesService.getDefaults("code_section") + "_" + key;
         }
 
         try {
@@ -49,7 +49,7 @@ public class CacheService {
      */
     public static void saveObjectToCache(String key, Object o){
         if (!key.equalsIgnoreCase("countries")) {
-            key = PreferencesService.getDefaults("CODE_SECTION") + "_" + key;
+            key = PreferencesService.getDefaults("code_section") + "_" + key;
         }
 
         try {

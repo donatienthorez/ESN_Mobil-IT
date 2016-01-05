@@ -69,7 +69,7 @@ public class ListFragment extends android.support.v4.app.ListFragment
             /** This statement ensures that the hosting activity implements ListFragmentItemClickListener */
             itemClickListener = (ListFragmentItemClickListener) activity;
         }catch(Exception e){
-            Toast.makeText(activity.getBaseContext(), "Exception onAttach ListFragment",Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity.getBaseContext(), "Exception onAttach ListFragment", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -79,7 +79,7 @@ public class ListFragment extends android.support.v4.app.ListFragment
                 if (currentActivity != null) {
                     PreferencesService.resetSection();
                     Intent returnIntent = new Intent();
-                    currentActivity.setResult(ApplicationConstants.RESULT_FIRST_LAUNCH,returnIntent);
+                    currentActivity.setResult(ApplicationConstants.RESULT_FIRST_LAUNCH, returnIntent);
                     currentActivity.finish();
                 }
                 return true;

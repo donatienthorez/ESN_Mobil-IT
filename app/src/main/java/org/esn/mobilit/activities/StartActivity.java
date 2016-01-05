@@ -28,7 +28,7 @@ public class StartActivity extends Activity
     }
 
     protected void chooseActivity(){
-        String section_website = getDefaults("SECTION_WEBSITE");
+        String section_website = getDefaults("section_website");
 
         Intent intent = null;
 

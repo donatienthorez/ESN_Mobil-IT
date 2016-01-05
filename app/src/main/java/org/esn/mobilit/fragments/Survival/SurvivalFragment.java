@@ -40,7 +40,6 @@ public class SurvivalFragment extends Fragment{
         String survivalContent = sgr.renderSurvivalGuide();
         t.setText(Html.fromHtml(survivalContent), TextView.BufferType.SPANNABLE);
 
-
         return myInflatedView;
     }
 
@@ -59,7 +58,6 @@ public class SurvivalFragment extends Fragment{
         switch (item.getItemId()) {
             case R.id.ras_section_settings:
                 if (currentActivity != null) {
-                    Log.d(TAG, "RAS SECTION SETTINGS");
                     PreferencesService.resetSection();
 
                     Intent returnIntent = new Intent();

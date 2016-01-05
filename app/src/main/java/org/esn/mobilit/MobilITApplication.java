@@ -17,4 +17,3 @@ public class MobilITApplication extends Application {
         return context;
     }
 }
-

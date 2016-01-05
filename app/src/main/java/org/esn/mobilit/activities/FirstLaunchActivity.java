@@ -149,13 +149,14 @@ public class FirstLaunchActivity extends Activity {
     public void launchHomeActivity(View view){
         //Load new parameters
         PreferencesService.setDefaults(
-                "CODE_COUNTRY",
-                CountriesService.getCountries()
+                "code_country",
+                CountriesService
+                        .getCountries()
                         .getCountryFromSection(currentSection)
                         .getCodeCountry()
         );
-        PreferencesService.setDefaults("CODE_SECTION", currentSection.getCode_section());
-        PreferencesService.setDefaults("SECTION_WEBSITE", currentSection.getWebsite());
+        PreferencesService.setDefaults("code_section", currentSection.getCode_section());
+        PreferencesService.setDefaults("section_website", currentSection.getWebsite());
 
         CacheService.saveObjectToCache("country", currentCountry);
         CacheService.saveObjectToCache("section", currentSection);

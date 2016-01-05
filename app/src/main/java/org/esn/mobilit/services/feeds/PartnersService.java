@@ -50,7 +50,7 @@ public class PartnersService {
     public static void initPartners(final NetworkCallback<RSS> callback) throws ParseException{
         PartnersServiceInterface partnersService = new RestAdapter
                 .Builder()
-                .setEndpoint(PreferencesService.getDefaults("SECTION_WEBSITE"))
+                .setEndpoint(PreferencesService.getDefaults("section_website"))
                 .setConverter(new SimpleXMLConverter())
                 .build()
                 .create(PartnersServiceInterface.class);

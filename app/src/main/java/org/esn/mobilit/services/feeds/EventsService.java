@@ -51,7 +51,7 @@ public class EventsService {
     public static void initEvents(final NetworkCallback<RSS> callback) throws ParseException{
         EventsServiceInterface eventsService =
                 new RestAdapter.Builder()
-                        .setEndpoint(PreferencesService.getDefaults("SECTION_WEBSITE"))
+                        .setEndpoint(PreferencesService.getDefaults("section_website"))
                         .setConverter(new SimpleXMLConverter())
                         .build()
                         .create(EventsServiceInterface.class);

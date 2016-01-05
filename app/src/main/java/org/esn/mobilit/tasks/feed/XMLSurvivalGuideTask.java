@@ -26,7 +26,7 @@ public class XMLSurvivalGuideTask extends AsyncTask<Void, Void, Callback> {
 
         String url = ApplicationConstants.SURVIVAL_WEBSERVICE_URL
                 + "/getCategories.php?section="
-                + PreferencesService.getDefaults("CODE_SECTION");
+                + PreferencesService.getDefaults("code_section");
 
         this.survivalGuide = JSONfunctions.getSurvivalGuide(url);
 
