@@ -1,4 +1,4 @@
-package org.esn.mobilit.utils.image;
+package org.esn.mobilit.utils.storage;
 
 import android.content.Context;
 
@@ -26,10 +26,5 @@ public final class InternalStorage{
         ObjectInputStream ois = new ObjectInputStream(fis);
         Object object = ois.readObject();
         return object;
-    }
-
-    public static boolean deleteObject(String key) throws IOException {
-
-        return MobilITApplication.getContext().deleteFile(key);
     }
 }

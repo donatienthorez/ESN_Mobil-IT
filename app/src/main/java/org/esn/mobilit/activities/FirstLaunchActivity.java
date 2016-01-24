@@ -3,9 +3,8 @@ package org.esn.mobilit.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -14,13 +13,18 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+
+import org.esn.mobilit.renderers.HomepageRenderer;
+import org.esn.mobilit.services.CacheService;
+import org.esn.mobilit.services.PreferencesService;
+import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Countries;
 import org.esn.mobilit.models.Country;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.CountriesService;
-import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.adapters.SpinnerAdapter;
 
@@ -28,6 +32,7 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.fabric.sdk.android.Fabric;
 import retrofit.RetrofitError;
 
 public class FirstLaunchActivity extends Activity {
@@ -53,9 +58,19 @@ public class FirstLaunchActivity extends Activity {
 
         setContentView(R.layout.activity_firstlaunch);
 
+        Fabric.with(this, new Crashlytics());
+
+        String sectionWebsite = PreferencesService.getDefaults("section_website");
+
+        if (!(sectionWebsite == null || sectionWebsite.equalsIgnoreCase(""))) {
+            Intent intent = new Intent(this, SplashActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
+
         initContent();
 
-        if (Utils.isConnected(this)){
+        if (Utils.isConnected()){
             CountriesService.getCountries(new NetworkCallback<Countries>() {
                 @Override
                 public void onSuccess(Countries result) {
@@ -80,27 +95,9 @@ public class FirstLaunchActivity extends Activity {
 
         spinnerCountries = new Spinner(this);
 
-        //Set text color
-        SpannableStringBuilder text = new SpannableStringBuilder();
-        text.append(getResources().getString(R.string.chooseyour) + " "); // Choose your
-
-        ForegroundColorSpan blue = new ForegroundColorSpan(ApplicationConstants.ESNBlueRGB);
-
-        SpannableString countrySpan = new SpannableString(getResources().getString(R.string.country));
-        countrySpan.setSpan(blue, 0, countrySpan.length(), 0);
-        text.append(countrySpan); // Choose your country
-        text.append(", ");// Choose your country ,
-
-        SpannableString cityspan = new SpannableString(getResources().getString(R.string.city));
-        cityspan.setSpan(blue, 0, cityspan.length(), 0);
-        text.append(cityspan + " "); // Choose your country, city
-        text.append(getResources().getString(R.string.and) + " ");// Choose your country ,city and
-
-        SpannableString esnSectionSpan = new SpannableString(getResources().getString(R.string.esnsection));
-        esnSectionSpan.setSpan(blue, 0, esnSectionSpan.length(), 0);
-        text.append(esnSectionSpan); // Choose your country, city and ESN Section
-        text.append('.');// Choose your country ,city and ESN Section.
-
+        //Set text
+        HomepageRenderer homepageRenderer = new HomepageRenderer();
+        SpannableStringBuilder text = homepageRenderer.renderHomepageText();
         textView.setText(text, TextView.BufferType.SPANNABLE);
     }
 
@@ -164,21 +161,23 @@ public class FirstLaunchActivity extends Activity {
         spinnersLayout.addView(spinnerSections);
     }
 
-    public void launchHomeActivity(View view){
+    public void launchSplashActivity(View view){
         //Load new parameters
-        Utils.setDefaults(
-                "CODE_COUNTRY",
-                CountriesService.getCountries()
-                                .getCountryFromSection(currentSection)
-                                .getCodeCountry()
+        PreferencesService.setDefaults(
+                "code_country",
+                CountriesService
+                        .getCountries()
+                        .getCountryFromSection(currentSection)
+                        .getCodeCountry()
         );
-        Utils.setDefaults("CODE_SECTION", currentSection.getCode_section());
-        Utils.setDefaults("SECTION_WEBSITE", currentSection.getWebsite());
-        Utils.saveObjectToCache("country", currentCountry);
-        Utils.saveObjectToCache("section", currentSection);
+        PreferencesService.setDefaults("code_section", currentSection.getCode_section());
+        PreferencesService.setDefaults("section_website", currentSection.getWebsite());
 
-        Intent returnIntent = new Intent();
-        setResult(RESULT_OK,returnIntent);
-        finish();
+        CacheService.saveObjectToCache("country", currentCountry);
+        CacheService.saveObjectToCache("section", currentSection);
+
+        Intent intent = new Intent(this, SplashActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 }

@@ -4,30 +4,26 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.widget.ListView;
 
 import org.esn.mobilit.R;
-import org.esn.mobilit.adapters.FragmentPagerAdapter;
+import org.esn.mobilit.adapters.PagerAdapter;
 import org.esn.mobilit.fragments.Satellite.ListFragment.ListFragmentItemClickListener;
 import org.esn.mobilit.models.Section;
+import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.feeds.FeedService;
 import org.esn.mobilit.services.gcm.GCMService;
-import org.esn.mobilit.utils.Utils;
-import org.esn.mobilit.utils.image.InternalStorage;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 public class HomeActivity extends FragmentActivity implements ActionBar.TabListener, ListFragmentItemClickListener {
 
     private static final String TAG = HomeActivity.class.getSimpleName();
 
-    ViewPager myPager;
-    FragmentPagerAdapter myAdapter;
+    ViewPager viewPager;
+    PagerAdapter pagerAdapter;
 
     FeedService feedService;
 
@@ -38,23 +34,11 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         setContentView(R.layout.activity_main);
 
         feedService = FeedService.getInstance();
-        int totalTabs = feedService.getTotalTabs();
 
-        try{
-            Section section = (Section) Utils.getObjectFromCache("section");
-            if (section != null) totalTabs++;
-        } catch (NullPointerException e){
-            Log.d(TAG, e.toString());
-        }
-
-        //Init FragmentPagerAdapter
-        FragmentPagerAdapter fpa = new FragmentPagerAdapter(
-                getSupportFragmentManager(),
-                totalTabs
+        //Init PagerAdapter
+        pagerAdapter = new PagerAdapter(
+                getSupportFragmentManager()
         );
-
-        fpa.setTabsList();
-        myAdapter = fpa;
 
         //Init ActionBar
         final ActionBar actionBar = getActionBar();
@@ -65,9 +49,9 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         }
 
         //Init Pager
-        myPager = (ViewPager) findViewById(R.id.pager);
-        myPager.setAdapter(myAdapter);
-        myPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 actionBar.setSelectedNavigationItem(position);
@@ -112,7 +96,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         }
 
         try{
-            Section section = (Section) Utils.getObjectFromCache("section");
+            Section section = (Section) CacheService.getObjectFromCache("section");
 
             if (section != null){
                 ActionBar.Tab tabAbout = getActionBar().newTab();
@@ -130,26 +114,25 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         String pushMsg = GCMService.getInstance().getPushMsg();
 
         int pos = -1;
-        RSSFeedParser currentfeed = null;
-        ListView lv = null;
+        RSSFeedParser currentFeed = null;
         if (feedService.getFeedEvents().getPositionFromTitle(pushMsg) > 0) {
             pos = feedService.getFeedEvents().getPositionFromTitle(pushMsg);
-            currentfeed = feedService.getFeedEvents();
+            currentFeed = feedService.getFeedEvents();
         }
         if (feedService.getFeedNews().getPositionFromTitle(pushMsg) > 0) {
             pos = feedService.getFeedNews().getPositionFromTitle(pushMsg);
-            currentfeed = feedService.getFeedNews();
+            currentFeed = feedService.getFeedNews();
         }
         if (feedService.getFeedPartners().getPositionFromTitle(pushMsg) > 0) {
             pos = feedService.getFeedPartners().getPositionFromTitle(pushMsg);
-            currentfeed = feedService.getFeedPartners();
+            currentFeed = feedService.getFeedPartners();
         }
 
-        if (currentfeed != null && pos > 0) {
+        if (currentFeed != null && pos > 0) {
             Intent intent = new Intent(this, DetailActivity.class);
 
             Bundle b = new Bundle();
-            b.putSerializable("feed", currentfeed);
+            b.putSerializable("feed", currentFeed);
             b.putInt("pos", pos);
             intent.putExtras(b);
 
@@ -157,32 +140,15 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         }
     }
 
-    // PREFERENCES
-    public String getDefaults(String key) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        return preferences.getString(key, null);
-    }
-
-    public Object getObjectFromCache(String key) {
-        Object o = null;
-        key = getDefaults("CODE_SECTION") + "_" + key;
-        try {
-            o = InternalStorage.readObject(key);
-        } catch (Exception e) {
-            Log.d(TAG, "Exception getobject: " + e);
-        }
-        return o;
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("viewpagerid", myPager.getId());
+        outState.putInt("viewpagerid", viewPager.getId());
     }
 
     @Override
     public void onTabSelected(Tab tab, FragmentTransaction ft) {
-        myPager.setCurrentItem(tab.getPosition());
+        viewPager.setCurrentItem(tab.getPosition());
     }
 
     @Override

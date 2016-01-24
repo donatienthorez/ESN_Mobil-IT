@@ -1,7 +1,5 @@
 package org.esn.mobilit.utils.parser;
 
-import android.util.Log;
-
 import org.esn.mobilit.models.RSS.RSSItem;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;

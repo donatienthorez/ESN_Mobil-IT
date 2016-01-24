@@ -3,6 +3,8 @@ package org.esn.mobilit.tasks.feed;
 import android.os.AsyncTask;
 
 import org.esn.mobilit.MobilITApplication;
+import org.esn.mobilit.services.CacheService;
+import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.utils.callbacks.Callback;
 import org.esn.mobilit.models.SurvivalGuide;
 import org.esn.mobilit.network.JSONfunctions;
@@ -24,12 +26,12 @@ public class XMLSurvivalGuideTask extends AsyncTask<Void, Void, Callback> {
 
         String url = ApplicationConstants.SURVIVAL_WEBSERVICE_URL
                 + "/getCategories.php?section="
-                + Utils.getDefaults("CODE_SECTION");
+                + PreferencesService.getDefaults("code_section");
 
         this.survivalGuide = JSONfunctions.getSurvivalGuide(url);
 
         FeedService.getInstance().setSurvivalguide(survivalGuide);
-        Utils.saveObjectToCache("survivalGuide", survivalGuide);
+        CacheService.saveObjectToCache("survivalGuide", survivalGuide);
 
         return callback;
     }

@@ -1,5 +1,7 @@
 package org.esn.mobilit.services.feeds;
 
+import org.esn.mobilit.services.CacheService;
+import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.models.RSS.RSS;
 import org.esn.mobilit.utils.ApplicationConstants;
@@ -26,13 +28,11 @@ public class EventsService {
     }
 
     public static EventsService getInstance() {
+        if (instance == null){
+            instance = new EventsService();
+        }
         return instance;
     }
-
-    private static RestAdapter restAdapter = new RestAdapter.Builder()
-            .setEndpoint(Utils.getDefaults("SECTION_WEBSITE"))
-            .setConverter(new SimpleXMLConverter())
-            .build();
 
     private interface EventsServiceInterface{
         @GET(ApplicationConstants.EVENTS_PATH + ApplicationConstants.FEED_PATH)
@@ -49,14 +49,20 @@ public class EventsService {
     }
 
     public static void initEvents(final NetworkCallback<RSS> callback) throws ParseException{
-        EventsServiceInterface eventsService = restAdapter.create(EventsServiceInterface.class);
+        EventsServiceInterface eventsService =
+                new RestAdapter.Builder()
+                        .setEndpoint(PreferencesService.getDefaults("section_website"))
+                        .setConverter(new SimpleXMLConverter())
+                        .build()
+                        .create(EventsServiceInterface.class);
+
         eventsService.getEvents(new Callback<RSS>() {
             @Override
             public void success(RSS events, Response response) {
                 events.getRSSChannel().moveImage();
                 FeedService.getInstance().setFeedEvents(new RSSFeedParser(events.getRSSChannel().getList()));
 
-                Utils.saveObjectToCache(
+                CacheService.saveObjectToCache(
                         "feedEvents",
                         new RSSFeedParser(events.getRSSChannel().getList())
                 );
