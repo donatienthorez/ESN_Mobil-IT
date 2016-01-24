@@ -14,6 +14,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import org.esn.mobilit.R;
+import org.esn.mobilit.activities.FirstLaunchActivity;
+import org.esn.mobilit.activities.SplashActivity;
 import org.esn.mobilit.adapters.ListAdapter;
 import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.utils.ApplicationConstants;
@@ -78,8 +80,8 @@ public class ListFragment extends android.support.v4.app.ListFragment
             case R.id.ras_section_settings:
                 if (currentActivity != null) {
                     PreferencesService.resetSection();
-                    Intent returnIntent = new Intent();
-                    currentActivity.setResult(ApplicationConstants.RESULT_FIRST_LAUNCH, returnIntent);
+                    Intent intent = new Intent(currentActivity, FirstLaunchActivity.class);
+                    startActivity(intent);
                     currentActivity.finish();
                 }
                 return true;

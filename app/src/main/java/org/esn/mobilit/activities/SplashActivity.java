@@ -5,18 +5,21 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.crashlytics.android.Crashlytics;
 
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.models.Abouts;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.AboutService;
 import org.esn.mobilit.services.CacheService;
+import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.utils.callbacks.Callback;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.R;
@@ -34,6 +37,7 @@ import org.esn.mobilit.utils.Utils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.fabric.sdk.android.Fabric;
 import retrofit.RetrofitError;
 
 public class SplashActivity extends Activity {
@@ -48,11 +52,18 @@ public class SplashActivity extends Activity {
     GCMService gcmService;
     LauncherService launcherService;
 
-    @OnClick({R.id.changesection, R.id.retry})
-    public void onClick(View v) {
-        Intent returnIntent = new Intent();
-        setResult(ApplicationConstants.RESULT_FIRST_LAUNCH, returnIntent);
+    @OnClick(R.id.changesection)
+    public void changeSection(View v) {
+        PreferencesService.resetSection();
+        Intent intent = new Intent(this, FirstLaunchActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.retry)
+    public void retry(View v) {
         finish();
+        startActivity(getIntent());
     }
 
     @Override
@@ -188,6 +199,7 @@ public class SplashActivity extends Activity {
         textView.setText(R.string.noitems);
         progressBar.setVisibility(View.INVISIBLE);
         buttonRetry.setVisibility(View.VISIBLE);
+        buttonSection.setVisibility(View.VISIBLE);
     }
 
     public Callback callbackSurvivalGuideConstructor(final int stringId){
@@ -235,8 +247,8 @@ public class SplashActivity extends Activity {
         feedService.getFeedsFromCache();
         if (feedService.getTotalItems() > 0) {
             textView.setText(R.string.start_homeactivity);
-            Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-            startActivityForResult(i, ApplicationConstants.RESULT_SPLASH_ACTIVITY);
+            Intent i = new Intent(this, HomeActivity.class);
+            startActivity(i);
         } else {
             this.retry();
         }
@@ -250,20 +262,5 @@ public class SplashActivity extends Activity {
         if (extras != null) {
             gcmService.setPushMsg(getIntent().getExtras().getString("title"));
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == ApplicationConstants.RESULT_SPLASH_ACTIVITY) {
-            Intent returnIntent = new Intent();
-            if (resultCode == RESULT_CANCELED){
-                setResult(ApplicationConstants.RESULT_CLOSE_ALL, returnIntent);
-                finish();
-            } else if (resultCode == ApplicationConstants.RESULT_FIRST_LAUNCH){
-                setResult(ApplicationConstants.RESULT_FIRST_LAUNCH, returnIntent);
-                finish();
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 }

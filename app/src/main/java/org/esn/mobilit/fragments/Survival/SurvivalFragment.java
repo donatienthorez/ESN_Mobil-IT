@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.esn.mobilit.R;
+import org.esn.mobilit.activities.FirstLaunchActivity;
 import org.esn.mobilit.renderers.SurvivalGuideRenderer;
 import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.utils.ApplicationConstants;
@@ -59,9 +60,8 @@ public class SurvivalFragment extends Fragment{
             case R.id.ras_section_settings:
                 if (currentActivity != null) {
                     PreferencesService.resetSection();
-
-                    Intent returnIntent = new Intent();
-                    currentActivity.setResult(ApplicationConstants.RESULT_FIRST_LAUNCH,returnIntent);
+                    Intent intent = new Intent(currentActivity, FirstLaunchActivity.class);
+                    startActivity(intent);
                     currentActivity.finish();
                 }
                 return true;

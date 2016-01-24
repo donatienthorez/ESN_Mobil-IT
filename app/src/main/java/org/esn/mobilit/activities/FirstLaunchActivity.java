@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -12,9 +13,12 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.esn.mobilit.renderers.HomepageRenderer;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.PreferencesService;
+import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Countries;
@@ -28,6 +32,7 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.fabric.sdk.android.Fabric;
 import retrofit.RetrofitError;
 
 public class FirstLaunchActivity extends Activity {
@@ -52,6 +57,16 @@ public class FirstLaunchActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_firstlaunch);
+
+        Fabric.with(this, new Crashlytics());
+
+        String sectionWebsite = PreferencesService.getDefaults("section_website");
+
+        if (!(sectionWebsite == null || sectionWebsite.equalsIgnoreCase(""))) {
+            Intent intent = new Intent(this, SplashActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
 
         initContent();
 
@@ -146,7 +161,7 @@ public class FirstLaunchActivity extends Activity {
         spinnersLayout.addView(spinnerSections);
     }
 
-    public void launchHomeActivity(View view){
+    public void launchSplashActivity(View view){
         //Load new parameters
         PreferencesService.setDefaults(
                 "code_country",
@@ -161,8 +176,8 @@ public class FirstLaunchActivity extends Activity {
         CacheService.saveObjectToCache("country", currentCountry);
         CacheService.saveObjectToCache("section", currentSection);
 
-        Intent returnIntent = new Intent();
-        setResult(RESULT_OK,returnIntent);
-        finish();
+        Intent intent = new Intent(this, SplashActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 }
