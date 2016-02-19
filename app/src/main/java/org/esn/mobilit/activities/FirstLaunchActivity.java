@@ -21,7 +21,6 @@ import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.R;
-import org.esn.mobilit.models.Countries;
 import org.esn.mobilit.models.Country;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.CountriesService;
@@ -29,6 +28,7 @@ import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.adapters.SpinnerAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -71,10 +71,10 @@ public class FirstLaunchActivity extends Activity {
         initContent();
 
         if (Utils.isConnected()){
-            CountriesService.getCountries(new NetworkCallback<Countries>() {
+            CountriesService.getCountries(new NetworkCallback<List<Country>>() {
                 @Override
-                public void onSuccess(Countries result) {
-                    initCountriesSpinner();
+                public void onSuccess(List<Country> result) {
+                    initCountriesSpinner(result);
                 }
 
                 @Override
@@ -101,12 +101,12 @@ public class FirstLaunchActivity extends Activity {
         textView.setText(text, TextView.BufferType.SPANNABLE);
     }
 
-    private void initCountriesSpinner(){
+    private void initCountriesSpinner(final List<Country> countries){
         ArrayList<String> datas = new ArrayList<String>();
 
         //Add dummy string
         datas.add(getResources().getString(R.string.selectyourcountry));
-        for(Country country : CountriesService.getCountries().getCountries()){
+        for(Country country : countries){
             datas.add(country.getName());
         }
 
@@ -116,7 +116,7 @@ public class FirstLaunchActivity extends Activity {
                 new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
                         if (position != 0) {
-                            currentCountry = CountriesService.getCountries().getCountry(position - 1);
+                            currentCountry = countries.get(position - 1);
                             initSectionsSpinner();
                         }
                     }
@@ -165,10 +165,7 @@ public class FirstLaunchActivity extends Activity {
         //Load new parameters
         PreferencesService.setDefaults(
                 "code_country",
-                CountriesService
-                        .getCountries()
-                        .getCountryFromSection(currentSection)
-                        .getCodeCountry()
+                currentCountry.getCodeCountry()
         );
         PreferencesService.setDefaults("code_section", currentSection.getCode_section());
         PreferencesService.setDefaults("section_website", currentSection.getWebsite());
