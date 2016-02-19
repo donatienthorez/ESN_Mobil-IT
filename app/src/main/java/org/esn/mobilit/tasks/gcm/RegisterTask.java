@@ -49,7 +49,6 @@ public class RegisterTask extends AsyncTask<Void, Void, String> {
             try {
                 PostRegService.registerId(
                         new NetworkCallback<Response>() {
-
                             @Override
                             public void onSuccess(Response result) {
                                 callback.onSuccess(null);
@@ -57,7 +56,7 @@ public class RegisterTask extends AsyncTask<Void, Void, String> {
 
                             @Override
                             public void onFailure(RetrofitError error) {
-                                callback.onSuccess(error);
+                                callback.onFailure(error);
                             }
                         }
                 );

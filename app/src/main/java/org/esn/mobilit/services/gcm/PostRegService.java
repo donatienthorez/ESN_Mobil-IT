@@ -4,9 +4,7 @@ import android.util.Log;
 
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.CacheService;
-import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
-import org.simpleframework.xml.util.Cache;
 
 import java.text.ParseException;
 
@@ -14,8 +12,9 @@ import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import retrofit.http.GET;
-import retrofit.http.Query;
+import retrofit.http.Multipart;
+import retrofit.http.POST;
+import retrofit.http.Part;
 
 public class PostRegService {
 
@@ -30,14 +29,15 @@ public class PostRegService {
     }
 
     private static RestAdapter restAdapter = new RestAdapter.Builder()
-            .setEndpoint("http://esnlille.fr/survivalGuide")
+            .setEndpoint("http://mobilit.esnlille.fr/api/android")
             .build();
 
     private interface PostRegServiceInterface{
-        @GET("/rest/insertRegId.php")
+        @Multipart
+        @POST("/v1/regids/")
         void registerId(
-                @Query("regId") String regId,
-                @Query("code_section") String section,
+                @Part("regId") String regId,
+                @Part("section") String section,
                 Callback<Response> callback
         );
     }
