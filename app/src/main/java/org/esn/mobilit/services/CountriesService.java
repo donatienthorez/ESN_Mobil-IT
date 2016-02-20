@@ -10,19 +10,6 @@ import retrofit.RetrofitError;
 
 public class CountriesService {
 
-    private static CountriesService instance;
-
-    private CountriesService(){
-        instance = new CountriesService();
-    }
-
-    public static CountriesService getInstance(){
-        if (instance == null){
-            instance = new CountriesService();
-        }
-        return instance;
-    }
-
     public static void getCountries(final NetworkCallback<List<Country>> callback) {
         if (CacheService.getObjectFromCache("countries") == null) {
             CountryProvider.makeCountriesRequest(new NetworkCallback<List<Country>>() {

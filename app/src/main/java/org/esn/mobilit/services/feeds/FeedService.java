@@ -1,10 +1,7 @@
 package org.esn.mobilit.services.feeds;
 
-import android.util.Log;
-
-import org.esn.mobilit.models.SurvivalGuide;
+import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.services.CacheService;
-import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 public class FeedService
@@ -12,7 +9,7 @@ public class FeedService
     private static FeedService instance;
 
     private RSSFeedParser feedEvents, feedNews, feedPartners;
-    private SurvivalGuide survivalguide;
+    private Guide guide;
     private static final String TAG = "FeedService";
 
 
@@ -28,7 +25,7 @@ public class FeedService
 
     public boolean emptyFeeds()
     {
-        return feedEvents == null && feedNews == null && feedPartners == null && survivalguide == null;
+        return feedEvents == null && feedNews == null && feedPartners == null && guide == null;
     }
 
     public void getFeedsFromCache()
@@ -36,7 +33,7 @@ public class FeedService
         feedEvents    = (RSSFeedParser) CacheService.getObjectFromCache("feedEvents");
         feedNews      = (RSSFeedParser) CacheService.getObjectFromCache("feedNews");
         feedPartners  = (RSSFeedParser) CacheService.getObjectFromCache("feedPartners");
-        survivalguide = (SurvivalGuide) CacheService.getObjectFromCache("survivalGuide");
+        guide = (Guide) CacheService.getObjectFromCache("survivalGuide");
     }
 
     public int getTotalItems(){
@@ -44,7 +41,7 @@ public class FeedService
         total += feedEvents != null? feedEvents.getItemCount() : 0;
         total += feedNews != null ? feedNews.getItemCount() : 0;
         total += feedPartners != null ? feedPartners.getItemCount() : 0;
-        total += survivalguide != null ? survivalguide.getCategories().size() : 0;
+        total += guide != null ? guide.getNodes().size() : 0;
 
         return total;
     }
@@ -73,12 +70,12 @@ public class FeedService
         this.feedPartners = feedPartners;
     }
 
-    public SurvivalGuide getSurvivalguide() {
-        return survivalguide;
+    public Guide getGuide() {
+        return guide;
     }
 
-    public void setSurvivalguide(SurvivalGuide survivalguide) {
-        this.survivalguide = survivalguide;
+    public void setGuide(Guide guide) {
+        this.guide = guide;
     }
 
 }

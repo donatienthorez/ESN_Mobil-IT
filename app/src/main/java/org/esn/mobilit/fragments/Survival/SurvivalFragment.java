@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,9 +15,9 @@ import android.widget.TextView;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.activities.FirstLaunchActivity;
-import org.esn.mobilit.renderers.SurvivalGuideRenderer;
+import org.esn.mobilit.renderers.GuideRenderer;
 import org.esn.mobilit.services.PreferencesService;
-import org.esn.mobilit.utils.ApplicationConstants;
+import org.esn.mobilit.services.feeds.FeedService;
 
 public class SurvivalFragment extends Fragment{
     private static final String TAG = SurvivalFragment.class.getSimpleName();
@@ -37,8 +36,8 @@ public class SurvivalFragment extends Fragment{
         // Set the Text to try this out
         TextView t = (TextView) myInflatedView.findViewById(R.id.survivalContent);
 
-        SurvivalGuideRenderer sgr = new SurvivalGuideRenderer();
-        String survivalContent = sgr.renderSurvivalGuide();
+        GuideRenderer sgr = new GuideRenderer();
+        String survivalContent = sgr.renderSurvivalGuide(FeedService.getInstance().getGuide());
         t.setText(Html.fromHtml(survivalContent), TextView.BufferType.SPANNABLE);
 
         return myInflatedView;

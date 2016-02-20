@@ -6,10 +6,9 @@ import android.support.v4.app.FragmentManager;
 import org.esn.mobilit.fragments.AboutFragment;
 import org.esn.mobilit.fragments.Satellite.ListFragment;
 import org.esn.mobilit.fragments.Survival.SurvivalFragment;
-import org.esn.mobilit.models.SurvivalGuide;
+import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.feeds.FeedService;
-import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ public class PagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
     ArrayList<Fragment> fragmentsList;
     FeedService feedService;
     RSSFeedParser feedEvents, feedNews, feedPartners;
-    SurvivalGuide survivalGuide;
+    Guide guide;
 
     public PagerAdapter(FragmentManager fm) {
         super(fm);
@@ -28,7 +27,7 @@ public class PagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
         this.feedEvents = feedService.getFeedEvents();
         this.feedNews = feedService.getFeedNews();
         this.feedPartners = feedService.getFeedPartners();
-        this.survivalGuide = feedService.getSurvivalguide();
+        this.guide = feedService.getGuide();
         this.setTabsList();
     }
 
@@ -52,7 +51,7 @@ public class PagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
             fragmentsList.add(partners);
         }
 
-        if (survivalGuide != null && survivalGuide.getCategories().size() > 0 ) {
+        if (guide != null && guide.getNodes().size() > 0 ) {
             //Survival Guide
             SurvivalFragment survival = new SurvivalFragment();
 

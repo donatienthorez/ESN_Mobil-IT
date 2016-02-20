@@ -16,9 +16,11 @@ import com.crashlytics.android.Crashlytics;
 
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.models.Abouts;
+import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.AboutService;
 import org.esn.mobilit.services.CacheService;
+import org.esn.mobilit.services.GuideService;
 import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.utils.callbacks.Callback;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
@@ -29,7 +31,6 @@ import org.esn.mobilit.services.gcm.GCMService;
 import org.esn.mobilit.services.LauncherService;
 import org.esn.mobilit.services.feeds.NewsService;
 import org.esn.mobilit.services.feeds.PartnersService;
-import org.esn.mobilit.tasks.feed.XMLSurvivalGuideTask;
 import org.esn.mobilit.services.feeds.FeedService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
@@ -191,7 +192,24 @@ public class SplashActivity extends Activity {
                 }
             });
 
-            new XMLSurvivalGuideTask(callbackSurvivalGuideConstructor(R.string.load_survival_end)).execute();
+            GuideService.getGuide(section, new NetworkCallback<Guide>() {
+                @Override
+                public void onSuccess(Guide result) {
+                    textView.setText(getResources().getString(R.string.load_survival_end));
+                    launcherService.incrementCount();
+                    if(launcherService.launchHomeActivity()) {
+                        launchHomeActivity();
+                    }
+                }
+
+                @Override
+                public void onFailure(RetrofitError error) {
+                    launcherService.incrementCount();
+                    if(launcherService.launchHomeActivity()) {
+                        launchHomeActivity();
+                    }
+                }
+            });
         }
     }
 
@@ -200,27 +218,6 @@ public class SplashActivity extends Activity {
         progressBar.setVisibility(View.INVISIBLE);
         buttonRetry.setVisibility(View.VISIBLE);
         buttonSection.setVisibility(View.VISIBLE);
-    }
-
-    public Callback callbackSurvivalGuideConstructor(final int stringId){
-        return new Callback() {
-            @Override
-            public void onSuccess(Object result) {
-                textView.setText(getResources().getString(stringId));
-                launcherService.getInstance().incrementCount();
-                if(launcherService.launchHomeActivity()) {
-                    launchHomeActivity();
-                }
-            }
-
-            @Override
-            public void onFailure(Exception ex) {
-                launcherService.getInstance().incrementCount();
-                if(launcherService.launchHomeActivity()) {
-                    launchHomeActivity();
-                }
-            }
-        };
     }
 
     public Callback callbackGCMConstructor(){
