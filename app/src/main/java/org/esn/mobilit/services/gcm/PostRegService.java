@@ -51,7 +51,6 @@ public class PostRegService {
                 new Callback<Response>() {
                     @Override
                     public void success(Response s, Response response) {
-                        GCMService.getInstance().storeRegIdinSharedPref();
                         callback.onSuccess(s);
                     }
 

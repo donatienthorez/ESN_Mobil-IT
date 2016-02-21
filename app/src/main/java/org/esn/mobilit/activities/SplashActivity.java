@@ -15,10 +15,8 @@ import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
 
 import org.esn.mobilit.MobilITApplication;
-import org.esn.mobilit.models.Abouts;
 import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.models.Section;
-import org.esn.mobilit.services.AboutService;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.GuideService;
 import org.esn.mobilit.services.PreferencesService;
@@ -109,31 +107,28 @@ public class SplashActivity extends Activity {
             textView.setText(R.string.loading);
 
             launcherService.resetCount();
-            gcmService.pushForGcm(this, callbackGCMConstructor());
+            gcmService.pushForGcm(this, new Callback<Object>() {
+                @Override
+                public void onSuccess(Object result) {
+                    launcherService.incrementCount();
+                    if(launcherService.launchHomeActivity()) {
+                        launchHomeActivity();
+                    }
+                }
+
+                @Override
+                public void onFailure(Exception ex) {
+                    launcherService.incrementCount();
+                    if(launcherService.launchHomeActivity()) {
+                        launchHomeActivity();
+                    }
+                }
+            });
 
             final Section section = (Section) CacheService.getObjectFromCache("section");
-            final String url = ApplicationConstants.LOGOINSERTER_URL + "assets/img/logos/" + section.getLogo_url();
-
-            if (section.getLogo_url() == null || section.getLogo_url().equalsIgnoreCase("")) {
-                AboutService.getAbout(new NetworkCallback<Abouts>() {
-                    @Override
-                    public void onSuccess(Abouts result) {
-                        section.setLogo_url(result.getAbout().getLogoPath());
-                        CacheService.saveObjectToCache("section", section);
-                        Glide.with(MobilITApplication.getContext())
-                                .load(url)
-                                .downloadOnly(150, 250);
-                    }
-
-                    @Override
-                    public void onFailure(RetrofitError error) {
-                    }
-                });
-            } else {
-                Glide.with(MobilITApplication.getContext())
-                        .load(url)
-                        .downloadOnly(150, 250);
-            }
+            Glide.with(MobilITApplication.getContext())
+                    .load(section.getLogo_url())
+                    .downloadOnly(150, 250);
 
             NewsService.getNews(new NetworkCallback<RSS>() {
                 @Override
@@ -197,7 +192,7 @@ public class SplashActivity extends Activity {
                 public void onSuccess(Guide result) {
                     textView.setText(getResources().getString(R.string.load_survival_end));
                     launcherService.incrementCount();
-                    if(launcherService.launchHomeActivity()) {
+                    if (launcherService.launchHomeActivity()) {
                         launchHomeActivity();
                     }
                 }
@@ -205,7 +200,7 @@ public class SplashActivity extends Activity {
                 @Override
                 public void onFailure(RetrofitError error) {
                     launcherService.incrementCount();
-                    if(launcherService.launchHomeActivity()) {
+                    if (launcherService.launchHomeActivity()) {
                         launchHomeActivity();
                     }
                 }
@@ -218,26 +213,6 @@ public class SplashActivity extends Activity {
         progressBar.setVisibility(View.INVISIBLE);
         buttonRetry.setVisibility(View.VISIBLE);
         buttonSection.setVisibility(View.VISIBLE);
-    }
-
-    public Callback callbackGCMConstructor(){
-        return new Callback() {
-            @Override
-            public void onSuccess(Object result) {
-                launcherService.getInstance().incrementCount();
-                if(launcherService.launchHomeActivity()) {
-                    launchHomeActivity();
-                }
-            }
-
-            @Override
-            public void onFailure(Exception ex) {
-                launcherService.getInstance().incrementCount();
-                if(launcherService.launchHomeActivity()) {
-                    launchHomeActivity();
-                }
-            }
-        };
     }
 
     public void launchHomeActivity(){

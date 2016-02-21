@@ -27,5 +27,5 @@ public class LauncherService {
 
     public boolean launchHomeActivity(){
         return count == this.countLimit;
-    };
+    }
 }

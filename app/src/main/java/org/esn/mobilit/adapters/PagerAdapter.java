@@ -51,7 +51,7 @@ public class PagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
             fragmentsList.add(partners);
         }
 
-        if (guide != null && guide.getNodes().size() > 0 ) {
+        if (guide != null && guide.getNodes() != null && guide.getNodes().size() > 0 ) {
             //Survival Guide
             SurvivalFragment survival = new SurvivalFragment();
 

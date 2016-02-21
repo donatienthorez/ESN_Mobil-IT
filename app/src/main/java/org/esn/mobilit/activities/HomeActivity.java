@@ -88,7 +88,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
             getActionBar().addTab(tabPartners);
         }
 
-        if (feedService.getGuide() != null && feedService.getGuide().getNodes().size() > 0){
+        if (feedService.getGuide() != null && feedService.getGuide().getNodes() != null && feedService.getGuide().getNodes().size() > 0){
             ActionBar.Tab tabSurvivalGuide = getActionBar().newTab();
             tabSurvivalGuide.setText(getResources().getString(R.string.title_survivalguide));
             tabSurvivalGuide.setTabListener(this);

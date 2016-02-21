@@ -41,7 +41,7 @@ public class FeedService
         total += feedEvents != null? feedEvents.getItemCount() : 0;
         total += feedNews != null ? feedNews.getItemCount() : 0;
         total += feedPartners != null ? feedPartners.getItemCount() : 0;
-        total += guide != null ? guide.getNodes().size() : 0;
+        total += (guide != null && guide.getNodes() != null) ? guide.getNodes().size() : 0;
 
         return total;
     }

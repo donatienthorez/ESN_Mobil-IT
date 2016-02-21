@@ -5,23 +5,34 @@ import java.io.Serializable;
 public class Section implements Serializable{
     private String name;
     private String code_section;
-    private String logo_url;
     private String address;
     private String website;
     private String phone;
     private String email;
     private String university;
+    private String logo_url;
 
-    public Section(int id, int id_country, String name, String url, String code_section, String address, String website, String phone, String email, String university) {
-
+    public Section(
+            int id,
+            int id_country,
+            String name,
+            String url,
+            String code_section,
+            String address,
+            String website,
+            String phone,
+            String email,
+            String university,
+            String logo_url
+    ) {
         this.name = name;
         this.code_section = code_section;
-        this.logo_url = "";
         this.address = address;
         this.website = website;
         this.phone = phone;
         this.email = email;
         this.university = university;
+        this.logo_url = logo_url;
     }
 
     public String getName() {
@@ -38,14 +49,6 @@ public class Section implements Serializable{
 
     public void setCode_section(String code_section) {
         this.code_section = code_section;
-    }
-
-    public String getLogo_url() {
-        return logo_url;
-    }
-
-    public void setLogo_url(String logo_url) {
-        this.logo_url = logo_url;
     }
 
     public String getAddress() {
@@ -88,12 +91,19 @@ public class Section implements Serializable{
         this.university = university;
     }
 
+    public String getLogo_url() {
+        return logo_url;
+    }
+
+    public void setLogo_url(String logo_url) {
+        this.logo_url = logo_url;
+    }
+
     @Override
     public String toString() {
         return "Section{" +
                 ", name='" + name + '\'' +
                 ", code_section='" + code_section + '\'' +
-                ", logo_url='" + logo_url + '\'' +
                 ", address='" + address + '\'' +
                 ", website='" + website + '\'' +
                 ", phone='" + phone + '\'' +

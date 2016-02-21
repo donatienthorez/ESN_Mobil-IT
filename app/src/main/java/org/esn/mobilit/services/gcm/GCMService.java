@@ -28,21 +28,31 @@ public class GCMService {
         return instance;
     }
 
-    public void pushForGcm(Activity activity, Callback<Object> callback)
+    public void pushForGcm(Activity activity, final Callback<Object> callback)
     {
         if (PreferencesService.getDefaults(REG_ID) == null) {
 
             // Registering RegID
             if (checkPlayServices(activity)) {
-                new RegisterTask(callback).execute();
+                new RegisterTask(new Callback<Object>() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        PreferencesService.setDefaults(REG_ID, regId);
+                        callback.onSuccess(result);
+
+                    }
+
+                    @Override
+                    public void onFailure(Exception ex) {
+                        callback.onFailure(ex);
+
+                    }
+                }).execute();
             }
         }
         else {
             callback.onSuccess(null);
         }
-    }
-    public void storeRegIdinSharedPref() {
-        PreferencesService.setDefaults(REG_ID, regId);
     }
 
     private boolean checkPlayServices(Activity activity) {

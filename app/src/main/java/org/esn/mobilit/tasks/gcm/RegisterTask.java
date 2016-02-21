@@ -22,7 +22,7 @@ public class RegisterTask extends AsyncTask<Void, Void, String> {
 
     Callback<Object> callback;
 
-    public RegisterTask(Callback callback) {
+    public RegisterTask(Callback<Object> callback) {
         this.callback = callback;
     }
 
@@ -51,7 +51,7 @@ public class RegisterTask extends AsyncTask<Void, Void, String> {
                         new NetworkCallback<Response>() {
                             @Override
                             public void onSuccess(Response result) {
-                                callback.onSuccess(null);
+                                callback.onSuccess(result);
                             }
 
                             @Override
