@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.activities.FirstLaunchActivity;
 import org.esn.mobilit.activities.SplashActivity;
@@ -44,6 +45,8 @@ public class ListFragment extends android.support.v4.app.ListFragment
 
         LayoutInflater layoutInflater = (LayoutInflater) currentActivity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+//        LayoutInflater layoutInflater = LayoutInflater.from(MobilITApplication.getContext());
 
         // Set an Adapter to the ListView
         ListAdapter adapter = new ListAdapter(feed, layoutInflater);
@@ -78,11 +81,11 @@ public class ListFragment extends android.support.v4.app.ListFragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.ras_section_settings:
-                if (currentActivity != null) {
+                if (getActivity() != null) {
                     PreferencesService.resetSection();
-                    Intent intent = new Intent(currentActivity, FirstLaunchActivity.class);
+                    Intent intent = new Intent(getActivity(), FirstLaunchActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-                    currentActivity.finish();
                 }
                 return true;
             default:

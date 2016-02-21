@@ -1,6 +1,5 @@
 package org.esn.mobilit.fragments.Survival;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,8 +19,7 @@ import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.services.feeds.FeedService;
 
 public class SurvivalFragment extends Fragment{
-    private static final String TAG = SurvivalFragment.class.getSimpleName();
-    private Activity currentActivity;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,20 +46,14 @@ public class SurvivalFragment extends Fragment{
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
-        currentActivity = activity;
-    }
-
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.ras_section_settings:
-                if (currentActivity != null) {
+                if (getActivity() != null) {
                     PreferencesService.resetSection();
-                    Intent intent = new Intent(currentActivity, FirstLaunchActivity.class);
+                    Intent intent = new Intent(getActivity(), FirstLaunchActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-                    currentActivity.finish();
                 }
                 return true;
             default:

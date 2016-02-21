@@ -18,30 +18,32 @@ import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.RSS.RSSItem;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class DetailsFragment extends Fragment {
 
     RSSItem fFeed;
 
-    public void onCreate(Bundle savedInstanceState) {
+    @Bind(R.id.title) TextView title;
+    @Bind(R.id.header) ImageView imageView;
+    @Bind(R.id.desc) WebView desc;
+    @Bind(R.id.sv) ScrollView sv;
+
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         fFeed = (RSSItem) getArguments().getSerializable("feed");
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         /** Inflating the layout country_details_fragment_layout to the view object v */
         View view = inflater.inflate(R.layout.detail_fragment, null);
 
-        /** Getting the textview object of the layout to set the details */
-        // Initialize views
-        TextView title = (TextView) view.findViewById(R.id.title);
-        ImageView imageView = (ImageView) view.findViewById(R.id.header);
-        WebView desc = (WebView) view.findViewById(R.id.desc);
-
-
-        /* Getting the bundle object passed from MainActivity */
-        Bundle b = getArguments();
+        // Load Butterknife
+        ButterKnife.bind(this, view);
 
         // Set the views
         title.setText(fFeed.getTitle());
@@ -62,7 +64,6 @@ public class DetailsFragment extends Fragment {
         );
 
         // Enable the vertical fading edge (by default it is disabled)
-        ScrollView sv = (ScrollView) view.findViewById(R.id.sv);
         sv.setVerticalFadingEdgeEnabled(true);
 
         // Set webview properties
@@ -74,5 +75,4 @@ public class DetailsFragment extends Fragment {
 
         return view;
     }
-
 }
