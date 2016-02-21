@@ -7,48 +7,39 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.adapters.PagerAdapter;
-import org.esn.mobilit.fragments.Satellite.ListFragment.ListFragmentItemClickListener;
-import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.feeds.FeedService;
 import org.esn.mobilit.services.gcm.GCMService;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
-public class HomeActivity extends FragmentActivity implements ActionBar.TabListener, ListFragmentItemClickListener {
+import java.util.ArrayList;
+import java.util.List;
 
-    private static final String TAG = HomeActivity.class.getSimpleName();
+public class HomeActivity extends FragmentActivity implements ActionBar.TabListener {
 
-    ViewPager viewPager;
-    PagerAdapter pagerAdapter;
+    private ViewPager viewPager;
 
-    FeedService feedService;
+    private FeedService feedService;
+    private ActionBar actionBar;
+    private RSSFeedParser currentFeed;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //Change Layout
         setContentView(R.layout.activity_main);
 
         feedService = FeedService.getInstance();
-
-        //Init PagerAdapter
-        pagerAdapter = new PagerAdapter(
+        PagerAdapter pagerAdapter = new PagerAdapter(
                 getSupportFragmentManager()
         );
 
-        //Init ActionBar
-        final ActionBar actionBar = getActionBar();
-        try {
+        actionBar = getActionBar();
+        if (actionBar != null) {
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        } catch (Exception e) {
-            Log.d(TAG, "Exception: " + e);
         }
 
-        //Init Pager
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -58,82 +49,60 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
             }
         });
 
-        //Add tabs
         initTabs();
 
-        if(! GCMService.getInstance().getPushMsg().equals("")) {
+        if (!GCMService.getInstance().getPushMsg().equals("")) {
             pushReceived();
         }
     }
 
     private void initTabs(){
-        if (feedService.getFeedEvents() != null && feedService.getFeedEvents().getItemCount() > 0) {
-            ActionBar.Tab tabEvent = getActionBar().newTab();
-            tabEvent.setText(getResources().getString(R.string.title_events));
-            tabEvent.setTabListener(this);
-            getActionBar().addTab(tabEvent);
-        }
-
-        if (feedService.getFeedNews() != null && feedService.getFeedNews().getItemCount() > 0){
-            ActionBar.Tab tabNews = getActionBar().newTab();
-            tabNews.setText(getResources().getString(R.string.title_news));
-            tabNews.setTabListener(this);
-            getActionBar().addTab(tabNews);
-        }
-
-        if (feedService.getFeedPartners() != null && feedService.getFeedPartners().getItemCount() > 0){
-            ActionBar.Tab tabPartners = getActionBar().newTab();
-            tabPartners.setText(getResources().getString(R.string.title_partners));
-            tabPartners.setTabListener(this);
-            getActionBar().addTab(tabPartners);
-        }
+        setRSSFeedTab(R.string.title_events, feedService.getFeedEvents());
+        setRSSFeedTab(R.string.title_news, feedService.getFeedNews());
+        setRSSFeedTab(R.string.title_partners, feedService.getFeedPartners());
 
         if (feedService.getGuide() != null && feedService.getGuide().getNodes() != null && feedService.getGuide().getNodes().size() > 0){
-            ActionBar.Tab tabSurvivalGuide = getActionBar().newTab();
-            tabSurvivalGuide.setText(getResources().getString(R.string.title_survivalguide));
-            tabSurvivalGuide.setTabListener(this);
-            getActionBar().addTab(tabSurvivalGuide);
+            addTab(R.string.title_survivalguide);
         }
 
-        try{
-            Section section = (Section) CacheService.getObjectFromCache("section");
-
-            if (section != null){
-                ActionBar.Tab tabAbout = getActionBar().newTab();
-                tabAbout.setText(getResources().getString(R.string.title_about));
-                tabAbout.setTabListener(this);
-                getActionBar().addTab(tabAbout);
-            }
-
-        }catch (NullPointerException e){
-            Log.d(TAG, e.toString());
+        if (CacheService.getObjectFromCache("section") != null){
+            addTab(R.string.title_about);
         }
     }
 
+    private void setRSSFeedTab(int stringId, RSSFeedParser rssFeedParser){
+        if (rssFeedParser != null && rssFeedParser.getItemCount() > 0) {
+            addTab(stringId);
+        }
+    }
+
+    private void addTab(int stringId){
+        ActionBar.Tab tabEvent = actionBar.newTab();
+        tabEvent.setText(getResources().getString(stringId));
+        tabEvent.setTabListener(this);
+        actionBar.addTab(tabEvent);
+    }
+
     public void pushReceived() {
-        String pushMsg = GCMService.getInstance().getPushMsg();
+        List<RSSFeedParser> rssFeedParsers = new ArrayList<RSSFeedParser>();
+        rssFeedParsers.add(feedService.getFeedEvents());
+        rssFeedParsers.add(feedService.getFeedNews());
+        rssFeedParsers.add(feedService.getFeedPartners());
+        int i = 0, position;
+        do {
+            position = rssFeedParsers.get(i).getPositionFromTitle(GCMService.getInstance().getPushMsg());
+            if (position > 0) {
+                currentFeed = rssFeedParsers.get(i);
+            }
+            i++;
+        } while (currentFeed != null || i == rssFeedParsers.size()-1);
 
-        int pos = -1;
-        RSSFeedParser currentFeed = null;
-        if (feedService.getFeedEvents().getPositionFromTitle(pushMsg) > 0) {
-            pos = feedService.getFeedEvents().getPositionFromTitle(pushMsg);
-            currentFeed = feedService.getFeedEvents();
-        }
-        if (feedService.getFeedNews().getPositionFromTitle(pushMsg) > 0) {
-            pos = feedService.getFeedNews().getPositionFromTitle(pushMsg);
-            currentFeed = feedService.getFeedNews();
-        }
-        if (feedService.getFeedPartners().getPositionFromTitle(pushMsg) > 0) {
-            pos = feedService.getFeedPartners().getPositionFromTitle(pushMsg);
-            currentFeed = feedService.getFeedPartners();
-        }
-
-        if (currentFeed != null && pos > 0) {
+        if (currentFeed != null) {
             Intent intent = new Intent(this, DetailActivity.class);
 
             Bundle b = new Bundle();
             b.putSerializable("feed", currentFeed);
-            b.putInt("pos", pos);
+            b.putInt("pos", position);
             intent.putExtras(b);
 
             startActivity(intent);
@@ -152,26 +121,12 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
     @Override
-    public void onTabReselected(Tab tab, FragmentTransaction ft) {
-        // TODO Auto-generated method stub
+    public void onTabUnselected(Tab tab, FragmentTransaction fragmentTransaction) {
+
     }
 
     @Override
-    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-        // TODO Auto-generated method stub
-    }
+    public void onTabReselected(Tab tab, FragmentTransaction fragmentTransaction) {
 
-    @Override
-    public void onListFragmentItemClick(int position, RSSFeedParser currentfeed) {
-        /** Creating an intent object to start the CountryDetailsActivity */
-        Intent intent = new Intent(this, DetailActivity.class);
-
-        /** Setting data ( the clicked item's position ) to this intent */
-        Bundle b = new Bundle();
-        b.putSerializable("feed", currentfeed.getItem(position));
-        intent.putExtras(b);
-
-        /** Starting the activity by passing the implicit intent */
-        startActivity(intent);
     }
 }
