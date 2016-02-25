@@ -6,7 +6,7 @@ public class LauncherService {
     private static LauncherService instance;
 
     private int count;
-    private final int countLimit = 5;
+    private final int countLimit = 4;
 
     private LauncherService(){
         this.count = 0;

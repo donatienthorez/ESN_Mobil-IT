@@ -1,7 +1,5 @@
 package org.esn.mobilit.fragments.Satellite;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,17 +9,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.activities.DetailActivity;
 import org.esn.mobilit.activities.FirstLaunchActivity;
-import org.esn.mobilit.activities.SplashActivity;
 import org.esn.mobilit.adapters.ListAdapter;
 import org.esn.mobilit.services.PreferencesService;
-import org.esn.mobilit.utils.ApplicationConstants;
-import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 public class ListFragment extends android.support.v4.app.ListFragment

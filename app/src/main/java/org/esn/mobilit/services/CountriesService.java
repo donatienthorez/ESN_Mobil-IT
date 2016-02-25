@@ -20,6 +20,11 @@ public class CountriesService {
                 }
 
                 @Override
+                public void onNoAvailableData() {
+
+                }
+
+                @Override
                 public void onFailure(RetrofitError error) {
                     callback.onFailure(error);
                 }

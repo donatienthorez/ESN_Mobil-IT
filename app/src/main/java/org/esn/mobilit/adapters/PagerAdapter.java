@@ -7,8 +7,10 @@ import org.esn.mobilit.fragments.AboutFragment;
 import org.esn.mobilit.fragments.Satellite.ListFragment;
 import org.esn.mobilit.fragments.Survival.SurvivalFragment;
 import org.esn.mobilit.models.Guide;
-import org.esn.mobilit.services.CacheService;
+import org.esn.mobilit.services.feeds.EventsService;
 import org.esn.mobilit.services.feeds.FeedService;
+import org.esn.mobilit.services.feeds.NewsService;
+import org.esn.mobilit.services.feeds.PartnersService;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 import java.util.ArrayList;
@@ -16,52 +18,40 @@ import java.util.ArrayList;
 public class PagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
 
     ArrayList<Fragment> fragmentsList;
-    FeedService feedService;
-    RSSFeedParser feedEvents, feedNews, feedPartners;
-    Guide guide;
 
     public PagerAdapter(FragmentManager fm) {
         super(fm);
         this.fragmentsList = new ArrayList<Fragment>();
-        this.feedService = FeedService.getInstance();
-        this.feedEvents = feedService.getFeedEvents();
-        this.feedNews = feedService.getFeedNews();
-        this.feedPartners = feedService.getFeedPartners();
-        this.guide = feedService.getGuide();
         this.setTabsList();
     }
 
-    public void setTabsList(){
-        if (feedEvents != null && feedEvents.getItemCount() > 0) {
-            ListFragment events = new ListFragment();
-            events.setFeed(feedEvents);
-            fragmentsList.add(events);
-        }
+    public void setTabsList()
+    {
+        FeedService feedService = FeedService.getInstance();
+        Guide guide = feedService.getGuide();
+        RSSFeedParser feedsEvents = EventsService.getInstance().getFeed();
+        RSSFeedParser feedsPartners = PartnersService.getInstance().getFeed();
+        RSSFeedParser feedsNews = NewsService.getInstance().getFeed();
 
-        if (feedNews != null && feedNews.getItemCount() > 0) {
-            ListFragment news = new ListFragment();
-            news.setFeed(feedNews);
-            fragmentsList.add(news);
-        }
+        addToFragmentsList(feedsEvents);
+        addToFragmentsList(feedsNews);
+        addToFragmentsList(feedsPartners);
 
-        if (feedPartners != null && feedPartners.getItemCount() > 0 ) {
-            //Partners
-            ListFragment partners = new ListFragment();
-            partners.setFeed(feedPartners);
-            fragmentsList.add(partners);
-        }
-
-        if (guide != null && guide.getNodes() != null && guide.getNodes().size() > 0 ) {
-            //Survival Guide
+        if (guide != null && guide.getNodes() != null && guide.getNodes().size() > 0) {
             SurvivalFragment survival = new SurvivalFragment();
-
             fragmentsList.add(survival);
         }
 
-        if (CacheService.getObjectFromCache("section") != null) {
-            //About Page
-            AboutFragment about = new AboutFragment();
-            fragmentsList.add(about);
+        AboutFragment about = new AboutFragment();
+        fragmentsList.add(about);
+    }
+
+    public void addToFragmentsList(RSSFeedParser feed)
+    {
+        if (feed != null && feed.getItemCount() > 0) {
+            ListFragment listFragment = new ListFragment();
+            listFragment.setFeed(feed);
+            fragmentsList.add(listFragment);
         }
     }
 

@@ -5,14 +5,12 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.crashlytics.android.Crashlytics;
 
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.models.Guide;
@@ -20,7 +18,9 @@ import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.GuideService;
 import org.esn.mobilit.services.PreferencesService;
+import org.esn.mobilit.services.feeds.FeedServiceInterface;
 import org.esn.mobilit.utils.callbacks.Callback;
+import org.esn.mobilit.utils.callbacks.LoadingCallback;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.RSS.RSS;
@@ -30,13 +30,14 @@ import org.esn.mobilit.services.LauncherService;
 import org.esn.mobilit.services.feeds.NewsService;
 import org.esn.mobilit.services.feeds.PartnersService;
 import org.esn.mobilit.services.feeds.FeedService;
-import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
+import org.esn.mobilit.utils.parser.RSSFeedParser;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.fabric.sdk.android.Fabric;
 import retrofit.RetrofitError;
 
 public class SplashActivity extends Activity {
@@ -50,6 +51,7 @@ public class SplashActivity extends Activity {
     FeedService feedService;
     GCMService gcmService;
     LauncherService launcherService;
+    ArrayList<FeedServiceInterface> arrayList;
 
     @OnClick(R.id.changesection)
     public void changeSection(View v) {
@@ -88,142 +90,98 @@ public class SplashActivity extends Activity {
             version.setText("v 1.0.0");
         }
 
-        if (!Utils.isConnected()){
-            FeedService.getInstance().getFeedsFromCache();
-            if(feedService.emptyFeeds()){
-                textView.setText(getResources().getString(R.string.emptycache));
-                progressBar.setVisibility(View.INVISIBLE);
-            } else {
-                // No connectivity - Load cache
-                textView.setText(getResources().getString(R.string.tryingcache));
+        final Section section = (Section) CacheService.getObjectFromCache("section");
+
+        gcmService.pushForGcm(this, new Callback<Object>() {
+            @Override
+            public void onSuccess(Object result) {
+                launcherService.incrementCount();
+                if(launcherService.launchHomeActivity()) {
+                    launchHomeActivity();
+                }
+            }
+
+            @Override
+            public void onFailure(Exception ex) {
+                launcherService.incrementCount();
+                if(launcherService.launchHomeActivity()) {
+                    launchHomeActivity();
+                }
+            }
+        });
+
+        Glide.with(MobilITApplication.getContext())
+                .load(section.getLogo_url())
+                .downloadOnly(150, 250);
+        // Connected - Start parsing
+        textView.setText("Image loaded");
+
+        arrayList = new ArrayList<FeedServiceInterface>();
+        arrayList.add(EventsService.getInstance());
+        arrayList.add(NewsService.getInstance());
+        arrayList.add(PartnersService.getInstance());
+
+        // Connected - Start parsing
+        textView.setText(R.string.loading);
+
+        FeedService.getInstance().loadFeeds(arrayList, section, new LoadingCallback<RSSFeedParser>() {
+            @Override
+            public void onSuccess(RSSFeedParser result) {
                 launchHomeActivity();
             }
-            buttonRetry.setVisibility(View.VISIBLE);
-            buttonSection.setVisibility(View.VISIBLE);
 
-        }else{
+            @Override
+            public void onNoAvailableData() {
+                showLoadingError(R.string.emptycache);
+            }
 
-            // Connected - Start parsing
-            textView.setText(R.string.loading);
+            @Override
+            public void onFailure(RetrofitError error) {
+                showLoadingError(R.string.emptycache);
+                textView.setText("Oops une erreur s'est produite");
+            }
 
-            launcherService.resetCount();
-            gcmService.pushForGcm(this, new Callback<Object>() {
-                @Override
-                public void onSuccess(Object result) {
-                    launcherService.incrementCount();
-                    if(launcherService.launchHomeActivity()) {
-                        launchHomeActivity();
-                    }
+            public void onProgress(int id, RSSFeedParser result) {
+                if (result == null) {
+                    textView.setText("No feed found");
+                } else {
+                    textView.setText(getResources().getString(id, result.getItemCount()));
                 }
+            }
+        });
 
-                @Override
-                public void onFailure(Exception ex) {
-                    launcherService.incrementCount();
-                    if(launcherService.launchHomeActivity()) {
-                        launchHomeActivity();
-                    }
-                }
-            });
-
-            final Section section = (Section) CacheService.getObjectFromCache("section");
-            Glide.with(MobilITApplication.getContext())
-                    .load(section.getLogo_url())
-                    .downloadOnly(150, 250);
-
-            NewsService.getNews(new NetworkCallback<RSS>() {
-                @Override
-                public void onSuccess(RSS result) {
-                    textView.setText(getResources().getString(R.string.load_news_end, result.getListSize()));
-                    launcherService.incrementCount();
-                    if (launcherService.launchHomeActivity()) {
-                        launchHomeActivity();
-                    }
-                }
-
-                @Override
-                public void onFailure(RetrofitError error) {
-                    launcherService.incrementCount();
-                    if (launcherService.launchHomeActivity()) {
-                        launchHomeActivity();
-                    }
-                }
-            });
-
-            EventsService.getEvents(new NetworkCallback<RSS>() {
-                @Override
-                public void onSuccess(RSS result) {
-                    textView.setText(getResources().getString(R.string.load_events_end, result.getListSize()));
-                    launcherService.incrementCount();
-                    if (launcherService.launchHomeActivity()) {
-                        launchHomeActivity();
-                    }
-                }
-
-                @Override
-                public void onFailure(RetrofitError error) {
-                    launcherService.incrementCount();
-                    if (launcherService.getInstance().launchHomeActivity()) {
-                        launchHomeActivity();
-                    }
-                }
-            });
-
-            PartnersService.getPartners(new NetworkCallback<RSS>() {
-                @Override
-                public void onSuccess(RSS result) {
-                    textView.setText(getResources().getString(R.string.load_partners_end, result.getListSize()));
-                    launcherService.incrementCount();
-                    if (launcherService.launchHomeActivity()) {
-                        launchHomeActivity();
-                    }
-                }
-
-                @Override
-                public void onFailure(RetrofitError error) {
-                    launcherService.incrementCount();
-                    if (launcherService.launchHomeActivity()) {
-                        launchHomeActivity();
-                    }
-                }
-            });
-
-            GuideService.getGuide(section, new NetworkCallback<Guide>() {
-                @Override
-                public void onSuccess(Guide result) {
-                    textView.setText(getResources().getString(R.string.load_survival_end));
-                    launcherService.incrementCount();
-                    if (launcherService.launchHomeActivity()) {
-                        launchHomeActivity();
-                    }
-                }
-
-                @Override
-                public void onFailure(RetrofitError error) {
-                    launcherService.incrementCount();
-                    if (launcherService.launchHomeActivity()) {
-                        launchHomeActivity();
-                    }
-                }
-            });
-        }
+//            GuideService.getGuide(section, new NetworkCallback<Guide>() {
+//                @Override
+//                public void onSuccess(Guide result) {
+//                    textView.setText(getResources().getString(R.string.load_survival_end));
+//                    launcherService.incrementCount();
+//                    if (launcherService.launchHomeActivity()) {
+//                        launchHomeActivity();
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(RetrofitError error) {
+//                    launcherService.incrementCount();
+//                    if (launcherService.launchHomeActivity()) {
+//                        launchHomeActivity();
+//                    }
+//                }
+//            });
+//        }
     }
 
-    public void retry(){
-        textView.setText(R.string.noitems);
+    public void showLoadingError(int id){
+        textView.setText(id);
         progressBar.setVisibility(View.INVISIBLE);
         buttonRetry.setVisibility(View.VISIBLE);
         buttonSection.setVisibility(View.VISIBLE);
     }
 
     public void launchHomeActivity(){
-        feedService.getFeedsFromCache();
-        if (feedService.getTotalItems() > 0) {
-            textView.setText(R.string.start_homeactivity);
-            Intent i = new Intent(this, HomeActivity.class);
-            startActivity(i);
-        } else {
-            this.retry();
-        }
+        textView.setText(R.string.start_homeactivity);
+        Intent i = new Intent(this, HomeActivity.class);
+        startActivity(i);
     }
 
     public void onResume(){

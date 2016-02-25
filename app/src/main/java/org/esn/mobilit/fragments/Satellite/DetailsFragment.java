@@ -39,13 +39,11 @@ public class DetailsFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        /** Inflating the layout country_details_fragment_layout to the view object v */
         View view = inflater.inflate(R.layout.detail_fragment, null);
 
         // Load Butterknife
         ButterKnife.bind(this, view);
 
-        // Set the views
         title.setText(fFeed.getTitle());
 
         Glide.with(MobilITApplication.getContext())
@@ -63,10 +61,8 @@ public class DetailsFragment extends Fragment {
                 null
         );
 
-        // Enable the vertical fading edge (by default it is disabled)
         sv.setVerticalFadingEdgeEnabled(true);
 
-        // Set webview properties
         WebSettings ws = desc.getSettings();
         ws.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         ws.setLightTouchEnabled(false);

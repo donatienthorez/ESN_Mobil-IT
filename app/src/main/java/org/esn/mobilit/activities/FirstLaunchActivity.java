@@ -39,17 +39,14 @@ public class FirstLaunchActivity extends Activity {
 
     private static final String TAG = FirstLaunchActivity.class.getSimpleName();
 
-    //Layout
     @Bind(R.id.spinnersLayout) public LinearLayout spinnersLayout;
     @Bind(R.id.startButton)    public Button startButton;
     @Bind(R.id.chooseCountry)  public TextView textView;
     @Bind(R.id.progressBar)    public ProgressBar progressBar;
 
-    // Attributes for spinnerCountries
     private Country currentCountry;
     private Section currentSection;
 
-    // Spinners
     private Spinner spinnerCountries;
     private Spinner spinnerSections;
 
@@ -78,6 +75,11 @@ public class FirstLaunchActivity extends Activity {
                 }
 
                 @Override
+                public void onNoAvailableData() {
+
+                }
+
+                @Override
                 public void onFailure(RetrofitError error) {
 
                 }
@@ -95,7 +97,6 @@ public class FirstLaunchActivity extends Activity {
 
         spinnerCountries = new Spinner(this);
 
-        //Set text
         HomepageRenderer homepageRenderer = new HomepageRenderer();
         SpannableStringBuilder text = homepageRenderer.renderHomepageText();
         textView.setText(text, TextView.BufferType.SPANNABLE);
@@ -104,7 +105,6 @@ public class FirstLaunchActivity extends Activity {
     private void initCountriesSpinner(final List<Country> countries){
         ArrayList<String> datas = new ArrayList<String>();
 
-        //Add dummy string
         datas.add(getResources().getString(R.string.selectyourcountry));
         for(Country country : countries){
             datas.add(country.getName());
@@ -137,7 +137,6 @@ public class FirstLaunchActivity extends Activity {
 
         ArrayList<String> datas = new ArrayList<String>();
 
-        //Add dummy string
         datas.add(getResources().getString(R.string.selectyoursection));
         for(Section section : currentCountry.getSections()){
             datas.add(section.getName());
@@ -162,11 +161,7 @@ public class FirstLaunchActivity extends Activity {
     }
 
     public void launchSplashActivity(View view){
-        //Load new parameters
-        PreferencesService.setDefaults(
-                "code_country",
-                currentCountry.getCodeCountry()
-        );
+        PreferencesService.setDefaults("code_country",currentCountry.getCodeCountry());
         PreferencesService.setDefaults("code_section", currentSection.getCode_section());
         PreferencesService.setDefaults("section_website", currentSection.getWebsite());
 

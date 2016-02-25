@@ -19,6 +19,11 @@ public class GuideService {
             }
 
             @Override
+            public void onNoAvailableData() {
+                callback.onNoAvailableData();
+            }
+
+            @Override
             public void onFailure(RetrofitError error) {
                 callback.onFailure(error);
             }

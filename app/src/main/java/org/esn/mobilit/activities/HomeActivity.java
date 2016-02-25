@@ -11,7 +11,10 @@ import android.support.v4.view.ViewPager;
 import org.esn.mobilit.R;
 import org.esn.mobilit.adapters.PagerAdapter;
 import org.esn.mobilit.services.CacheService;
+import org.esn.mobilit.services.feeds.EventsService;
 import org.esn.mobilit.services.feeds.FeedService;
+import org.esn.mobilit.services.feeds.NewsService;
+import org.esn.mobilit.services.feeds.PartnersService;
 import org.esn.mobilit.services.gcm.GCMService;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
@@ -57,9 +60,13 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
     private void initTabs(){
-        setRSSFeedTab(R.string.title_events, feedService.getFeedEvents());
-        setRSSFeedTab(R.string.title_news, feedService.getFeedNews());
-        setRSSFeedTab(R.string.title_partners, feedService.getFeedPartners());
+        RSSFeedParser feedsEvents = EventsService.getInstance().getFeed();
+        RSSFeedParser feedsPartners = PartnersService.getInstance().getFeed();
+        RSSFeedParser feedsNews = NewsService.getInstance().getFeed();
+
+        setRSSFeedTab(R.string.title_events, feedsEvents);
+        setRSSFeedTab(R.string.title_news, feedsPartners);
+        setRSSFeedTab(R.string.title_partners, feedsNews);
 
         if (feedService.getGuide() != null && feedService.getGuide().getNodes() != null && feedService.getGuide().getNodes().size() > 0){
             addTab(R.string.title_survivalguide);
@@ -84,10 +91,14 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
     public void pushReceived() {
+        RSSFeedParser feedsEvents = EventsService.getInstance().getFeed();
+        RSSFeedParser feedsPartners = PartnersService.getInstance().getFeed();
+        RSSFeedParser feedsNews = NewsService.getInstance().getFeed();
+
         List<RSSFeedParser> rssFeedParsers = new ArrayList<RSSFeedParser>();
-        rssFeedParsers.add(feedService.getFeedEvents());
-        rssFeedParsers.add(feedService.getFeedNews());
-        rssFeedParsers.add(feedService.getFeedPartners());
+        rssFeedParsers.add(feedsEvents);
+        rssFeedParsers.add(feedsPartners);
+        rssFeedParsers.add(feedsNews);
         int i = 0, position;
         do {
             position = rssFeedParsers.get(i).getPositionFromTitle(GCMService.getInstance().getPushMsg());

@@ -55,6 +55,11 @@ public class RegisterTask extends AsyncTask<Void, Void, String> {
                             }
 
                             @Override
+                            public void onNoAvailableData() {
+
+                            }
+
+                            @Override
                             public void onFailure(RetrofitError error) {
                                 callback.onFailure(error);
                             }

@@ -1,5 +1,6 @@
 package org.esn.mobilit.activities;
 
+import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -12,9 +13,14 @@ public class DetailActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        getActionBar().setIcon(R.drawable.ic_launcher);
         setContentView(R.layout.detail);
+
+        ActionBar actionBar =
+                getActionBar();
+
+        if (actionBar != null) {
+            actionBar.setIcon(R.drawable.ic_launcher);
+        }
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("feed", getIntent().getSerializableExtra("feed"));

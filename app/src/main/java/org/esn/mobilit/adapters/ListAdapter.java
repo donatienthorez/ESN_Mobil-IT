@@ -41,20 +41,16 @@ public class ListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-        // Inflate the item layout and set the views
         View listItem = convertView;
         int pos = position;
         if (listItem == null) {
             listItem = layoutInflater.inflate(R.layout.list_item, null);
         }
 
-        // Initialize the views in the layout
         ImageView iv = (ImageView) listItem.findViewById(R.id.thumb);
         TextView tvTitle = (TextView) listItem.findViewById(R.id.title);
         TextView tvDate = (TextView) listItem.findViewById(R.id.date);
 
-        // Set the views in the layout
         Glide.with(MobilITApplication.getContext())
                 .load(feed.getItem(pos).getImage())
                 .placeholder(R.drawable.default_list_item)
