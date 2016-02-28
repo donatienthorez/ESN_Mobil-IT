@@ -60,7 +60,7 @@ public class RegisterTask extends AsyncTask<Void, Void, String> {
                             }
 
                             @Override
-                            public void onFailure(RetrofitError error) {
+                            public void onFailure(String error) {
                                 callback.onFailure(error);
                             }
                         }

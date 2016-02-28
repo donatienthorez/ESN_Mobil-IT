@@ -10,7 +10,6 @@ public class CacheService {
     private static CacheService instance;
 
     private CacheService(){
-        instance = new CacheService();
     }
 
     public static CacheService getInstance(){

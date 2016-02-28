@@ -7,6 +7,7 @@ import org.esn.mobilit.fragments.AboutFragment;
 import org.esn.mobilit.fragments.Satellite.ListFragment;
 import org.esn.mobilit.fragments.Survival.SurvivalFragment;
 import org.esn.mobilit.models.Guide;
+import org.esn.mobilit.services.GuideService;
 import org.esn.mobilit.services.feeds.EventsService;
 import org.esn.mobilit.services.feeds.FeedService;
 import org.esn.mobilit.services.feeds.NewsService;
@@ -27,8 +28,7 @@ public class PagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
 
     public void setTabsList()
     {
-        FeedService feedService = FeedService.getInstance();
-        Guide guide = feedService.getGuide();
+        Guide guide = GuideService.getInstance().getGuide();
         RSSFeedParser feedsEvents = EventsService.getInstance().getFeed();
         RSSFeedParser feedsPartners = PartnersService.getInstance().getFeed();
         RSSFeedParser feedsNews = NewsService.getInstance().getFeed();

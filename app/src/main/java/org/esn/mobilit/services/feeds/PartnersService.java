@@ -2,12 +2,10 @@ package org.esn.mobilit.services.feeds;
 
 import org.esn.mobilit.models.RSS.RSS;
 import org.esn.mobilit.network.providers.FeedProvider;
-import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
-import org.esn.mobilit.utils.parser.RSSFeedParser;
 
-public class PartnersService implements FeedServiceInterface{
-    private RSSFeedParser partners;
+public class PartnersService extends RSSFeedService {
+
     private static PartnersService instance;
 
     public static final String PARTNERS = "partners";
@@ -23,27 +21,17 @@ public class PartnersService implements FeedServiceInterface{
     }
 
     @Override
-    public RSSFeedParser getFeed() {
-        return this.partners;
+    public void resetService() {
+        instance = new PartnersService();
     }
 
     @Override
-    public RSSFeedParser getFromCache() {
-        return (RSSFeedParser) CacheService.getObjectFromCache(PARTNERS);
+    public String getString() {
+        return PARTNERS;
     }
 
     @Override
     public void getFromSite(String sectionWebsite, NetworkCallback<RSS> networkCallback) {
         FeedProvider.makePartnersRequest(sectionWebsite, networkCallback);
-    }
-
-    @Override
-    public void setFeed(RSSFeedParser partners) {
-        this.partners = partners;
-    }
-
-    @Override
-    public void setFeedToCache(RSSFeedParser partners) {
-        CacheService.saveObjectToCache(PARTNERS, partners);
     }
 }

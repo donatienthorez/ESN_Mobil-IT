@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import org.esn.mobilit.R;
 import org.esn.mobilit.adapters.PagerAdapter;
 import org.esn.mobilit.services.CacheService;
+import org.esn.mobilit.services.GuideService;
 import org.esn.mobilit.services.feeds.EventsService;
 import org.esn.mobilit.services.feeds.FeedService;
 import org.esn.mobilit.services.feeds.NewsService;
@@ -25,7 +26,6 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
     private ViewPager viewPager;
 
-    private FeedService feedService;
     private ActionBar actionBar;
     private RSSFeedParser currentFeed;
 
@@ -33,7 +33,6 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        feedService = FeedService.getInstance();
         PagerAdapter pagerAdapter = new PagerAdapter(
                 getSupportFragmentManager()
         );
@@ -68,7 +67,8 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         setRSSFeedTab(R.string.title_news, feedsPartners);
         setRSSFeedTab(R.string.title_partners, feedsNews);
 
-        if (feedService.getGuide() != null && feedService.getGuide().getNodes() != null && feedService.getGuide().getNodes().size() > 0){
+        if (GuideService.getInstance().getGuide() != null && GuideService.getInstance().getGuide().getNodes() != null
+                && GuideService.getInstance().getGuide().getNodes().size() > 0){
             addTab(R.string.title_survivalguide);
         }
 

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -18,7 +17,6 @@ import com.crashlytics.android.Crashlytics;
 import org.esn.mobilit.renderers.HomepageRenderer;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.PreferencesService;
-import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Country;
@@ -33,7 +31,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.fabric.sdk.android.Fabric;
-import retrofit.RetrofitError;
 
 public class FirstLaunchActivity extends Activity {
 
@@ -52,39 +49,33 @@ public class FirstLaunchActivity extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_firstlaunch);
-
         Fabric.with(this, new Crashlytics());
-
+        setContentView(R.layout.activity_firstlaunch);
         String sectionWebsite = PreferencesService.getDefaults("section_website");
 
         if (!(sectionWebsite == null || sectionWebsite.equalsIgnoreCase(""))) {
-            Intent intent = new Intent(this, SplashActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            Intent intent = new Intent(this, LoadingActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+            finish();
         }
 
         initContent();
 
-        if (Utils.isConnected()){
-            CountriesService.getCountries(new NetworkCallback<List<Country>>() {
-                @Override
-                public void onSuccess(List<Country> result) {
-                    initCountriesSpinner(result);
-                }
+        CountriesService.getCountries(new NetworkCallback<List<Country>>() {
+            @Override
+            public void onSuccess(List<Country> result) {
+                initCountriesSpinner(result);
+            }
 
-                @Override
-                public void onNoAvailableData() {
+            @Override
+            public void onNoAvailableData() {
+            }
 
-                }
-
-                @Override
-                public void onFailure(RetrofitError error) {
-
-                }
-            });
-        }
+            @Override
+            public void onFailure(String error) {
+            }
+        });
     }
 
     private void initContent(){
@@ -168,7 +159,7 @@ public class FirstLaunchActivity extends Activity {
         CacheService.saveObjectToCache("country", currentCountry);
         CacheService.saveObjectToCache("section", currentSection);
 
-        Intent intent = new Intent(this, SplashActivity.class);
+        Intent intent = new Intent(this, LoadingActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }

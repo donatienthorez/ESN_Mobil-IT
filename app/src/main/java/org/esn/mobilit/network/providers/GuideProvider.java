@@ -34,7 +34,7 @@ public class GuideProvider {
 
             @Override
             public void failure(RetrofitError error) {
-                callback.onFailure(error);
+                callback.onFailure(error.getMessage());
             }
         });
     }

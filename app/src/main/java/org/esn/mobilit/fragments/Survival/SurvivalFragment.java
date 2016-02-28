@@ -14,7 +14,9 @@ import android.widget.TextView;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.activities.FirstLaunchActivity;
+import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.renderers.GuideRenderer;
+import org.esn.mobilit.services.GuideService;
 import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.services.feeds.FeedService;
 
@@ -35,7 +37,7 @@ public class SurvivalFragment extends Fragment{
         TextView t = (TextView) myInflatedView.findViewById(R.id.survivalContent);
 
         GuideRenderer sgr = new GuideRenderer();
-        String survivalContent = sgr.renderSurvivalGuide(FeedService.getInstance().getGuide());
+        String survivalContent = sgr.renderSurvivalGuide(GuideService.getInstance().getGuide());
         t.setText(Html.fromHtml(survivalContent), TextView.BufferType.SPANNABLE);
 
         return myInflatedView;

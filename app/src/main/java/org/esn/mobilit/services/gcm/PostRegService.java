@@ -21,7 +21,6 @@ public class PostRegService {
     public static PostRegService instance;
 
     private PostRegService(){
-        instance = new PostRegService();
     }
 
     public static PostRegService getInstance(){
@@ -56,7 +55,7 @@ public class PostRegService {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        callback.onFailure(error);
+                        callback.onFailure(error.getMessage());
                     }
                 }
         );

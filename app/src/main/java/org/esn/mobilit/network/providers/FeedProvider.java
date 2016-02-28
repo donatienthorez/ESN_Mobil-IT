@@ -56,7 +56,7 @@ public class FeedProvider {
 
             @Override
             public void failure(RetrofitError error) {
-                callback.onFailure(error);
+                callback.onFailure(error.getMessage());
             }
         };
     }

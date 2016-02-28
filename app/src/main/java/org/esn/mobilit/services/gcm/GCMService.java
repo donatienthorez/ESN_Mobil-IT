@@ -1,26 +1,30 @@
 package org.esn.mobilit.services.gcm;
 
-import android.app.Activity;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.services.PreferencesService;
+import org.esn.mobilit.services.launcher.interfaces.Cachable;
+import org.esn.mobilit.services.launcher.interfaces.Launchable;
 import org.esn.mobilit.utils.callbacks.Callback;
 import org.esn.mobilit.tasks.gcm.RegisterTask;
-import org.esn.mobilit.utils.Utils;
+import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
-public class GCMService {
+public class GCMService implements Cachable, Launchable{
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String REG_ID = "regId";
     GoogleCloudMessaging gcmObj;
     String regId = "";
     private String pushMsg = "";
+    public static final String GCM = "gcm";
 
     private static GCMService instance;
+
+    private GCMService(){}
+
     public static GCMService getInstance(){
         if (instance == null){
             instance = new GCMService();
@@ -28,12 +32,16 @@ public class GCMService {
         return instance;
     }
 
-    public void pushForGcm(Activity activity, final Callback<Object> callback)
-    {
+    public String getString(){
+        return GCM;
+    }
+
+    @Override
+    public void doAction(final NetworkCallback callback) {
         if (PreferencesService.getDefaults(REG_ID) == null) {
 
             // Registering RegID
-            if (checkPlayServices(activity)) {
+            if (checkPlayServices()) {
                 new RegisterTask(new Callback<Object>() {
                     @Override
                     public void onSuccess(Object result) {
@@ -43,7 +51,7 @@ public class GCMService {
                     }
 
                     @Override
-                    public void onFailure(Exception ex) {
+                    public void onFailure(String ex) {
                         callback.onFailure(ex);
 
                     }
@@ -55,14 +63,14 @@ public class GCMService {
         }
     }
 
-    private boolean checkPlayServices(Activity activity) {
+    private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil
-                .isGooglePlayServicesAvailable(activity);
+                .isGooglePlayServicesAvailable(MobilITApplication.getContext());
         if (resultCode != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, activity,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            }
+//            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+//                GooglePlayServicesUtil.getErrorDialog(resultCode, activity,
+//                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+//            }
             return false;
         }
         return true;
