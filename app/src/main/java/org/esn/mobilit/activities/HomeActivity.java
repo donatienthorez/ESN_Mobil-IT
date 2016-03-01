@@ -10,10 +10,8 @@ import android.support.v4.view.ViewPager;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.adapters.PagerAdapter;
-import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.GuideService;
 import org.esn.mobilit.services.feeds.EventsService;
-import org.esn.mobilit.services.feeds.FeedService;
 import org.esn.mobilit.services.feeds.NewsService;
 import org.esn.mobilit.services.feeds.PartnersService;
 import org.esn.mobilit.services.gcm.GCMService;
@@ -25,7 +23,6 @@ import java.util.List;
 public class HomeActivity extends FragmentActivity implements ActionBar.TabListener {
 
     private ViewPager viewPager;
-
     private ActionBar actionBar;
     private RSSFeedParser currentFeed;
 
@@ -72,9 +69,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
             addTab(R.string.title_survivalguide);
         }
 
-        if (CacheService.getObjectFromCache("section") != null){
-            addTab(R.string.title_about);
-        }
+        addTab(R.string.title_about);
     }
 
     private void setRSSFeedTab(int stringId, RSSFeedParser rssFeedParser){

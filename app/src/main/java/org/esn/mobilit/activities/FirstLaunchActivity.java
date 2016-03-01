@@ -17,12 +17,12 @@ import com.crashlytics.android.Crashlytics;
 import org.esn.mobilit.renderers.HomepageRenderer;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.PreferencesService;
+import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Country;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.CountriesService;
-import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.adapters.SpinnerAdapter;
 
 import java.util.ArrayList;
@@ -33,8 +33,6 @@ import butterknife.ButterKnife;
 import io.fabric.sdk.android.Fabric;
 
 public class FirstLaunchActivity extends Activity {
-
-    private static final String TAG = FirstLaunchActivity.class.getSimpleName();
 
     @Bind(R.id.spinnersLayout) public LinearLayout spinnersLayout;
     @Bind(R.id.startButton)    public Button startButton;
@@ -51,7 +49,7 @@ public class FirstLaunchActivity extends Activity {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_firstlaunch);
-        String sectionWebsite = PreferencesService.getDefaults("section_website");
+        String sectionWebsite = PreferencesService.getDefaults(ApplicationConstants.CACHE_SECTION_WEBSITE);
 
         if (!(sectionWebsite == null || sectionWebsite.equalsIgnoreCase(""))) {
             Intent intent = new Intent(this, LoadingActivity.class);
@@ -152,12 +150,11 @@ public class FirstLaunchActivity extends Activity {
     }
 
     public void launchSplashActivity(View view){
-        PreferencesService.setDefaults("code_country",currentCountry.getCodeCountry());
-        PreferencesService.setDefaults("code_section", currentSection.getCode_section());
-        PreferencesService.setDefaults("section_website", currentSection.getWebsite());
+        PreferencesService.setDefaults(ApplicationConstants.PREFERENCES_CODE_COUNTRY, currentCountry.getCodeCountry());
+        PreferencesService.setDefaults(ApplicationConstants.PREFERENCES_CODE_SECTION, currentSection.getCode_section());
 
-        CacheService.saveObjectToCache("country", currentCountry);
-        CacheService.saveObjectToCache("section", currentSection);
+        CacheService.saveObjectToCache(ApplicationConstants.CACHE_COUNTRY, currentCountry);
+        CacheService.saveObjectToCache(ApplicationConstants.CACHE_SECTION, currentSection);
 
         Intent intent = new Intent(this, LoadingActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

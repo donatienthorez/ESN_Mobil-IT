@@ -1,6 +1,7 @@
 package org.esn.mobilit.network.providers;
 
 import org.esn.mobilit.models.Country;
+import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 import java.util.List;
@@ -10,6 +11,8 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.http.GET;
+import retrofit.http.Path;
+import retrofit.http.Query;
 
 public class CountryProvider {
 
@@ -19,12 +22,12 @@ public class CountryProvider {
 
     private interface CountriesProviderInterface{
         @GET("/countries/")
-        void getCountries(Callback<List<Country>> callback);
+        void getCountries(@Query("token") String token, Callback<List<Country>> callback);
     }
 
     public static void makeCountriesRequest(final NetworkCallback<List<Country>> callback) {
         CountriesProviderInterface countriesService = restAdapter.create(CountriesProviderInterface.class);
-        countriesService.getCountries(new Callback<List<Country>>() {
+        countriesService.getCountries(ApplicationConstants.MOBILIT_TOKEN, new Callback<List<Country>>() {
             @Override
             public void success(List<Country> result, Response response) {
                 callback.onSuccess(result);

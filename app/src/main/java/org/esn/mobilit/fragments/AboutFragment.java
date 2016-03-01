@@ -16,6 +16,7 @@ import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.CacheService;
+import org.esn.mobilit.utils.ApplicationConstants;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -50,7 +51,7 @@ public class AboutFragment extends android.support.v4.app.Fragment {
         // Load Butterknife
         ButterKnife.bind(this, view);
 
-        section = (Section) CacheService.getObjectFromCache("section");
+        section = (Section) CacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
         Glide.with(MobilITApplication.getContext())
                 .load(section.getLogo_url())
                 .placeholder(R.drawable.default_list_item)

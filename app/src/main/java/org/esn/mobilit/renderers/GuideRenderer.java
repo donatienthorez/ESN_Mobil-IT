@@ -4,7 +4,6 @@ import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.models.Node;
-import org.esn.mobilit.services.feeds.FeedService;
 
 import java.util.List;
 

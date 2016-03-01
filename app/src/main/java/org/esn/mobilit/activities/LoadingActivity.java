@@ -18,6 +18,7 @@ import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.GuideService;
 import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.services.launcher.interfaces.Launchable;
+import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.LoadingCallback;
 import org.esn.mobilit.R;
 import org.esn.mobilit.services.feeds.EventsService;
@@ -82,7 +83,7 @@ public class LoadingActivity extends Activity {
             GCMService.getInstance().setPushMsg(getIntent().getExtras().getString("title"));
         }
 
-        final Section section = (Section) CacheService.getObjectFromCache("section");
+        final Section section = (Section) CacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
 
         Glide.with(MobilITApplication.getContext())
                 .load(section.getLogo_url())

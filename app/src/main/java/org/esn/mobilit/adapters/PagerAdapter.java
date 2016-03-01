@@ -9,7 +9,6 @@ import org.esn.mobilit.fragments.Survival.SurvivalFragment;
 import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.services.GuideService;
 import org.esn.mobilit.services.feeds.EventsService;
-import org.esn.mobilit.services.feeds.FeedService;
 import org.esn.mobilit.services.feeds.NewsService;
 import org.esn.mobilit.services.feeds.PartnersService;
 import org.esn.mobilit.utils.parser.RSSFeedParser;

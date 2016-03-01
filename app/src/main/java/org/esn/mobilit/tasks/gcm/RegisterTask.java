@@ -48,22 +48,22 @@ public class RegisterTask extends AsyncTask<Void, Void, String> {
         if (!TextUtils.isEmpty(GCMService.getInstance().getRegId())) {
             try {
                 PostRegService.registerId(
-                        new NetworkCallback<Response>() {
-                            @Override
-                            public void onSuccess(Response result) {
-                                callback.onSuccess(result);
-                            }
-
-                            @Override
-                            public void onNoAvailableData() {
-
-                            }
-
-                            @Override
-                            public void onFailure(String error) {
-                                callback.onFailure(error);
-                            }
+                    new NetworkCallback<Response>() {
+                        @Override
+                        public void onSuccess(Response result) {
+                            callback.onSuccess(result);
                         }
+
+                        @Override
+                        public void onNoAvailableData() {
+
+                        }
+
+                        @Override
+                        public void onFailure(String error) {
+                            callback.onFailure(error);
+                        }
+                    }
                 );
             } catch (ParseException e) {
                 e.printStackTrace();

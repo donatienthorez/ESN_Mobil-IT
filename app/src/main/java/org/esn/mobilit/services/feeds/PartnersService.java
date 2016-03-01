@@ -2,13 +2,12 @@ package org.esn.mobilit.services.feeds;
 
 import org.esn.mobilit.models.RSS.RSS;
 import org.esn.mobilit.network.providers.FeedProvider;
+import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 public class PartnersService extends RSSFeedService {
 
     private static PartnersService instance;
-
-    public static final String PARTNERS = "partners";
 
     private PartnersService() {
     }
@@ -27,7 +26,7 @@ public class PartnersService extends RSSFeedService {
 
     @Override
     public String getString() {
-        return PARTNERS;
+        return ApplicationConstants.CACHE_PARTNERS;
     }
 
     @Override

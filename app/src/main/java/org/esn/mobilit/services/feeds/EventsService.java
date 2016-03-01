@@ -2,13 +2,12 @@ package org.esn.mobilit.services.feeds;
 
 import org.esn.mobilit.models.RSS.RSS;
 import org.esn.mobilit.network.providers.FeedProvider;
+import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 public class EventsService extends RSSFeedService {
 
     private static EventsService instance;
-
-    public static final String EVENTS = "events";
 
     private EventsService(){
     }
@@ -27,7 +26,7 @@ public class EventsService extends RSSFeedService {
 
     @Override
     public String getString() {
-        return EVENTS;
+        return ApplicationConstants.CACHE_EVENTS;
     }
 
     @Override

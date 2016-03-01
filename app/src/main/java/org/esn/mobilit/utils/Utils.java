@@ -6,9 +6,6 @@ import android.net.ConnectivityManager;
 import org.esn.mobilit.MobilITApplication;
 
 public class Utils {
-
-    private static final String TAG = Utils.class.getSimpleName();
-
     public static boolean isConnected(){
         ConnectivityManager conMgr = (ConnectivityManager) MobilITApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         return (

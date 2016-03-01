@@ -14,11 +14,9 @@ import android.widget.TextView;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.activities.FirstLaunchActivity;
-import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.renderers.GuideRenderer;
 import org.esn.mobilit.services.GuideService;
 import org.esn.mobilit.services.PreferencesService;
-import org.esn.mobilit.services.feeds.FeedService;
 
 public class SurvivalFragment extends Fragment{
 

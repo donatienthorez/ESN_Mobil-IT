@@ -2,6 +2,7 @@ package org.esn.mobilit.services;
 
 import org.esn.mobilit.models.Country;
 import org.esn.mobilit.services.launcher.interfaces.Cachable;
+import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.network.providers.CountryProvider;
@@ -24,14 +25,12 @@ public class CountriesService implements Cachable{
         return instance;
     }
 
-    public static final String COUNTRIES = "countries";
-
     public static void getCountries(final NetworkCallback<List<Country>> callback) {
         if (Utils.isConnected()) {
             CountryProvider.makeCountriesRequest(new NetworkCallback<List<Country>>() {
                 @Override
                 public void onSuccess(List<Country> result) {
-                    CacheService.saveObjectToCache(COUNTRIES, result);
+                    CacheService.saveObjectToCache(getInstance().getString(), result);
                     callback.onSuccess(result);
                 }
 
@@ -46,7 +45,7 @@ public class CountriesService implements Cachable{
                 }
             });
         } else {
-            List<Country> cachedCountries = (List<Country>) CacheService.getObjectFromCache(COUNTRIES);
+            List<Country> cachedCountries = (List<Country>) CacheService.getObjectFromCache(getInstance().getString());
 
             if (cachedCountries == null || cachedCountries.size() == 0) {
                 callback.onNoAvailableData();
@@ -58,7 +57,7 @@ public class CountriesService implements Cachable{
 
     @Override
     public String getString() {
-        return COUNTRIES;
+        return ApplicationConstants.CACHE_COUNTRIES;
     }
 }
 

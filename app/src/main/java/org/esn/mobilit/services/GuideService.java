@@ -3,17 +3,14 @@ package org.esn.mobilit.services;
 import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.network.providers.GuideProvider;
-import org.esn.mobilit.services.feeds.FeedService;
 import org.esn.mobilit.services.launcher.interfaces.Cachable;
 import org.esn.mobilit.services.launcher.interfaces.Launchable;
+import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
-import retrofit.RetrofitError;
-
 public class GuideService implements Cachable, Launchable<Guide> {
     private static GuideService instance;
-    public static final String GUIDE = "guide";
 
     private Guide guide;
 
@@ -40,12 +37,12 @@ public class GuideService implements Cachable, Launchable<Guide> {
     }
 
     public String getString() {
-        return GUIDE;
+        return ApplicationConstants.CACHE_GUIDE;
     }
 
     @Override
     public void doAction(final NetworkCallback<Guide> callback) {
-        final Section section = (Section) CacheService.getObjectFromCache("section");
+        final Section section = (Section) CacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
 
         if (Utils.isConnected()){
             GuideProvider.makeGuideRequest(section, new NetworkCallback<Guide>() {
@@ -67,10 +64,11 @@ public class GuideService implements Cachable, Launchable<Guide> {
                 }
             });
         } else {
-            Guide g = (Guide) CacheService.getObjectFromCache(getString());
+            Guide guide = (Guide) CacheService.getObjectFromCache(getString());
+            if (guide != null) {
+                setGuide(guide);
 
-            if (g != null) {
-                callback.onSuccess(g);
+                callback.onSuccess(guide);
             } else {
                 callback.onNoAvailableData();
             }
