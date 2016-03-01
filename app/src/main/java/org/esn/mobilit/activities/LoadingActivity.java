@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.models.Section;
+import org.esn.mobilit.services.AboutService;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.GuideService;
 import org.esn.mobilit.services.PreferencesService;
@@ -95,6 +96,7 @@ public class LoadingActivity extends Activity {
         arrayList.add(NewsService.getInstance());
         arrayList.add(PartnersService.getInstance());
         arrayList.add(GuideService.getInstance());
+        arrayList.add(AboutService.getInstance());
         arrayList.add(GCMService.getInstance());
 
         LauncherService.getInstance().launchServices(arrayList, new LoadingCallback() {

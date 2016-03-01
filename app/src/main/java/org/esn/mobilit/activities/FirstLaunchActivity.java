@@ -49,7 +49,8 @@ public class FirstLaunchActivity extends Activity {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_firstlaunch);
-        String sectionWebsite = PreferencesService.getDefaults(ApplicationConstants.CACHE_SECTION_WEBSITE);
+        Section section = (Section) CacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
+        String sectionWebsite = section.getWebsite();
 
         if (!(sectionWebsite == null || sectionWebsite.equalsIgnoreCase(""))) {
             Intent intent = new Intent(this, LoadingActivity.class);
