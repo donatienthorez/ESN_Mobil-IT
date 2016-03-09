@@ -107,17 +107,33 @@ public class LoadingActivity extends Activity {
 
             @Override
             public void onNoAvailableData() {
-                showLoadingError(R.string.emptycache);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showLoadingError(R.string.emptycache);
+                    }
+                });
             }
 
             @Override
             public void onFailure() {
-                showLoadingError(R.string.emptycache);
-                textView.setText("Oops une erreur s'est produite");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showLoadingError(R.string.emptycache);
+                        textView.setText("Oops une erreur s'est produite");
+                    }
+                });
             }
 
-            public void onProgress(int id) {
-                textView.setText(id);
+            public void onProgress(final int id) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showLoadingError(R.string.emptycache);
+                        textView.setText(id);
+                    }
+                });
             }
         });
     }

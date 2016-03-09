@@ -4,16 +4,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 
+import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.renderers.HomepageRenderer;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.PreferencesService;
@@ -34,25 +36,22 @@ import io.fabric.sdk.android.Fabric;
 
 public class FirstLaunchActivity extends Activity {
 
-    @Bind(R.id.spinnersLayout) public LinearLayout spinnersLayout;
-    @Bind(R.id.startButton)    public Button startButton;
-    @Bind(R.id.chooseCountry)  public TextView textView;
-    @Bind(R.id.progressBar)    public ProgressBar progressBar;
+    @Bind(R.id.startButton)      public Button startButton;
+    @Bind(R.id.chooseCountry)    public TextView chooseCountryTextView;
+    @Bind(R.id.progressBar)      public ProgressBar progressBar;
+    @Bind(R.id.spinnerCountries) public Spinner spinnerCountries;
+    @Bind(R.id.spinnerSections)  public Spinner spinnerSections;
 
     private Country currentCountry;
     private Section currentSection;
-
-    private Spinner spinnerCountries;
-    private Spinner spinnerSections;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_firstlaunch);
         Section section = (Section) CacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
-        String sectionWebsite = section.getWebsite();
 
-        if (!(sectionWebsite == null || sectionWebsite.equalsIgnoreCase(""))) {
+        if (section != null && !TextUtils.isEmpty(section.getWebsite())) {
             Intent intent = new Intent(this, LoadingActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
@@ -69,10 +68,20 @@ public class FirstLaunchActivity extends Activity {
 
             @Override
             public void onNoAvailableData() {
+                Toast.makeText(
+                        MobilITApplication.getContext(),
+                        getResources().getString(R.string.error_message_network),
+                        Toast.LENGTH_LONG
+                ).show();
             }
 
             @Override
             public void onFailure(String error) {
+                Toast.makeText(
+                        MobilITApplication.getContext(),
+                        getResources().getString(R.string.error_message_no_data_countries),
+                        Toast.LENGTH_LONG
+                ).show();
             }
         });
     }
@@ -85,11 +94,9 @@ public class FirstLaunchActivity extends Activity {
         startButton.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
 
-        spinnerCountries = new Spinner(this);
-
         HomepageRenderer homepageRenderer = new HomepageRenderer();
         SpannableStringBuilder text = homepageRenderer.renderHomepageText();
-        textView.setText(text, TextView.BufferType.SPANNABLE);
+        chooseCountryTextView.setText(text, TextView.BufferType.SPANNABLE);
     }
 
     private void initCountriesSpinner(final List<Country> countries){
@@ -110,20 +117,17 @@ public class FirstLaunchActivity extends Activity {
                             initSectionsSpinner();
                         }
                     }
-                    public void onNothingSelected(AdapterView<?> arg0) {}
+
+                    public void onNothingSelected(AdapterView<?> arg0) {
+                    }
                 }
         );
+        spinnerCountries.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
-        spinnersLayout.addView(spinnerCountries);
     }
 
     private void initSectionsSpinner(){
         progressBar.setVisibility(View.VISIBLE);
-        if (spinnerSections != null) {
-            spinnersLayout.removeView(spinnerSections);
-        }
-
-        spinnerSections = new Spinner(this);
 
         ArrayList<String> datas = new ArrayList<String>();
 
@@ -133,21 +137,23 @@ public class FirstLaunchActivity extends Activity {
         }
 
         spinnerSections.setSelection(0);
-        spinnerSections.setAdapter(new SpinnerAdapter(FirstLaunchActivity.this,datas));
+        spinnerSections.setAdapter(new SpinnerAdapter(FirstLaunchActivity.this, datas));
         spinnerSections.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
                         if (position != 0) {
-                            currentSection = currentCountry.getSections().get(position-1);
+                            currentSection = currentCountry.getSections().get(position - 1);
                             startButton.setEnabled(true);
                             startButton.setVisibility(View.VISIBLE);
                         }
                     }
-                    public void onNothingSelected(AdapterView<?> arg0) {}
+
+                    public void onNothingSelected(AdapterView<?> arg0) {
+                    }
                 }
         );
+        spinnerSections.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
-        spinnersLayout.addView(spinnerSections);
     }
 
     public void launchSplashActivity(View view){

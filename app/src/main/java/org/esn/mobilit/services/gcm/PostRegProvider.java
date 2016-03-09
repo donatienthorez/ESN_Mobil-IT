@@ -1,9 +1,6 @@
 package org.esn.mobilit.services.gcm;
 
-import org.esn.mobilit.models.Section;
-import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.utils.ApplicationConstants;
-import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -31,12 +28,12 @@ public class PostRegProvider {
         );
     }
 
-    public static void makeRequest(final NetworkCallback<Response> callback) {
+    public static void makeRequest(String codeSection, String regId, final org.esn.mobilit.utils.callbacks.Callback<Response> callback) {
         PostRegServiceInterface postRegService = restAdapter.create(PostRegServiceInterface.class);
-        Section section = (Section) CacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
+
         postRegService.registerId(
-                GCMService.getInstance().getRegId(),
-                section.getCode_section(),
+                regId,
+                codeSection,
                 ApplicationConstants.MOBILIT_TOKEN,
                 new Callback<Response>() {
                     @Override

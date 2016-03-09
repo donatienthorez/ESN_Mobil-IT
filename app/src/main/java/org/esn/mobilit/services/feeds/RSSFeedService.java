@@ -31,7 +31,6 @@ public abstract class RSSFeedService implements Cachable, Launchable<RSSFeedPars
     }
 
     private RSSFeedParser getFromCache() {
-        String s = this.getString();
         return (RSSFeedParser) CacheService.getObjectFromCache(this.getString());
     }
 
