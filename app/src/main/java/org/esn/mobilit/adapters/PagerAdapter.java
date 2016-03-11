@@ -11,6 +11,7 @@ import org.esn.mobilit.services.GuideService;
 import org.esn.mobilit.services.feeds.EventsService;
 import org.esn.mobilit.services.feeds.NewsService;
 import org.esn.mobilit.services.feeds.PartnersService;
+import org.esn.mobilit.services.feeds.RSSFeedService;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 import java.util.ArrayList;
@@ -28,13 +29,10 @@ public class PagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
     public void setTabsList()
     {
         Guide guide = GuideService.getInstance().getGuide();
-        RSSFeedParser feedsEvents = EventsService.getInstance().getFeed();
-        RSSFeedParser feedsPartners = PartnersService.getInstance().getFeed();
-        RSSFeedParser feedsNews = NewsService.getInstance().getFeed();
 
-        addToFragmentsList(feedsEvents);
-        addToFragmentsList(feedsNews);
-        addToFragmentsList(feedsPartners);
+        addToFragmentsList(EventsService.getInstance());
+        addToFragmentsList(NewsService.getInstance());
+        addToFragmentsList(PartnersService.getInstance());
 
         if (guide != null && guide.getNodes() != null && guide.getNodes().size() > 0) {
             SurvivalFragment survival = new SurvivalFragment();
@@ -45,13 +43,11 @@ public class PagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
         fragmentsList.add(about);
     }
 
-    public void addToFragmentsList(RSSFeedParser feed)
+    public void addToFragmentsList(RSSFeedService rssFeedService)
     {
-        if (feed != null && feed.getItemCount() > 0) {
-            ListFragment listFragment = new ListFragment();
-            listFragment.setFeed(feed);
-            fragmentsList.add(listFragment);
-        }
+        ListFragment listFragment = new ListFragment();
+        listFragment.setService(rssFeedService);
+        fragmentsList.add(listFragment);
     }
 
     @Override

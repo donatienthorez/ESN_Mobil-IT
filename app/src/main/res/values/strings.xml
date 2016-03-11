@@ -16,6 +16,11 @@
         There are no countries or sections in the database.
     </string>
 
+    <!-- INFO -->
+    <string name="info.message.no_content">
+        There is no content yet.
+    </string>
+
     <!-- SPLASH SCREEN -->
     <string name="tryingcache">No Internet connection, load from cache ...</string>
     <string name="emptycache">You need to load data at least once with internet</string>

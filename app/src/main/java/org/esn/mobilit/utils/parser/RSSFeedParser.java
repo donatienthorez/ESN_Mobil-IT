@@ -20,6 +20,10 @@ public class RSSFeedParser implements Serializable {
         this.itemlist = itemlist;
     }
 
+	public void addItem(RSSItem rssItem) {
+		itemlist.add(0, rssItem);
+	}
+
 	public RSSItem getItem(int location) {
 		return itemlist.get(location);
 	}
@@ -27,6 +31,10 @@ public class RSSFeedParser implements Serializable {
     public List<RSSItem> getList(){
 		return itemlist;
 	}
+
+    public boolean isEmpty(){
+        return itemlist.size() == 0;
+    }
 
 	public int getItemCount() {
 		return getList().size();
@@ -39,5 +47,4 @@ public class RSSFeedParser implements Serializable {
         }
         return -1;
     }
-
 }

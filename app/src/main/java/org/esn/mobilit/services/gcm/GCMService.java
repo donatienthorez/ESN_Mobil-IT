@@ -8,6 +8,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.models.Section;
+import org.esn.mobilit.network.providers.PostRegProvider;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.services.launcher.interfaces.Cachable;

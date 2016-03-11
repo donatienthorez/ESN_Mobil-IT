@@ -18,6 +18,10 @@ public abstract class RSSFeedService implements Cachable, Launchable<RSSFeedPars
     public abstract void getFromSite(String sectionWebsite, NetworkCallback<RSS> networkCallback);
     public abstract void resetService();
 
+    public RSSFeedService(){
+        this.feed = new RSSFeedParser();
+    }
+
     public RSSFeedParser getFeed() {
         return feed;
     }

@@ -55,14 +55,10 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         }
     }
 
-    private void initTabs(){
-        RSSFeedParser feedsEvents = EventsService.getInstance().getFeed();
-        RSSFeedParser feedsPartners = PartnersService.getInstance().getFeed();
-        RSSFeedParser feedsNews = NewsService.getInstance().getFeed();
-
-        setRSSFeedTab(R.string.title_events, feedsEvents);
-        setRSSFeedTab(R.string.title_news, feedsPartners);
-        setRSSFeedTab(R.string.title_partners, feedsNews);
+    private void initTabs() {
+        addTab(R.string.title_events);
+        addTab(R.string.title_news);
+        addTab(R.string.title_partners);
 
         if (GuideService.getInstance().getGuide() != null && GuideService.getInstance().getGuide().getNodes() != null
                 && GuideService.getInstance().getGuide().getNodes().size() > 0){
@@ -70,12 +66,6 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         }
 
         addTab(R.string.title_about);
-    }
-
-    private void setRSSFeedTab(int stringId, RSSFeedParser rssFeedParser){
-        if (rssFeedParser != null && rssFeedParser.getItemCount() > 0) {
-            addTab(stringId);
-        }
     }
 
     private void addTab(int stringId){
