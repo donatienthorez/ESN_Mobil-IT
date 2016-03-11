@@ -1,9 +1,5 @@
 package org.esn.mobilit.network.providers;
 
-import org.esn.mobilit.models.Country;
-import org.esn.mobilit.utils.ApplicationConstants;
-import org.esn.mobilit.utils.callbacks.NetworkCallback;
-
 import java.util.List;
 
 import retrofit.Callback;
@@ -11,8 +7,12 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.http.GET;
-import retrofit.http.Path;
 import retrofit.http.Query;
+
+import org.esn.mobilit.models.Country;
+import org.esn.mobilit.utils.ApplicationConstants;
+import org.esn.mobilit.utils.callbacks.NetworkCallback;
+
 
 public class CountryProvider {
 

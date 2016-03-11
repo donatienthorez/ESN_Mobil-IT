@@ -46,12 +46,13 @@ public class AboutFragment extends android.support.v4.app.Fragment {
             ViewGroup container,
             Bundle savedInstanceState
     ){
-        View view = inflater.inflate(R.layout.about_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_about, container, false);
 
         // Load Butterknife
         ButterKnife.bind(this, view);
 
         section = (Section) CacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
+
         Glide.with(MobilITApplication.getContext())
                 .load(section.getLogo_url())
                 .placeholder(R.drawable.default_list_item)

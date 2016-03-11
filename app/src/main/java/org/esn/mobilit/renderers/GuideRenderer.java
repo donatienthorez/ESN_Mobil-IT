@@ -1,11 +1,11 @@
 package org.esn.mobilit.renderers;
 
+import java.util.List;
+
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.models.Node;
-
-import java.util.List;
 
 public class GuideRenderer {
 

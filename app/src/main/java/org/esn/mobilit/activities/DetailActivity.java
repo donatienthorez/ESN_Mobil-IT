@@ -13,10 +13,9 @@ public class DetailActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.detail);
+        setContentView(R.layout.activity_detail);
 
-        ActionBar actionBar =
-                getActionBar();
+        ActionBar actionBar = getActionBar();
 
         if (actionBar != null) {
             actionBar.setIcon(R.drawable.ic_launcher);

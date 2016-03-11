@@ -13,26 +13,27 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
-
-import org.esn.mobilit.MobilITApplication;
-import org.esn.mobilit.renderers.HomepageRenderer;
-import org.esn.mobilit.services.CacheService;
-import org.esn.mobilit.services.PreferencesService;
-import org.esn.mobilit.utils.ApplicationConstants;
-import org.esn.mobilit.utils.callbacks.NetworkCallback;
-import org.esn.mobilit.R;
-import org.esn.mobilit.models.Country;
-import org.esn.mobilit.models.Section;
-import org.esn.mobilit.services.CountriesService;
-import org.esn.mobilit.adapters.SpinnerAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 import io.fabric.sdk.android.Fabric;
+
+import com.crashlytics.android.Crashlytics;
+
+import org.esn.mobilit.adapters.SpinnerAdapter;
+import org.esn.mobilit.MobilITApplication;
+import org.esn.mobilit.models.Country;
+import org.esn.mobilit.models.Section;
+import org.esn.mobilit.R;
+import org.esn.mobilit.renderers.HomepageRenderer;
+import org.esn.mobilit.services.CacheService;
+import org.esn.mobilit.services.CountriesService;
+import org.esn.mobilit.services.PreferencesService;
+import org.esn.mobilit.utils.ApplicationConstants;
+import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 public class FirstLaunchActivity extends Activity {
 
@@ -48,8 +49,9 @@ public class FirstLaunchActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
-        setContentView(R.layout.activity_firstlaunch);
-        Section section = (Section) CacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
+        setContentView(R.layout.activity_first_launch);
+        Section section = (Section) CacheService.
+                getObjectFromCache(ApplicationConstants.CACHE_SECTION);
 
         if (section != null && !TextUtils.isEmpty(section.getWebsite())) {
             Intent intent = new Intent(this, LoadingActivity.class);
@@ -129,15 +131,11 @@ public class FirstLaunchActivity extends Activity {
     private void initSectionsSpinner(){
         progressBar.setVisibility(View.VISIBLE);
 
-        ArrayList<String> datas = new ArrayList<String>();
-
-        datas.add(getResources().getString(R.string.selectyoursection));
-        for(Section section : currentCountry.getSections()){
-            datas.add(section.getName());
-        }
+        ArrayList<String> sections = currentCountry.getSectionsNamesArray();
+        sections.add(0, getResources().getString(R.string.selectyoursection));
 
         spinnerSections.setSelection(0);
-        spinnerSections.setAdapter(new SpinnerAdapter(FirstLaunchActivity.this, datas));
+        spinnerSections.setAdapter(new SpinnerAdapter(FirstLaunchActivity.this, sections));
         spinnerSections.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
@@ -153,7 +151,7 @@ public class FirstLaunchActivity extends Activity {
                 }
         );
         spinnerSections.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.GONE);
     }
 
     public void launchSplashActivity(View view){

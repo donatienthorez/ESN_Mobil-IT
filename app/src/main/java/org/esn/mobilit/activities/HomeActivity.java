@@ -28,7 +28,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home);
 
         PagerAdapter pagerAdapter = new PagerAdapter(
                 getSupportFragmentManager()

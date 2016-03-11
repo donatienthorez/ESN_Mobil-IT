@@ -44,7 +44,7 @@ public class ListAdapter extends BaseAdapter {
         View listItem = convertView;
         int pos = position;
         if (listItem == null) {
-            listItem = layoutInflater.inflate(R.layout.list_item, null);
+            listItem = layoutInflater.inflate(R.layout.list_item_feeds, null);
         }
 
         ImageView iv = (ImageView) listItem.findViewById(R.id.thumb);

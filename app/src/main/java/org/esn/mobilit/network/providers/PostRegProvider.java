@@ -1,7 +1,5 @@
 package org.esn.mobilit.network.providers;
 
-import org.esn.mobilit.utils.ApplicationConstants;
-
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -10,6 +8,8 @@ import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
 import retrofit.http.Query;
+
+import org.esn.mobilit.utils.ApplicationConstants;
 
 public class PostRegProvider {
 

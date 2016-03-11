@@ -1,16 +1,15 @@
 package org.esn.mobilit.network.providers;
 
-import org.esn.mobilit.models.RSS.RSS;
-import org.esn.mobilit.utils.ApplicationConstants;
-import org.esn.mobilit.utils.callbacks.NetworkCallback;
-
-
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.converter.SimpleXMLConverter;
 import retrofit.http.GET;
+
+import org.esn.mobilit.models.RSS.RSS;
+import org.esn.mobilit.utils.ApplicationConstants;
+import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 public class FeedProvider {
     private interface FeedProviderInterface{

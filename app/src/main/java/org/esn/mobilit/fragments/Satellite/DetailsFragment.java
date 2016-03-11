@@ -44,7 +44,7 @@ public class DetailsFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.detail_fragment, null);
+        View view = inflater.inflate(R.layout.fragment_detail_feeds, null);
 
         // Load Butterknife
         ButterKnife.bind(this, view);

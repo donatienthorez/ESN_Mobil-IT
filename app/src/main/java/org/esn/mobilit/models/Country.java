@@ -1,5 +1,7 @@
 package org.esn.mobilit.models;
 
+import org.esn.mobilit.R;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -69,8 +71,16 @@ public class Country implements Serializable{
         this.sections = sections;
     }
 
-    public void addSection(Section section){
+    public void addSection(Section section) {
         this.sections.add(section);
+    }
+
+    public ArrayList<String> getSectionsNamesArray() {
+        ArrayList<String> sections = new ArrayList<String>();
+        for (Section section : this.getSections()) {
+            sections.add(section.getName());
+        }
+        return sections;
     }
 
     public String toString() {

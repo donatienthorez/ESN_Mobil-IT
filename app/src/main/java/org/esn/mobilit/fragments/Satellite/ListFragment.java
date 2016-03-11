@@ -2,7 +2,6 @@ package org.esn.mobilit.fragments.Satellite;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,15 +9,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.activities.DetailActivity;
 import org.esn.mobilit.activities.FirstLaunchActivity;
 import org.esn.mobilit.adapters.ListAdapter;
-import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.services.feeds.RSSFeedService;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
@@ -36,9 +32,11 @@ public class ListFragment extends android.support.v4.app.ListFragment
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.list_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_list_feeds, container, false);
+
         adapter = new ListAdapter(feed, inflater);
         this.setListAdapter(adapter);
+
         if (feed.isEmpty()) {
             mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_empty);
             SwipeRefreshLayout swipeRefreshListView = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
@@ -55,8 +53,6 @@ public class ListFragment extends android.support.v4.app.ListFragment
         });
 
         setHasOptionsMenu(true);
-
-
 
         return view;
     }

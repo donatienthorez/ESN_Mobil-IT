@@ -8,7 +8,6 @@ import retrofit.http.GET;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.utils.ApplicationConstants;

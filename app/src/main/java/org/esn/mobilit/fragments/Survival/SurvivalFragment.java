@@ -28,10 +28,8 @@ public class SurvivalFragment extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // -- inflate the layout for this fragment
-        View myInflatedView = inflater.inflate(R.layout.survival, container,false);
+        View myInflatedView = inflater.inflate(R.layout.fragment_guide, container,false);
 
-        // Set the Text to try this out
         TextView t = (TextView) myInflatedView.findViewById(R.id.survivalContent);
 
         GuideRenderer sgr = new GuideRenderer();
