@@ -1,9 +1,9 @@
 package org.esn.mobilit.services.feeds;
 
-import org.esn.mobilit.models.RSS.RSS;
 import org.esn.mobilit.network.providers.FeedProvider;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
+import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 public class NewsService extends RSSFeedService {
 
@@ -28,7 +28,7 @@ public class NewsService extends RSSFeedService {
         return ApplicationConstants.CACHE_NEWS;
     }
 
-    public void getFromSite(String sectionWebsite, NetworkCallback<RSS> networkCallback) {
-        FeedProvider.makeNewsRequest(sectionWebsite, networkCallback);
+    public void getFromSite(String sectionWebsite, NetworkCallback<RSSFeedParser> networkCallback) {
+        FeedProvider.makeNewsRequest(sectionWebsite, getCallback(networkCallback));
     }
 }

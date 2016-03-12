@@ -15,7 +15,7 @@ public abstract class RSSFeedService implements Cachable, Launchable<RSSFeedPars
     private RSSFeedParser feed;
 
     public abstract String getString();
-    public abstract void getFromSite(String sectionWebsite, NetworkCallback<RSS> networkCallback);
+    public abstract void getFromSite(String sectionWebsite, NetworkCallback<RSSFeedParser> networkCallback);
     public abstract void resetService();
 
     public RSSFeedService(){
@@ -49,7 +49,7 @@ public abstract class RSSFeedService implements Cachable, Launchable<RSSFeedPars
 
         if (Utils.isConnected()){
             Section section = (Section) CacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
-            getFromSite(section.getWebsite(), getCallback(callback));
+            getFromSite(section.getWebsite(), callback);
         } else {
             feed = this.getFromCache();
 
@@ -62,7 +62,7 @@ public abstract class RSSFeedService implements Cachable, Launchable<RSSFeedPars
         }
     }
 
-    private NetworkCallback<RSS> getCallback(final NetworkCallback<RSSFeedParser> callback) {
+    protected NetworkCallback<RSS> getCallback(final NetworkCallback<RSSFeedParser> callback) {
         return new NetworkCallback<RSS>() {
             @Override
             public void onSuccess(RSS feed) {
@@ -70,8 +70,6 @@ public abstract class RSSFeedService implements Cachable, Launchable<RSSFeedPars
                 RSSFeedParser rssFeedParser = new RSSFeedParser(feed.getRSSChannel().getList());
                 setFeed(rssFeedParser);
                 setFeedToCache(rssFeedParser);
-
-                rssFeedParser = (RSSFeedParser) CacheService.getObjectFromCache(getString());
                 callback.onSuccess(rssFeedParser);
             }
 

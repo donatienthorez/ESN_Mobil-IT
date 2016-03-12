@@ -4,6 +4,7 @@ import org.esn.mobilit.models.RSS.RSS;
 import org.esn.mobilit.network.providers.FeedProvider;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
+import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 public class EventsService extends RSSFeedService {
 
@@ -30,8 +31,8 @@ public class EventsService extends RSSFeedService {
     }
 
     @Override
-    public void getFromSite(String sectionWebsite, NetworkCallback<RSS> networkCallback) {
-        FeedProvider.makeEventRequest(sectionWebsite, networkCallback);
+    public void getFromSite(String sectionWebsite, NetworkCallback<RSSFeedParser> networkCallback) {
+        FeedProvider.makeEventRequest(sectionWebsite, getCallback(networkCallback));
     }
 
 }
