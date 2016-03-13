@@ -50,7 +50,11 @@ public class FeedProvider {
         return new Callback<RSS>() {
             @Override
             public void success(RSS result, Response response) {
-                callback.onSuccess(result);
+                if (result.getListSize() == 0) {
+                    callback.onNoAvailableData();
+                } else {
+                    callback.onSuccess(result);
+                }
             }
 
             @Override

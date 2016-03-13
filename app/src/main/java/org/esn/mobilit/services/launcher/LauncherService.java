@@ -70,6 +70,7 @@ public class LauncherService {
                     feedService.doAction(new NetworkCallback() {
                         @Override
                         public void onSuccess(Object result) {
+
                             callback.onProgress(R.string.load_events_end);
                             addStatus(feedService.getString(), LauncherStatus.FINISHED);
                             launchHomeActivity(callback);

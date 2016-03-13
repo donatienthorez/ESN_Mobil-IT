@@ -10,6 +10,7 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Root(name = "RSSChannel", strict = false)
@@ -27,22 +28,14 @@ public class RSSChannel {
     @Element(name = "language", required = false)
     private String language;
 
-    @ElementList(name = "item", inline = true)
+    @ElementList(name = "item", inline = true, required = false)
     private List<RSSItem> rssItemList;
 
     public List<RSSItem> getList(){
-        return rssItemList;
-    }
-
-    public void moveImage(){
-        for(RSSItem item : getList())
-        {
-            DOMParser.moveImage(item);
-
-            Glide.with(MobilITApplication.getContext())
-                    .load(item.getImage())
-                    .downloadOnly(150, 250);
+        if (rssItemList == null) {
+            rssItemList = new ArrayList<RSSItem>();
         }
+        return rssItemList;
     }
 
     public static class Link {

@@ -30,9 +30,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        PagerAdapter pagerAdapter = new PagerAdapter(
-                getSupportFragmentManager()
-        );
+        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
 
         actionBar = getActionBar();
         if (actionBar != null) {
@@ -41,7 +39,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter);
-        viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 actionBar.setSelectedNavigationItem(position);

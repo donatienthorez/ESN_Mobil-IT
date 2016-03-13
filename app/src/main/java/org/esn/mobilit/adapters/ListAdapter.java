@@ -12,6 +12,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
+import org.esn.mobilit.models.RSS.RSS;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 public class ListAdapter extends BaseAdapter {
@@ -22,6 +23,11 @@ public class ListAdapter extends BaseAdapter {
     public ListAdapter(RSSFeedParser feed, LayoutInflater layoutInflater) {
         this.feed = feed;
         this.layoutInflater = layoutInflater;
+    }
+
+    public void setFeed(RSSFeedParser feed) {
+        this.feed = feed;
+        this.notifyDataSetChanged();
     }
 
     @Override
@@ -55,6 +61,7 @@ public class ListAdapter extends BaseAdapter {
                 .load(feed.getItem(pos).getImage())
                 .placeholder(R.drawable.default_list_item)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .override(150, 250)
                 .into(iv);
 
         tvTitle.setText(feed.getItem(pos).getTitle());

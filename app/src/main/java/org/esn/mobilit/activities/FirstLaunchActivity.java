@@ -72,7 +72,7 @@ public class FirstLaunchActivity extends Activity {
             public void onNoAvailableData() {
                 Toast.makeText(
                         MobilITApplication.getContext(),
-                        getResources().getString(R.string.error_message_network),
+                        getResources().getString(R.string.error_message_no_data_countries),
                         Toast.LENGTH_LONG
                 ).show();
             }
@@ -81,7 +81,7 @@ public class FirstLaunchActivity extends Activity {
             public void onFailure(String error) {
                 Toast.makeText(
                         MobilITApplication.getContext(),
-                        getResources().getString(R.string.error_message_no_data_countries),
+                        getResources().getString(R.string.error_message_network),
                         Toast.LENGTH_LONG
                 ).show();
             }

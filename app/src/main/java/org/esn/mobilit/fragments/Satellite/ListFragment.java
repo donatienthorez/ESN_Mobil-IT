@@ -2,6 +2,7 @@ package org.esn.mobilit.fragments.Satellite;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,20 +11,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.activities.DetailActivity;
 import org.esn.mobilit.activities.FirstLaunchActivity;
 import org.esn.mobilit.adapters.ListAdapter;
 import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.services.feeds.RSSFeedService;
+import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 public class ListFragment extends android.support.v4.app.ListFragment
 {
     private RSSFeedParser feed;
     private RSSFeedService rssFeedService;
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    SwipeRefreshLayout swipeRefreshLayoutListView;
     ListAdapter adapter;
 
     public void setService(RSSFeedService rssFeedService){
@@ -33,27 +37,21 @@ public class ListFragment extends android.support.v4.app.ListFragment
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list_feeds, container, false);
-
         adapter = new ListAdapter(feed, inflater);
         this.setListAdapter(adapter);
 
-        if (feed.isEmpty()) {
-            mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_empty);
-            SwipeRefreshLayout swipeRefreshListView = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
-            mSwipeRefreshLayout.setVisibility(View.VISIBLE);
-            swipeRefreshListView.setVisibility(View.GONE);
-        } else {
-            mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
-        }
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayoutListView = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
+
+        swipeRefreshLayoutListView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshContent();
+                refreshContent(true);
             }
         });
 
         setHasOptionsMenu(true);
 
+        refreshContent(false);
         return view;
     }
 
@@ -87,9 +85,38 @@ public class ListFragment extends android.support.v4.app.ListFragment
         }
     }
 
-    private void refreshContent(){
-        feed = rssFeedService.getFeed();
-        adapter.notifyDataSetChanged();
-        mSwipeRefreshLayout.setRefreshing(false);
+    private void refreshContent(final boolean showMessage){
+        swipeRefreshLayoutListView.measure(View.MEASURED_SIZE_MASK, View.MEASURED_HEIGHT_STATE_SHIFT);
+        swipeRefreshLayoutListView.setRefreshing(true);
+        swipeRefreshLayoutListView.post(new Runnable() {
+            @Override
+            public void run() {
+                rssFeedService.getFromSite(new NetworkCallback<RSSFeedParser>() {
+                    @Override
+                    public void onSuccess(RSSFeedParser result) {
+                        feed = rssFeedService.getFeed();
+                        adapter.setFeed(feed);
+                        swipeRefreshLayoutListView.setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onNoAvailableData() {
+                        swipeRefreshLayoutListView.setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+                        swipeRefreshLayoutListView.setRefreshing(false);
+                        if (showMessage) {
+                            Toast.makeText(
+                                    MobilITApplication.getContext(),
+                                    getResources().getString(R.string.info_message_no_network),
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                        }
+                    }
+                });
+            }
+        });
     }
 }
