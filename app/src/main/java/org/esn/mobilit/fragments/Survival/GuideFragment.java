@@ -14,11 +14,15 @@ import android.widget.TextView;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.activities.FirstLaunchActivity;
+import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.renderers.GuideRenderer;
 import org.esn.mobilit.services.GuideService;
 import org.esn.mobilit.services.PreferencesService;
+import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
-public class SurvivalFragment extends Fragment{
+public class GuideFragment extends Fragment{
+
+    TextView guideContent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,13 +32,25 @@ public class SurvivalFragment extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View myInflatedView = inflater.inflate(R.layout.fragment_guide, container,false);
+        View myInflatedView = inflater.inflate(R.layout.fragment_guide, container, false);
+        guideContent = (TextView) myInflatedView.findViewById(R.id.guideContent);
 
-        TextView t = (TextView) myInflatedView.findViewById(R.id.survivalContent);
+        setGuide(GuideService.getInstance().getFromCache());
 
-        GuideRenderer sgr = new GuideRenderer();
-        String survivalContent = sgr.renderSurvivalGuide(GuideService.getInstance().getGuide());
-        t.setText(Html.fromHtml(survivalContent), TextView.BufferType.SPANNABLE);
+        GuideService.getInstance().getFromSite(new NetworkCallback<Guide>() {
+            @Override
+            public void onSuccess(Guide result) {
+                setGuide(result);
+            }
+
+            @Override
+            public void onNoAvailableData() {
+            }
+
+            @Override
+            public void onFailure(String error) {
+            }
+        });
 
         return myInflatedView;
     }
@@ -57,5 +73,12 @@ public class SurvivalFragment extends Fragment{
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void setGuide(Guide guide) {
+
+        GuideRenderer sgr = new GuideRenderer();
+        String survivalContent = sgr.renderSurvivalGuide(GuideService.getInstance().getFromCache());
+        guideContent.setText(Html.fromHtml(survivalContent), TextView.BufferType.SPANNABLE);
     }
 }

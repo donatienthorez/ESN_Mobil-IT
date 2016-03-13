@@ -1,16 +1,15 @@
 package org.esn.mobilit.services;
 
-import org.esn.mobilit.models.Guide;
+import org.esn.mobilit.MobilITApplication;
+import org.esn.mobilit.R;
 import org.esn.mobilit.models.Section;
-import org.esn.mobilit.network.providers.GuideProvider;
 import org.esn.mobilit.network.providers.SectionProvider;
 import org.esn.mobilit.services.launcher.interfaces.Cachable;
-import org.esn.mobilit.services.launcher.interfaces.Launchable;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
-public class AboutService implements Cachable, Launchable<Section> {
+public class AboutService implements Cachable {
     private static AboutService instance;
 
     private Section section;
@@ -37,40 +36,46 @@ public class AboutService implements Cachable, Launchable<Section> {
         return section;
     }
 
+    public Section getFromCache() {
+        return (Section) CacheService.getObjectFromCache(this.getString());
+    }
+
+    public void setSectionToCache(Section section) {
+        CacheService.saveObjectToCache(getString(), section);
+    }
+
     @Override
     public String getString() {
         return ApplicationConstants.CACHE_SECTION;
     }
 
-    @Override
-    public void doAction(final NetworkCallback<Section> callback) {
-        final Section section = (Section) CacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
+    public void getFromSite(final NetworkCallback<Section> callback) {
+        final Section section = getFromCache();
 
-        if (Utils.isConnected()){
-            SectionProvider.makeRequest(section, new NetworkCallback<Section>() {
-                @Override
-                public void onSuccess(Section section) {
-                    setSection(section);
-                    CacheService.saveObjectToCache(getString(), section);
-                    callback.onSuccess(section);
-                }
+        if (!Utils.isConnected()) {
+            callback.onFailure(MobilITApplication.getContext().getResources().getString(
+                    R.string.info_message_no_network
+            ));
+            return;
+        }
 
-                @Override
-                public void onNoAvailableData() {
-                    callback.onNoAvailableData();
-                }
-
-                @Override
-                public void onFailure(String error) {
-                    callback.onFailure(error);
-                }
-            });
-        } else {
-            if (section != null) {
+        SectionProvider.makeRequest(section, new NetworkCallback<Section>() {
+            @Override
+            public void onSuccess(Section section) {
+                setSection(section);
+                setSectionToCache(section);
                 callback.onSuccess(section);
-            } else {
+            }
+
+            @Override
+            public void onNoAvailableData() {
                 callback.onNoAvailableData();
             }
-        }
+
+            @Override
+            public void onFailure(String error) {
+                callback.onFailure(error);
+            }
+        });
     }
 }

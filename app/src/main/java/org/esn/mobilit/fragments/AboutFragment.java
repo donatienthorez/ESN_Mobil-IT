@@ -15,8 +15,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Section;
-import org.esn.mobilit.services.CacheService;
-import org.esn.mobilit.utils.ApplicationConstants;
+import org.esn.mobilit.services.AboutService;
+import org.esn.mobilit.services.gcm.GCMService;
+import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -51,20 +52,41 @@ public class AboutFragment extends android.support.v4.app.Fragment {
         // Load Butterknife
         ButterKnife.bind(this, view);
 
-        section = (Section) CacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
+        setSection(AboutService.getInstance().getFromCache());
+
+        AboutService.getInstance().getFromSite(new NetworkCallback<Section>() {
+            @Override
+            public void onSuccess(Section result) {
+                setSection(result);
+            }
+
+            @Override
+            public void onNoAvailableData() {
+
+            }
+
+            @Override
+            public void onFailure(String error) {
+
+            }
+        });
+
+        return view;
+    }
+
+    public void setSection(Section section){
+        this.section = section;
 
         Glide.with(MobilITApplication.getContext())
                 .load(section.getLogo_url())
                 .placeholder(R.drawable.default_list_item)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(logo);
-
         name.setText(section.getName());
         email.setText(section.getEmail());
         phone.setText(section.getPhone());
         website.setText(section.getWebsite());
         address.setText(section.getAddress());
 
-        return view;
     }
 }

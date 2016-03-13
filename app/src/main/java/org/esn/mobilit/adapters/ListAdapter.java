@@ -21,7 +21,7 @@ public class ListAdapter extends BaseAdapter {
     private RSSFeedParser feed;
 
     public ListAdapter(RSSFeedParser feed, LayoutInflater layoutInflater) {
-        this.feed = feed;
+        this.feed = feed != null ? feed : new RSSFeedParser();
         this.layoutInflater = layoutInflater;
     }
 

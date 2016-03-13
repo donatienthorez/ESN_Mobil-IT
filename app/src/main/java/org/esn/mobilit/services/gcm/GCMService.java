@@ -12,16 +12,14 @@ import org.esn.mobilit.network.providers.PostRegProvider;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.services.launcher.interfaces.Cachable;
-import org.esn.mobilit.services.launcher.interfaces.Launchable;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.Callback;
-import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 import java.io.IOException;
 
 import retrofit.client.Response;
 
-public class GCMService implements Cachable, Launchable<String>{
+public class GCMService implements Cachable {
 
     String regId = "";
     private String pushMsg = "";
@@ -41,17 +39,14 @@ public class GCMService implements Cachable, Launchable<String>{
         return ApplicationConstants.PREFERENCES_REG_ID;
     }
 
-    @Override
-    public void doAction(final NetworkCallback<String> callback) {
+    public void register() {
 
         if (PreferencesService.getDefaults(getString()) != null) {
             setRegId(PreferencesService.getDefaults(getString()));
-            callback.onSuccess(getRegId());
             return;
         }
 
         if (!checkPlayServices()) {
-            callback.onFailure("Google play service is not available");
             return;
         }
 
@@ -62,11 +57,9 @@ public class GCMService implements Cachable, Launchable<String>{
                             .register(ApplicationConstants.GOOGLE_PROJ_ID)
             );
         } catch (IOException e) {
-            callback.onFailure(e.getMessage());
         }
 
         if (TextUtils.isEmpty(getRegId())) {
-            callback.onFailure("RegId is empty");
             return;
         }
 
@@ -78,13 +71,11 @@ public class GCMService implements Cachable, Launchable<String>{
                 new Callback<Response>() {
                     @Override
                     public void onSuccess(Response result) {
-                        callback.onSuccess(regId);
                         PreferencesService.setDefaults(getString(), regId);
                     }
 
                     @Override
                     public void onFailure(String error) {
-                        callback.onFailure(error);
                     }
                 }
         );

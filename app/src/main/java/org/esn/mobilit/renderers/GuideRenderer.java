@@ -11,6 +11,9 @@ public class GuideRenderer {
 
     public String renderSurvivalGuide(Guide guide)
     {
+        if (guide == null || guide.getNodes().size() == 0) {
+            return "";
+        }
         return computeNodes(guide.getNodes(), 0);
     }
 

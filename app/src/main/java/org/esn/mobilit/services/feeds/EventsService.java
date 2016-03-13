@@ -1,6 +1,5 @@
 package org.esn.mobilit.services.feeds;
 
-import org.esn.mobilit.models.RSS.RSS;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.network.providers.FeedProvider;
 import org.esn.mobilit.services.CacheService;
@@ -37,5 +36,4 @@ public class EventsService extends RSSFeedService {
         Section section = (Section) CacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
         FeedProvider.makeEventRequest(section.getWebsite(), getCallback(networkCallback));
     }
-
 }

@@ -32,7 +32,7 @@ public class ListFragment extends android.support.v4.app.ListFragment
 
     public void setService(RSSFeedService rssFeedService){
         this.rssFeedService = rssFeedService;
-        this.feed = rssFeedService.getFeed();
+        this.feed = rssFeedService.getFromCache();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -94,7 +94,7 @@ public class ListFragment extends android.support.v4.app.ListFragment
                 rssFeedService.getFromSite(new NetworkCallback<RSSFeedParser>() {
                     @Override
                     public void onSuccess(RSSFeedParser result) {
-                        feed = rssFeedService.getFeed();
+                        feed = result;
                         adapter.setFeed(feed);
                         swipeRefreshLayoutListView.setRefreshing(false);
                     }

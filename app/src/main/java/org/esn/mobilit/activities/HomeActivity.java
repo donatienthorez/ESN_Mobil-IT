@@ -7,14 +7,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 
+import com.bumptech.glide.Glide;
+
+import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.adapters.PagerAdapter;
-import org.esn.mobilit.services.GuideService;
+import org.esn.mobilit.models.Section;
+import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.feeds.EventsService;
 import org.esn.mobilit.services.feeds.NewsService;
 import org.esn.mobilit.services.feeds.PartnersService;
 import org.esn.mobilit.services.gcm.GCMService;
+import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 import java.util.ArrayList;
@@ -24,11 +30,26 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
     private ViewPager viewPager;
     private ActionBar actionBar;
-    private RSSFeedParser currentFeed;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        Section section = (Section) CacheService.
+                getObjectFromCache(ApplicationConstants.CACHE_SECTION);
+
+        if (section == null || TextUtils.isEmpty(section.getWebsite())) {
+            Intent intent = new Intent(this, FirstLaunchActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            return;
+        }
+
+        registerRegId();
+
+        Glide.with(MobilITApplication.getContext())
+                .load(section.getLogo_url())
+                .downloadOnly(150, 250);
 
         PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
 
@@ -48,7 +69,10 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
         initTabs();
 
-        if (!GCMService.getInstance().getPushMsg().equals("")) {
+        // Manage GCM notifications, to be refactored
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            GCMService.getInstance().setPushMsg(getIntent().getExtras().getString("title"));
             pushReceived();
         }
     }
@@ -57,12 +81,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         addTab(R.string.title_events);
         addTab(R.string.title_news);
         addTab(R.string.title_partners);
-
-        if (GuideService.getInstance().getGuide() != null && GuideService.getInstance().getGuide().getNodes() != null
-                && GuideService.getInstance().getGuide().getNodes().size() > 0){
-            addTab(R.string.title_survivalguide);
-        }
-
+        addTab(R.string.title_survivalguide);
         addTab(R.string.title_about);
     }
 
@@ -77,6 +96,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         RSSFeedParser feedsEvents = EventsService.getInstance().getFeed();
         RSSFeedParser feedsPartners = PartnersService.getInstance().getFeed();
         RSSFeedParser feedsNews = NewsService.getInstance().getFeed();
+        RSSFeedParser currentFeed = null;
 
         List<RSSFeedParser> rssFeedParsers = new ArrayList<RSSFeedParser>();
         rssFeedParsers.add(feedsEvents);
@@ -103,11 +123,6 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
         }
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt("viewpagerid", viewPager.getId());
-    }
 
     @Override
     public void onTabSelected(Tab tab, FragmentTransaction ft) {
@@ -123,4 +138,18 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
     public void onTabReselected(Tab tab, FragmentTransaction fragmentTransaction) {
 
     }
+
+    /**
+     * Call the GCMService to register the regId
+     */
+    private void registerRegId() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                GCMService.getInstance().register();
+            }
+        });
+    }
+
+
 }

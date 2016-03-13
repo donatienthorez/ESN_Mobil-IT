@@ -1,17 +1,12 @@
 package org.esn.mobilit.services.feeds;
 
 import org.esn.mobilit.models.RSS.RSS;
-import org.esn.mobilit.models.RSS.RSSItem;
-import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.launcher.interfaces.Cachable;
-import org.esn.mobilit.services.launcher.interfaces.Launchable;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
-import java.util.List;
-
-public abstract class RSSFeedService implements Cachable, Launchable<RSSFeedParser> {
+public abstract class RSSFeedService implements Cachable {
 
     private RSSFeedParser feed;
 
@@ -40,29 +35,6 @@ public abstract class RSSFeedService implements Cachable, Launchable<RSSFeedPars
 
     public RSSFeedParser getFromCache() {
         return (RSSFeedParser) CacheService.getObjectFromCache(this.getString());
-    }
-
-    public void doAction(final NetworkCallback<RSSFeedParser> callback)
-    {
-        RSSFeedParser feed = this.getFeed();
-
-        if (feed != null && feed.getItemCount() > 0) {
-            callback.onSuccess(feed);
-            return;
-        }
-
-//        if (Utils.isConnected()){
-//            getFromSite(callback);
-//        } else {
-            feed = this.getFromCache();
-
-//            if (feed != null) {
-                setFeed(feed);
-                callback.onSuccess(feed);
-//            } else {
-//                callback.onNoAvailableData();
-//            }
-//        }
     }
 
     protected NetworkCallback<RSS> getCallback(final NetworkCallback<RSSFeedParser> callback) {

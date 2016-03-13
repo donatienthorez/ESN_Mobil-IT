@@ -50,15 +50,6 @@ public class FirstLaunchActivity extends Activity {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_first_launch);
-        Section section = (Section) CacheService.
-                getObjectFromCache(ApplicationConstants.CACHE_SECTION);
-
-        if (section != null && !TextUtils.isEmpty(section.getWebsite())) {
-            Intent intent = new Intent(this, LoadingActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
-        }
 
         initContent();
 
@@ -161,7 +152,7 @@ public class FirstLaunchActivity extends Activity {
         CacheService.saveObjectToCache(ApplicationConstants.CACHE_COUNTRY, currentCountry);
         CacheService.saveObjectToCache(ApplicationConstants.CACHE_SECTION, currentSection);
 
-        Intent intent = new Intent(this, LoadingActivity.class);
+        Intent intent = new Intent(this, HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
