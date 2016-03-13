@@ -1,5 +1,6 @@
 package org.esn.mobilit.fragments;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,7 +24,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AboutFragment extends android.support.v4.app.Fragment {
+public class AboutFragment extends Fragment {
 
     @Bind(R.id.section_logo) ImageView logo;
     @Bind(R.id.section_name) TextView name;

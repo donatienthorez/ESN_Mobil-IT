@@ -23,13 +23,10 @@
         <item name="android:actionBarItemBackground">@drawable/selectable_background_esnmobilit</item>
         <item name="android:popupMenuStyle">@style/PopupMenu.Esnmobilit</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Esnmobilit</item>
-        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Esnmobilit</item>
         <item name="android:actionDropDownStyle">@style/DropDownNav.Esnmobilit</item>
-        <item name="android:actionBarStyle">@style/ActionBar.Solid.Esnmobilit</item>
         <item name="android:actionModeBackground">@drawable/cab_background_top_esnmobilit</item>
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_esnmobilit</item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Esnmobilit</item>
-        <item name="android:actionBarTabTextStyle">@style/ActionBarTabText.white.Esnmobilit</item>
         <item name="android:buttonStyle">@style/ButtonStyle.Esnmobilit</item>
         <item name="android:windowAnimationStyle">@null</item>
     </style>
@@ -45,39 +42,12 @@
         <item name="android:layout_gravity">center_horizontal</item>
     </style>
 
-    <style name="ActionBarTabText.white.Esnmobilit" parent="@android:style/Widget.Holo.Light.ActionBar.TabText">
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="ActionBar.Solid.Esnmobilit" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
-        <item name="android:background">@drawable/ab_solid_esnmobilit</item>
-        <item name="android:titleTextStyle">@style/ActionBar.Solid.TextStyle.Esnmobilit</item>
-        <item name="android:backgroundStacked">@drawable/ab_stacked_solid_esnmobilit</item>
-        <item name="android:backgroundSplit">@drawable/ab_bottom_solid_esnmobilit</item>
-        <item name="android:progressBarStyle">@style/ProgressBar.Esnmobilit</item>
-    </style>
-
-    <style name="ActionBar.Solid.TextStyle.Esnmobilit" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="ActionBar.Transparent.Esnmobilit" parent="@android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:background">@drawable/ab_transparent_esnmobilit</item>
-        <item name="android:progressBarStyle">@style/ProgressBar.Esnmobilit</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
     <style name="PopupMenu.Esnmobilit" parent="@android:style/Widget.Holo.Light.ListPopupWindow">
         <item name="android:popupBackground">@drawable/menu_dropdown_panel_esnmobilit</item>
     </style>
 
     <style name="DropDownListView.Esnmobilit" parent="@android:style/Widget.Holo.Light.ListView.DropDown">
         <item name="android:listSelector">@drawable/selectable_background_esnmobilit</item>
-    </style>
-
-    <style name="ActionBarTabStyle.Esnmobilit" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
-        <item name="android:background">@drawable/tab_indicator_ab_esnmobilit</item>
-        <item name="android:titleTextStyle">@style/ActionBar.Solid.TextStyle.Esnmobilit</item>
     </style>
 
     <style name="DropDownNav.Esnmobilit" parent="@android:style/Widget.Holo.Light.Spinner">

@@ -1,8 +1,8 @@
-package org.esn.mobilit.fragments.Survival;
+package org.esn.mobilit.fragments.Guide;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,7 +20,7 @@ import org.esn.mobilit.services.GuideService;
 import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
-public class GuideFragment extends Fragment{
+public class GuideFragment extends Fragment {
 
     TextView guideContent;
 
@@ -76,9 +76,8 @@ public class GuideFragment extends Fragment{
     }
 
     public void setGuide(Guide guide) {
-
         GuideRenderer sgr = new GuideRenderer();
-        String survivalContent = sgr.renderSurvivalGuide(GuideService.getInstance().getFromCache());
+        String survivalContent = sgr.renderSurvivalGuide(guide);
         guideContent.setText(Html.fromHtml(survivalContent), TextView.BufferType.SPANNABLE);
     }
 }

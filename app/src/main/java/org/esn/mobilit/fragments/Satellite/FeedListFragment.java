@@ -1,8 +1,8 @@
 package org.esn.mobilit.fragments.Satellite;
 
+import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,7 +23,7 @@ import org.esn.mobilit.services.feeds.RSSFeedService;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
-public class ListFragment extends android.support.v4.app.ListFragment
+public class FeedListFragment extends ListFragment
 {
     private RSSFeedParser feed;
     private RSSFeedService rssFeedService;
