@@ -116,7 +116,7 @@ public class FirstLaunchActivity extends Activity {
                 }
         );
         spinnerCountries.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.GONE);
     }
 
     private void initSectionsSpinner(){

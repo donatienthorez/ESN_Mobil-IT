@@ -4,8 +4,11 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,12 +35,12 @@ import org.esn.mobilit.utils.parser.RSSFeedParser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends FragmentActivity {
+public class HomeActivity extends ActionBarActivity {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
-    ArrayList<Fragment> fragmentsList;
-
+    private ArrayList<Fragment> fragmentsList;
+    ActionBarDrawerToggle actionBarDrawerToggle;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +57,7 @@ public class HomeActivity extends FragmentActivity {
         }
 
         this.setFragmentList();
-        String[] mPlanetTitles = new String[]{
+        String[] titles = new String[]{
                 getString(R.string.title_events),
                 getString(R.string.title_news),
                 getString(R.string.title_partners),
@@ -62,14 +65,21 @@ public class HomeActivity extends FragmentActivity {
                 getString(R.string.title_about)
         };
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         // Set the adapter for the list view
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, mPlanetTitles));
-        // Set the list's click listener
+                R.layout.drawer_list_item, titles));
+
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.app_name, R.string.app_name);
+        mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
 
         registerRegId();
 
