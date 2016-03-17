@@ -4,16 +4,19 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 
@@ -35,11 +38,12 @@ import org.esn.mobilit.utils.parser.RSSFeedParser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends ActionBarActivity {
+public class HomeActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ArrayList<Fragment> fragmentsList;
+    private RelativeLayout mDrawerRelativeLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -58,19 +62,20 @@ public class HomeActivity extends ActionBarActivity {
 
         this.setFragmentList();
         String[] titles = new String[]{
-                getString(R.string.title_events),
-                getString(R.string.title_news),
-                getString(R.string.title_partners),
-                getString(R.string.title_survivalguide),
-                getString(R.string.title_about)
+                getString(R.string.menu_drawer_item_events),
+                getString(R.string.menu_drawer_item_news),
+                getString(R.string.menu_drawer_item_partners),
+                getString(R.string.menu_drawer_item_guide),
+                getString(R.string.menu_drawer_item_about)
         };
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
         setSupportActionBar(toolbar);
 
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList = (ListView) findViewById(R.id.list_view_drawer);
+        mDrawerRelativeLayout = (RelativeLayout) findViewById(R.id.left_drawer);
 
         // Set the adapter for the list view
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
@@ -161,7 +166,7 @@ public class HomeActivity extends ActionBarActivity {
 
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
-        mDrawerLayout.closeDrawer(mDrawerList);
+        mDrawerLayout.closeDrawer(mDrawerRelativeLayout);
     }
 
     public void setFragmentList()

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/menu_top"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/drawer_item_news"
+            android:title="@string/menu_drawer_item_news"/>
+        <item
+            android:id="@+id/drawer_item_events"
+            android:title="@string/menu_drawer_item_events"/>
+        <item
+            android:id="@+id/drawer_item_partners"
+            android:title="@string/menu_drawer_item_partners"/>
+        <item
+            android:id="@+id/drawer_item_guide"
+            android:title="@string/menu_drawer_item_guide"/>
+        <item
+            android:id="@+id/drawer_item_about"
+            android:title="@string/menu_drawer_item_about"/>
+    </group>
+    <group
+        android:id="@+id/menu_bottom"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/drawer_item_reset"
+            android:title="@string/menu_drawer_item_reset" >
+        </item>
+    </group>
+</menu>

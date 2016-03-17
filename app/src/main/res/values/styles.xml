@@ -3,4 +3,10 @@
     <style name="Theme.Esnmobilit" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowAnimationStyle">@null</item>
     </style>
+
+    <style name="Theme.Esnmobilit.Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="actionMenuTextColor">@color/white</item>
+        <item name="android:background">@color/esnblue</item>
+        <item name="android:minHeight">@dimen/toolbar_minHeight</item>
+    </style>
 </resources>

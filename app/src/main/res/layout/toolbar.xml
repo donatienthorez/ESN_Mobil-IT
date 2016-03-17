@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="@color/esnblue"
-        android:minHeight="@dimen/toolbar_minHeight"/>
+        android:textColorPrimary="@color/white"
+        android:textColorSecondary="@color/white"
+        style="@style/Theme.Esnmobilit.Toolbar"/>
 </RelativeLayout>

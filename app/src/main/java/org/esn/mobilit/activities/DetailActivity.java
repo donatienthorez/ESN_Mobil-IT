@@ -15,12 +15,6 @@ public class DetailActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        ActionBar actionBar = getActionBar();
-
-        if (actionBar != null) {
-            actionBar.setIcon(R.drawable.ic_launcher);
-        }
-
         Bundle bundle = new Bundle();
         bundle.putSerializable("feed", getIntent().getSerializableExtra("feed"));
 

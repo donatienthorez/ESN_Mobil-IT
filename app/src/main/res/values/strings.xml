@@ -48,10 +48,15 @@
     <string name="selectyoursection">Select your section</string>
 
     <!-- Action Bar Title -->
-    <string name="title_events">Events</string>
-    <string name="title_news">News</string>
-    <string name="title_partners">Partners</string>
-    <string name="title_survivalguide">Survival Guide</string>
-    <string name="title_about">About</string>
+    <string name="menu_drawer_item_news">News</string>
+    <string name="menu_drawer_item_events">Events</string>
+    <string name="menu_drawer_item_partners">Partners</string>
+    <string name="menu_drawer_item_guide">Survival guide</string>
+    <string name="menu_drawer_item_about">About</string>
+    <string name="menu_drawer_item_reset">Change my section</string>
+
+    <string name="icon_feed">&#xf09e;</string>
+    <string name="icon_book">&#xf02d;</string>
+    <string name="icon_settings">&#xf013;</string>
 
 </resources>
