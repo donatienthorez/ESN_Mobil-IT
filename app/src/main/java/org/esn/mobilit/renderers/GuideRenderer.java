@@ -11,10 +11,10 @@ public class GuideRenderer {
 
     public String renderSurvivalGuide(Guide guide)
     {
-        if (guide == null || guide.getNodes().size() == 0) {
+        if (guide == null || guide.getNodes() == null || guide.getNodes().size() == 0) {
             return "";
         }
-        return computeNodes(guide.getNodes(), 0);
+        return computeNodes(guide.getNodes() , 0);
     }
 
     public String computeNodes(List<Node> nodes, int level)

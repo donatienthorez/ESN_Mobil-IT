@@ -80,7 +80,7 @@ public class AboutFragment extends Fragment {
 
         Glide.with(MobilITApplication.getContext())
                 .load(section.getLogo_url())
-                .placeholder(R.drawable.default_list_item)
+                .placeholder(R.drawable.logo_small_2_25)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(logo);
         name.setText(section.getName());

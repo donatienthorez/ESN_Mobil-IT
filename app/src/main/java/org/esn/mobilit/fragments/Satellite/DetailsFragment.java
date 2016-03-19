@@ -45,8 +45,6 @@ public class DetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_detail_feeds, null);
-
-        // Load Butterknife
         ButterKnife.bind(this, view);
 
         title.setText(fFeed.getTitle());
@@ -56,6 +54,8 @@ public class DetailsFragment extends Fragment {
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        progressBar.setVisibility(View.GONE);
+                        imageView.setVisibility(View.GONE);
                         return false;
                     }
 
@@ -75,8 +75,6 @@ public class DetailsFragment extends Fragment {
 
         WebSettings ws = desc.getSettings();
         ws.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        ws.setLightTouchEnabled(false);
-        ws.setPluginState(WebSettings.PluginState.ON);
         ws.setJavaScriptEnabled(true);
 
         return view;

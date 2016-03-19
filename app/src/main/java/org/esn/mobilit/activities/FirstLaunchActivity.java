@@ -80,7 +80,6 @@ public class FirstLaunchActivity extends Activity {
     }
 
     private void initContent(){
-        // Load Butterknife
         ButterKnife.bind(this);
 
         startButton.setEnabled(false);
