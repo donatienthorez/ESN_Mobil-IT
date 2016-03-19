@@ -58,5 +58,6 @@
     <string name="icon_feed">&#xf09e;</string>
     <string name="icon_book">&#xf02d;</string>
     <string name="icon_settings">&#xf013;</string>
+    <string name="menu_drawer_item_settings">Settings</string>
 
 </resources>

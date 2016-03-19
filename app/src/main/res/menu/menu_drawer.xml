@@ -5,26 +5,38 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/drawer_item_news"
-            android:title="@string/menu_drawer_item_news"/>
+            android:title="@string/menu_drawer_item_news"
+            android:icon="@drawable/ic_rss_feed_black_24dp"/>
         <item
             android:id="@+id/drawer_item_events"
-            android:title="@string/menu_drawer_item_events"/>
+            android:title="@string/menu_drawer_item_events"
+            android:icon="@drawable/ic_rss_feed_black_24dp"/>
         <item
             android:id="@+id/drawer_item_partners"
-            android:title="@string/menu_drawer_item_partners"/>
+            android:title="@string/menu_drawer_item_partners"
+            android:icon="@drawable/ic_rss_feed_black_24dp"/>
         <item
             android:id="@+id/drawer_item_guide"
-            android:title="@string/menu_drawer_item_guide"/>
+            android:title="@string/menu_drawer_item_guide"
+            android:icon="@drawable/ic_book_black_24dp"/>
         <item
             android:id="@+id/drawer_item_about"
-            android:title="@string/menu_drawer_item_about"/>
+            android:title="@string/menu_drawer_item_about"
+            android:icon="@drawable/ic_info_black_24dp"/>
     </group>
     <group
-        android:id="@+id/menu_bottom"
-        android:checkableBehavior="none">
+        android:id="@+id/menu_settings"
+        android:checkableBehavior="single">
         <item
-            android:id="@+id/drawer_item_reset"
-            android:title="@string/menu_drawer_item_reset" >
+            android:id="@+id/drawer_item_settings"
+            android:title="@string/menu_drawer_item_settings"
+            android:icon="@drawable/ic_settings_black_24dp">
+                <menu>
+                    <item
+                        android:id="@+id/drawer_item_reset"
+                        android:title="@string/menu_drawer_item_reset"
+                        android:icon="@drawable/ic_autorenew_black_24dp"/>
+                </menu>
         </item>
     </group>
 </menu>

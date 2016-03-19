@@ -4,18 +4,13 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.view.MenuItem;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
@@ -40,11 +35,11 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
+    private DrawerLayout drawerLayout;
     private ArrayList<Fragment> fragmentsList;
-    private RelativeLayout mDrawerRelativeLayout;
-    ActionBarDrawerToggle actionBarDrawerToggle;
+    private RelativeLayout drawerRelativeLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private NavigationView navigationView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,18 +67,45 @@ public class HomeActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Initializing NavigationView
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.list_view_drawer);
-        mDrawerRelativeLayout = (RelativeLayout) findViewById(R.id.left_drawer);
+        //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener(){
 
-        // Set the adapter for the list view
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, titles));
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                menuItem.setChecked(!menuItem.isChecked());
+                drawerLayout.closeDrawers();
+                switch(menuItem.getItemId()) {
+                    case R.id.drawer_item_events:
+                        selectItem(0);
+                        break;
+                    case R.id.drawer_item_news:
+                        selectItem(1);
+                        break;
+                    case R.id.drawer_item_partners:
+                        selectItem(2);
+                        break;
+                    case R.id.drawer_item_guide:
+                        selectItem(3);
+                        break;
+                    case R.id.drawer_item_about:
+                        selectItem(4);
+                        break;
+                }
 
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.app_name, R.string.app_name);
-        mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
+                return true;
+            }
+        });
+
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        drawerRelativeLayout = (RelativeLayout) findViewById(R.id.left_drawer);
+
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
         registerRegId();
@@ -146,15 +168,6 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-
-    /* The click listner for ListView in the navigation drawer */
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-            selectItem(position);
-        }
-    }
-
     private void selectItem(int position) {
         // update the main content by replacing fragments
         Fragment fragment = fragmentsList.get(position);
@@ -165,8 +178,7 @@ public class HomeActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
         // update selected item and title, then close the drawer
-        mDrawerList.setItemChecked(position, true);
-        mDrawerLayout.closeDrawer(mDrawerRelativeLayout);
+        drawerLayout.closeDrawer(drawerRelativeLayout);
     }
 
     public void setFragmentList()
