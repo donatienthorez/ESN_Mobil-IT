@@ -33,7 +33,7 @@ public class AboutFragment extends Fragment {
     @Bind(R.id.section_website) TextView website;
     @Bind(R.id.section_address) TextView address;
 
-    Section section;
+    private Section section;
 
     @OnClick(R.id.section_address)
     public void clickAddress(View v)
@@ -83,11 +83,11 @@ public class AboutFragment extends Fragment {
                 .placeholder(R.drawable.logo_small_2_25)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(logo);
+
         name.setText(section.getName());
         email.setText(section.getEmail());
         phone.setText(section.getPhone());
         website.setText(section.getWebsite());
         address.setText(section.getAddress());
-
     }
 }

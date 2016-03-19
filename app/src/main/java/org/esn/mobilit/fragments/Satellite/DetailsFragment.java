@@ -18,16 +18,17 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.RSS.RSSItem;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 public class DetailsFragment extends Fragment {
 
-    RSSItem fFeed;
+    RSSItem rssItem;
 
     @Bind(R.id.title) TextView title;
     @Bind(R.id.header) ImageView imageView;
@@ -35,11 +36,9 @@ public class DetailsFragment extends Fragment {
     @Bind(R.id.sv) ScrollView sv;
     @Bind(R.id.progress) ProgressBar progressBar;
 
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-
-        fFeed = (RSSItem) getArguments().getSerializable("feed");
+    public DetailsFragment setFeed(RSSItem rssItem){
+        this.rssItem = rssItem;
+        return this;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -47,10 +46,10 @@ public class DetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_detail_feeds, null);
         ButterKnife.bind(this, view);
 
-        title.setText(fFeed.getTitle());
+        title.setText(rssItem.getTitle());
 
         Glide.with(MobilITApplication.getContext())
-                .load(fFeed.getImage())
+                .load(rssItem.getImage())
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -69,7 +68,7 @@ public class DetailsFragment extends Fragment {
                 .fitCenter()
                 .into(imageView);
 
-        desc.loadData(fFeed.getDescription(), "text/html; charset=UTF-8", null);
+        desc.loadData(rssItem.getDescription(), "text/html; charset=UTF-8", null);
 
         sv.setVerticalFadingEdgeEnabled(true);
 

@@ -2,6 +2,7 @@ package org.esn.mobilit.activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -18,8 +19,10 @@ import com.bumptech.glide.Glide;
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.fragments.AboutFragment;
+import org.esn.mobilit.fragments.Satellite.DetailsFragment;
 import org.esn.mobilit.fragments.Satellite.FeedListFragment;
 import org.esn.mobilit.fragments.Guide.GuideFragment;
+import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.PreferencesService;
@@ -86,45 +89,10 @@ public class HomeActivity extends AppCompatActivity {
                 .load(section.getLogo_url())
                 .downloadOnly(150, 250);
 
-        // Manage GCM notifications, to be refactored
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            GCMService.getInstance().setPushMsg(getIntent().getExtras().getString("title"));
-            pushReceived();
-        }
+        //TODO push notifications open detail fragment
+
         if (savedInstanceState == null) {
             doDrawerMenuAction(0);
-        }
-    }
-
-    public void pushReceived() {
-        RSSFeedParser feedsEvents = EventsService.getInstance().getFeed();
-        RSSFeedParser feedsPartners = PartnersService.getInstance().getFeed();
-        RSSFeedParser feedsNews = NewsService.getInstance().getFeed();
-        RSSFeedParser currentFeed = null;
-
-        List<RSSFeedParser> rssFeedParsers = new ArrayList<RSSFeedParser>();
-        rssFeedParsers.add(feedsEvents);
-        rssFeedParsers.add(feedsPartners);
-        rssFeedParsers.add(feedsNews);
-        int i = 0, position;
-        do {
-            position = rssFeedParsers.get(i).getPositionFromTitle(GCMService.getInstance().getPushMsg());
-            if (position > 0) {
-                currentFeed = rssFeedParsers.get(i);
-            }
-            i++;
-        } while (currentFeed != null || i == rssFeedParsers.size()-1);
-
-        if (currentFeed != null) {
-            Intent intent = new Intent(this, DetailActivity.class);
-
-            Bundle b = new Bundle();
-            b.putSerializable("feed", currentFeed);
-            b.putInt("pos", position);
-            intent.putExtras(b);
-
-            startActivity(intent);
         }
     }
 
@@ -143,19 +111,19 @@ public class HomeActivity extends AppCompatActivity {
     private void doDrawerMenuAction(int menuItemId) {
         switch (menuItemId) {
             case R.id.drawer_item_events:
-                loadFragment(fragmentsList.get(0), menuItemId);
+                loadFragment(fragmentsList.get(0), menuItemId, false);
                 break;
             case R.id.drawer_item_news:
-                loadFragment(fragmentsList.get(1), menuItemId);
+                loadFragment(fragmentsList.get(1), menuItemId, false);
                 break;
             case R.id.drawer_item_partners:
-                loadFragment(fragmentsList.get(2), menuItemId);
+                loadFragment(fragmentsList.get(2), menuItemId, false);
                 break;
             case R.id.drawer_item_guide:
-                loadFragment(fragmentsList.get(3), menuItemId);
+                loadFragment(fragmentsList.get(3), menuItemId, false);
                 break;
             case R.id.drawer_item_about:
-                loadFragment(fragmentsList.get(4), menuItemId);
+                loadFragment(fragmentsList.get(4), menuItemId, false);
                 break;
             case R.id.drawer_item_reset:
                 PreferencesService.resetSection();
@@ -166,15 +134,29 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    public void loadFragment(Fragment fragment, int currentFragmentId) {
+    public void loadFragment(Fragment fragment, int currentFragmentId, boolean addToBackStack) {
         this.currentFragmentId = currentFragmentId;
 
         Bundle args = new Bundle();
         fragment.setArguments(args);
 
         FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        FragmentTransaction fragmentTransaction= fragmentManager
+                .beginTransaction()
+                .replace(R.id.content_frame, fragment);
+
+        if (addToBackStack) {
+            fragmentTransaction.addToBackStack(null);
+        }
+        fragmentTransaction.commit();
+
         navigationView.setCheckedItem(currentFragmentId);
+    }
+
+    public void replaceByDetailsFragment(RSSItem rssItem){
+        Fragment fragment = (new DetailsFragment()).setFeed(rssItem);
+        loadFragment(fragment, this.currentFragmentId, true);
+
     }
 
     public void setFragmentList()
@@ -185,5 +167,17 @@ public class HomeActivity extends AppCompatActivity {
         fragmentsList.add((new FeedListFragment()).setService(PartnersService.getInstance()));
         fragmentsList.add(new GuideFragment());
         fragmentsList.add(new AboutFragment());
+    }
+
+    @Override
+    public void onBackPressed() {
+        int count = getFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            super.onBackPressed();
+        } else {
+            getFragmentManager().popBackStack();
+        }
+
     }
 }

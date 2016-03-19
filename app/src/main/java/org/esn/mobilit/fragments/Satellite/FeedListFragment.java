@@ -1,7 +1,6 @@
 package org.esn.mobilit.fragments.Satellite;
 
 import android.app.ListFragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -10,10 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+import org.esn.mobilit.activities.HomeActivity;
+import org.esn.mobilit.adapters.ListAdapter;
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
-import org.esn.mobilit.activities.DetailActivity;
-import org.esn.mobilit.adapters.ListAdapter;
 import org.esn.mobilit.services.feeds.RSSFeedService;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
@@ -22,8 +24,9 @@ public class FeedListFragment extends ListFragment
 {
     private RSSFeedParser feed;
     private RSSFeedService rssFeedService;
-    SwipeRefreshLayout swipeRefreshLayoutListView;
-    ListAdapter adapter;
+    private ListAdapter adapter;
+
+    @Bind(R.id.swipe_refresh) protected SwipeRefreshLayout swipeRefreshLayoutListView;
 
     public FeedListFragment setService(RSSFeedService rssFeedService){
         this.rssFeedService = rssFeedService;
@@ -34,10 +37,10 @@ public class FeedListFragment extends ListFragment
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list_feeds, container, false);
+        ButterKnife.bind(this, view);
+
         adapter = new ListAdapter(feed, inflater);
         this.setListAdapter(adapter);
-
-        swipeRefreshLayoutListView = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
 
         swipeRefreshLayoutListView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -50,13 +53,7 @@ public class FeedListFragment extends ListFragment
     }
 
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Intent intent = new Intent(getActivity(), DetailActivity.class);
-
-        Bundle b = new Bundle();
-        b.putSerializable("feed", feed.getItem(position));
-        intent.putExtras(b);
-
-        startActivity(intent);
+        ((HomeActivity) getActivity()).replaceByDetailsFragment(feed.getItem(position));
     }
 
     private void refreshContent(final boolean showMessage){
