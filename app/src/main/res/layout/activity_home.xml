@@ -22,7 +22,7 @@
 
     <RelativeLayout
         android:id="@+id/left_drawer"
-        android:layout_width="240dp"
+        android:layout_width="@dimen/left_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:orientation="vertical"
@@ -34,7 +34,8 @@
             android:layout_width="wrap_content"
             android:layout_gravity="start"
             app:headerLayout="@layout/drawer_header"
-            app:menu="@menu/menu_drawer"/>
+            android:paddingTop="@dimen/status_bar_margin_top"
+            app:menu="@menu/menu_drawer" />
 
     </RelativeLayout>
 

@@ -4,4 +4,6 @@
     <dimen name="button_padding">5dp</dimen>
     <dimen name="button_textSize">20sp</dimen>
     <dimen name="toolbar_minHeight">56dp</dimen>
+    <dimen name="status_bar_margin_top">0dp</dimen>
+    <dimen name="left_drawer_width">240dp</dimen>
 </resources>

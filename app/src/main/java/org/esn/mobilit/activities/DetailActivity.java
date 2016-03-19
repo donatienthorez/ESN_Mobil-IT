@@ -1,6 +1,5 @@
 package org.esn.mobilit.activities;
 
-import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
