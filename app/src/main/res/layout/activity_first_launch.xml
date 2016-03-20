@@ -3,10 +3,11 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/status_bar_margin_top"
     android:gravity="center_horizontal"
-    android:background="#FFFFFF">
+    android:background="@color/white">
 
     <ImageView
         android:id="@+id/imageView"
@@ -31,24 +32,29 @@
         android:id="@+id/spinnerCountries"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        android:layout_marginTop="@dimen/first_launch_spinner_margin_top"/>
 
     <Spinner
         android:id="@+id/spinnerSections"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        android:layout_marginTop="@dimen/first_launch_spinner_margin_top"/>
 
     <Button
+        android:id="@+id/startButton"
         android:text="@string/start_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_height="@dimen/button_height"
         android:onClick="launchSplashActivity"
         android:background="@color/esnblue"
-        android:padding="@dimen/button_padding"
+        android:layout_marginTop="@dimen/first_launch_start_button_margin_top"
+        android:paddingLeft="@dimen/button_padding_left"
+        android:paddingRight="@dimen/button_padding_right"
+        android:paddingTop="@dimen/button_padding_top"
+        android:paddingBottom="@dimen/button_padding_bottom"
         android:textSize="@dimen/button_textSize"
-        android:textColor="@color/white"
-        android:id="@+id/startButton"/>
+        android:textColor="@color/white"/>
 
 </LinearLayout>

@@ -71,9 +71,7 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-                if (menuItem.getItemId() != currentFragmentId) {
-                    doDrawerMenuAction(menuItem.getItemId());
-                }
+                doDrawerMenuAction(menuItem.getItemId());
                 drawerLayout.closeDrawers();
                 return true;
             }
@@ -137,9 +135,6 @@ public class HomeActivity extends AppCompatActivity {
     public void loadFragment(Fragment fragment, int currentFragmentId, boolean addToBackStack) {
         this.currentFragmentId = currentFragmentId;
 
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction= fragmentManager
                 .beginTransaction()
@@ -156,7 +151,6 @@ public class HomeActivity extends AppCompatActivity {
     public void replaceByDetailsFragment(RSSItem rssItem){
         Fragment fragment = (new DetailsFragment()).setFeed(rssItem);
         loadFragment(fragment, this.currentFragmentId, true);
-
     }
 
     public void setFragmentList()
@@ -178,6 +172,5 @@ public class HomeActivity extends AppCompatActivity {
         } else {
             getFragmentManager().popBackStack();
         }
-
     }
 }
