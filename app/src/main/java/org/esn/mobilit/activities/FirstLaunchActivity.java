@@ -4,109 +4,98 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.crashlytics.android.Crashlytics;
-
-import org.esn.mobilit.renderers.HomepageRenderer;
-import org.esn.mobilit.services.CacheService;
-import org.esn.mobilit.services.PreferencesService;
-import org.esn.mobilit.utils.ApplicationConstants;
-import org.esn.mobilit.utils.callbacks.NetworkCallback;
-import org.esn.mobilit.R;
-import org.esn.mobilit.models.Countries;
-import org.esn.mobilit.models.Country;
-import org.esn.mobilit.models.Section;
-import org.esn.mobilit.services.CountriesService;
-import org.esn.mobilit.utils.Utils;
-import org.esn.mobilit.adapters.SpinnerAdapter;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 import io.fabric.sdk.android.Fabric;
-import retrofit.RetrofitError;
+
+import com.crashlytics.android.Crashlytics;
+
+import org.esn.mobilit.adapters.SpinnerAdapter;
+import org.esn.mobilit.MobilITApplication;
+import org.esn.mobilit.models.Country;
+import org.esn.mobilit.models.Section;
+import org.esn.mobilit.R;
+import org.esn.mobilit.renderers.HomepageRenderer;
+import org.esn.mobilit.services.CacheService;
+import org.esn.mobilit.services.CountriesService;
+import org.esn.mobilit.services.PreferencesService;
+import org.esn.mobilit.utils.ApplicationConstants;
+import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 public class FirstLaunchActivity extends Activity {
 
-    private static final String TAG = FirstLaunchActivity.class.getSimpleName();
+    @Bind(R.id.startButton)      public Button startButton;
+    @Bind(R.id.chooseCountry)    public TextView chooseCountryTextView;
+    @Bind(R.id.progressBar)      public ProgressBar progressBar;
+    @Bind(R.id.spinnerCountries) public Spinner spinnerCountries;
+    @Bind(R.id.spinnerSections)  public Spinner spinnerSections;
 
-    //Layout
-    @Bind(R.id.spinnersLayout) public LinearLayout spinnersLayout;
-    @Bind(R.id.startButton)    public Button startButton;
-    @Bind(R.id.chooseCountry)  public TextView textView;
-    @Bind(R.id.progressBar)    public ProgressBar progressBar;
-
-    // Attributes for spinnerCountries
     private Country currentCountry;
     private Section currentSection;
 
-    // Spinners
-    private Spinner spinnerCountries;
-    private Spinner spinnerSections;
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_firstlaunch);
-
         Fabric.with(this, new Crashlytics());
-
-        String sectionWebsite = PreferencesService.getDefaults("section_website");
-
-        if (!(sectionWebsite == null || sectionWebsite.equalsIgnoreCase(""))) {
-            Intent intent = new Intent(this, SplashActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        }
+        setContentView(R.layout.activity_first_launch);
 
         initContent();
 
-        if (Utils.isConnected()){
-            CountriesService.getCountries(new NetworkCallback<Countries>() {
-                @Override
-                public void onSuccess(Countries result) {
-                    initCountriesSpinner();
-                }
+        CountriesService.getCountries(new NetworkCallback<List<Country>>() {
+            @Override
+            public void onSuccess(List<Country> result) {
+                initCountriesSpinner(result);
+            }
 
-                @Override
-                public void onFailure(RetrofitError error) {
+            @Override
+            public void onNoAvailableData() {
+                Toast.makeText(
+                        MobilITApplication.getContext(),
+                        getResources().getString(R.string.error_message_no_data_countries),
+                        Toast.LENGTH_LONG
+                ).show();
+            }
 
-                }
-            });
-        }
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(
+                        MobilITApplication.getContext(),
+                        getResources().getString(R.string.error_message_network),
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        });
     }
 
     private void initContent(){
-        // Load Butterknife
         ButterKnife.bind(this);
 
         startButton.setEnabled(false);
         startButton.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
 
-        spinnerCountries = new Spinner(this);
-
-        //Set text
         HomepageRenderer homepageRenderer = new HomepageRenderer();
         SpannableStringBuilder text = homepageRenderer.renderHomepageText();
-        textView.setText(text, TextView.BufferType.SPANNABLE);
+        chooseCountryTextView.setText(text, TextView.BufferType.SPANNABLE);
     }
 
-    private void initCountriesSpinner(){
+    private void initCountriesSpinner(final List<Country> countries){
         ArrayList<String> datas = new ArrayList<String>();
 
-        //Add dummy string
         datas.add(getResources().getString(R.string.selectyourcountry));
-        for(Country country : CountriesService.getCountries().getCountries()){
+        for(Country country : countries){
             datas.add(country.getName());
         }
 
@@ -116,67 +105,53 @@ public class FirstLaunchActivity extends Activity {
                 new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
                         if (position != 0) {
-                            currentCountry = CountriesService.getCountries().getCountry(position - 1);
+                            currentCountry = countries.get(position - 1);
                             initSectionsSpinner();
                         }
                     }
-                    public void onNothingSelected(AdapterView<?> arg0) {}
+
+                    public void onNothingSelected(AdapterView<?> arg0) {
+                    }
                 }
         );
-        progressBar.setVisibility(View.INVISIBLE);
-        spinnersLayout.addView(spinnerCountries);
+        spinnerCountries.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
     }
 
     private void initSectionsSpinner(){
         progressBar.setVisibility(View.VISIBLE);
-        if (spinnerSections != null) {
-            spinnersLayout.removeView(spinnerSections);
-        }
 
-        spinnerSections = new Spinner(this);
-
-        ArrayList<String> datas = new ArrayList<String>();
-
-        //Add dummy string
-        datas.add(getResources().getString(R.string.selectyoursection));
-        for(Section section : currentCountry.getSections()){
-            datas.add(section.getName());
-        }
+        ArrayList<String> sections = currentCountry.getSectionsNamesArray();
+        sections.add(0, getResources().getString(R.string.selectyoursection));
 
         spinnerSections.setSelection(0);
-        spinnerSections.setAdapter(new SpinnerAdapter(FirstLaunchActivity.this,datas));
+        spinnerSections.setAdapter(new SpinnerAdapter(FirstLaunchActivity.this, sections));
         spinnerSections.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
                         if (position != 0) {
-                            currentSection = currentCountry.getSections().get(position-1);
+                            currentSection = currentCountry.getSections().get(position - 1);
                             startButton.setEnabled(true);
                             startButton.setVisibility(View.VISIBLE);
                         }
                     }
-                    public void onNothingSelected(AdapterView<?> arg0) {}
+
+                    public void onNothingSelected(AdapterView<?> arg0) {
+                    }
                 }
         );
-        progressBar.setVisibility(View.INVISIBLE);
-        spinnersLayout.addView(spinnerSections);
+        spinnerSections.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
     }
 
     public void launchSplashActivity(View view){
-        //Load new parameters
-        PreferencesService.setDefaults(
-                "code_country",
-                CountriesService
-                        .getCountries()
-                        .getCountryFromSection(currentSection)
-                        .getCodeCountry()
-        );
-        PreferencesService.setDefaults("code_section", currentSection.getCode_section());
-        PreferencesService.setDefaults("section_website", currentSection.getWebsite());
+        PreferencesService.setDefaults(ApplicationConstants.PREFERENCES_CODE_COUNTRY, currentCountry.getCodeCountry());
+        PreferencesService.setDefaults(ApplicationConstants.PREFERENCES_CODE_SECTION, currentSection.getCode_section());
 
-        CacheService.saveObjectToCache("country", currentCountry);
-        CacheService.saveObjectToCache("section", currentSection);
+        CacheService.saveObjectToCache(ApplicationConstants.CACHE_COUNTRY, currentCountry);
+        CacheService.saveObjectToCache(ApplicationConstants.CACHE_SECTION, currentSection);
 
-        Intent intent = new Intent(this, SplashActivity.class);
+        Intent intent = new Intent(this, HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }

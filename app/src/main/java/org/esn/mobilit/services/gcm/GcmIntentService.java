@@ -13,7 +13,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.esn.mobilit.GcmBroadcastReceiver;
 import org.esn.mobilit.R;
-import org.esn.mobilit.activities.SplashActivity;
+import org.esn.mobilit.activities.HomeActivity;
 import org.esn.mobilit.utils.ApplicationConstants;
 
 public class GcmIntentService extends IntentService {
@@ -51,7 +51,7 @@ public class GcmIntentService extends IntentService {
     }
 
     private void sendNotification(String sbj, String msg) {
-        Intent resultIntent = new Intent(this, SplashActivity.class);
+        Intent resultIntent = new Intent(this, HomeActivity.class);
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         resultIntent.putExtra("title", msg);
 

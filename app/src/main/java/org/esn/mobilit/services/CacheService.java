@@ -2,6 +2,7 @@ package org.esn.mobilit.services;
 
 import android.util.Log;
 
+import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.storage.InternalStorage;
 
 public class CacheService {
@@ -10,7 +11,6 @@ public class CacheService {
     private static CacheService instance;
 
     private CacheService(){
-        instance = new CacheService();
     }
 
     public static CacheService getInstance(){
@@ -30,7 +30,7 @@ public class CacheService {
     public static Object getObjectFromCache(String key){
         Object o = null;
         if (!key.equalsIgnoreCase("countries")) {
-            key = PreferencesService.getDefaults("code_section") + "_" + key;
+            key = PreferencesService.getDefaults(ApplicationConstants.PREFERENCES_CODE_SECTION) + "_" + key;
         }
 
         try {
@@ -49,7 +49,7 @@ public class CacheService {
      */
     public static void saveObjectToCache(String key, Object o){
         if (!key.equalsIgnoreCase("countries")) {
-            key = PreferencesService.getDefaults("code_section") + "_" + key;
+            key = PreferencesService.getDefaults(ApplicationConstants.PREFERENCES_CODE_SECTION) + "_" + key;
         }
 
         try {

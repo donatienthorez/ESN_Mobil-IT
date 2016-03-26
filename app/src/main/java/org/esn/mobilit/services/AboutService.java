@@ -1,72 +1,79 @@
 package org.esn.mobilit.services;
 
-import android.util.Log;
-
 import org.esn.mobilit.MobilITApplication;
-import org.esn.mobilit.models.About;
-import org.esn.mobilit.models.Abouts;
+import org.esn.mobilit.R;
 import org.esn.mobilit.models.Section;
+import org.esn.mobilit.network.providers.SectionProvider;
+import org.esn.mobilit.services.launcher.interfaces.Cachable;
+import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
-import java.text.ParseException;
-
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-import retrofit.http.GET;
-import retrofit.http.Query;
-
-public class AboutService {
-
+public class AboutService implements Cachable {
     private static AboutService instance;
-    private static About about;
-    private final static String TAG = "AboutService";
+
+    private Section section;
 
     private AboutService(){
-        instance = new AboutService();
     }
 
-    public static AboutService getInstance(){
+    public static AboutService getInstance() {
         if (instance == null){
             instance = new AboutService();
         }
         return instance;
     }
 
-    private static RestAdapter restAdapter = new RestAdapter.Builder()
-            .setEndpoint("http://logoinserter.esnlille.fr")
-            .build();
-
-    private interface AboutServiceInterface{
-        @GET("/rest/getPath.php")
-        void getAbout(@Query("code_section") String section, Callback<Abouts> callback);
+    public void resetService() {
+        instance = new AboutService();
     }
 
-    public static About getAbout(final NetworkCallback<Abouts> callback) {
-        try{
-            initAbout(callback);
-        } catch (ParseException e){
-            e.printStackTrace();
+    public void setSection(Section section) {
+        this.section = section;
+    }
+
+    public Section getSection() {
+        return section;
+    }
+
+    public Section getFromCache() {
+        return (Section) CacheService.getObjectFromCache(this.getString());
+    }
+
+    public void setSectionToCache(Section section) {
+        CacheService.saveObjectToCache(getString(), section);
+    }
+
+    @Override
+    public String getString() {
+        return ApplicationConstants.CACHE_SECTION;
+    }
+
+    public void getFromSite(final NetworkCallback<Section> callback) {
+        final Section section = getFromCache();
+
+        if (!Utils.isConnected()) {
+            callback.onFailure(MobilITApplication.getContext().getResources().getString(
+                    R.string.info_message_no_network
+            ));
+            return;
         }
-        return about;
-    }
 
-    public static void initAbout(final NetworkCallback<Abouts> callback) throws ParseException{
-        AboutServiceInterface aboutService = restAdapter.create(AboutServiceInterface.class);
-        aboutService.getAbout(((Section) CacheService.getObjectFromCache("section")).getCode_section(), new Callback<Abouts>() {
+        SectionProvider.makeRequest(section, new NetworkCallback<Section>() {
             @Override
-            public void success(Abouts abouts, Response response) {
-                if(abouts != null && abouts.hasAbout()) {
-                    about = abouts.getAbout();
-                    callback.onSuccess(abouts);
-                }
+            public void onSuccess(Section section) {
+                setSection(section);
+                setSectionToCache(section);
+                callback.onSuccess(section);
             }
 
             @Override
-            public void failure(RetrofitError error) {
-                Log.d(TAG, error.toString());
+            public void onNoAvailableData() {
+                callback.onNoAvailableData();
+            }
+
+            @Override
+            public void onFailure(String error) {
                 callback.onFailure(error);
             }
         });
