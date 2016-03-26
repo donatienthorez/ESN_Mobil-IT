@@ -14,8 +14,7 @@
     <string name="loading">Bitte warten Sie ...…</string>
     <string name="btn_retry">Erneut versuchen</string>
     <string name="btn_change">Andere Sektion</string>
-    <string name="load_survival_start">Survival Guide wird heruntergeladen ...</string>
-    <string name="load_survival_end">%1$d Geladene Seiten</string>
+    <string name="load_survival_end">SurvivalGuide downloaded</string>
     <string name="load_events_start">Events werden heruntergeladen ...</string>
     <string name="load_events_end">%1$d Geladene Events</string>
     <string name="load_news_start">News werden heruntergeladen ...</string>

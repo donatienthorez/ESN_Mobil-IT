@@ -1,26 +1,33 @@
 package org.esn.mobilit.services.gcm;
 
-import android.app.Activity;
+import android.text.TextUtils;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.esn.mobilit.MobilITApplication;
+import org.esn.mobilit.models.Section;
+import org.esn.mobilit.network.providers.PostRegProvider;
+import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.PreferencesService;
+import org.esn.mobilit.services.launcher.interfaces.Cachable;
+import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.Callback;
-import org.esn.mobilit.tasks.gcm.RegisterTask;
-import org.esn.mobilit.utils.Utils;
 
-public class GCMService {
+import java.io.IOException;
 
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    public static final String REG_ID = "regId";
-    GoogleCloudMessaging gcmObj;
+import retrofit.client.Response;
+
+public class GCMService implements Cachable {
+
     String regId = "";
     private String pushMsg = "";
 
     private static GCMService instance;
+
+    private GCMService(){}
+
     public static GCMService getInstance(){
         if (instance == null){
             instance = new GCMService();
@@ -28,34 +35,56 @@ public class GCMService {
         return instance;
     }
 
-    public void pushForGcm(Activity activity, Callback<Object> callback)
-    {
-        if (PreferencesService.getDefaults(REG_ID) == null) {
-
-            // Registering RegID
-            if (checkPlayServices(activity)) {
-                new RegisterTask(callback).execute();
-            }
-        }
-        else {
-            callback.onSuccess(null);
-        }
-    }
-    public void storeRegIdinSharedPref() {
-        PreferencesService.setDefaults(REG_ID, regId);
+    public String getString(){
+        return ApplicationConstants.PREFERENCES_REG_ID;
     }
 
-    private boolean checkPlayServices(Activity activity) {
+    public void register() {
+
+        if (PreferencesService.getDefaults(getString()) != null) {
+            setRegId(PreferencesService.getDefaults(getString()));
+            return;
+        }
+
+        if (!checkPlayServices()) {
+            return;
+        }
+
+        try {
+            setRegId(
+                    GoogleCloudMessaging
+                            .getInstance(MobilITApplication.getContext())
+                            .register(ApplicationConstants.GOOGLE_PROJ_ID)
+            );
+        } catch (IOException e) {
+        }
+
+        if (TextUtils.isEmpty(getRegId())) {
+            return;
+        }
+
+        Section section = (Section) CacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
+
+        PostRegProvider.makeRequest(
+                section.getCode_section(),
+                getRegId(),
+                new Callback<Response>() {
+                    @Override
+                    public void onSuccess(Response result) {
+                        PreferencesService.setDefaults(getString(), regId);
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+                    }
+                }
+        );
+    }
+
+    private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil
-                .isGooglePlayServicesAvailable(activity);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, activity,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            }
-            return false;
-        }
-        return true;
+                .isGooglePlayServicesAvailable(MobilITApplication.getContext());
+        return resultCode == ConnectionResult.SUCCESS;
     }
 
     public String getRegId() {
@@ -64,14 +93,6 @@ public class GCMService {
 
     public void setRegId(String regId) {
         this.regId = regId;
-    }
-
-    public GoogleCloudMessaging getGcmObj() {
-        return gcmObj;
-    }
-
-    public void setGcmObj(GoogleCloudMessaging gcmObj) {
-        this.gcmObj = gcmObj;
     }
 
     public String getPushMsg() {

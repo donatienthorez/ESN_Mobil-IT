@@ -1,9 +1,9 @@
 package org.esn.mobilit.fragments;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,49 +16,78 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Section;
-import org.esn.mobilit.services.CacheService;
-import org.esn.mobilit.utils.ApplicationConstants;
-import org.esn.mobilit.utils.Utils;
+import org.esn.mobilit.services.AboutService;
+import org.esn.mobilit.services.gcm.GCMService;
+import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
-public class AboutFragment extends android.support.v4.app.Fragment {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+public class AboutFragment extends Fragment {
+
+    @Bind(R.id.section_logo) ImageView logo;
+    @Bind(R.id.section_name) TextView name;
+    @Bind(R.id.section_email) TextView email;
+    @Bind(R.id.section_phone) TextView phone;
+    @Bind(R.id.section_website) TextView website;
+    @Bind(R.id.section_address) TextView address;
+
+    private Section section;
+
+    @OnClick(R.id.section_address)
+    public void clickAddress(View v)
+    {
+        String map = "http://maps.google.co.in/maps?q=" + section.getAddress();
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(map));
+        startActivity(intent);
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.about_fragment, container, false);
+    public View onCreateView(
+            LayoutInflater inflater,
+            ViewGroup container,
+            Bundle savedInstanceState
+    ){
+        View view = inflater.inflate(R.layout.fragment_about, container, false);
 
-        final Section section = (Section) CacheService.getObjectFromCache("section");
-        final String url = ApplicationConstants.LOGOINSERTER_URL + "assets/img/logos/" + section.getLogo_url();
+        // Load Butterknife
+        ButterKnife.bind(this, view);
 
-        ImageView logo = (ImageView) view.findViewById(R.id.section_logo);
+        setSection(AboutService.getInstance().getFromCache());
 
-        Glide.with(MobilITApplication.getContext())
-                .load(url)
-                .placeholder(R.drawable.default_list_item)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .into(logo);
+        AboutService.getInstance().getFromSite(new NetworkCallback<Section>() {
+            @Override
+            public void onSuccess(Section result) {
+                setSection(result);
+            }
 
-        TextView name  = (TextView)  view.findViewById(R.id.section_name);
-        name.setText(section.getName());
-        TextView email = (TextView)  view.findViewById(R.id.section_email);
-        email.setText(section.getEmail());
-        TextView phone = (TextView)  view.findViewById(R.id.section_phone);
-        phone.setText(section.getPhone());
-        TextView website = (TextView)  view.findViewById(R.id.section_website);
-        website.setText(section.getWebsite());
-        TextView address = (TextView)  view.findViewById(R.id.section_address);
-        address.setText(section.getAddress());
-        address.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                String map = "http://maps.google.co.in/maps?q=" + section.getAddress();
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(map));
-                startActivity(intent);
+            @Override
+            public void onNoAvailableData() {
+
+            }
+
+            @Override
+            public void onFailure(String error) {
+
             }
         });
 
         return view;
+    }
+
+    public void setSection(Section section){
+        this.section = section;
+
+        Glide.with(MobilITApplication.getContext())
+                .load(section.getLogo_url())
+                .placeholder(R.drawable.logo_small_2_25)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .into(logo);
+
+        name.setText(section.getName());
+        email.setText(section.getEmail());
+        phone.setText(section.getPhone());
+        website.setText(section.getWebsite());
+        address.setText(section.getAddress());
     }
 }

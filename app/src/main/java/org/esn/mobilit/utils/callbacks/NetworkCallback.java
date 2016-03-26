@@ -4,5 +4,6 @@ import retrofit.RetrofitError;
 
 public interface NetworkCallback<T> {
     void onSuccess(T result);
-    void onFailure(RetrofitError error);
+    void onNoAvailableData();
+    void onFailure(String error);
 }

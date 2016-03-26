@@ -8,19 +8,31 @@
     <string name="action_settings">Action</string>
     <string name="ras_section_settings">Change section</string>
 
+    <!-- ERRORS -->
+    <string name="error.message.network">
+        Oops, a network error happened. Please verify that you are connected to internet and restart the application.
+    </string>
+    <string name="error.message.no_data.countries">
+        There are no countries or sections in the database.
+    </string>
+
+    <!-- INFO -->
+    <string name="info.message.no_content">
+        There is no content yet.
+    </string>
+    <string name="info.message.no_network">
+        You are not connected to internet.
+    </string>
+
     <!-- SPLASH SCREEN -->
     <string name="tryingcache">No Internet connection, load from cache ...</string>
     <string name="emptycache">You need to load data at least once with internet</string>
     <string name="loading">Loading please wait …</string>
     <string name="btn_retry">Try again</string>
     <string name="btn_change">Reset section</string>
-    <string name="load_survival_start">Downloading Survival Guide ...</string>
     <string name="load_survival_end">SurvivalGuide downloaded</string>
-    <string name="load_events_start">Downloading Events ...</string>
     <string name="load_events_end">%1$d events loaded</string>
-    <string name="load_news_start">Downloading News ...</string>
     <string name="load_news_end">%1$d news loaded</string>
-    <string name="load_partners_start">Downloading Partners ...</string>
     <string name="load_partners_end">%1$d partners loaded</string>
     <string name="start_homeactivity">Launching app ...</string>
     <string name="noitems">There is no contents for this section, please contact webmaster@esnlille.fr</string>
@@ -36,10 +48,16 @@
     <string name="selectyoursection">Select your section</string>
 
     <!-- Action Bar Title -->
-    <string name="title_events">Events</string>
-    <string name="title_news">News</string>
-    <string name="title_partners">Partners</string>
-    <string name="title_survivalguide">Survival Guide</string>
-    <string name="title_about">About</string>
+    <string name="menu_drawer_item_news">News</string>
+    <string name="menu_drawer_item_events">Events</string>
+    <string name="menu_drawer_item_partners">Partners</string>
+    <string name="menu_drawer_item_guide">Survival guide</string>
+    <string name="menu_drawer_item_about">About</string>
+    <string name="menu_drawer_item_reset">Change my section</string>
+
+    <string name="icon_feed">&#xf09e;</string>
+    <string name="icon_book">&#xf02d;</string>
+    <string name="icon_settings">&#xf013;</string>
+    <string name="menu_drawer_item_settings">Settings</string>
 
 </resources>

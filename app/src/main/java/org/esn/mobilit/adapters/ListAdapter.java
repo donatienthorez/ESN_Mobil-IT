@@ -12,6 +12,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
+import org.esn.mobilit.models.RSS.RSS;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 public class ListAdapter extends BaseAdapter {
@@ -20,8 +21,13 @@ public class ListAdapter extends BaseAdapter {
     private RSSFeedParser feed;
 
     public ListAdapter(RSSFeedParser feed, LayoutInflater layoutInflater) {
-        this.feed = feed;
+        this.feed = feed != null ? feed : new RSSFeedParser();
         this.layoutInflater = layoutInflater;
+    }
+
+    public void setFeed(RSSFeedParser feed) {
+        this.feed = feed;
+        this.notifyDataSetChanged();
     }
 
     @Override
@@ -41,24 +47,21 @@ public class ListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-        // Inflate the item layout and set the views
         View listItem = convertView;
         int pos = position;
         if (listItem == null) {
-            listItem = layoutInflater.inflate(R.layout.list_item, null);
+            listItem = layoutInflater.inflate(R.layout.list_item_feeds, null);
         }
 
-        // Initialize the views in the layout
         ImageView iv = (ImageView) listItem.findViewById(R.id.thumb);
         TextView tvTitle = (TextView) listItem.findViewById(R.id.title);
         TextView tvDate = (TextView) listItem.findViewById(R.id.date);
 
-        // Set the views in the layout
         Glide.with(MobilITApplication.getContext())
                 .load(feed.getItem(pos).getImage())
                 .placeholder(R.drawable.default_list_item)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .override(150, 250)
                 .into(iv);
 
         tvTitle.setText(feed.getItem(pos).getTitle());

@@ -9,20 +9,13 @@
     <string name="ras_section_settings">Zmieniac sekcje</string>
 
     <!-- SPLASH SCREEN -->
-    <string name="tryingcache">Brak Internetu ...</string>
     <string name="emptycache">Nalezy sciagnac informacje przynajmniej jeden raz</string>
-    <string name="loading">Sciaganie, prosze czekac ...</string>
     <string name="btn_retry">Sprobuj ponownie</string>
     <string name="btn_change">Zmiana sekcji</string>
-    <string name="load_survival_start">Sciaganie przewodnika ...</string>
-    <string name="load_survival_end">%1$d strony sciagniete</string>
-    <string name="load_events_start">Sciaganie wydarzen ...</string>
+    <string name="load_survival_end">SurvivalGuide downloaded</string>
     <string name="load_events_end">%1$d wydarzenia sciagniete</string>
-    <string name="load_news_start">Sciaganie wiadomosci ...</string>
     <string name="load_news_end">%1$d wiadomosci sciagniete</string>
-    <string name="load_partners_start">Sciagane partenariatu ...</string>
     <string name="load_partners_end">%1$d partenariat sciagniety</string>
-    <string name="start_homeactivity">Sciaganie aplikacji ...</string>
     <string name="noitems">Ta sekcja nie zawiera zadnych informacji, prosze skontaktuj sie z webmaster@esnlille.fr</string>
 
     <!-- FIRST LAUNCH LAYOUT -->

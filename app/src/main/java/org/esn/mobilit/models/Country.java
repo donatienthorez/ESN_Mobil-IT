@@ -1,11 +1,12 @@
 package org.esn.mobilit.models;
 
+import org.esn.mobilit.R;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Country implements Serializable{
 
-    private int    id;
     private String name;
     private String url;
     private String code_country;
@@ -13,22 +14,13 @@ public class Country implements Serializable{
     private String email;
     private ArrayList<Section> sections;
 
-    public Country(int id, String name, String url, String code_country, String website, String email) {
-        this.id = id;
+    public Country(String name, String url, String code_country, String website, String email) {
         this.name = name;
         this.url = url;
         this.code_country = code_country;
         this.website = website;
         this.email = email;
         this.sections = new ArrayList<Section>();
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -79,13 +71,20 @@ public class Country implements Serializable{
         this.sections = sections;
     }
 
-    public void addSection(Section section){
+    public void addSection(Section section) {
         this.sections.add(section);
+    }
+
+    public ArrayList<String> getSectionsNamesArray() {
+        ArrayList<String> sections = new ArrayList<String>();
+        for (Section section : this.getSections()) {
+            sections.add(section.getName());
+        }
+        return sections;
     }
 
     public String toString() {
         return "Country{" +
-                "id=" + id +
                 ", name='" + name + '\'' +
                 ", url='" + url + '\'' +
                 ", code_country='" + code_country + '\'' +

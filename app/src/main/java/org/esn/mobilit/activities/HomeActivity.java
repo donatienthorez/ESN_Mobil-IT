@@ -1,177 +1,176 @@
 package org.esn.mobilit.activities;
 
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.MenuItem;
+import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
+
+import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
-import org.esn.mobilit.adapters.PagerAdapter;
-import org.esn.mobilit.fragments.Satellite.ListFragment.ListFragmentItemClickListener;
+import org.esn.mobilit.fragments.AboutFragment;
+import org.esn.mobilit.fragments.Satellite.DetailsFragment;
+import org.esn.mobilit.fragments.Satellite.FeedListFragment;
+import org.esn.mobilit.fragments.Guide.GuideFragment;
+import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.CacheService;
-import org.esn.mobilit.services.feeds.FeedService;
+import org.esn.mobilit.services.PreferencesService;
+import org.esn.mobilit.services.feeds.EventsService;
+import org.esn.mobilit.services.feeds.NewsService;
+import org.esn.mobilit.services.feeds.PartnersService;
 import org.esn.mobilit.services.gcm.GCMService;
+import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
-public class HomeActivity extends FragmentActivity implements ActionBar.TabListener, ListFragmentItemClickListener {
+import java.util.ArrayList;
+import java.util.List;
 
-    private static final String TAG = HomeActivity.class.getSimpleName();
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
-    ViewPager viewPager;
-    PagerAdapter pagerAdapter;
+public class HomeActivity extends AppCompatActivity {
 
-    FeedService feedService;
+    @Bind(R.id.drawer_layout)   protected DrawerLayout drawerLayout;
+    @Bind(R.id.left_drawer)     protected RelativeLayout drawerRelativeLayout;
+    @Bind(R.id.toolbar)         protected Toolbar toolbar;
+    @Bind(R.id.navigation_view) protected NavigationView navigationView;
+    private ArrayList<Fragment> fragmentsList;
+    private int currentFragmentId;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
 
-        //Change Layout
-        setContentView(R.layout.activity_main);
+        Section section = (Section) CacheService.
+                getObjectFromCache(ApplicationConstants.CACHE_SECTION);
 
-        feedService = FeedService.getInstance();
-
-        //Init PagerAdapter
-        pagerAdapter = new PagerAdapter(
-                getSupportFragmentManager()
-        );
-
-        //Init ActionBar
-        final ActionBar actionBar = getActionBar();
-        try {
-            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        } catch (Exception e) {
-            Log.d(TAG, "Exception: " + e);
+        if (section == null || TextUtils.isEmpty(section.getWebsite())) {
+            Intent intent = new Intent(this, FirstLaunchActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            return;
         }
 
-        //Init Pager
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        ButterKnife.bind(this);
+        setFragmentList();
+        doDrawerMenuAction(R.id.drawer_item_events);
+        setSupportActionBar(toolbar);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener(){
+
             @Override
-            public void onPageSelected(int position) {
-                actionBar.setSelectedNavigationItem(position);
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                doDrawerMenuAction(menuItem.getItemId());
+                drawerLayout.closeDrawers();
+                return true;
             }
         });
+        ActionBarDrawerToggle actionBarDrawerToggle =
+                new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
 
-        //Add tabs
-        initTabs();
+        registerRegId();
 
-        if(! GCMService.getInstance().getPushMsg().equals("")) {
-            pushReceived();
+        Glide.with(MobilITApplication.getContext())
+                .load(section.getLogo_url())
+                .downloadOnly(150, 250);
+
+        //TODO push notifications open detail fragment
+
+        if (savedInstanceState == null) {
+            doDrawerMenuAction(0);
         }
     }
 
-    private void initTabs(){
-        if (feedService.getFeedEvents() != null && feedService.getFeedEvents().getItemCount() > 0) {
-            ActionBar.Tab tabEvent = getActionBar().newTab();
-            tabEvent.setText(getResources().getString(R.string.title_events));
-            tabEvent.setTabListener(this);
-            getActionBar().addTab(tabEvent);
-        }
-
-        if (feedService.getFeedNews() != null && feedService.getFeedNews().getItemCount() > 0){
-            ActionBar.Tab tabNews = getActionBar().newTab();
-            tabNews.setText(getResources().getString(R.string.title_news));
-            tabNews.setTabListener(this);
-            getActionBar().addTab(tabNews);
-        }
-
-        if (feedService.getFeedPartners() != null && feedService.getFeedPartners().getItemCount() > 0){
-            ActionBar.Tab tabPartners = getActionBar().newTab();
-            tabPartners.setText(getResources().getString(R.string.title_partners));
-            tabPartners.setTabListener(this);
-            getActionBar().addTab(tabPartners);
-        }
-
-        if (feedService.getSurvivalguide() != null && feedService.getSurvivalguide().getCategories().size() > 0){
-            ActionBar.Tab tabSurvivalGuide = getActionBar().newTab();
-            tabSurvivalGuide.setText(getResources().getString(R.string.title_survivalguide));
-            tabSurvivalGuide.setTabListener(this);
-            getActionBar().addTab(tabSurvivalGuide);
-        }
-
-        try{
-            Section section = (Section) CacheService.getObjectFromCache("section");
-
-            if (section != null){
-                ActionBar.Tab tabAbout = getActionBar().newTab();
-                tabAbout.setText(getResources().getString(R.string.title_about));
-                tabAbout.setTabListener(this);
-                getActionBar().addTab(tabAbout);
+    /**
+     * Call the GCMService to register the regId
+     */
+    private void registerRegId() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                GCMService.getInstance().register();
             }
+        });
+    }
 
-        }catch (NullPointerException e){
-            Log.d(TAG, e.toString());
+    private void doDrawerMenuAction(int menuItemId) {
+        switch (menuItemId) {
+            case R.id.drawer_item_events:
+                loadFragment(fragmentsList.get(0), menuItemId, false);
+                break;
+            case R.id.drawer_item_news:
+                loadFragment(fragmentsList.get(1), menuItemId, false);
+                break;
+            case R.id.drawer_item_partners:
+                loadFragment(fragmentsList.get(2), menuItemId, false);
+                break;
+            case R.id.drawer_item_guide:
+                loadFragment(fragmentsList.get(3), menuItemId, false);
+                break;
+            case R.id.drawer_item_about:
+                loadFragment(fragmentsList.get(4), menuItemId, false);
+                break;
+            case R.id.drawer_item_reset:
+                PreferencesService.resetSection();
+                Intent intent = new Intent(this, FirstLaunchActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                break;
         }
     }
 
-    public void pushReceived() {
-        String pushMsg = GCMService.getInstance().getPushMsg();
+    public void loadFragment(Fragment fragment, int currentFragmentId, boolean addToBackStack) {
+        this.currentFragmentId = currentFragmentId;
 
-        int pos = -1;
-        RSSFeedParser currentFeed = null;
-        if (feedService.getFeedEvents().getPositionFromTitle(pushMsg) > 0) {
-            pos = feedService.getFeedEvents().getPositionFromTitle(pushMsg);
-            currentFeed = feedService.getFeedEvents();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction= fragmentManager
+                .beginTransaction()
+                .replace(R.id.content_frame, fragment);
+
+        if (addToBackStack) {
+            fragmentTransaction.addToBackStack(null);
         }
-        if (feedService.getFeedNews().getPositionFromTitle(pushMsg) > 0) {
-            pos = feedService.getFeedNews().getPositionFromTitle(pushMsg);
-            currentFeed = feedService.getFeedNews();
+        fragmentTransaction.commit();
+
+        navigationView.setCheckedItem(currentFragmentId);
+    }
+
+    public void replaceByDetailsFragment(RSSItem rssItem){
+        Fragment fragment = (new DetailsFragment()).setFeed(rssItem);
+        loadFragment(fragment, this.currentFragmentId, true);
+    }
+
+    public void setFragmentList()
+    {
+        fragmentsList = new ArrayList<>();
+        fragmentsList.add((new FeedListFragment()).setService(EventsService.getInstance()));
+        fragmentsList.add((new FeedListFragment()).setService(NewsService.getInstance()));
+        fragmentsList.add((new FeedListFragment()).setService(PartnersService.getInstance()));
+        fragmentsList.add(new GuideFragment());
+        fragmentsList.add(new AboutFragment());
+    }
+
+    @Override
+    public void onBackPressed() {
+        int count = getFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            super.onBackPressed();
+        } else {
+            getFragmentManager().popBackStack();
         }
-        if (feedService.getFeedPartners().getPositionFromTitle(pushMsg) > 0) {
-            pos = feedService.getFeedPartners().getPositionFromTitle(pushMsg);
-            currentFeed = feedService.getFeedPartners();
-        }
-
-        if (currentFeed != null && pos > 0) {
-            Intent intent = new Intent(this, DetailActivity.class);
-
-            Bundle b = new Bundle();
-            b.putSerializable("feed", currentFeed);
-            b.putInt("pos", pos);
-            intent.putExtras(b);
-
-            startActivity(intent);
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt("viewpagerid", viewPager.getId());
-    }
-
-    @Override
-    public void onTabSelected(Tab tab, FragmentTransaction ft) {
-        viewPager.setCurrentItem(tab.getPosition());
-    }
-
-    @Override
-    public void onTabReselected(Tab tab, FragmentTransaction ft) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void onListFragmentItemClick(int position, RSSFeedParser currentfeed) {
-        /** Creating an intent object to start the CountryDetailsActivity */
-        Intent intent = new Intent(this, DetailActivity.class);
-
-        /** Setting data ( the clicked item's position ) to this intent */
-        Bundle b = new Bundle();
-        b.putSerializable("feed", currentfeed.getItem(position));
-        intent.putExtras(b);
-
-        /** Starting the activity by passing the implicit intent */
-        startActivity(intent);
     }
 }

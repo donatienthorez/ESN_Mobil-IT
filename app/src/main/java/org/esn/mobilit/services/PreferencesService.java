@@ -5,12 +5,15 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import org.esn.mobilit.MobilITApplication;
+import org.esn.mobilit.services.feeds.EventsService;
+import org.esn.mobilit.services.feeds.NewsService;
+import org.esn.mobilit.services.feeds.PartnersService;
+import org.esn.mobilit.utils.ApplicationConstants;
 
 public class PreferencesService {
     private static PreferencesService instance;
 
     private PreferencesService(){
-        instance = new PreferencesService();
     }
 
     public static PreferencesService getInstance(){
@@ -33,9 +36,12 @@ public class PreferencesService {
     }
 
     public static void resetSection(){
-        setDefaults("CODE_SECTION", null);
-        setDefaults("CODE_COUNTRY", null);
-        setDefaults("SECTION_WEBSITE", null);
-        setDefaults("regId", null);
+        GuideService.getInstance().resetService();
+        EventsService.getInstance().resetService();
+        NewsService.getInstance().resetService();
+        PartnersService.getInstance().resetService();
+        setDefaults(ApplicationConstants.PREFERENCES_CODE_SECTION, null);
+        setDefaults(ApplicationConstants.PREFERENCES_REG_ID, null);
+
     }
 }

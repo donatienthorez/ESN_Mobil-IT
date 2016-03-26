@@ -27,9 +27,4 @@ public final class InternalStorage{
         Object object = ois.readObject();
         return object;
     }
-
-    public static boolean deleteObject(String key) throws IOException {
-
-        return MobilITApplication.getContext().deleteFile(key);
-    }
 }
