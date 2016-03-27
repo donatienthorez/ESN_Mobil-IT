@@ -5,12 +5,12 @@ import org.esn.mobilit.R;
 import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.network.providers.GuideProvider;
-import org.esn.mobilit.services.launcher.interfaces.Cachable;
+import org.esn.mobilit.services.interfaces.CachableInterface;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
-public class GuideService implements Cachable {
+public class GuideService implements CachableInterface {
     private static GuideService instance;
 
     private Guide guide;
