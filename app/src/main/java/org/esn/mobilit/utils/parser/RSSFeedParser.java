@@ -37,21 +37,18 @@ public class RSSFeedParser implements Serializable {
 		return itemlist;
 	}
 
-    public boolean isEmpty(){
-        return itemlist.size() == 0;
-    }
-
 	public int getItemCount() {
 		return getList().size();
 	}
 
-    public int getPositionFromTitle(String title){
-        for(RSSItem item : this.getList()){
-            if (item.getTitle().equalsIgnoreCase(title))
-				return getList().indexOf(item);
-        }
-        return -1;
-    }
+	public RSSItem getRSSItemFromTitle(String title) {
+		for(RSSItem item : this.getList()) {
+			if (item.getTitle().equalsIgnoreCase(title)) {
+				return item;
+			}
+		}
+		return null;
+	}
 
 	public boolean isInList(String title, String link) {
 		for(RSSItem item : this.getList()){

@@ -2,11 +2,11 @@ package org.esn.mobilit.services.feeds;
 
 import org.esn.mobilit.models.RSS.RSS;
 import org.esn.mobilit.services.CacheService;
-import org.esn.mobilit.services.launcher.interfaces.Cachable;
+import org.esn.mobilit.services.interfaces.CachableInterface;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
-public abstract class RSSFeedService implements Cachable {
+public abstract class RSSFeedService implements CachableInterface {
 
     private RSSFeedParser feed;
 
