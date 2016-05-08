@@ -10,9 +10,11 @@ public interface ApplicationConstants {
     // Google Project Number
     String GOOGLE_PROJ_ID = "1079816997";
 
-    // Message Key
-    String MSG_KEY = "m";
-    String SBJ_KEY = "sbj";
+    // GCM Messages
+    String GCM_TITLE = "title";
+    String GCM_CONTENT = "content";
+    String GCM_TYPE = "type";
+    String GCM_RSS_ITEM = "rssItem";
 
     // Path for news event & partners
     String FEED_PATH = "/feed";
@@ -31,6 +33,13 @@ public interface ApplicationConstants {
     String CACHE_EVENTS = "events";
     String CACHE_PARTNERS = "partners";
     String CACHE_NEWS = "news";
+
+    // Menu
+    String MENU_NEWS = "news";
+    String MENU_EVENTS = "events";
+    String MENU_PARTNERS = "partners";
+    String MENU_GUIDE = "guide";
+    String MENU_ABOUT = "about";
 
     String CACHE_COUNTRIES = "countries";
 

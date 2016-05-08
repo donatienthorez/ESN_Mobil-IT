@@ -53,7 +53,7 @@ public class FeedListFragment extends ListFragment
     }
 
     public void onListItemClick(ListView l, View v, int position, long id) {
-        ((HomeActivity) getActivity()).replaceByDetailsFragment(feed.getItem(position));
+        ((HomeActivity) getActivity()).replaceByDetailsFragment(feed.getItem(position), true);
     }
 
     private void refreshContent(final boolean showMessage){

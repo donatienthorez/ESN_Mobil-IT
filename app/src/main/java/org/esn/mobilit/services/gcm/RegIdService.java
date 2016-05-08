@@ -11,7 +11,7 @@ import org.esn.mobilit.models.Section;
 import org.esn.mobilit.network.providers.PostRegProvider;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.PreferencesService;
-import org.esn.mobilit.services.launcher.interfaces.Cachable;
+import org.esn.mobilit.services.interfaces.CachableInterface;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.Callback;
 
@@ -19,18 +19,17 @@ import java.io.IOException;
 
 import retrofit.client.Response;
 
-public class GCMService implements Cachable {
+public class RegIdService implements CachableInterface {
 
     String regId = "";
-    private String pushMsg = "";
 
-    private static GCMService instance;
+    private static RegIdService instance;
 
-    private GCMService(){}
+    private RegIdService(){}
 
-    public static GCMService getInstance(){
+    public static RegIdService getInstance(){
         if (instance == null){
-            instance = new GCMService();
+            instance = new RegIdService();
         }
         return instance;
     }
@@ -93,13 +92,5 @@ public class GCMService implements Cachable {
 
     public void setRegId(String regId) {
         this.regId = regId;
-    }
-
-    public String getPushMsg() {
-        return pushMsg;
-    }
-
-    public void setPushMsg(String pushMsg) {
-        this.pushMsg = pushMsg;
     }
 }
