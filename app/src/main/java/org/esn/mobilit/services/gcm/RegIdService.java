@@ -39,12 +39,6 @@ public class RegIdService implements CachableInterface {
     }
 
     public void register() {
-
-        if (PreferencesService.getDefaults(getString()) != null) {
-            setRegId(PreferencesService.getDefaults(getString()));
-            return;
-        }
-
         if (!checkPlayServices()) {
             return;
         }
