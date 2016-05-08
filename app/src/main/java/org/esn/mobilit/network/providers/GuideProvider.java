@@ -15,11 +15,11 @@ import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 public class GuideProvider {
     private static RestAdapter restAdapter = new RestAdapter.Builder()
-            .setEndpoint("http://mobilit.esnlille.fr/api/android/v1")
+            .setEndpoint(ApplicationConstants.API_ENDPOINT)
             .build();
 
     private interface GuideProviderInterface{
-        @GET("/guides/{section}")
+        @GET(ApplicationConstants.API_GUIDE)
         void getGuide(@Path("section") String section, @Query("token") String token, Callback<Guide> callback);
     }
 

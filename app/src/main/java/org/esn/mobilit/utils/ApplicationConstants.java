@@ -22,6 +22,14 @@ public interface ApplicationConstants {
     String PARTNERS_PATH = "/partners";
     String EVENTS_PATH = "/events";
 
+    // Path of Back-Office API
+    String API_ENDPOINT = "http://dev.mobilit.esnlille.fr/api/android/v1";
+    String API_COUNTRIES = "/countries/";
+    String API_GUIDE = "/guides/{section}";
+    String API_REGIDS = "/regids";
+    String API_SECTIONS = "/sections/{section}";
+
+    // Preferences and cache
     String PREFERENCES_CODE_COUNTRY = "codeCountry";
     String PREFERENCES_CODE_SECTION = "codeSection";
     String PREFERENCES_REG_ID = "regId";
