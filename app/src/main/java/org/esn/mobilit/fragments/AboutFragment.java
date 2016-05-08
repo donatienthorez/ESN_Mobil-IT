@@ -17,7 +17,6 @@ import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.AboutService;
-import org.esn.mobilit.services.gcm.GCMService;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 import butterknife.Bind;
