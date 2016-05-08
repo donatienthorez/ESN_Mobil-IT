@@ -17,11 +17,11 @@ import org.esn.mobilit.utils.callbacks.NetworkCallback;
 public class CountryProvider {
 
     private static RestAdapter restAdapter = new RestAdapter.Builder()
-            .setEndpoint("http://mobilit.esnlille.fr/api/android/v1")
+            .setEndpoint(ApplicationConstants.API_ENDPOINT)
             .build();
 
     private interface CountriesProviderInterface{
-        @GET("/countries/")
+        @GET(ApplicationConstants.API_COUNTRIES)
         void getCountries(@Query("token") String token, Callback<List<Country>> callback);
     }
 

@@ -14,12 +14,12 @@ import org.esn.mobilit.utils.ApplicationConstants;
 public class PostRegProvider {
 
     private static RestAdapter restAdapter = new RestAdapter.Builder()
-            .setEndpoint("http://mobilit.esnlille.fr/api/android")
+            .setEndpoint(ApplicationConstants.API_ENDPOINT)
             .build();
 
     private interface PostRegServiceInterface{
         @Multipart
-        @POST("/v1/regids")
+        @POST(ApplicationConstants.API_REGIDS)
         void registerId(
                 @Part("regId") String regId,
                 @Part("section") String section,
