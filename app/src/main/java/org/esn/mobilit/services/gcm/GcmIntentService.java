@@ -38,21 +38,21 @@ public class GcmIntentService extends IntentService {
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
 
         String messageType = gcm.getMessageType(intent);
-        String title = String.valueOf(extras.get(ApplicationConstants.GCM_TITLE));
-        String content = String.valueOf(extras.get(ApplicationConstants.GCM_CONTENT));
-        String type = String.valueOf(extras.get(ApplicationConstants.GCM_TYPE));
+
+        if (messageType == null) {
+            return;
+        }
+        Object title = extras.get(ApplicationConstants.GCM_TITLE);
+        String titleString = title != null ? String.valueOf(title) : "";
+        Object content = extras.get(ApplicationConstants.GCM_CONTENT);
+        String contentString = content != null ? String.valueOf(content) : "";
+        Object type = extras.get(ApplicationConstants.GCM_TYPE);
+        String typeString = type != null ? String.valueOf(type) : "";
 
         if (!extras.isEmpty()) {
             switch (messageType) {
-                //TODO manage errors
-//                case GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR:
-//                    sendNotification("Send error: ", extras.toString(), null);
-//                    break;
-//                case GoogleCloudMessaging.MESSAGE_TYPE_DELETED:
-//                    sendNotification("Deleted messages on server: ", extras.toString(), null);
-//                    break;
                 case GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE:
-                    downloadFromSite(title, content, type);
+                    downloadFromSite(titleString, contentString, typeString);
                     break;
             }
         }

@@ -4,10 +4,9 @@ import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import retrofit.http.Multipart;
+import retrofit.http.Field;
+import retrofit.http.FormUrlEncoded;
 import retrofit.http.POST;
-import retrofit.http.Part;
-import retrofit.http.Query;
 
 import org.esn.mobilit.utils.ApplicationConstants;
 
@@ -18,12 +17,12 @@ public class PostRegProvider {
             .build();
 
     private interface PostRegServiceInterface{
-        @Multipart
+        @FormUrlEncoded
         @POST(ApplicationConstants.API_REGIDS)
         void registerId(
-                @Part("regId") String regId,
-                @Part("section") String section,
-                @Query("token") String token,
+                @Field("token") String token,
+                @Field("regId") String regId,
+                @Field("section") String section,
                 Callback<Response> callback
         );
     }
@@ -32,9 +31,9 @@ public class PostRegProvider {
         PostRegServiceInterface postRegService = restAdapter.create(PostRegServiceInterface.class);
 
         postRegService.registerId(
+                ApplicationConstants.MOBILIT_TOKEN,
                 regId,
                 codeSection,
-                ApplicationConstants.MOBILIT_TOKEN,
                 new Callback<Response>() {
                     @Override
                     public void success(Response s, Response response) {

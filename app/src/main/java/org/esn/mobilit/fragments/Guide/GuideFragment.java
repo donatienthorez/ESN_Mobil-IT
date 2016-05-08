@@ -1,23 +1,17 @@
 package org.esn.mobilit.fragments.Guide;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.esn.mobilit.R;
-import org.esn.mobilit.activities.FirstLaunchActivity;
 import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.renderers.GuideRenderer;
 import org.esn.mobilit.services.GuideService;
-import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 public class GuideFragment extends Fragment {
