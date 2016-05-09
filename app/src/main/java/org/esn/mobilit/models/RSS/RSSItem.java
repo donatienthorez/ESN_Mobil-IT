@@ -16,7 +16,7 @@ public class RSSItem implements Serializable {
 	@Element(name = "link", required = false)
 	private String link;
 
-	@Element(name = "description", required = true)
+	@Element(name = "description", required = false)
 	private String description;
 
     @Element(name = "author", required = false)
@@ -63,7 +63,7 @@ public class RSSItem implements Serializable {
     }
 
     public String getDescription() {
-        return description;
+        return description != null ? description : "Empty description";
     }
 
     public void setDescription(String description) {

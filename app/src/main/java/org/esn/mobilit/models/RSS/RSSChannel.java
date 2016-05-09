@@ -1,9 +1,5 @@
 package org.esn.mobilit.models.RSS;
 
-import com.bumptech.glide.Glide;
-
-import org.esn.mobilit.MobilITApplication;
-import org.esn.mobilit.utils.parser.DOMParser;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
