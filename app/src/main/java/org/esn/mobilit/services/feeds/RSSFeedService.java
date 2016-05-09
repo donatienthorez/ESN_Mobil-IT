@@ -45,7 +45,7 @@ public abstract class RSSFeedService implements CachableInterface {
                         ? getFromCache()
                         : new RSSFeedParser();
 
-                rssFeedParser.addItems(feed);
+                rssFeedParser = rssFeedParser.addItems(feed);
 
                 setFeed(rssFeedParser);
                 setFeedToCache(rssFeedParser);
