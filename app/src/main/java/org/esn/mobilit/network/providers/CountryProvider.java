@@ -13,7 +13,6 @@ import org.esn.mobilit.models.Country;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
-
 public class CountryProvider {
 
     private static RestAdapter restAdapter = new RestAdapter.Builder()

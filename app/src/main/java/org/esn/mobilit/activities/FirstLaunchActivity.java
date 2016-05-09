@@ -92,15 +92,15 @@ public class FirstLaunchActivity extends Activity {
     }
 
     private void initCountriesSpinner(final List<Country> countries){
-        ArrayList<String> datas = new ArrayList<String>();
+        ArrayList<String> data = new ArrayList<String>();
 
-        datas.add(getResources().getString(R.string.selectyourcountry));
+        data.add(getResources().getString(R.string.selectyourcountry));
         for(Country country : countries){
-            datas.add(country.getName());
+            data.add(country.getName());
         }
 
         spinnerCountries.setSelection(0);
-        spinnerCountries.setAdapter(new SpinnerAdapter(FirstLaunchActivity.this, datas));
+        spinnerCountries.setAdapter(new SpinnerAdapter(FirstLaunchActivity.this, data));
         spinnerCountries.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {

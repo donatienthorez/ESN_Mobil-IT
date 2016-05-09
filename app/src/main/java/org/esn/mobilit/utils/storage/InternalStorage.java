@@ -24,7 +24,6 @@ public final class InternalStorage{
             ClassNotFoundException {
         FileInputStream fis = MobilITApplication.getContext().openFileInput(key);
         ObjectInputStream ois = new ObjectInputStream(fis);
-        Object object = ois.readObject();
-        return object;
+        return ois.readObject();
     }
 }

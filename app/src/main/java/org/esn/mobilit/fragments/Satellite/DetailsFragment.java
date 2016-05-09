@@ -28,7 +28,7 @@ import org.esn.mobilit.models.RSS.RSSItem;
 
 public class DetailsFragment extends Fragment {
 
-    RSSItem rssItem;
+    protected RSSItem rssItem;
 
     @Bind(R.id.title) TextView title;
     @Bind(R.id.header) ImageView imageView;

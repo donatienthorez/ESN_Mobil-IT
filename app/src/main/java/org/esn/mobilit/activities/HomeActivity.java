@@ -102,7 +102,6 @@ public class HomeActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
-
         Glide.with(MobilITApplication.getContext())
                 .load(section.getLogo_url())
                 .downloadOnly(150, 250);

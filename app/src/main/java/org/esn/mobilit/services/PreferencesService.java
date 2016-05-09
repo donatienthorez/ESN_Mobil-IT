@@ -1,6 +1,5 @@
 package org.esn.mobilit.services;
 
-
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
