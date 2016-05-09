@@ -42,6 +42,8 @@ public interface ApplicationConstants {
     String CACHE_PARTNERS = "partners";
     String CACHE_NEWS = "news";
 
+    String CACHE_DEFAULT_MENU = "defaultMenu";
+
     // Menu
     String MENU_NEWS = "news";
     String MENU_EVENTS = "events";

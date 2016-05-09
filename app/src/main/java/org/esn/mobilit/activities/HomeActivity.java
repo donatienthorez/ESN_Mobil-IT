@@ -15,7 +15,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
 
+import java.util.HashMap;
+
 import com.bumptech.glide.Glide;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
@@ -33,11 +38,6 @@ import org.esn.mobilit.services.feeds.PartnersService;
 import org.esn.mobilit.services.gcm.RegIdService;
 import org.esn.mobilit.utils.ApplicationConstants;
 
-import java.util.HashMap;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 public class HomeActivity extends AppCompatActivity {
 
     @Bind(R.id.drawer_layout)   protected DrawerLayout drawerLayout;
@@ -46,12 +46,13 @@ public class HomeActivity extends AppCompatActivity {
     @Bind(R.id.navigation_view) protected NavigationView navigationView;
     private HashMap<String, Fragment> fragmentHashMap;
     private int currentFragmentId;
+    private Section section;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        Section section = (Section) CacheService.
+        section = (Section) CacheService.
                 getObjectFromCache(ApplicationConstants.CACHE_SECTION);
 
         if (section == null || TextUtils.isEmpty(section.getWebsite())) {
@@ -62,35 +63,13 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         ButterKnife.bind(this);
-        setFragmentHashMap();
-        doDrawerMenuAction(R.id.drawer_item_events);
-        setSupportActionBar(toolbar);
-
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                doDrawerMenuAction(menuItem.getItemId());
-                drawerLayout.closeDrawers();
-                return true;
-            }
-        });
-        ActionBarDrawerToggle actionBarDrawerToggle =
-                new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name);
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
 
         registerRegId();
-
-        Glide.with(MobilITApplication.getContext())
-                .load(section.getLogo_url())
-                .downloadOnly(150, 250);
+        buildMenu();
 
         Intent intent = getIntent();
 
-        if (intent == null) {
-            doDrawerMenuAction(0);
-        } else {
+        if (intent != null) {
             RSSItem rssItem = (RSSItem) intent.getSerializableExtra(ApplicationConstants.GCM_RSS_ITEM);
 
             if (rssItem != null) {
@@ -100,6 +79,38 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Build the left drawer menu.
+     */
+    private void buildMenu() {
+        setFragmentHashMap();
+        Object defaultMenu = CacheService.getObjectFromCache(ApplicationConstants.CACHE_DEFAULT_MENU);
+        executeDrawerMenuAction(defaultMenu != null ? (int) defaultMenu : R.id.drawer_item_news);
+        setSupportActionBar(toolbar);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                executeDrawerMenuAction(menuItem.getItemId());
+                drawerLayout.closeDrawers();
+                return true;
+            }
+        });
+        ActionBarDrawerToggle actionBarDrawerToggle =
+                new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+
+
+        Glide.with(MobilITApplication.getContext())
+                .load(section.getLogo_url())
+                .downloadOnly(150, 250);
+    }
+
+    /**
+     * Unchecks all the element of the left drawer menu.
+     */
     private void uncheckNavigationViewItems() {
         Menu menu = navigationView.getMenu();
         for (int i = 0; i < menu.size(); i++) {
@@ -109,7 +120,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
-     * Call the RegIdService to register the regId
+     * Call the RegIdService to register the regId.
      */
     private void registerRegId() {
         new Thread(new Runnable() {
@@ -120,21 +131,26 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    private void doDrawerMenuAction(int menuItemId) {
+    private void executeDrawerMenuAction(int menuItemId) {
         switch (menuItemId) {
-            case R.id.drawer_item_events:
-                loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_EVENTS), menuItemId, false);
-                break;
             case R.id.drawer_item_news:
+                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_news);
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_NEWS), menuItemId, false);
                 break;
+            case R.id.drawer_item_events:
+                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_events);
+                loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_EVENTS), menuItemId, false);
+                break;
             case R.id.drawer_item_partners:
+                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_partners);
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_PARTNERS), menuItemId, false);
                 break;
             case R.id.drawer_item_guide:
+                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_guide);
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_GUIDE), menuItemId, false);
                 break;
             case R.id.drawer_item_about:
+                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_about);
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_ABOUT), menuItemId, false);
                 break;
             case R.id.drawer_item_reset:
@@ -170,12 +186,12 @@ public class HomeActivity extends AppCompatActivity {
     {
         fragmentHashMap = new HashMap<>();
         fragmentHashMap.put(
-                ApplicationConstants.MENU_EVENTS,
-                (new FeedListFragment()).setService(EventsService.getInstance())
-        );
-        fragmentHashMap.put(
                 ApplicationConstants.MENU_NEWS,
                 (new FeedListFragment()).setService(NewsService.getInstance())
+        );
+        fragmentHashMap.put(
+                ApplicationConstants.MENU_EVENTS,
+                (new FeedListFragment()).setService(EventsService.getInstance())
         );
         fragmentHashMap.put(
                 ApplicationConstants.MENU_PARTNERS,
