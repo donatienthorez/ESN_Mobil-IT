@@ -51,7 +51,7 @@ public class GuideFragment extends Fragment {
     public void setGuide(Guide guide) {
         GuideRenderer sgr = new GuideRenderer();
         String survivalContent = sgr.renderSurvivalGuide(guide);
-        if (guide.isActivated() && guide.isCreated()) {
+        if (guide != null && guide.isActivated() && guide.isCreated()) {
             guideContent.setText(Html.fromHtml(survivalContent), TextView.BufferType.SPANNABLE);
         } else {
             guideContent.setText(R.string.info_message_guide_not_displayable, TextView.BufferType.SPANNABLE);
