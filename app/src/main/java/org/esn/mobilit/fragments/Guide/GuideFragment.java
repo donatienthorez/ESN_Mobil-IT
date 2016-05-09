@@ -16,7 +16,7 @@ import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 public class GuideFragment extends Fragment {
 
-    TextView guideContent;
+    protected TextView guideContent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

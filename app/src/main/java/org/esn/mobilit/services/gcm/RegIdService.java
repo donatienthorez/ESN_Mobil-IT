@@ -6,6 +6,10 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import java.io.IOException;
+
+import retrofit.client.Response;
+
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.network.providers.PostRegProvider;
@@ -14,10 +18,6 @@ import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.services.interfaces.CachableInterface;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.Callback;
-
-import java.io.IOException;
-
-import retrofit.client.Response;
 
 public class RegIdService implements CachableInterface {
 
