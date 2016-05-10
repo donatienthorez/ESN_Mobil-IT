@@ -20,6 +20,7 @@ import org.esn.mobilit.adapters.ListAdapter;
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.services.feeds.RSSFeedService;
+import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
@@ -106,7 +107,9 @@ public class FeedListFragment extends Fragment
                         if (showMessage) {
                             Toast.makeText(
                                     MobilITApplication.getContext(),
-                                    getResources().getString(R.string.error_message_network),
+                                    getResources().getString(Utils.isConnected() ?
+                                            R.string.error_message_network :
+                                            R.string.info_message_no_network),
                                     Toast.LENGTH_SHORT
                             ).show();
                         }
