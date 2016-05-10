@@ -25,23 +25,30 @@ public class CountriesService implements CachableInterface {
 
     public static void getCountries(final NetworkCallback<List<Country>> callback) {
         if (Utils.isConnected()) {
-            CountryProvider.makeCountriesRequest(new NetworkCallback<List<Country>>() {
+            Thread thread = (new Thread() {
                 @Override
-                public void onSuccess(List<Country> result) {
-                    CacheService.saveObjectToCache(getInstance().getString(), result);
-                    callback.onSuccess(result);
-                }
+                public void run() {
+                    CountryProvider.makeCountriesRequest(new NetworkCallback<List<Country>>() {
+                        @Override
+                        public void onSuccess(List<Country> result) {
+                            CacheService.saveObjectToCache(getInstance().getString(), result);
+                            callback.onSuccess(result);
+                        }
 
-                @Override
-                public void onNoAvailableData() {
-                    callback.onNoAvailableData();
-                }
+                        @Override
+                        public void onNoAvailableData() {
+                            callback.onNoAvailableData();
+                        }
 
-                @Override
-                public void onFailure(String error) {
-                    callback.onFailure(error);
+                        @Override
+                        public void onFailure(String error) {
+                            callback.onFailure(error);
+                        }
+                    });
                 }
             });
+            thread.setPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+            thread.start();
         } else {
             List<Country> cachedCountries = (List<Country>) CacheService.getObjectFromCache(getInstance().getString());
 

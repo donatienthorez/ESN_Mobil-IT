@@ -79,7 +79,7 @@ public class FeedListFragment extends Fragment
     private void refreshContent(final boolean showMessage){
         swipeRefreshLayoutListView.measure(View.MEASURED_SIZE_MASK, View.MEASURED_HEIGHT_STATE_SHIFT);
         swipeRefreshLayoutListView.setRefreshing(true);
-        swipeRefreshLayoutListView.post(new Runnable() {
+        Thread thread = (new Thread() {
             @Override
             public void run() {
                 rssFeedService.getFromSite(new NetworkCallback<RSSFeedParser>() {
@@ -116,5 +116,7 @@ public class FeedListFragment extends Fragment
                 });
             }
         });
+        thread.setPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+        swipeRefreshLayoutListView.post(thread);
     }
 }

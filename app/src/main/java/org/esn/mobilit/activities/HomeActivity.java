@@ -122,12 +122,14 @@ public class HomeActivity extends AppCompatActivity {
      * Call the RegIdService to register the regId.
      */
     private void registerRegId() {
-        new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 RegIdService.getInstance().register();
             }
         });
+        thread.setPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+        thread.start();
     }
 
     private void executeDrawerMenuAction(int menuItemId) {
