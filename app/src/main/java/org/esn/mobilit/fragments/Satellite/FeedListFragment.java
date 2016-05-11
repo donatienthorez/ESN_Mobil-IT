@@ -63,7 +63,7 @@ public class FeedListFragment extends Fragment
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ((HomeActivity) getActivity()).replaceByDetailsFragment(feed.getItem(position), true);
+                ((HomeActivity) getActivity()).loadDetailsFragment(feed.getItem(position), true);
             }
         });
 

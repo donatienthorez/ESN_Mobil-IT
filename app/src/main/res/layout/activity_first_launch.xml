@@ -47,7 +47,6 @@
         android:text="@string/start_button"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/button_height"
-        android:onClick="launchSplashActivity"
         android:background="@color/esnblue"
         android:layout_marginTop="@dimen/first_launch_start_button_margin_top"
         android:paddingLeft="@dimen/button_padding_left"
