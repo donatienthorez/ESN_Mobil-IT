@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -19,6 +18,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import butterknife.OnClick;
 import io.fabric.sdk.android.Fabric;
 
 import com.crashlytics.android.Crashlytics;
@@ -52,7 +52,13 @@ public class FirstLaunchActivity extends Activity {
         setContentView(R.layout.activity_first_launch);
 
         initContent();
+        getCountries();
+    }
 
+    /**
+     * Gets the countries and initializes country spinner on success.
+     */
+    private void getCountries(){
         CountriesService.getCountries(new NetworkCallback<List<Country>>() {
             @Override
             public void onSuccess(List<Country> result) {
@@ -79,6 +85,10 @@ public class FirstLaunchActivity extends Activity {
         });
     }
 
+
+    /**
+     * Initializes the content of the view.
+     */
     private void initContent(){
         ButterKnife.bind(this);
 
@@ -91,6 +101,10 @@ public class FirstLaunchActivity extends Activity {
         chooseCountryTextView.setText(text, TextView.BufferType.SPANNABLE);
     }
 
+    /**
+     * Initializes the countries spinner.
+     * @param countries Country list.
+     */
     private void initCountriesSpinner(final List<Country> countries){
         ArrayList<String> data = new ArrayList<String>();
 
@@ -118,6 +132,9 @@ public class FirstLaunchActivity extends Activity {
         progressBar.setVisibility(View.GONE);
     }
 
+    /**
+     * Initializes the sections spinner depending on the currentCountry selected.
+     */
     private void initSectionsSpinner(){
         progressBar.setVisibility(View.VISIBLE);
 
@@ -144,7 +161,13 @@ public class FirstLaunchActivity extends Activity {
         progressBar.setVisibility(View.GONE);
     }
 
-    public void launchSplashActivity(View view){
+    /**
+     * Saves country and section in cache and launchs the HomeActivity.
+     * @param v
+     */
+    @OnClick(R.id.startButton)
+    public void launchHomeActivity(View v)
+    {
         PreferencesService.setDefaults(ApplicationConstants.PREFERENCES_CODE_COUNTRY, currentCountry.getCodeCountry());
         PreferencesService.setDefaults(ApplicationConstants.PREFERENCES_CODE_SECTION, currentSection.getCode_section());
 

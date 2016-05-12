@@ -12,6 +12,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
+import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 public class ListAdapter extends BaseAdapter {
@@ -57,17 +58,17 @@ public class ListAdapter extends BaseAdapter {
 
         ImageView iv = (ImageView) listItem.findViewById(R.id.thumb);
         TextView tvTitle = (TextView) listItem.findViewById(R.id.title);
-        TextView tvDate = (TextView) listItem.findViewById(R.id.date);
+
+        RSSItem item = feed.getItem(position);
 
         Glide.with(MobilITApplication.getContext())
-                .load(feed.getItem(position).getImage())
+                .load(item.getImage())
                 .placeholder(R.drawable.default_list_item)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .override(150, 250)
                 .into(iv);
 
-        tvTitle.setText(feed.getItem(position).getTitle());
-        tvDate.setText(feed.getItem(position).getDate());
+        tvTitle.setText(item.getTitle());
 
         return listItem;
     }

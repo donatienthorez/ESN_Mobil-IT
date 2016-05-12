@@ -20,6 +20,7 @@ import org.esn.mobilit.adapters.ListAdapter;
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.services.feeds.RSSFeedService;
+import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
@@ -62,7 +63,7 @@ public class FeedListFragment extends Fragment
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ((HomeActivity) getActivity()).replaceByDetailsFragment(feed.getItem(position), true);
+                ((HomeActivity) getActivity()).loadDetailsFragment(feed.getItem(position), true);
             }
         });
 
@@ -79,7 +80,7 @@ public class FeedListFragment extends Fragment
     private void refreshContent(final boolean showMessage){
         swipeRefreshLayoutListView.measure(View.MEASURED_SIZE_MASK, View.MEASURED_HEIGHT_STATE_SHIFT);
         swipeRefreshLayoutListView.setRefreshing(true);
-        swipeRefreshLayoutListView.post(new Runnable() {
+        Thread thread = (new Thread() {
             @Override
             public void run() {
                 rssFeedService.getFromSite(new NetworkCallback<RSSFeedParser>() {
@@ -106,7 +107,9 @@ public class FeedListFragment extends Fragment
                         if (showMessage) {
                             Toast.makeText(
                                     MobilITApplication.getContext(),
-                                    getResources().getString(R.string.error_message_network),
+                                    getResources().getString(Utils.isConnected() ?
+                                            R.string.error_message_network :
+                                            R.string.info_message_no_network),
                                     Toast.LENGTH_SHORT
                             ).show();
                         }
@@ -116,5 +119,7 @@ public class FeedListFragment extends Fragment
                 });
             }
         });
+        thread.setPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+        swipeRefreshLayoutListView.post(thread);
     }
 }

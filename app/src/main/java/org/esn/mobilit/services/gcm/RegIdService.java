@@ -38,7 +38,7 @@ public class RegIdService implements CachableInterface {
         return ApplicationConstants.PREFERENCES_REG_ID;
     }
 
-    public void register() {
+    public void register(Section section) {
         if (!checkPlayServices()) {
             return;
         }
@@ -55,8 +55,6 @@ public class RegIdService implements CachableInterface {
         if (TextUtils.isEmpty(getRegId())) {
             return;
         }
-
-        Section section = (Section) CacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
 
         PostRegProvider.makeRequest(
                 section.getCode_section(),

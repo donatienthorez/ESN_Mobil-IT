@@ -30,6 +30,7 @@ import org.esn.mobilit.fragments.Satellite.FeedListFragment;
 import org.esn.mobilit.fragments.Guide.GuideFragment;
 import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.models.Section;
+import org.esn.mobilit.services.AboutService;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.services.feeds.EventsService;
@@ -37,6 +38,7 @@ import org.esn.mobilit.services.feeds.NewsService;
 import org.esn.mobilit.services.feeds.PartnersService;
 import org.esn.mobilit.services.gcm.RegIdService;
 import org.esn.mobilit.utils.ApplicationConstants;
+import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -61,22 +63,12 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
             return;
         }
-
         ButterKnife.bind(this);
 
         registerRegId();
         buildMenu();
-
-        Intent intent = getIntent();
-
-        if (intent != null) {
-            RSSItem rssItem = (RSSItem) intent.getSerializableExtra(ApplicationConstants.GCM_RSS_ITEM);
-
-            if (rssItem != null) {
-                uncheckNavigationViewItems();
-                this.replaceByDetailsFragment(rssItem, false);
-            }
-        }
+        manageGCMRedirection();
+        updateSection();
     }
 
     /**
@@ -119,17 +111,66 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
-     * Call the RegIdService to register the regId.
+     * Calls the RegIdService to register the regId.
      */
     private void registerRegId() {
-        new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                RegIdService.getInstance().register();
+                RegIdService.getInstance().register(section);
+            }
+        });
+        thread.setPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+        thread.start();
+    }
+
+    /**
+     * Redirects to details page of the notifications.
+     */
+    private void manageGCMRedirection() {
+        Intent intent = getIntent();
+
+        if (intent != null) {
+            RSSItem rssItem = (RSSItem) intent.getSerializableExtra(ApplicationConstants.GCM_RSS_ITEM);
+
+            if (rssItem != null) {
+                uncheckNavigationViewItems();
+                this.loadDetailsFragment(rssItem, false);
+            }
+        }
+    }
+
+    /**
+     * Updates the section..
+     */
+    private void updateSection(){
+        AboutService.getInstance().getFromSite(new NetworkCallback<Section>() {
+            @Override
+            public void onSuccess(Section result) {
+                // If the user is on the about tab it updates the section.
+                if (currentFragmentId == R.id.drawer_item_about) {
+                    ((AboutFragment) fragmentHashMap.get(ApplicationConstants.MENU_ABOUT)).setSection(result);
+                    section = result;
+                }
+            }
+
+            @Override
+            public void onNoAvailableData() {
+                //TODO manage onNoAvailableData error.
+            }
+
+            @Override
+            public void onFailure(String error) {
+                //TODO manage onFailure error.
             }
         });
     }
 
+    /**
+     * Executes the action of the menuItem id
+     *
+     * @param menuItemId  Id of the item selected.
+     */
     private void executeDrawerMenuAction(int menuItemId) {
         switch (menuItemId) {
             case R.id.drawer_item_news:
@@ -161,6 +202,12 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Loads the fragment into the content frame.
+     * @param fragment Fragment to load.
+     * @param currentFragmentId Id of the current fragment displayed.
+     * @param addToBackStack If the current fragment should be added to the back stack.
+     */
     public void loadFragment(Fragment fragment, int currentFragmentId, boolean addToBackStack) {
         this.currentFragmentId = currentFragmentId;
 
@@ -176,11 +223,19 @@ public class HomeActivity extends AppCompatActivity {
         navigationView.setCheckedItem(currentFragmentId);
     }
 
-    public void replaceByDetailsFragment(RSSItem rssItem, boolean addToBackStack){
+    /**
+     * Loads the details fragment into the content frame.
+     * @param rssItem RssItem to display into the details fragment.
+     * @param addToBackStack If the current fragment should be added to the back stack.
+     */
+    public void loadDetailsFragment(RSSItem rssItem, boolean addToBackStack){
         Fragment fragment = (new DetailsFragment()).setFeed(rssItem);
         loadFragment(fragment, this.currentFragmentId, addToBackStack);
     }
 
+    /**
+     * Sets the Fragment HashMap menu.
+     */
     public void setFragmentHashMap()
     {
         fragmentHashMap = new HashMap<>();
