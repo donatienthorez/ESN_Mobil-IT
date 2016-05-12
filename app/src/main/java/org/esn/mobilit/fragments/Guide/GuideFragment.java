@@ -1,28 +1,22 @@
 package org.esn.mobilit.fragments.Guide;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.esn.mobilit.R;
-import org.esn.mobilit.activities.FirstLaunchActivity;
 import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.renderers.GuideRenderer;
 import org.esn.mobilit.services.GuideService;
-import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 public class GuideFragment extends Fragment {
 
-    TextView guideContent;
+    protected TextView guideContent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +51,10 @@ public class GuideFragment extends Fragment {
     public void setGuide(Guide guide) {
         GuideRenderer sgr = new GuideRenderer();
         String survivalContent = sgr.renderSurvivalGuide(guide);
-        guideContent.setText(Html.fromHtml(survivalContent), TextView.BufferType.SPANNABLE);
+        if (guide != null && guide.isActivated() && guide.isCreated()) {
+            guideContent.setText(Html.fromHtml(survivalContent), TextView.BufferType.SPANNABLE);
+        } else {
+            guideContent.setText(R.string.info_message_guide_not_displayable, TextView.BufferType.SPANNABLE);
+        }
     }
 }

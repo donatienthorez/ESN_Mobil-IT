@@ -35,7 +35,7 @@ public class CacheService {
 
         try {
             o = InternalStorage.readObject(key);
-        }catch (Exception e){
+        } catch (Exception e){
             Log.d(TAG, "Exception getObjectFromCache(" + key + "): " + e);
         }
         return o;

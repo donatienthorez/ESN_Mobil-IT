@@ -17,7 +17,6 @@ import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.AboutService;
-import org.esn.mobilit.services.gcm.GCMService;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 import butterknife.Bind;
@@ -63,12 +62,12 @@ public class AboutFragment extends Fragment {
 
             @Override
             public void onNoAvailableData() {
-
+                //TODO manage onNoAvailableData error.
             }
 
             @Override
             public void onFailure(String error) {
-
+                //TODO manager onFailure error.
             }
         });
 

@@ -14,12 +14,17 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import org.esn.mobilit.GcmBroadcastReceiver;
 import org.esn.mobilit.R;
 import org.esn.mobilit.activities.HomeActivity;
+import org.esn.mobilit.models.RSS.RSSItem;
+import org.esn.mobilit.services.feeds.EventsService;
+import org.esn.mobilit.services.feeds.NewsService;
+import org.esn.mobilit.services.feeds.PartnersService;
+import org.esn.mobilit.services.feeds.RSSFeedService;
 import org.esn.mobilit.utils.ApplicationConstants;
+import org.esn.mobilit.utils.callbacks.NetworkCallback;
+import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 public class GcmIntentService extends IntentService {
-    // Sets an ID for the notification, so it can be updated
     public static final int notifyID = 9001;
-    NotificationCompat.Builder builder;
 
     public GcmIntentService() {
         super("GcmIntentService");
@@ -31,57 +36,102 @@ public class GcmIntentService extends IntentService {
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
 
         String messageType = gcm.getMessageType(intent);
-        String msg = String.valueOf(extras.get(ApplicationConstants.MSG_KEY));
-        String sbj = String.valueOf(extras.get(ApplicationConstants.SBJ_KEY));
+
+        if (messageType == null) {
+            return;
+        }
+        Object title = extras.get(ApplicationConstants.GCM_TITLE);
+        String titleString = title != null ? String.valueOf(title) : "";
+        Object content = extras.get(ApplicationConstants.GCM_CONTENT);
+        String contentString = content != null ? String.valueOf(content) : "";
+        Object type = extras.get(ApplicationConstants.GCM_TYPE);
+        String typeString = type != null ? String.valueOf(type) : "";
 
         if (!extras.isEmpty()) {
-            if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR
-                    .equals(messageType)) {
-                sendNotification("Send error: ",  extras.toString());
-            } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED
-                    .equals(messageType)) {
-                sendNotification("Deleted messages on server: ",
-                         extras.toString());
-            } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE
-                    .equals(messageType)) {
-                sendNotification(sbj, msg);
+            switch (messageType) {
+                case GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE:
+                    downloadFromSite(titleString, contentString, typeString);
+                    break;
             }
         }
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    private void sendNotification(String sbj, String msg) {
-        Intent resultIntent = new Intent(this, HomeActivity.class);
-        resultIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        resultIntent.putExtra("title", msg);
+    private void downloadFromSite(final String title, final String content, final String type) {
+        RSSFeedService service = null;
+        switch (type) {
+            case ApplicationConstants.CACHE_NEWS:
+                service = NewsService.getInstance();
+                break;
+            case ApplicationConstants.CACHE_EVENTS:
+                service = EventsService.getInstance();
+                break;
+            case ApplicationConstants.CACHE_PARTNERS:
+                service = PartnersService.getInstance();
+                break;
+            default:
+                sendNotification(null, title, content, null);
+        }
+
+        if (service != null) {
+            service.getFromSite(new NetworkCallback<RSSFeedParser>() {
+                @Override
+                public void onSuccess(RSSFeedParser result) {
+                    RSSItem rssItem = result.getRSSItemFromTitle(content);
+                    if (rssItem != null) {
+                        sendNotification(
+                                rssItem,
+                                title,
+                                content,
+                                type
+                        );
+                    } else {
+                        sendNotification(null, title, content, null);
+                    }
+                }
+
+                @Override
+                public void onNoAvailableData() {
+                    //TODO manage errors
+                }
+
+                @Override
+                public void onFailure(String error) {
+                    //TODO manage errors
+                }
+            });
+        }
+    }
+
+    private void sendNotification(RSSItem rssItem, String title, String content, String type) {
+
+        Intent resultIntent = new Intent(this, HomeActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        if (rssItem != null) {
+            resultIntent.putExtra(ApplicationConstants.GCM_RSS_ITEM, rssItem);
+        }
+
+        if (type != null) {
+            resultIntent.putExtra(ApplicationConstants.GCM_TYPE, type);
+        }
 
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0,
                 resultIntent, PendingIntent.FLAG_ONE_SHOT);
 
-        NotificationCompat.Builder mNotifyBuilder;
-        NotificationManager mNotificationManager;
+        NotificationManager mNotificationManager = (NotificationManager)
+                getSystemService(Context.NOTIFICATION_SERVICE);
 
-        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(this)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setSmallIcon(R.drawable.ic_launcher_color)
+                .setAutoCancel(true)
+                .setContentIntent(resultPendingIntent)
+                .setDefaults(Notification.DEFAULT_LIGHTS
+                        | Notification.DEFAULT_VIBRATE
+                        | Notification.DEFAULT_SOUND);
 
-        mNotifyBuilder = new NotificationCompat.Builder(this)
-                .setContentTitle(sbj)
-                .setContentText(msg)
-                .setSmallIcon(R.drawable.ic_launcher_color);
-        // Set pending intent
-        mNotifyBuilder.setContentIntent(resultPendingIntent);
-
-        // Set Vibrate, Sound and Light
-        int defaults = 0;
-        defaults = defaults | Notification.DEFAULT_LIGHTS;
-        defaults = defaults | Notification.DEFAULT_VIBRATE;
-        defaults = defaults | Notification.DEFAULT_SOUND;
-
-        mNotifyBuilder.setDefaults(defaults);
-        // Set the content for Notification
-        mNotifyBuilder.setContentText(msg);
-        // Set autocancel
-        mNotifyBuilder.setAutoCancel(true);
-        // Post a notification
         mNotificationManager.notify(notifyID, mNotifyBuilder.build());
     }
 }

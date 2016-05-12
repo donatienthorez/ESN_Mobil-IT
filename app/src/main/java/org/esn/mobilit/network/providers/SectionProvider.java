@@ -14,11 +14,11 @@ import retrofit.http.Query;
 
 public class SectionProvider {
     private static RestAdapter restAdapter = new RestAdapter.Builder()
-            .setEndpoint("http://mobilit.esnlille.fr/api/android/v1")
+            .setEndpoint(ApplicationConstants.API_ENDPOINT)
             .build();
 
     private interface SectionProviderInterface{
-        @GET("/sections/{section}")
+        @GET(ApplicationConstants.API_SECTIONS)
         void getSection(@Path("section") String section, @Query("token") String token, Callback<Section> callback);
     }
 

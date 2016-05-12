@@ -10,9 +10,11 @@ public interface ApplicationConstants {
     // Google Project Number
     String GOOGLE_PROJ_ID = "1079816997";
 
-    // Message Key
-    String MSG_KEY = "m";
-    String SBJ_KEY = "sbj";
+    // GCM Messages
+    String GCM_TITLE = "title";
+    String GCM_CONTENT = "content";
+    String GCM_TYPE = "type";
+    String GCM_RSS_ITEM = "rssItem";
 
     // Path for news event & partners
     String FEED_PATH = "/feed";
@@ -20,6 +22,14 @@ public interface ApplicationConstants {
     String PARTNERS_PATH = "/partners";
     String EVENTS_PATH = "/events";
 
+    // Path of Back-Office API
+    String API_ENDPOINT = "http://mobilit.esnlille.fr/api/android/v1";
+    String API_COUNTRIES = "/countries/";
+    String API_GUIDE = "/guides/{section}";
+    String API_REGIDS = "/regids/";
+    String API_SECTIONS = "/sections/{section}";
+
+    // Preferences and cache
     String PREFERENCES_CODE_COUNTRY = "codeCountry";
     String PREFERENCES_CODE_SECTION = "codeSection";
     String PREFERENCES_REG_ID = "regId";
@@ -31,6 +41,15 @@ public interface ApplicationConstants {
     String CACHE_EVENTS = "events";
     String CACHE_PARTNERS = "partners";
     String CACHE_NEWS = "news";
+
+    String CACHE_DEFAULT_MENU = "defaultMenu";
+
+    // Menu
+    String MENU_NEWS = "news";
+    String MENU_EVENTS = "events";
+    String MENU_PARTNERS = "partners";
+    String MENU_GUIDE = "guide";
+    String MENU_ABOUT = "about";
 
     String CACHE_COUNTRIES = "countries";
 

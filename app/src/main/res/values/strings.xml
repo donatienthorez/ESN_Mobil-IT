@@ -10,7 +10,7 @@
 
     <!-- ERRORS -->
     <string name="error.message.network">
-        Oops, a network error happened. Please verify that you are connected to internet and restart the application.
+        Oops, a network error happened.
     </string>
     <string name="error.message.no_data.countries">
         There are no countries or sections in the database.
@@ -20,8 +20,11 @@
     <string name="info.message.no_content">
         There is no content yet.
     </string>
+    <string name="info.message.guide.not_displayable">
+        The guide has not been created or activated yet.
+    </string>
     <string name="info.message.no_network">
-        You are not connected to internet.
+        You are not connected to the internet.
     </string>
 
     <!-- SPLASH SCREEN -->

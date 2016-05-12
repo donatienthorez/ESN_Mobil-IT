@@ -11,10 +11,16 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
 
+import java.util.HashMap;
+
 import com.bumptech.glide.Glide;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
@@ -24,20 +30,15 @@ import org.esn.mobilit.fragments.Satellite.FeedListFragment;
 import org.esn.mobilit.fragments.Guide.GuideFragment;
 import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.models.Section;
+import org.esn.mobilit.services.AboutService;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.services.feeds.EventsService;
 import org.esn.mobilit.services.feeds.NewsService;
 import org.esn.mobilit.services.feeds.PartnersService;
-import org.esn.mobilit.services.gcm.GCMService;
+import org.esn.mobilit.services.gcm.RegIdService;
 import org.esn.mobilit.utils.ApplicationConstants;
-import org.esn.mobilit.utils.parser.RSSFeedParser;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -45,14 +46,15 @@ public class HomeActivity extends AppCompatActivity {
     @Bind(R.id.left_drawer)     protected RelativeLayout drawerRelativeLayout;
     @Bind(R.id.toolbar)         protected Toolbar toolbar;
     @Bind(R.id.navigation_view) protected NavigationView navigationView;
-    private ArrayList<Fragment> fragmentsList;
+    private HashMap<String, Fragment> fragmentHashMap;
     private int currentFragmentId;
+    private Section section;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        Section section = (Section) CacheService.
+        section = (Section) CacheService.
                 getObjectFromCache(ApplicationConstants.CACHE_SECTION);
 
         if (section == null || TextUtils.isEmpty(section.getWebsite())) {
@@ -61,17 +63,28 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
             return;
         }
-
         ButterKnife.bind(this);
-        setFragmentList();
-        doDrawerMenuAction(R.id.drawer_item_events);
+
+        registerRegId();
+        buildMenu();
+        manageGCMRedirection();
+        updateSection();
+    }
+
+    /**
+     * Build the left drawer menu.
+     */
+    private void buildMenu() {
+        setFragmentHashMap();
+        Object defaultMenu = CacheService.getObjectFromCache(ApplicationConstants.CACHE_DEFAULT_MENU);
+        executeDrawerMenuAction(defaultMenu != null ? (int) defaultMenu : R.id.drawer_item_news);
         setSupportActionBar(toolbar);
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener(){
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-                doDrawerMenuAction(menuItem.getItemId());
+                executeDrawerMenuAction(menuItem.getItemId());
                 drawerLayout.closeDrawers();
                 return true;
             }
@@ -81,47 +94,104 @@ public class HomeActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
-        registerRegId();
-
         Glide.with(MobilITApplication.getContext())
                 .load(section.getLogo_url())
                 .downloadOnly(150, 250);
+    }
 
-        //TODO push notifications open detail fragment
-
-        if (savedInstanceState == null) {
-            doDrawerMenuAction(0);
+    /**
+     * Unchecks all the element of the left drawer menu.
+     */
+    private void uncheckNavigationViewItems() {
+        Menu menu = navigationView.getMenu();
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            item.setChecked(false);
         }
     }
 
     /**
-     * Call the GCMService to register the regId
+     * Calls the RegIdService to register the regId.
      */
     private void registerRegId() {
-        new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                GCMService.getInstance().register();
+                RegIdService.getInstance().register(section);
+            }
+        });
+        thread.setPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+        thread.start();
+    }
+
+    /**
+     * Redirects to details page of the notifications.
+     */
+    private void manageGCMRedirection() {
+        Intent intent = getIntent();
+
+        if (intent != null) {
+            RSSItem rssItem = (RSSItem) intent.getSerializableExtra(ApplicationConstants.GCM_RSS_ITEM);
+
+            if (rssItem != null) {
+                uncheckNavigationViewItems();
+                this.loadDetailsFragment(rssItem, false);
+            }
+        }
+    }
+
+    /**
+     * Updates the section..
+     */
+    private void updateSection(){
+        AboutService.getInstance().getFromSite(new NetworkCallback<Section>() {
+            @Override
+            public void onSuccess(Section result) {
+                // If the user is on the about tab it updates the section.
+                if (currentFragmentId == R.id.drawer_item_about) {
+                    ((AboutFragment) fragmentHashMap.get(ApplicationConstants.MENU_ABOUT)).setSection(result);
+                    section = result;
+                }
+            }
+
+            @Override
+            public void onNoAvailableData() {
+                //TODO manage onNoAvailableData error.
+            }
+
+            @Override
+            public void onFailure(String error) {
+                //TODO manage onFailure error.
             }
         });
     }
 
-    private void doDrawerMenuAction(int menuItemId) {
+    /**
+     * Executes the action of the menuItem id
+     *
+     * @param menuItemId  Id of the item selected.
+     */
+    private void executeDrawerMenuAction(int menuItemId) {
         switch (menuItemId) {
-            case R.id.drawer_item_events:
-                loadFragment(fragmentsList.get(0), menuItemId, false);
-                break;
             case R.id.drawer_item_news:
-                loadFragment(fragmentsList.get(1), menuItemId, false);
+                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_news);
+                loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_NEWS), menuItemId, false);
+                break;
+            case R.id.drawer_item_events:
+                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_events);
+                loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_EVENTS), menuItemId, false);
                 break;
             case R.id.drawer_item_partners:
-                loadFragment(fragmentsList.get(2), menuItemId, false);
+                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_partners);
+                loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_PARTNERS), menuItemId, false);
                 break;
             case R.id.drawer_item_guide:
-                loadFragment(fragmentsList.get(3), menuItemId, false);
+                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_guide);
+                loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_GUIDE), menuItemId, false);
                 break;
             case R.id.drawer_item_about:
-                loadFragment(fragmentsList.get(4), menuItemId, false);
+                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_about);
+                loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_ABOUT), menuItemId, false);
                 break;
             case R.id.drawer_item_reset:
                 PreferencesService.resetSection();
@@ -132,6 +202,12 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Loads the fragment into the content frame.
+     * @param fragment Fragment to load.
+     * @param currentFragmentId Id of the current fragment displayed.
+     * @param addToBackStack If the current fragment should be added to the back stack.
+     */
     public void loadFragment(Fragment fragment, int currentFragmentId, boolean addToBackStack) {
         this.currentFragmentId = currentFragmentId;
 
@@ -144,23 +220,45 @@ public class HomeActivity extends AppCompatActivity {
             fragmentTransaction.addToBackStack(null);
         }
         fragmentTransaction.commit();
-
         navigationView.setCheckedItem(currentFragmentId);
     }
 
-    public void replaceByDetailsFragment(RSSItem rssItem){
+    /**
+     * Loads the details fragment into the content frame.
+     * @param rssItem RssItem to display into the details fragment.
+     * @param addToBackStack If the current fragment should be added to the back stack.
+     */
+    public void loadDetailsFragment(RSSItem rssItem, boolean addToBackStack){
         Fragment fragment = (new DetailsFragment()).setFeed(rssItem);
-        loadFragment(fragment, this.currentFragmentId, true);
+        loadFragment(fragment, this.currentFragmentId, addToBackStack);
     }
 
-    public void setFragmentList()
+    /**
+     * Sets the Fragment HashMap menu.
+     */
+    public void setFragmentHashMap()
     {
-        fragmentsList = new ArrayList<>();
-        fragmentsList.add((new FeedListFragment()).setService(EventsService.getInstance()));
-        fragmentsList.add((new FeedListFragment()).setService(NewsService.getInstance()));
-        fragmentsList.add((new FeedListFragment()).setService(PartnersService.getInstance()));
-        fragmentsList.add(new GuideFragment());
-        fragmentsList.add(new AboutFragment());
+        fragmentHashMap = new HashMap<>();
+        fragmentHashMap.put(
+                ApplicationConstants.MENU_NEWS,
+                (new FeedListFragment()).setService(NewsService.getInstance())
+        );
+        fragmentHashMap.put(
+                ApplicationConstants.MENU_EVENTS,
+                (new FeedListFragment()).setService(EventsService.getInstance())
+        );
+        fragmentHashMap.put(
+                ApplicationConstants.MENU_PARTNERS,
+                (new FeedListFragment()).setService(PartnersService.getInstance())
+        );
+        fragmentHashMap.put(
+                ApplicationConstants.MENU_GUIDE,
+                new GuideFragment()
+        );
+        fragmentHashMap.put(
+                ApplicationConstants.MENU_ABOUT,
+                new AboutFragment()
+        );
     }
 
     @Override

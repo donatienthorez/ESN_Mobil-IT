@@ -10,12 +10,11 @@ import java.util.ArrayList;
 
 public class SpinnerAdapter extends ArrayAdapter<String> {
 
-    public SpinnerAdapter(Context context, ArrayList<String> datas) {
-        super(context, android.R.layout.simple_list_item_1, datas);
+    public SpinnerAdapter(Context context, ArrayList<String> data) {
+        super(context, android.R.layout.simple_list_item_1, data);
     }
 
     public View getView(int position, View convertView,ViewGroup parent) {
-
         View v = super.getView(position, convertView, parent);
         ((TextView) v).setTextSize(16);
 
@@ -23,8 +22,8 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
     }
 
     public View getDropDownView(int position, View convertView,ViewGroup parent) {
-
         View v = super.getDropDownView(position, convertView,parent);
+
         return v;
     }
 }
