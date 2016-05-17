@@ -8,16 +8,24 @@
     <string name="action_settings">Action</string>
     <string name="ras_section_settings">Changer de section</string>
 
-    <!-- SPLASH SCREEN -->
-    <string name="emptycache">Vous devez télécharger les données au moins une fois.</string>
-    <string name="loading">Veuillez patienter …</string>
-    <string name="btn_retry">Réessayer</string>
-    <string name="btn_change">Changer de section</string>
-    <string name="load_survival_end">SurvivalGuide chargé</string>
-    <string name="load_events_end">%1$d évènements chargés</string>
-    <string name="load_news_end">%1$d news chargées</string>
-    <string name="load_partners_end">%1$d partenaires chargés</string>
-    <string name="noitems">Il n\'y a pas de contenu pour cette section, veuillez contacter webmaster@esnlille.fr</string>
+    <!-- ERRORS -->
+    <string name="error.message.network">
+        Oups, une erreur de réseau s\'est produite.
+    </string>
+    <string name="error.message.no_data.countries">
+        Il n\'y a pas de pays dans la base de données.
+    </string>
+
+    <!-- INFO -->
+    <string name="info.message.no_content">
+        Désolé mais il n\'y a pas de contenu.
+    </string>
+    <string name="info.message.guide.not_displayable">
+        Le guide n\'a pas encore été créé ou activé.
+    </string>
+    <string name="info.message.no_network">
+        Vous n\'êtes pas connecté à internet.
+    </string>
 
     <!-- FIRST LAUNCH LAYOUT -->
     <string name="chooseyour">Choisis ton</string>
@@ -30,9 +38,15 @@
     <string name="selectyoursection">Choisis ta section</string>
 
     <!-- Action Bar Title -->
-    <string name="title_events">Évènements</string>
-    <string name="title_news">Nouvelles</string>
-    <string name="title_partners">Partenaires</string>
-    <string name="title_survivalguide">Guide de Survie</string>
-    <string name="title_about">A propos</string>
+    <string name="menu_drawer_item_news">Nouvelles</string>
+    <string name="menu_drawer_item_events">Évènements</string>
+    <string name="menu_drawer_item_partners">Partenaires</string>
+    <string name="menu_drawer_item_guide">Guide de Survie</string>
+    <string name="menu_drawer_item_about">A propos</string>
+    <string name="menu_drawer_item_reset">Changer ma section</string>
+
+    <string name="icon_feed">&#xf09e;</string>
+    <string name="icon_book">&#xf02d;</string>
+    <string name="icon_settings">&#xf013;</string>
+    <string name="menu_drawer_item_settings">Paramètres</string>
 </resources>
