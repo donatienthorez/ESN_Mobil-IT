@@ -27,19 +27,6 @@
         You are not connected to the internet.
     </string>
 
-    <!-- SPLASH SCREEN -->
-    <string name="tryingcache">No Internet connection, load from cache ...</string>
-    <string name="emptycache">You need to load data at least once with internet</string>
-    <string name="loading">Loading please wait …</string>
-    <string name="btn_retry">Try again</string>
-    <string name="btn_change">Reset section</string>
-    <string name="load_survival_end">SurvivalGuide downloaded</string>
-    <string name="load_events_end">%1$d events loaded</string>
-    <string name="load_news_end">%1$d news loaded</string>
-    <string name="load_partners_end">%1$d partners loaded</string>
-    <string name="start_homeactivity">Launching app ...</string>
-    <string name="noitems">There is no contents for this section, please contact webmaster@esnlille.fr</string>
-
     <!-- FIRST LAUNCH LAYOUT -->
     <string name="chooseyour">Choose your</string>
     <string name="country">country</string>
