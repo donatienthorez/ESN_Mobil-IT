@@ -7,6 +7,8 @@ import com.crashlytics.android.Crashlytics;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.storage.InternalStorage;
 
+import java.io.IOException;
+
 public class CacheService {
 
     private static final String TAG = CacheService.class.getSimpleName();
@@ -36,7 +38,9 @@ public class CacheService {
         }
 
         try {
-            o = InternalStorage.readObject(key);
+            if (InternalStorage.objectExists(key)) {
+                o = InternalStorage.readObject(key);
+            }
         } catch (Exception e){
             Crashlytics.log(Log.ERROR, TAG, e.getMessage());
         }
