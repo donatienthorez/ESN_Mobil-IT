@@ -1,7 +1,5 @@
 package org.esn.mobilit.models;
 
-import org.esn.mobilit.R;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 

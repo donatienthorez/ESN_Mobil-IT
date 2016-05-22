@@ -12,17 +12,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
-import org.esn.mobilit.activities.HomeActivity;
-import org.esn.mobilit.adapters.ListAdapter;
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
+import org.esn.mobilit.activities.HomeActivity;
+import org.esn.mobilit.adapters.ListAdapter;
 import org.esn.mobilit.services.feeds.RSSFeedService;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class FeedListFragment extends Fragment
 {
@@ -70,14 +70,28 @@ public class FeedListFragment extends Fragment
         swipeRefreshLayoutListView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshContent(true);
+                if (Utils.isConnected()) {
+                    refreshContent();
+                } else {
+                    Toast.makeText(
+                        MobilITApplication.getContext(),
+                        getResources().getString(Utils.isConnected() ?
+                                R.string.error_message_network :
+                                R.string.info_message_no_network),
+                        Toast.LENGTH_SHORT
+                    ).show();
+                    swipeRefreshLayoutListView.setRefreshing(false);
+                }
             }
         });
-        refreshContent(false);
+        refreshContent();
         return view;
     }
 
-    private void refreshContent(final boolean showMessage){
+    /**
+     * Refreshes content of the listView by calling the Retrofit Feed provider.
+     */
+    private void refreshContent(){
         swipeRefreshLayoutListView.measure(View.MEASURED_SIZE_MASK, View.MEASURED_HEIGHT_STATE_SHIFT);
         swipeRefreshLayoutListView.setRefreshing(true);
         Thread thread = (new Thread() {
@@ -94,26 +108,16 @@ public class FeedListFragment extends Fragment
 
                     @Override
                     public void onNoAvailableData() {
-                        feed = null;
-                        adapter.setEmptyList();
-                        swipeRefreshLayoutListView.setRefreshing(false);
-                        emptyListMessage.setVisibility(View.VISIBLE);
+                        if (feed == null) {
+                            adapter.setEmptyList();
+                            swipeRefreshLayoutListView.setRefreshing(false);
+                            emptyListMessage.setVisibility(View.VISIBLE);
+                        }
                     }
 
                     @Override
                     public void onFailure(String error) {
                         swipeRefreshLayoutListView.setRefreshing(false);
-
-                        if (showMessage) {
-                            Toast.makeText(
-                                    MobilITApplication.getContext(),
-                                    getResources().getString(Utils.isConnected() ?
-                                            R.string.error_message_network :
-                                            R.string.info_message_no_network),
-                                    Toast.LENGTH_SHORT
-                            ).show();
-                        }
-
                         emptyListMessage.setVisibility(feed == null ? View.VISIBLE : View.GONE);
                     }
                 });

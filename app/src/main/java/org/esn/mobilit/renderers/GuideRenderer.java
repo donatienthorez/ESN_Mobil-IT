@@ -1,11 +1,11 @@
 package org.esn.mobilit.renderers;
 
-import java.util.List;
-
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.models.Node;
+
+import java.util.List;
 
 public class GuideRenderer {
 
@@ -25,7 +25,7 @@ public class GuideRenderer {
             content = content.concat(computeNodes(node.getNodes(), level + 1));
         }
 
-        return content;
+        return content.concat("<br>");
     }
 
     public String computeNode(Node node, int level)
@@ -33,13 +33,11 @@ public class GuideRenderer {
         String title = "<h" + (level + 1) + "><font color='"
                 + getColorByCategoryLevel(level) + "'>"
                 + node.getTitle() + "</font><h" + (level + 1)
-                + "><br/>";
+                + ">";
 
-        String content = "<p><font color='"
-                + getColorByCategoryLevel(3)+ "'>"
-                + node.getContent() + "</font></<br/>";
+        title += (node.getContent() != null) ? node.getContent() : "";
 
-        return title.concat(content);
+        return title;
     }
 
     public String getColorByCategoryLevel(int level)

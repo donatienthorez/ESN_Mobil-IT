@@ -15,19 +15,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
 
-import java.util.HashMap;
-
 import com.bumptech.glide.Glide;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.fragments.AboutFragment;
+import org.esn.mobilit.fragments.Guide.GuideFragment;
 import org.esn.mobilit.fragments.Satellite.DetailsFragment;
 import org.esn.mobilit.fragments.Satellite.FeedListFragment;
-import org.esn.mobilit.fragments.Guide.GuideFragment;
 import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.AboutService;
@@ -39,6 +34,11 @@ import org.esn.mobilit.services.feeds.PartnersService;
 import org.esn.mobilit.services.gcm.RegIdService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
+
+import java.util.HashMap;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class HomeActivity extends AppCompatActivity {
 

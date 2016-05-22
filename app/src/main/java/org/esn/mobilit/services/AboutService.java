@@ -24,10 +24,6 @@ public class AboutService implements CachableInterface {
         return instance;
     }
 
-    public void resetService() {
-        instance = new AboutService();
-    }
-
     public void setSection(Section section) {
         this.section = section;
     }

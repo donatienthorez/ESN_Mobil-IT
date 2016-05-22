@@ -18,12 +18,12 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.RSS.RSSItem;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 
 public class DetailsFragment extends Fragment {

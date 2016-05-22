@@ -1,27 +1,29 @@
 package org.esn.mobilit.services.gcm;
 
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import java.io.IOException;
-
-import retrofit.client.Response;
-
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.network.providers.PostRegProvider;
-import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.services.interfaces.CachableInterface;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.Callback;
 
+import java.io.IOException;
+
+import retrofit.client.Response;
+
 public class RegIdService implements CachableInterface {
 
     String regId = "";
+    public static final String TAG = "RegIdService";
 
     private static RegIdService instance;
 
@@ -40,6 +42,7 @@ public class RegIdService implements CachableInterface {
 
     public void register(Section section) {
         if (!checkPlayServices()) {
+            Crashlytics.log(Log.ERROR, TAG, "CheckPlay services is not available");
             return;
         }
 
@@ -49,7 +52,8 @@ public class RegIdService implements CachableInterface {
                             .getInstance(MobilITApplication.getContext())
                             .register(ApplicationConstants.GOOGLE_PROJ_ID)
             );
-        } catch (IOException e) {
+        } catch (IOException exception) {
+            Crashlytics.logException(exception);
         }
 
         if (TextUtils.isEmpty(getRegId())) {

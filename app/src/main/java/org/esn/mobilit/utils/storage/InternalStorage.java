@@ -5,6 +5,7 @@ import android.content.Context;
 import org.esn.mobilit.MobilITApplication;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -18,6 +19,15 @@ public final class InternalStorage{
         oos.writeObject(object);
         oos.close();
         fos.close();
+    }
+
+    public static boolean objectExists(String key) {
+        try {
+            FileInputStream fis = MobilITApplication.getContext().openFileInput(key);
+        } catch (FileNotFoundException e) {
+            return false;
+        }
+        return true;
     }
 
     public static Object readObject(String key) throws IOException,
