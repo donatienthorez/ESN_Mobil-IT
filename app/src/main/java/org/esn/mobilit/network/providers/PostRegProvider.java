@@ -1,5 +1,11 @@
 package org.esn.mobilit.network.providers;
 
+import android.util.Log;
+
+import com.crashlytics.android.Crashlytics;
+
+import org.esn.mobilit.utils.ApplicationConstants;
+
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -8,9 +14,9 @@ import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.POST;
 
-import org.esn.mobilit.utils.ApplicationConstants;
-
 public class PostRegProvider {
+
+    public static final String TAG = "PostRegProvider";
 
     private static RestAdapter restAdapter = new RestAdapter.Builder()
             .setEndpoint(ApplicationConstants.API_ENDPOINT)
@@ -43,6 +49,7 @@ public class PostRegProvider {
                     @Override
                     public void failure(RetrofitError error) {
                         callback.onFailure(error.getMessage());
+                        Crashlytics.log(Log.ERROR, PostRegProvider.TAG, error.getMessage());
                     }
                 }
         );

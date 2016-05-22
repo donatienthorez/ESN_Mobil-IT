@@ -2,23 +2,18 @@ package org.esn.mobilit.fragments.Guide;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.TextView;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.renderers.GuideRenderer;
 import org.esn.mobilit.services.GuideService;
-import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
-
-import java.io.File;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

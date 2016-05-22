@@ -1,5 +1,9 @@
 package org.esn.mobilit.network.providers;
 
+import android.util.Log;
+
+import com.crashlytics.android.Crashlytics;
+
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
@@ -13,6 +17,9 @@ import retrofit.http.Path;
 import retrofit.http.Query;
 
 public class SectionProvider {
+
+    public static final String TAG = "SectionProvider";
+
     private static RestAdapter restAdapter = new RestAdapter.Builder()
             .setEndpoint(ApplicationConstants.API_ENDPOINT)
             .build();
@@ -33,6 +40,7 @@ public class SectionProvider {
             @Override
             public void failure(RetrofitError error) {
                 callback.onFailure(error.getMessage());
+                Crashlytics.log(Log.ERROR, SectionProvider.TAG, error.getMessage());
             }
         });
     }

@@ -2,6 +2,8 @@ package org.esn.mobilit.services;
 
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.storage.InternalStorage;
 
@@ -36,7 +38,7 @@ public class CacheService {
         try {
             o = InternalStorage.readObject(key);
         } catch (Exception e){
-            Log.d(TAG, "Exception getObjectFromCache(" + key + "): " + e);
+            Crashlytics.log(Log.ERROR, TAG, e.getMessage());
         }
         return o;
     }
@@ -54,8 +56,8 @@ public class CacheService {
 
         try {
             InternalStorage.writeObject(key, o);
-        }catch (Exception e){
-            Log.d(TAG, "Exception saveobject: " + e);
+        } catch (Exception e){
+            Crashlytics.log(Log.ERROR, TAG, e.getMessage());
         }
     }
 }

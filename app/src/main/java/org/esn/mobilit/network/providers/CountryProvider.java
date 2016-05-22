@@ -1,5 +1,13 @@
 package org.esn.mobilit.network.providers;
 
+import android.util.Log;
+
+import com.crashlytics.android.Crashlytics;
+
+import org.esn.mobilit.models.Country;
+import org.esn.mobilit.utils.ApplicationConstants;
+import org.esn.mobilit.utils.callbacks.NetworkCallback;
+
 import java.util.List;
 
 import retrofit.Callback;
@@ -9,11 +17,9 @@ import retrofit.client.Response;
 import retrofit.http.GET;
 import retrofit.http.Query;
 
-import org.esn.mobilit.models.Country;
-import org.esn.mobilit.utils.ApplicationConstants;
-import org.esn.mobilit.utils.callbacks.NetworkCallback;
-
 public class CountryProvider {
+
+    public static final String TAG = "CountryProvider";
 
     private static RestAdapter restAdapter = new RestAdapter.Builder()
             .setEndpoint(ApplicationConstants.API_ENDPOINT)
@@ -35,6 +41,7 @@ public class CountryProvider {
             @Override
             public void failure(RetrofitError error) {
                 callback.onFailure(error.getMessage());
+                Crashlytics.log(Log.ERROR, CountryProvider.TAG, error.getMessage());
             }
         });
     }

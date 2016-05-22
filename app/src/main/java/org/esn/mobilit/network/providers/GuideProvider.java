@@ -1,5 +1,14 @@
 package org.esn.mobilit.network.providers;
 
+import android.util.Log;
+
+import com.crashlytics.android.Crashlytics;
+
+import org.esn.mobilit.models.Guide;
+import org.esn.mobilit.models.Section;
+import org.esn.mobilit.utils.ApplicationConstants;
+import org.esn.mobilit.utils.callbacks.NetworkCallback;
+
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -8,12 +17,10 @@ import retrofit.http.GET;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
-import org.esn.mobilit.models.Guide;
-import org.esn.mobilit.models.Section;
-import org.esn.mobilit.utils.ApplicationConstants;
-import org.esn.mobilit.utils.callbacks.NetworkCallback;
-
 public class GuideProvider {
+
+    public static final String TAG = "GuideProvider";
+
     private static RestAdapter restAdapter = new RestAdapter.Builder()
             .setEndpoint(ApplicationConstants.API_ENDPOINT)
             .build();
@@ -34,6 +41,7 @@ public class GuideProvider {
             @Override
             public void failure(RetrofitError error) {
                 callback.onFailure(error.getMessage());
+                Crashlytics.log(Log.ERROR, GuideProvider.TAG, error.getMessage());
             }
         });
     }

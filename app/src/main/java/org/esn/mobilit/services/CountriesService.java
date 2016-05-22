@@ -1,13 +1,13 @@
 package org.esn.mobilit.services;
 
-import java.util.List;
-
 import org.esn.mobilit.models.Country;
+import org.esn.mobilit.network.providers.CountryProvider;
 import org.esn.mobilit.services.interfaces.CachableInterface;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
-import org.esn.mobilit.network.providers.CountryProvider;
+
+import java.util.List;
 
 public class CountriesService implements CachableInterface {
 
