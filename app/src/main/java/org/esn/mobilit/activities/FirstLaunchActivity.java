@@ -19,9 +19,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import butterknife.OnClick;
-import io.fabric.sdk.android.Fabric;
-
-import com.crashlytics.android.Crashlytics;
 
 import org.esn.mobilit.adapters.SpinnerAdapter;
 import org.esn.mobilit.MobilITApplication;
@@ -48,7 +45,6 @@ public class FirstLaunchActivity extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_first_launch);
 
         initContent();
