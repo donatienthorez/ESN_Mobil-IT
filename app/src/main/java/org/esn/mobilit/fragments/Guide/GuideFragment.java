@@ -4,19 +4,28 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.renderers.GuideRenderer;
 import org.esn.mobilit.services.GuideService;
+import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
+
+import java.io.File;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class GuideFragment extends Fragment {
 
-    protected TextView guideContent;
+    @Bind(R.id.guideContent) WebView guideContentWebView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -25,8 +34,8 @@ public class GuideFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View myInflatedView = inflater.inflate(R.layout.fragment_guide, container, false);
-        guideContent = (TextView) myInflatedView.findViewById(R.id.guideContent);
+        View view = inflater.inflate(R.layout.fragment_guide, container, false);
+        ButterKnife.bind(this, view);
 
         setGuide(GuideService.getInstance().getFromCache());
 
@@ -45,16 +54,31 @@ public class GuideFragment extends Fragment {
             }
         });
 
-        return myInflatedView;
+        return view;
     }
 
     public void setGuide(Guide guide) {
-        GuideRenderer sgr = new GuideRenderer();
-        String survivalContent = sgr.renderSurvivalGuide(guide);
+        String survivalContent = getText(R.string.info_message_guide_not_displayable).toString();
         if (guide != null && guide.isActivated() && guide.isCreated()) {
-            guideContent.setText(Html.fromHtml(survivalContent), TextView.BufferType.SPANNABLE);
-        } else {
-            guideContent.setText(R.string.info_message_guide_not_displayable, TextView.BufferType.SPANNABLE);
+            GuideRenderer sgr = new GuideRenderer();
+            survivalContent = sgr.renderSurvivalGuide(guide);
         }
+
+        guideContentWebView.loadData(survivalContent, "text/html; charset=UTF-8", null);
+        guideContentWebView.setScrollContainer(false);
+
+        // disable scroll on touch
+        guideContentWebView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return (event.getAction() == MotionEvent.ACTION_MOVE);
+            }
+        });
+
+
+        WebSettings webSettings = guideContentWebView.getSettings();
+        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        webSettings.setDefaultFontSize(10);
+        webSettings.setJavaScriptEnabled(true);
     }
 }

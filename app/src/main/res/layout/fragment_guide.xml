@@ -5,24 +5,15 @@
     android:orientation="vertical"
     android:background="#FFFFFF"
     android:padding="2dp" >
-
     <ScrollView
-        android:id="@+id/sv"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginTop="10dp" >
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-            <TextView
-                android:id="@+id/guideContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_horizontal_margin"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                android:layout_alignParentTop="true" />
-        </RelativeLayout>
-
+        android:scrollbars="vertical">
+        <WebView
+            android:id="@+id/guideContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:scrollbars="none"/>
     </ScrollView>
 </RelativeLayout>
