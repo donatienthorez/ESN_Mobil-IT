@@ -19,7 +19,7 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "org.esn.mobilIT"
+        applicationId "org.esn.mobilit"
         minSdkVersion 14
         targetSdkVersion 23
     }
