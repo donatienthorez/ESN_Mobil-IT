@@ -80,6 +80,7 @@ public class FeedListFragment extends Fragment
                                 R.string.info_message_no_network),
                         Toast.LENGTH_SHORT
                     ).show();
+                    swipeRefreshLayoutListView.setRefreshing(false);
                 }
             }
         });
