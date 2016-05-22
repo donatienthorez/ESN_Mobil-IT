@@ -48,8 +48,8 @@ public class PostRegProvider {
 
                     @Override
                     public void failure(RetrofitError error) {
+                        Crashlytics.logException(error);
                         callback.onFailure(error.getMessage());
-                        Crashlytics.log(Log.ERROR, PostRegProvider.TAG, error.getMessage());
                     }
                 }
         );

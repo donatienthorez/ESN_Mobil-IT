@@ -32,19 +32,19 @@ public class CacheService {
      * @return Object o
      */
     public static Object getObjectFromCache(String key){
-        Object o = null;
+        Object object = null;
         if (!key.equalsIgnoreCase("countries")) {
             key = PreferencesService.getDefaults(ApplicationConstants.PREFERENCES_CODE_SECTION) + "_" + key;
         }
 
         try {
             if (InternalStorage.objectExists(key)) {
-                o = InternalStorage.readObject(key);
+                object = InternalStorage.readObject(key);
             }
-        } catch (Exception e){
-            Crashlytics.log(Log.ERROR, TAG, e.getMessage());
+        } catch (Exception exception){
+            Crashlytics.logException(exception);
         }
-        return o;
+        return object;
     }
 
     /*
@@ -53,15 +53,15 @@ public class CacheService {
      * @param String key
      * @param Object o
      */
-    public static void saveObjectToCache(String key, Object o){
+    public static void saveObjectToCache(String key, Object object){
         if (!key.equalsIgnoreCase("countries")) {
             key = PreferencesService.getDefaults(ApplicationConstants.PREFERENCES_CODE_SECTION) + "_" + key;
         }
 
         try {
-            InternalStorage.writeObject(key, o);
-        } catch (Exception e){
-            Crashlytics.log(Log.ERROR, TAG, e.getMessage());
+            InternalStorage.writeObject(key, object);
+        } catch (Exception exception){
+            Crashlytics.logException(exception);
         }
     }
 }

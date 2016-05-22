@@ -52,8 +52,8 @@ public class RegIdService implements CachableInterface {
                             .getInstance(MobilITApplication.getContext())
                             .register(ApplicationConstants.GOOGLE_PROJ_ID)
             );
-        } catch (IOException e) {
-            Crashlytics.log(Log.ERROR, TAG, e.getMessage());
+        } catch (IOException exception) {
+            Crashlytics.logException(exception);
         }
 
         if (TextUtils.isEmpty(getRegId())) {

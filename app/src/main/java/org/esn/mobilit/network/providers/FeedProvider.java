@@ -66,7 +66,7 @@ public class FeedProvider {
 
             @Override
             public void failure(RetrofitError error) {
-                Crashlytics.log(Log.ERROR, FeedProvider.TAG, error.getMessage());
+                Crashlytics.logException(error);
                 callback.onFailure(error.getMessage());
             }
         };

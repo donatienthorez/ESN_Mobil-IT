@@ -39,8 +39,8 @@ public class SectionProvider {
 
             @Override
             public void failure(RetrofitError error) {
+                Crashlytics.logException(error);
                 callback.onFailure(error.getMessage());
-                Crashlytics.log(Log.ERROR, SectionProvider.TAG, error.getMessage());
             }
         });
     }

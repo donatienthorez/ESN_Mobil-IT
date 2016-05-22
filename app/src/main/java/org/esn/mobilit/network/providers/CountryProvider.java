@@ -40,8 +40,8 @@ public class CountryProvider {
 
             @Override
             public void failure(RetrofitError error) {
+                Crashlytics.logException(error);
                 callback.onFailure(error.getMessage());
-                Crashlytics.log(Log.ERROR, CountryProvider.TAG, error.getMessage());
             }
         });
     }

@@ -40,8 +40,8 @@ public class GuideProvider {
 
             @Override
             public void failure(RetrofitError error) {
+                Crashlytics.logException(error);
                 callback.onFailure(error.getMessage());
-                Crashlytics.log(Log.ERROR, GuideProvider.TAG, error.getMessage());
             }
         });
     }
