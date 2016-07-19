@@ -23,7 +23,7 @@ public interface ApplicationConstants {
     String EVENTS_PATH = "/events";
 
     // Path of Back-Office API
-    String API_ENDPOINT = "http://mobilit.esnlille.fr/api/android/v1";
+    String API_ENDPOINT = "http://dev.mobilit.esnlille.fr/api/android/v1";
     String API_COUNTRIES = "/countries/";
     String API_GUIDE = "/guides/{section}";
     String API_REGIDS = "/regids/";
