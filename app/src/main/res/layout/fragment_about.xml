@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -7,176 +8,92 @@
     <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp">
+        style="@style/Theme.Esnmobilit.CardView">
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            style="@style/Theme.Esnmobilit.CardViewLinearLayoutAbout">
 
             <ImageView
                 android:id="@+id/section_logo"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"/>
+                style="@style/Theme.Esnmobilit.CardViewImage.WithMargin"/>
 
             <TextView
                 android:id="@+id/section_name"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginBottom="16dp"
-                android:textSize="24sp"
-                android:textColor="@color/black"/>
+                style="@style/Theme.Esnmobilit.CardViewTitle"/>
 
             <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:textSize="14sp"
-                android:text="ESN is an association blabla bla bla bla blabl abla bla bla bla bka"/>
+                style="@style/Theme.Esnmobilit.CardViewSubtitle"
+                android:text="@string/about_fragment_about"/>
             </LinearLayout>
     </android.support.v7.widget.CardView>
     <android.support.v7.widget.CardView
         android:id="@+id/card_view2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp">
+        style="@style/Theme.Esnmobilit.CardView">
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical">
+            style="@style/Theme.Esnmobilit.CardViewLinearLayoutAbout">
 
             <RelativeLayout
                 android:id="@+id/phone_relative"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:minHeight="56dp">
+                style="@style/Theme.Esnmobilit.CardViewRelativeLayoutAbout">
 
                 <ImageView
-                    android:id="@+id/phone_icon"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:paddingLeft="16dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
+                    style="@style/Theme.Esnmobilit.CardViewImageViewAbout"
                     android:src="@drawable/ic_local_phone_black_24dp"/>
 
                 <TextView
                     android:id="@+id/section_phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="72dp"
-                    android:layout_centerVertical="true"
-                    android:text="0600000000"
-                    android:textSize="16sp"/>
+                    style="@style/Theme.Esnmobilit.CardViewTextViewAbout"/>
             </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/mail_relative"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:minHeight="56dp">
+                style="@style/Theme.Esnmobilit.CardViewRelativeLayoutAbout">
 
                 <ImageView
-                    android:id="@+id/mail_icon"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:paddingLeft="16dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
+                    style="@style/Theme.Esnmobilit.CardViewImageViewAbout"
                     android:src="@drawable/ic_email_black_24dp"/>
 
                 <TextView
                     android:id="@+id/section_email"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="72dp"
-                    android:layout_centerVertical="true"
-                    android:text="email@email.com"
-                    android:textSize="16sp"/>
+                    style="@style/Theme.Esnmobilit.CardViewTextViewAbout"/>
             </RelativeLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
     <android.support.v7.widget.CardView
         android:id="@+id/card_view3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp">
+        style="@style/Theme.Esnmobilit.CardView">
 
         <LinearLayout
-            android:id="@+id/website_relative"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="24dp"
-            android:layout_marginRight="16dp">
+            style="@style/Theme.Esnmobilit.CardViewLinearLayoutAbout">
 
             <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:minHeight="56dp"
-                android:paddingRight="16dp">
+                android:id="@+id/website_relative"
+                style="@style/Theme.Esnmobilit.CardViewRelativeLayoutAbout">
 
                 <ImageView
-                    android:id="@+id/website_icon"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:paddingLeft="16dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
+                    style="@style/Theme.Esnmobilit.CardViewImageViewAbout"
                     android:src="@drawable/ic_public_black_24dp"/>
 
                 <TextView
                     android:id="@+id/section_website"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="72dp"
-                    android:layout_centerVertical="true"
-                    android:text="test.com"
-                    android:textSize="16sp"/>
+                    style="@style/Theme.Esnmobilit.CardViewTextViewAbout"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/address_relative"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:minHeight="56dp">
+                style="@style/Theme.Esnmobilit.CardViewRelativeLayoutAbout">
 
                 <ImageView
-                    android:id="@+id/address_icon"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:paddingLeft="16dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
+                    style="@style/Theme.Esnmobilit.CardViewImageViewAbout"
                     android:src="@drawable/ic_directions_black_24dp"/>
 
                 <TextView
                     android:id="@+id/section_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="72dp"
-                    android:layout_centerVertical="true"
-                    android:text="test.com"
-                    android:textSize="16sp"/>
+                    style="@style/Theme.Esnmobilit.CardViewTextViewAbout"/>
             </RelativeLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
