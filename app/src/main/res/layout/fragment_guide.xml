@@ -5,15 +5,23 @@
     android:orientation="vertical"
     android:background="#FFFFFF"
     android:padding="2dp" >
+    <TextView
+        android:id="@+id/empty"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/info.message.no_content"
+        android:visibility="gone"/>
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_margin="@dimen/activity_horizontal_margin"
         android:scrollbars="vertical">
         <WebView
             android:id="@+id/guideContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_horizontal_margin"
             android:scrollbars="none"/>
     </ScrollView>
 </RelativeLayout>

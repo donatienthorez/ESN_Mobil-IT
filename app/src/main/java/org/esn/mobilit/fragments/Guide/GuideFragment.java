@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.TextView;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Guide;
@@ -21,6 +22,7 @@ import butterknife.ButterKnife;
 public class GuideFragment extends Fragment {
 
     @Bind(R.id.guideContent) WebView guideContentWebView;
+    @Bind(R.id.empty) protected TextView emptyListMessage;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,27 +55,29 @@ public class GuideFragment extends Fragment {
     }
 
     public void setGuide(Guide guide) {
-        String survivalContent = getText(R.string.info_message_guide_not_displayable).toString();
         if (guide != null && guide.isActivated() && guide.isCreated()) {
+            emptyListMessage.setVisibility(View.GONE);
             GuideRenderer sgr = new GuideRenderer();
-            survivalContent = sgr.renderSurvivalGuide(guide);
+            String survivalContent = sgr.renderSurvivalGuide(guide);
+
+            guideContentWebView.loadData(survivalContent, "text/html; charset=UTF-8", null);
+            guideContentWebView.setScrollContainer(false);
+
+            // disable scroll on touch
+            guideContentWebView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return (event.getAction() == MotionEvent.ACTION_MOVE);
+                }
+            });
+
+            WebSettings webSettings = guideContentWebView.getSettings();
+            webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+            webSettings.setDefaultFontSize(10);
+            webSettings.setJavaScriptEnabled(true);
+        } else {
+            emptyListMessage.setVisibility(View.VISIBLE);
         }
 
-        guideContentWebView.loadData(survivalContent, "text/html; charset=UTF-8", null);
-        guideContentWebView.setScrollContainer(false);
-
-        // disable scroll on touch
-        guideContentWebView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return (event.getAction() == MotionEvent.ACTION_MOVE);
-            }
-        });
-
-
-        WebSettings webSettings = guideContentWebView.getSettings();
-        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        webSettings.setDefaultFontSize(10);
-        webSettings.setJavaScriptEnabled(true);
     }
 }

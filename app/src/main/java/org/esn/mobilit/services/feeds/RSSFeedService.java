@@ -8,33 +8,17 @@ import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 public abstract class RSSFeedService implements CachableInterface {
 
-    private RSSFeedParser feed;
-
     public abstract String getString();
     public abstract void getFromSite(NetworkCallback<RSSFeedParser> networkCallback);
     public abstract void resetService();
-
-    public RSSFeedService(){
-        this.feed = new RSSFeedParser();
-    }
-
-    public RSSFeedParser getFeed() {
-        if (feed == null) {
-            feed = new RSSFeedParser();
-        }
-        return feed;
-    }
-
-    public void setFeed(RSSFeedParser feed) {
-        this.feed = feed;
-    }
 
     private void setFeedToCache(RSSFeedParser feed) {
         CacheService.saveObjectToCache(this.getString(), feed);
     }
 
     public RSSFeedParser getFromCache() {
-        return (RSSFeedParser) CacheService.getObjectFromCache(this.getString());
+        RSSFeedParser rssFeedParser = (RSSFeedParser) CacheService.getObjectFromCache(this.getString());
+        return rssFeedParser != null ? rssFeedParser : new RSSFeedParser();
     }
 
     protected NetworkCallback<RSS> getCallback(final NetworkCallback<RSSFeedParser> callback) {
@@ -47,7 +31,6 @@ public abstract class RSSFeedService implements CachableInterface {
 
                 rssFeedParser = rssFeedParser.addItems(feed);
 
-                setFeed(rssFeedParser);
                 setFeedToCache(rssFeedParser);
                 callback.onSuccess(rssFeedParser);
             }
