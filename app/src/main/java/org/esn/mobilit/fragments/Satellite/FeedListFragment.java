@@ -3,7 +3,9 @@ package org.esn.mobilit.fragments.Satellite;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +48,8 @@ public class FeedListFragment extends Fragment
 
         recyclerView.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        recyclerView.setItemAnimator(null);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new ListAdapter(feed);
         recyclerView.setAdapter(adapter);
@@ -104,8 +107,10 @@ public class FeedListFragment extends Fragment
                 rssFeedService.getFromSite(new NetworkCallback<RSSFeedParser>() {
                     @Override
                     public void onSuccess(RSSFeedParser result) {
-                        feed = result;
-                        adapter.setFeed(feed);
+                        if (feed.getItemCount() != result.getItemCount()) {
+                            feed = result;
+                            adapter.setFeed(feed);
+                        }
                         swipeRefreshLayoutListView.setRefreshing(false);
                         emptyListMessage.setVisibility(View.GONE);
                     }
