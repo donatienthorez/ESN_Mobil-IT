@@ -34,7 +34,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
         public ViewHolder(View v) {
             super(v);
-            imageView = (ImageView) v.findViewById(R.id.thumb);
+            imageView = (ImageView) v.findViewById(R.id.image);
             textView = (TextView) v.findViewById(R.id.title);
             v.setOnClickListener(this);
         }
@@ -48,7 +48,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                     .load(imageLink)
                     .placeholder(R.drawable.default_list_item)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .override(150, 250)
                     .into(imageView);
         }
 
@@ -76,11 +75,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     @Override
     public ListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
-        // create a new view
-        View v = LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_feeds, parent, false);
 
-        return new ViewHolder(v);
+        return new ViewHolder(view);
     }
 
     @Override
