@@ -13,33 +13,25 @@
     <dimen name="first_launch_spinner_margin_top">20dp</dimen>
     <dimen name="first_launch_start_button_margin_top">50dp</dimen>
 
-    <!-- Cardview -->
-    <dimen name="cardView_margin">8dp</dimen>
 
-    <dimen name="cardView_image_margin">8dp</dimen>
+    <!-- font sizes -->
+    <dimen name="font_huge">24sp</dimen>
+    <dimen name="font_large">16sp</dimen>
+    <dimen name="font_normal">15sp</dimen>
+    <dimen name="font_small">14sp</dimen>
 
-    <dimen name="cardView_title_marginTop">24dp</dimen>
-    <dimen name="cardView_title_marginBottom">16dp</dimen>
-    <dimen name="cardView_title_marginLeft">16dp</dimen>
-    <dimen name="cardView_title_marginRight">16dp</dimen>
-    <dimen name="cardView_title_textSize">24sp</dimen>
+    <!-- typical spacing between two views -->
+    <dimen name="spacing_huge">40dp</dimen>
+    <dimen name="spacing_large">24dp</dimen>
+    <dimen name="spacing_normal">16dp</dimen>
+    <dimen name="spacing_small_plus_tiny">12dp</dimen>
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_tiny">4dp</dimen>
 
-    <dimen name="cardView_subtitle_paddingBottom">16dp</dimen>
-    <dimen name="cardView_subtitle_paddingLeft">16dp</dimen>
-    <dimen name="cardView_subtitle_paddingRight">16dp</dimen>
-    <dimen name="cardView_subtitle_textSize">14sp</dimen>
-
-    <dimen name="cardView_linearLayoutAbout_marginBottom">8dp</dimen>
-    <dimen name="cardView_linearLayoutAbout_marginTop">8dp</dimen>
-    <dimen name="cardView_linearLayoutAbout_marginRight">16dp</dimen>
-
-    <dimen name="cardView_relativeLayoutAbout_marginTop">8dp</dimen>
-    <dimen name="cardView_relativeLayoutAbout_marginBottom">16dp</dimen>
-
+    <dimen name="image_feed_list_minHeight">150dp</dimen>
+    <dimen name="image_feed_list_minWidth">250dp</dimen>
+    <dimen name="cardView_textViewAbout_paddingLeft">72dp</dimen>
     <dimen name="cardView_imageViewAbout_width">40dp</dimen>
     <dimen name="cardView_imageViewAbout_height">40dp</dimen>
-    <dimen name="cardView_imageViewAbout_paddingLeft">16dp</dimen>
 
-    <dimen name="cardView_textViewAbout_paddingLeft">72dp</dimen>
-    <dimen name="cardView_textViewAbout_textSize">16sp</dimen>
 </resources>

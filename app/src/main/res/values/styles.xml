@@ -16,75 +16,31 @@
         <item name="android:background">@color/esnblue</item>
     </style>
 
-    <!-- Cardview -->
-    <style name="Theme.Esnmobilit.CardView" parent="CardView">
-        <item name="android:layout_margin">@dimen/cardView_margin</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="Theme.Esnmobilit.CardViewImage">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="Theme.Esnmobilit.CardViewImage.WithMargin">
-        <item name="android:layout_marginTop">@dimen/cardView_image_margin</item>
-        <item name="android:layout_marginLeft">@dimen/cardView_image_margin</item>
-        <item name="android:layout_marginRight">@dimen/cardView_image_margin</item>
-    </style>
-
     <style name="Theme.Esnmobilit.CardViewTitle" parent="CardView">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">@dimen/cardView_title_marginTop</item>
-        <item name="android:layout_marginBottom">@dimen/cardView_title_marginBottom</item>
-        <item name="android:layout_marginLeft">@dimen/cardView_title_marginLeft</item>
-        <item name="android:layout_marginRight">@dimen/cardView_title_marginRight</item>
-        <item name="android:textSize">@dimen/cardView_title_textSize</item>
+        <item name="android:textSize">@dimen/font_huge</item>
         <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="Theme.Esnmobilit.CardViewSubtitle" parent="CardView">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingBottom">@dimen/cardView_subtitle_paddingBottom</item>
-        <item name="android:paddingLeft">@dimen/cardView_subtitle_paddingLeft</item>
-        <item name="android:paddingRight">@dimen/cardView_subtitle_paddingRight</item>
-        <item name="android:textSize">@dimen/cardView_subtitle_textSize</item>
-    </style>
-
-    <!-- About Actions cards -->
-    <style name="Theme.Esnmobilit.CardViewLinearLayoutAbout">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:orientation">vertical</item>
-        <item name="android:layout_marginBottom">@dimen/cardView_linearLayoutAbout_marginBottom</item>
-        <item name="android:layout_marginTop">@dimen/cardView_linearLayoutAbout_marginTop</item>
-        <item name="android:layout_marginRight">@dimen/cardView_linearLayoutAbout_marginRight</item>
-    </style>
-
-    <style name="Theme.Esnmobilit.CardViewRelativeLayoutAbout">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:orientation">vertical</item>
-        <item name="android:layout_marginTop">@dimen/cardView_relativeLayoutAbout_marginTop</item>
-        <item name="android:layout_marginBottom">@dimen/cardView_relativeLayoutAbout_marginBottom</item>
+        <item name="android:paddingBottom">@dimen/spacing_normal</item>
+        <item name="android:paddingLeft">@dimen/spacing_normal</item>
+        <item name="android:paddingRight">@dimen/spacing_normal</item>
+        <item name="android:textSize">@dimen/font_small</item>
     </style>
 
     <style name="Theme.Esnmobilit.CardViewImageViewAbout">
-        <item name="android:layout_width">@dimen/cardView_imageViewAbout_width</item>
-        <item name="android:layout_height">@dimen/cardView_imageViewAbout_height</item>
-        <item name="android:paddingLeft">@dimen/cardView_imageViewAbout_paddingLeft</item>
-        <item name="android:layout_alignParentLeft">true</item>
-        <item name="android:layout_centerVertical">true</item>
+        <item name="android:paddingLeft">@dimen/spacing_normal</item>
     </style>
 
     <style name="Theme.Esnmobilit.CardViewTextViewAbout">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingLeft">@dimen/cardView_textViewAbout_paddingLeft</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:textSize">@dimen/cardView_textViewAbout_textSize</item>
+        <item name="android:textSize">@dimen/font_large</item>
+    </style>
+
+    <style name="Theme.Esnmobilit.CardViewTitleListFeeds">
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 </resources>
