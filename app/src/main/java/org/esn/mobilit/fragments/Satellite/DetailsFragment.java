@@ -8,15 +8,11 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
@@ -32,9 +28,8 @@ public class DetailsFragment extends Fragment {
 
     @Bind(R.id.title) TextView title;
     @Bind(R.id.header) ImageView imageView;
-    @Bind(R.id.desc) WebView desc;
-    @Bind(R.id.sv) ScrollView sv;
-    @Bind(R.id.progress) ProgressBar progressBar;
+    @Bind(R.id.desc) WebView webView;
+    @Bind(R.id.scrollView) ScrollView scrollView;
 
     public DetailsFragment setFeed(RSSItem rssItem){
         this.rssItem = rssItem;
@@ -50,31 +45,21 @@ public class DetailsFragment extends Fragment {
 
         Glide.with(MobilITApplication.getContext())
                 .load(rssItem.getImage())
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        progressBar.setVisibility(View.GONE);
-                        imageView.setVisibility(View.GONE);
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        progressBar.setVisibility(View.GONE);
-                        return false;
-                    }
-                })
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .fitCenter()
                 .into(imageView);
 
-        desc.loadData(rssItem.getDescription(), "text/html; charset=UTF-8", null);
-
-        sv.setVerticalFadingEdgeEnabled(true);
-
-        WebSettings ws = desc.getSettings();
-        ws.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        ws.setJavaScriptEnabled(true);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<html><head><link href=\"detailsFragment.css\" type=\"text/css\" rel=\"stylesheet\"/></head><body>");
+        stringBuilder.append(rssItem.getDescription());
+        stringBuilder.append("</body></HTML>");
+        
+        webView.loadDataWithBaseURL("file:///android_asset/", stringBuilder.toString(), "text/html", "utf-8", null);
+        webView.setHorizontalScrollBarEnabled(false);
+        webView.setVerticalScrollBarEnabled(false);
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        webSettings.setJavaScriptEnabled(true);
 
         return view;
     }
