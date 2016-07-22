@@ -1,0 +1,7 @@
+iframe, img.mobilitFullWidth {
+    display: block;
+    height:auto;
+    max-width:100%;
+    margin-top:10px;
+    margin-bottom:10px;
+}

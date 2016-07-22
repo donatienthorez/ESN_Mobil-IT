@@ -33,5 +33,6 @@
     <dimen name="cardView_textViewAbout_paddingLeft">72dp</dimen>
     <dimen name="cardView_imageViewAbout_width">40dp</dimen>
     <dimen name="cardView_imageViewAbout_height">40dp</dimen>
+    <dimen name="image_feed_maxHeight">150dp</dimen>
 
 </resources>
