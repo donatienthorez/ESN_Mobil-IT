@@ -53,4 +53,7 @@
     <string name="icon_settings">&#xf013;</string>
     <string name="menu_drawer_item_settings">Settings</string>
 
+    <!--List Feeds-->
+    <string name="list_feeds_image_content_description">Image of the feed</string>
+
 </resources>
