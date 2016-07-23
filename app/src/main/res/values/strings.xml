@@ -33,7 +33,7 @@
     <string name="city">city</string>
     <string name="esnsection">ESN Section</string>
     <string name="and">and</string>
-    <string name="start_button">Launch</string>
+    <string name="first_launch_start_button">Launch</string>
     <string name="selectyourcountry">Select your country</string>
     <string name="selectyoursection">Select your section</string>
 

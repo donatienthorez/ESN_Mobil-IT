@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.esn.mobilit"
     android:versionCode="17"
-    android:versionName="2.1.dev" >
+    android:versionName="2.1.dev">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -48,8 +48,7 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.HomeActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
