@@ -1,9 +1,9 @@
 package org.esn.mobilit.adapters;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,14 +15,52 @@ import org.esn.mobilit.R;
 import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
-public class ListAdapter extends BaseAdapter {
+public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
-    private LayoutInflater layoutInflater;
     private RSSFeedParser feed;
+    OnItemClickListener itemClickListener;
 
-    public ListAdapter(RSSFeedParser feed, LayoutInflater layoutInflater) {
+    public interface OnItemClickListener {
+        void onItemClick(View view , int position);
+    }
+
+    public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
+        this.itemClickListener = mItemClickListener;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        ImageView imageView;
+        TextView textView;
+
+        public ViewHolder(View v) {
+            super(v);
+            imageView = (ImageView) v.findViewById(R.id.image);
+            textView = (TextView) v.findViewById(R.id.title);
+            v.setOnClickListener(this);
+        }
+
+        public void setTitle(String title) {
+            textView.setText(title);
+        }
+
+        public void setImage(String imageLink) {
+            Glide.with(MobilITApplication.getContext())
+                    .load(imageLink)
+                    .placeholder(R.drawable.default_list_item)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .into(imageView);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (itemClickListener != null) {
+                itemClickListener.onItemClick(v, getLayoutPosition());
+            }
+        }
+    }
+
+    public ListAdapter(RSSFeedParser feed) {
         this.feed = feed != null ? feed : new RSSFeedParser();
-        this.layoutInflater = layoutInflater;
     }
 
     public void setFeed(RSSFeedParser feed) {
@@ -35,41 +73,23 @@ public class ListAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public ListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                   int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_item_feeds, parent, false);
+
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        RSSItem currentFeed = feed.getList().get(position);
+        holder.setTitle(currentFeed.getTitle());
+        holder.setImage(currentFeed.getImage());
+    }
+
+    @Override
+    public int getItemCount() {
         return feed.getItemCount();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return position;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View listItem = convertView;
-        if (listItem == null) {
-            listItem = layoutInflater.inflate(R.layout.list_item_feeds, null);
-        }
-
-        ImageView iv = (ImageView) listItem.findViewById(R.id.thumb);
-        TextView tvTitle = (TextView) listItem.findViewById(R.id.title);
-
-        RSSItem item = feed.getItem(position);
-
-        Glide.with(MobilITApplication.getContext())
-                .load(item.getImage())
-                .placeholder(R.drawable.default_list_item)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .override(150, 250)
-                .into(iv);
-
-        tvTitle.setText(item.getTitle());
-
-        return listItem;
     }
 }
