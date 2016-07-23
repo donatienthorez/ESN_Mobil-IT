@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -34,12 +35,28 @@ public class AboutFragment extends Fragment {
 
     private Section section;
 
-    @OnClick(R.id.section_address)
-    public void clickAddress(View v)
+    @OnClick(R.id.address_relative)
+    public void clickAddress(View view)
     {
-        String map = "http://maps.google.co.in/maps?q=" + section.getAddress();
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(map));
-        startActivity(intent);
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.co.in/maps?q=" + section.getAddress())));
+    }
+
+    @OnClick(R.id.phone_relative)
+    public void clickPhone(View view)
+    {
+        startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", section.getPhone(), null)));
+    }
+
+    @OnClick(R.id.website_relative)
+    public void clickWebsite(View view)
+    {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(section.getWebsite())));
+    }
+
+    @OnClick(R.id.mail_relative)
+    public void clickMail(View view)
+    {
+        startActivity(new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", section.getEmail(), null)));
     }
 
     public View onCreateView(
@@ -49,7 +66,6 @@ public class AboutFragment extends Fragment {
     ){
         View view = inflater.inflate(R.layout.fragment_about, container, false);
 
-        // Load Butterknife
         ButterKnife.bind(this, view);
 
         setSection(AboutService.getInstance().getFromCache());
