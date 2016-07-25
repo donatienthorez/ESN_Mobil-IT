@@ -7,6 +7,7 @@ public class Node implements Serializable {
     private int id;
     private String title;
     private String content;
+    private String image;
     private int position;
     private List<Node> nodes;
 
@@ -24,6 +25,14 @@ public class Node implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getContent() {

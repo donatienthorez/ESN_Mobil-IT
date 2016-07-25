@@ -15,7 +15,7 @@ import org.esn.mobilit.R;
 import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
+public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHolder> {
 
     private RSSFeedParser feed;
     OnItemClickListener itemClickListener;
@@ -59,7 +59,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         }
     }
 
-    public ListAdapter(RSSFeedParser feed) {
+    public FeedListAdapter(RSSFeedParser feed) {
         this.feed = feed != null ? feed : new RSSFeedParser();
     }
 
@@ -73,7 +73,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     }
 
     @Override
-    public ListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+    public FeedListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_feeds, parent, false);

@@ -3,8 +3,6 @@ package org.esn.mobilit.fragments.Satellite;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +13,7 @@ import android.widget.Toast;
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.activities.HomeActivity;
-import org.esn.mobilit.adapters.ListAdapter;
+import org.esn.mobilit.adapters.FeedListAdapter;
 import org.esn.mobilit.services.feeds.RSSFeedService;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
@@ -30,7 +28,7 @@ public class FeedListFragment extends Fragment
 {
     private RSSFeedParser feed;
     private RSSFeedService rssFeedService;
-    private ListAdapter adapter;
+    private FeedListAdapter adapter;
 
     @Bind(R.id.swipe_refresh) protected SwipeRefreshLayout swipeRefreshLayoutListView;
     @Bind(R.id.recyclerViewFeedList) protected RecyclerView recyclerView;
@@ -43,7 +41,7 @@ public class FeedListFragment extends Fragment
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list_feeds, container, false);
+        View view = inflater.inflate(R.layout.fragment_card_list, container, false);
         ButterKnife.bind(this, view);
 
         recyclerView.setHasFixedSize(true);
@@ -51,10 +49,10 @@ public class FeedListFragment extends Fragment
         RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setItemAnimator(null);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new ListAdapter(feed);
+        adapter = new FeedListAdapter(feed);
         recyclerView.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new ListAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new FeedListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 ((HomeActivity) getActivity()).loadDetailsFragment(feed.getItem(position), true);
@@ -68,9 +66,9 @@ public class FeedListFragment extends Fragment
             }
 
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 int topRowVerticalPosition = (recyclerView == null || recyclerView.getChildCount() == 0) ? 0 : recyclerView.getChildAt(0).getTop();
-                swipeRefreshLayoutListView.setEnabled(topRowVerticalPosition >= 0);
+                swipeRefreshLayoutListView.setEnabled(topRowVerticalPosition == 0);
             }
         });
 
