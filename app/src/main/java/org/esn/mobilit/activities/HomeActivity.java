@@ -23,6 +23,7 @@ import org.esn.mobilit.fragments.AboutFragment;
 import org.esn.mobilit.fragments.Guide.GuideFragment;
 import org.esn.mobilit.fragments.Satellite.DetailsFragment;
 import org.esn.mobilit.fragments.Satellite.FeedListFragment;
+import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.models.Node;
 import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.models.Section;
@@ -236,6 +237,16 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
+     * Loads the details fragment into the content frame.
+     * @param node Node to display into the details fragment.
+     * @param addToBackStack If the current fragment should be added to the back stack.
+     */
+    public void loadGuideFragment(Guide guide, Node node, boolean addToBackStack){
+        GuideFragment fragment = (new GuideFragment()).setCurrentNode(guide, node);
+        loadFragment(fragment, this.currentFragmentId, addToBackStack);
+    }
+
+    /**
      * Sets the Fragment HashMap menu.
      */
     public void setFragmentHashMap()
@@ -255,7 +266,7 @@ public class HomeActivity extends AppCompatActivity {
         );
         fragmentHashMap.put(
                 ApplicationConstants.MENU_GUIDE,
-                new GuideFragment()
+                (new GuideFragment()).setCurrentNode(GuideService.getInstance().getFromCache(), null)
         );
         fragmentHashMap.put(
                 ApplicationConstants.MENU_ABOUT,

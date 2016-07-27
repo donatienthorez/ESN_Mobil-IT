@@ -12,12 +12,10 @@ import android.widget.TextView;
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.activities.HomeActivity;
-import org.esn.mobilit.adapters.FeedListAdapter;
 import org.esn.mobilit.adapters.GuideListAdapter;
 import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.models.Node;
 import org.esn.mobilit.services.GuideService;
-import org.esn.mobilit.services.feeds.PartnersService;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
@@ -34,22 +32,17 @@ public class GuideFragment extends Fragment {
     @Bind(R.id.swipe_refresh) protected SwipeRefreshLayout swipeRefreshLayoutListView;
     @Bind(R.id.recyclerViewFeedList) protected RecyclerView recyclerView;
     @Bind(R.id.empty) protected TextView emptyListMessage;
-    private GuideListAdapter adapter;
     private Guide guide;
     private Node currentNode;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.guide = GuideService.getInstance().getFromCache();
-    }
-
+    private List<Node> listNodes;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_card_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_guide, container, false);
         ButterKnife.bind(this, view);
-        this.adapter = new GuideListAdapter(GuideService.getInstance().getFromCache());
+
+        GuideListAdapter adapter = new GuideListAdapter(listNodes);
+        adapter.setNodes(listNodes, currentNode);
 
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -93,18 +86,14 @@ public class GuideFragment extends Fragment {
         adapter.setOnItemClickListener(new GuideListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                if (guide.getNode(position).getNodes() != null && guide.getNode(position).getNodes().size() > position) {
-                    // get good fragment
-//                    ((HomeActivity) getActivity()).loadDetailsGuideFragment(guide.getNode(position).getNodes().get(position), true);
+                if (currentNode != null) { position--;}
+                if (position >= 0 && listNodes.get(position) != null) {
+                    ((HomeActivity) getActivity()).loadGuideFragment(guide, listNodes.get(position), true);
                 }
             }
         });
 
         return view;
-    }
-
-    public List<Node> getNodes() {
-        return guide.getNodes();
     }
 
     /**
@@ -119,7 +108,7 @@ public class GuideFragment extends Fragment {
                 GuideService.getInstance().getFromSite(new NetworkCallback<Guide>() {
                     @Override
                     public void onSuccess(Guide result) {
-                        setGuide(result);
+                        setCurrentNode(result, currentNode);
                         swipeRefreshLayoutListView.setRefreshing(false);
                         emptyListMessage.setVisibility(View.GONE);
                     }
@@ -127,7 +116,6 @@ public class GuideFragment extends Fragment {
                     @Override
                     public void onNoAvailableData() {
                         if (guide == null) {
-                            adapter.setEmptyGuide();
                             swipeRefreshLayoutListView.setRefreshing(false);
                             emptyListMessage.setVisibility(View.VISIBLE);
                             recyclerView.setVisibility(View.GONE);
@@ -146,31 +134,12 @@ public class GuideFragment extends Fragment {
         swipeRefreshLayoutListView.post(thread);
     }
 
-    public void setGuide(Guide guide) {
+    public GuideFragment setCurrentNode(Guide guide, Node node) {
         if (guide != null && guide.isActivated() && guide.isCreated()) {
             this.guide = guide;
-            adapter.setGuide(guide);
+            this.listNodes = node != null ? node.getNodes() : guide.getNodes();
+            this.currentNode = node;
         }
-
-
-//            emptyListMessage.setVisibility(View.GONE);
-//            GuideRenderer sgr = new GuideRenderer();
-//            String survivalContent = sgr.renderSurvivalGuide(guide);
-//
-//            guideContentWebView.loadData(survivalContent, "text/html; charset=UTF-8", null);
-//            guideContentWebView.setScrollContainer(false);
-//
-//            // disable scroll on touch
-//            guideContentWebView.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    return (event.getAction() == MotionEvent.ACTION_MOVE);
-//                }
-//            });
-//
-//            WebSettings webSettings = guideContentWebView.getSettings();
-//            webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-//            webSettings.setDefaultFontSize(10);
-//            webSettings.setJavaScriptEnabled(true);
+        return this;
     }
 }
