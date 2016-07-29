@@ -16,6 +16,7 @@ import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Node;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.ViewHolderItem> {
@@ -104,7 +105,7 @@ public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.View
     }
 
     public void setNodes(List<Node> nodes, Node currentNode) {
-        this.nodes = nodes;
+        this.nodes = nodes != null ? nodes : new ArrayList<Node>();
         this.currentNode = currentNode;
         this.notifyDataSetChanged();
     }

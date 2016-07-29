@@ -37,8 +37,10 @@
                 android:id="@+id/recyclerViewFeedList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/spacing_small_plus_tiny"
-                android:layout_marginRight="@dimen/spacing_small_plus_tiny">
+                android:layout_marginLeft="@dimen/spacing_normal"
+                android:layout_marginRight="@dimen/spacing_small"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:layout_marginBottom="@dimen/spacing_small">
             </android.support.v7.widget.RecyclerView>
 
         </LinearLayout>

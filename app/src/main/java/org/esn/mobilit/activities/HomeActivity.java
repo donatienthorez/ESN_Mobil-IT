@@ -175,25 +175,23 @@ public class HomeActivity extends AppCompatActivity {
      * @param menuItemId  Id of the item selected.
      */
     private void executeDrawerMenuAction(int menuItemId) {
+        clearFragmentBackStack();
+        CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, menuItemId);
+
         switch (menuItemId) {
             case R.id.drawer_item_news:
-                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_news);
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_NEWS), menuItemId, false);
                 break;
             case R.id.drawer_item_events:
-                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_events);
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_EVENTS), menuItemId, false);
                 break;
             case R.id.drawer_item_partners:
-                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_partners);
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_PARTNERS), menuItemId, false);
                 break;
             case R.id.drawer_item_guide:
-                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_guide);
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_GUIDE), menuItemId, false);
                 break;
             case R.id.drawer_item_about:
-                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_about);
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_ABOUT), menuItemId, false);
                 break;
             case R.id.drawer_item_reset:
@@ -282,6 +280,13 @@ public class HomeActivity extends AppCompatActivity {
             super.onBackPressed();
         } else {
             getFragmentManager().popBackStack();
+        }
+    }
+
+    public void clearFragmentBackStack(){
+        FragmentManager fm = getFragmentManager();
+        for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+            fm.popBackStack();
         }
     }
 }

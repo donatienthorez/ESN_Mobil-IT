@@ -58,9 +58,8 @@ public class GuideFragment extends Fragment {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (recyclerView != null && recyclerView.getChildAdapterPosition(recyclerView.getChildAt(0)) == 0) {
-                    swipeRefreshLayoutListView.setEnabled(recyclerView.getChildAt(0).getTop() >= 0);
-                }
+                int topRowVerticalPosition = (recyclerView == null || recyclerView.getChildCount() == 0) ? 0 : recyclerView.getChildAt(0).getTop();
+                swipeRefreshLayoutListView.setEnabled(topRowVerticalPosition == 0);
             }
         });
 
