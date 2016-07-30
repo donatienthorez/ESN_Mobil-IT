@@ -36,13 +36,14 @@ public class FeedListFragment extends Fragment
 
     public FeedListFragment setService(RSSFeedService rssFeedService){
         this.rssFeedService = rssFeedService;
-        this.feed = rssFeedService.getFromCache();
         return this;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_card_list, container, false);
         ButterKnife.bind(this, view);
+        rssFeedService = ((HomeActivity) getActivity()).getCurrentFeedService();
+        this.feed = rssFeedService.getFromCache();
 
         recyclerView.setHasFixedSize(true);
 

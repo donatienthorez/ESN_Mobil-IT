@@ -87,15 +87,15 @@ public class FirstLaunchActivity extends Activity {
     @OnClick(R.id.startButton)
     public void launchHomeActivity(View view) {
         Section currentSection = currentCountry.getSections().get(sectionPosition);
-        PreferencesService.setDefaults(ApplicationConstants.PREFERENCES_CODE_COUNTRY, currentCountry.getCodeCountry());
-        PreferencesService.setDefaults(ApplicationConstants.PREFERENCES_CODE_SECTION, currentSection.getCode_section());
 
         CacheService.saveObjectToCache(ApplicationConstants.CACHE_COUNTRY, currentCountry);
         CacheService.saveObjectToCache(ApplicationConstants.CACHE_SECTION, currentSection);
 
-        Intent intent = new Intent(this, HomeActivity.class);
+        Intent intent = new Intent(FirstLaunchActivity.this, HomeActivity.class);
+        intent.putExtra("section", currentSection);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+        finish();
     }
 
     @Override

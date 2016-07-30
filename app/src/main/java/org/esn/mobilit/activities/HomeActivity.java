@@ -23,8 +23,10 @@ import org.esn.mobilit.fragments.AboutFragment;
 import org.esn.mobilit.fragments.Guide.GuideFragment;
 import org.esn.mobilit.fragments.Satellite.DetailsFragment;
 import org.esn.mobilit.fragments.Satellite.FeedListFragment;
+import org.esn.mobilit.models.Country;
 import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.models.Node;
+import org.esn.mobilit.models.RSS.RSS;
 import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.AboutService;
@@ -34,6 +36,7 @@ import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.services.feeds.EventsService;
 import org.esn.mobilit.services.feeds.NewsService;
 import org.esn.mobilit.services.feeds.PartnersService;
+import org.esn.mobilit.services.feeds.RSSFeedService;
 import org.esn.mobilit.services.gcm.RegIdService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
@@ -52,17 +55,20 @@ public class HomeActivity extends AppCompatActivity {
     private HashMap<String, Fragment> fragmentHashMap;
     private int currentFragmentId;
     private Section section;
+    private RSSFeedService currentFeedService;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        section = (Section) getIntent().getSerializableExtra("section");
 
-        section = (Section) CacheService.
-                getObjectFromCache(ApplicationConstants.CACHE_SECTION);
+        if (section == null) {
+            section = (Section) CacheService.
+                    getObjectFromCache(ApplicationConstants.CACHE_SECTION);
+        }
 
         if (section == null || TextUtils.isEmpty(section.getWebsite())) {
             Intent intent = new Intent(this, FirstLaunchActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         } else {
             ButterKnife.bind(this);
@@ -181,12 +187,15 @@ public class HomeActivity extends AppCompatActivity {
         switch (menuItemId) {
             case R.id.drawer_item_news:
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_NEWS), menuItemId, false);
+                this.currentFeedService = NewsService.getInstance();
                 break;
             case R.id.drawer_item_events:
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_EVENTS), menuItemId, false);
+                this.currentFeedService = EventsService.getInstance();
                 break;
             case R.id.drawer_item_partners:
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_PARTNERS), menuItemId, false);
+                this.currentFeedService = PartnersService.getInstance();
                 break;
             case R.id.drawer_item_guide:
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_GUIDE), menuItemId, false);
@@ -252,15 +261,15 @@ public class HomeActivity extends AppCompatActivity {
         fragmentHashMap = new HashMap<>();
         fragmentHashMap.put(
                 ApplicationConstants.MENU_NEWS,
-                (new FeedListFragment()).setService(NewsService.getInstance())
+                (new FeedListFragment())
         );
         fragmentHashMap.put(
                 ApplicationConstants.MENU_EVENTS,
-                (new FeedListFragment()).setService(EventsService.getInstance())
+                (new FeedListFragment())
         );
         fragmentHashMap.put(
                 ApplicationConstants.MENU_PARTNERS,
-                (new FeedListFragment()).setService(PartnersService.getInstance())
+                (new FeedListFragment())
         );
         fragmentHashMap.put(
                 ApplicationConstants.MENU_GUIDE,
@@ -288,5 +297,9 @@ public class HomeActivity extends AppCompatActivity {
         for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
             fm.popBackStack();
         }
+    }
+
+    public RSSFeedService getCurrentFeedService(){
+        return currentFeedService;
     }
 }
