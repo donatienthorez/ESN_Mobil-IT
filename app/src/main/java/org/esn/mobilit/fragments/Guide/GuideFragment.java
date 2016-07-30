@@ -50,36 +50,7 @@ public class GuideFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView view, int scrollState) {
-                super.onScrollStateChanged(recyclerView, scrollState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                int topRowVerticalPosition = (recyclerView == null || recyclerView.getChildCount() == 0) ? 0 : recyclerView.getChildAt(0).getTop();
-                swipeRefreshLayoutListView.setEnabled(topRowVerticalPosition == 0);
-            }
-        });
-
-        swipeRefreshLayoutListView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (Utils.isConnected()) {
-                    refreshContent();
-                } else {
-                    Toast.makeText(
-                            MobilITApplication.getContext(),
-                            getResources().getString(Utils.isConnected() ?
-                                    R.string.error_message_network :
-                                    R.string.info_message_no_network),
-                            Toast.LENGTH_SHORT
-                    ).show();
-                    swipeRefreshLayoutListView.setRefreshing(false);
-                }
-            }
-        });
+        swipeRefreshLayoutListView.setEnabled(false);
         refreshContent();
 
         adapter.setOnItemClickListener(new GuideListAdapter.OnItemClickListener() {

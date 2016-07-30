@@ -64,14 +64,14 @@ public class HomeActivity extends AppCompatActivity {
             Intent intent = new Intent(this, FirstLaunchActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            return;
-        }
-        ButterKnife.bind(this);
+        } else {
+            ButterKnife.bind(this);
 
-        registerRegId();
-        buildMenu();
-        manageGCMRedirection();
-        updateSection();
+            registerRegId();
+            buildMenu();
+            manageGCMRedirection();
+            updateSection();
+        }
     }
 
     /**

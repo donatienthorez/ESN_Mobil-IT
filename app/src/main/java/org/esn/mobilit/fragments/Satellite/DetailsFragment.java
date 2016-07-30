@@ -57,6 +57,7 @@ public class DetailsFragment extends Fragment {
         webView.loadDataWithBaseURL("file:///android_asset/", stringBuilder.toString(), "text/html", "utf-8", null);
         webView.setHorizontalScrollBarEnabled(false);
         webView.setVerticalScrollBarEnabled(false);
+        webView.setScrollContainer(false);
         WebSettings webSettings = webView.getSettings();
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webSettings.setJavaScriptEnabled(true);

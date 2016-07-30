@@ -58,6 +58,7 @@ public class FirstLaunchActivity extends Activity {
     private ArrayAdapter countriesAdapter, sectionsAdapter;
     private ArrayList<String> countries, sections;
     private int sectionPosition;
+    private boolean countryLoaded;
 
     @OnItemSelected(R.id.spinnerCountries)
     public void onCountriesItemSelected(Spinner spinner, int position) {
@@ -106,9 +107,11 @@ public class FirstLaunchActivity extends Activity {
         networkStateReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-                getCountries();
+                if (!countryLoaded) {
+                    ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+                    getCountries();
+                }
             }
         };
     }
@@ -153,7 +156,7 @@ public class FirstLaunchActivity extends Activity {
         CountriesService.getCountries(new NetworkCallback<List<Country>>() {
             @Override
             public void onSuccess(List<Country> result) {
-                countries.clear();
+                countryLoaded = true;
                 countries.add(getResources().getString(R.string.selectyourcountry));
                 for (Country country : result) {
                     countries.add(country.getName());
