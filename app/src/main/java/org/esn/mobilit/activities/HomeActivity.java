@@ -62,7 +62,7 @@ public class HomeActivity extends AppCompatActivity {
 
         if (section == null || TextUtils.isEmpty(section.getWebsite())) {
             Intent intent = new Intent(this, FirstLaunchActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             return;
         }

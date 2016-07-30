@@ -19,7 +19,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:contentDescription="@string/app_name"
-        android:layout_marginTop="@dimen/spacing_small"
+        android:layout_marginTop="@dimen/spacing_large"
         android:src="@drawable/logo_small" />
 
     <TextView
@@ -30,15 +30,14 @@
         android:layout_marginBottom="20dp"
         android:layout_below="@id/imageView"
         android:layout_marginTop="@dimen/spacing_huge"
-        android:layout_centerHorizontal="true"
-        tools:text="Choose your country, city and esnSection"/>
+        android:layout_centerHorizontal="true"/>
 
     <ProgressBar
         android:id="@+id/progressBar" style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView"
-        android:layout_marginTop="@dimen/spacing_huge"
+        android:layout_below="@+id/chooseCountry"
+        android:layout_marginTop="@dimen/spacing_normal"
         android:layout_centerHorizontal="true"/>
 
     <Spinner
@@ -63,12 +62,10 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/button_height"
         android:minWidth="@dimen/button_minimumWidth"
-        android:layout_marginBottom="@dimen/spacing_huge"
         android:layout_marginTop="@dimen/spacing_huge"
-        android:layout_marginLeft="@dimen/spacing_normal"
-        android:layout_marginStart="@dimen/spacing_normal"
-        android:layout_marginRight="@dimen/spacing_normal"
-        android:layout_marginEnd="@dimen/spacing_normal"
+        android:layout_marginBottom="@dimen/spacing_normal"
+        android:paddingLeft="@dimen/spacing_normal"
+        android:paddingRight="@dimen/spacing_normal"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="@string/first_launch_start_button"
@@ -76,6 +73,6 @@
         android:textSize="@dimen/button_textSize"
         android:radius="2dp"
         android:textColor="@color/white"
-        android:fitsSystemWindows="true"/>
+        android:visibility="invisible"/>
 
 </RelativeLayout>
