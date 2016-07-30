@@ -109,7 +109,7 @@ public class GuideFragment extends Fragment {
                     public void onSuccess(Guide result) {
                         setCurrentNode(result, currentNode);
                         swipeRefreshLayoutListView.setRefreshing(false);
-                        emptyListMessage.setVisibility(View.GONE);
+                        emptyListMessage.setVisibility(guide != null ? View.GONE : View.VISIBLE);
                     }
 
                     @Override
