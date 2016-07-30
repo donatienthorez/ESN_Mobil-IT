@@ -37,7 +37,7 @@
     <string name="selectyoursection">Select your section</string>
 
     <!-- About fragment -->
-    <string name="about_fragment_about">If you have some questions or need some helps, don\'t hesitate to contact us.</string>
+    <string name="about_fragment_about">If you have some questions or need some help, don\'t hesitate to contact us.</string>
 
     <!-- Action Bar Title -->
     <string name="menu_drawer_item_news">News</string>
