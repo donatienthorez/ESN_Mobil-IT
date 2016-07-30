@@ -27,4 +27,7 @@
     <color name="esngrey">#677480</color>
     <color name="grey_300">#E0E0E0</color>
     <color name="grey_400">#BDBDBD</color>
+
+    <color name="grey_200">#EEEEEE</color>
+    <color name="black_transparent">#99000000</color>
 </resources>

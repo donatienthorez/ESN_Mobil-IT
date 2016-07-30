@@ -44,5 +44,9 @@ public class Guide implements Serializable {
     public Node getNode(int i){
         return nodes.get(i);
     }
+
+    public int getSize(){
+        return nodes != null ? nodes.size() : 0;
+    }
 }
 

@@ -23,10 +23,13 @@ import org.esn.mobilit.fragments.AboutFragment;
 import org.esn.mobilit.fragments.Guide.GuideFragment;
 import org.esn.mobilit.fragments.Satellite.DetailsFragment;
 import org.esn.mobilit.fragments.Satellite.FeedListFragment;
+import org.esn.mobilit.models.Guide;
+import org.esn.mobilit.models.Node;
 import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.AboutService;
 import org.esn.mobilit.services.CacheService;
+import org.esn.mobilit.services.GuideService;
 import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.services.feeds.EventsService;
 import org.esn.mobilit.services.feeds.NewsService;
@@ -172,25 +175,23 @@ public class HomeActivity extends AppCompatActivity {
      * @param menuItemId  Id of the item selected.
      */
     private void executeDrawerMenuAction(int menuItemId) {
+        clearFragmentBackStack();
+        CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, menuItemId);
+
         switch (menuItemId) {
             case R.id.drawer_item_news:
-                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_news);
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_NEWS), menuItemId, false);
                 break;
             case R.id.drawer_item_events:
-                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_events);
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_EVENTS), menuItemId, false);
                 break;
             case R.id.drawer_item_partners:
-                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_partners);
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_PARTNERS), menuItemId, false);
                 break;
             case R.id.drawer_item_guide:
-                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_guide);
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_GUIDE), menuItemId, false);
                 break;
             case R.id.drawer_item_about:
-                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_about);
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_ABOUT), menuItemId, false);
                 break;
             case R.id.drawer_item_reset:
@@ -234,6 +235,16 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
+     * Loads the details fragment into the content frame.
+     * @param node Node to display into the details fragment.
+     * @param addToBackStack If the current fragment should be added to the back stack.
+     */
+    public void loadGuideFragment(Guide guide, Node node, boolean addToBackStack){
+        GuideFragment fragment = (new GuideFragment()).setCurrentNode(guide, node);
+        loadFragment(fragment, this.currentFragmentId, addToBackStack);
+    }
+
+    /**
      * Sets the Fragment HashMap menu.
      */
     public void setFragmentHashMap()
@@ -253,7 +264,7 @@ public class HomeActivity extends AppCompatActivity {
         );
         fragmentHashMap.put(
                 ApplicationConstants.MENU_GUIDE,
-                new GuideFragment()
+                (new GuideFragment()).setCurrentNode(GuideService.getInstance().getFromCache(), null)
         );
         fragmentHashMap.put(
                 ApplicationConstants.MENU_ABOUT,
@@ -269,6 +280,13 @@ public class HomeActivity extends AppCompatActivity {
             super.onBackPressed();
         } else {
             getFragmentManager().popBackStack();
+        }
+    }
+
+    public void clearFragmentBackStack(){
+        FragmentManager fm = getFragmentManager();
+        for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+            fm.popBackStack();
         }
     }
 }
