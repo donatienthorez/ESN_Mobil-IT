@@ -38,8 +38,12 @@ public class DetailsFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_detail_feeds, null);
+        View view = inflater.inflate(R.layout.fragment_detail_feeds, container, false);
         ButterKnife.bind(this, view);
+
+        if (savedInstanceState != null) {
+            rssItem = (RSSItem) savedInstanceState.getSerializable("rssItem");
+        }
 
         title.setText(rssItem.getTitle());
 
@@ -63,5 +67,10 @@ public class DetailsFragment extends Fragment {
         webSettings.setJavaScriptEnabled(true);
 
         return view;
+    }
+
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("rssItem", rssItem);
     }
 }
