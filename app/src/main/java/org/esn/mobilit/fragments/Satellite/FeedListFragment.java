@@ -36,13 +36,14 @@ public class FeedListFragment extends Fragment
 
     public FeedListFragment setService(RSSFeedService rssFeedService){
         this.rssFeedService = rssFeedService;
-        this.feed = rssFeedService.getFromCache();
         return this;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_card_list, container, false);
         ButterKnife.bind(this, view);
+        rssFeedService = ((HomeActivity) getActivity()).getCurrentFeedService();
+        this.feed = rssFeedService.getFromCache();
 
         recyclerView.setHasFixedSize(true);
 
@@ -68,7 +69,7 @@ public class FeedListFragment extends Fragment
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 int topRowVerticalPosition = (recyclerView == null || recyclerView.getChildCount() == 0) ? 0 : recyclerView.getChildAt(0).getTop();
-                swipeRefreshLayoutListView.setEnabled(topRowVerticalPosition == 0);
+                swipeRefreshLayoutListView.setEnabled(topRowVerticalPosition >= 0);
             }
         });
 
@@ -115,7 +116,7 @@ public class FeedListFragment extends Fragment
 
                     @Override
                     public void onNoAvailableData() {
-                        if (feed == null) {
+                        if (feed == null || feed.getItemCount() == 0) {
                             adapter.setEmptyList();
                             swipeRefreshLayoutListView.setRefreshing(false);
                             emptyListMessage.setVisibility(View.VISIBLE);
@@ -125,7 +126,7 @@ public class FeedListFragment extends Fragment
                     @Override
                     public void onFailure(String error) {
                         swipeRefreshLayoutListView.setRefreshing(false);
-                        emptyListMessage.setVisibility(feed == null ? View.VISIBLE : View.GONE);
+                        emptyListMessage.setVisibility((feed == null || feed.getItemCount() == 0) ? View.VISIBLE : View.GONE);
                     }
                 });
             }

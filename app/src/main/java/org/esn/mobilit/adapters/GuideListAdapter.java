@@ -28,7 +28,6 @@ public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.View
     final int DEFAULT_CATEGORY_ITEM = 0;
     final int DEFAULT_CATEGORY_DETAILS = 1;
 
-
     public interface OnItemClickListener {
         void onItemClick(View view , int position);
     }

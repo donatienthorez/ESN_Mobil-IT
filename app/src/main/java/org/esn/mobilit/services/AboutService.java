@@ -24,6 +24,10 @@ public class AboutService implements CachableInterface {
         return instance;
     }
 
+    public void resetService() {
+        instance = new AboutService();
+    }
+
     public void setSection(Section section) {
         this.section = section;
     }
@@ -55,23 +59,25 @@ public class AboutService implements CachableInterface {
             return;
         }
 
-        SectionProvider.makeRequest(section, new NetworkCallback<Section>() {
-            @Override
-            public void onSuccess(Section section) {
-                setSection(section);
-                setSectionToCache(section);
-                callback.onSuccess(section);
-            }
+        if (section != null) {
+            SectionProvider.makeRequest(section, new NetworkCallback<Section>() {
+                @Override
+                public void onSuccess(Section section) {
+                    setSection(section);
+                    setSectionToCache(section);
+                    callback.onSuccess(section);
+                }
 
-            @Override
-            public void onNoAvailableData() {
-                callback.onNoAvailableData();
-            }
+                @Override
+                public void onNoAvailableData() {
+                    callback.onNoAvailableData();
+                }
 
-            @Override
-            public void onFailure(String error) {
-                callback.onFailure(error);
-            }
-        });
+                @Override
+                public void onFailure(String error) {
+                    callback.onFailure(error);
+                }
+            });
+        }
     }
 }

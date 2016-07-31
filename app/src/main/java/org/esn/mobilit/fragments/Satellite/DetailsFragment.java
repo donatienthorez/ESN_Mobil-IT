@@ -38,8 +38,12 @@ public class DetailsFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_detail_feeds, null);
+        View view = inflater.inflate(R.layout.fragment_detail_feeds, container, false);
         ButterKnife.bind(this, view);
+
+        if (savedInstanceState != null) {
+            rssItem = (RSSItem) savedInstanceState.getSerializable("rssItem");
+        }
 
         title.setText(rssItem.getTitle());
 
@@ -57,10 +61,16 @@ public class DetailsFragment extends Fragment {
         webView.loadDataWithBaseURL("file:///android_asset/", stringBuilder.toString(), "text/html", "utf-8", null);
         webView.setHorizontalScrollBarEnabled(false);
         webView.setVerticalScrollBarEnabled(false);
+        webView.setScrollContainer(false);
         WebSettings webSettings = webView.getSettings();
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webSettings.setJavaScriptEnabled(true);
 
         return view;
+    }
+
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("rssItem", rssItem);
     }
 }

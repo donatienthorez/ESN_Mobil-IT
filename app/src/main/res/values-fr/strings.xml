@@ -30,9 +30,8 @@
     <!-- FIRST LAUNCH LAYOUT -->
     <string name="chooseyour">Choisis ton</string>
     <string name="country">pays</string>
-    <string name="city">ta ville</string>
-    <string name="esnsection">ta Section ESN</string>
-    <string name="and">et</string>
+    <string name="and">et ta</string>
+    <string name="esnsection"> Section ESN</string>
     <string name="start_button">Démarrer</string>
     <string name="selectyourcountry">Choisis ton pays</string>
     <string name="selectyoursection">Choisis ta section</string>

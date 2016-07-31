@@ -4,6 +4,7 @@ import android.content.Context;
 
 import org.esn.mobilit.MobilITApplication;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -11,7 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-public final class InternalStorage{
+public final class InternalStorage {
 
     public static void writeObject(String key, Object object) throws IOException {
         FileOutputStream fos = MobilITApplication.getContext().openFileOutput(key, Context.MODE_PRIVATE);
@@ -28,6 +29,12 @@ public final class InternalStorage{
             return false;
         }
         return true;
+    }
+
+    public static void deleteObject(String key) throws IOException {
+        File dir = MobilITApplication.getContext().getFilesDir();
+        File fileToDelete = new File(dir, key);
+        fileToDelete.delete();
     }
 
     public static Object readObject(String key) throws IOException,
