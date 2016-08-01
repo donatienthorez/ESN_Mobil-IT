@@ -30,7 +30,6 @@ public interface ApplicationConstants {
     String API_SECTIONS = "/sections/{section}";
 
     // Preferences and cache
-    String PREFERENCES_CODE_COUNTRY = "codeCountry";
     String PREFERENCES_CODE_SECTION = "codeSection";
     String PREFERENCES_REG_ID = "regId";
 

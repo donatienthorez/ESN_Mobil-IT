@@ -42,6 +42,10 @@ public class PreferencesService {
         setDefaults(ApplicationConstants.CACHE_DEFAULT_MENU, null);
         setDefaults(ApplicationConstants.PREFERENCES_CODE_SECTION, null);
         setDefaults(ApplicationConstants.PREFERENCES_REG_ID, null);
+        CacheService.deleteObjectFromCache(ApplicationConstants.CACHE_EVENTS);
+        CacheService.deleteObjectFromCache(ApplicationConstants.CACHE_PARTNERS);
+        CacheService.deleteObjectFromCache(ApplicationConstants.CACHE_NEWS);
+        CacheService.deleteObjectFromCache(ApplicationConstants.CACHE_GUIDE);
         CacheService.deleteObjectFromCache(ApplicationConstants.CACHE_DEFAULT_MENU);
         CacheService.deleteObjectFromCache(ApplicationConstants.CACHE_COUNTRY);
         CacheService.deleteObjectFromCache(ApplicationConstants.CACHE_SECTION);
