@@ -8,7 +8,7 @@ public interface ApplicationConstants {
     int ESNBlueRGB = Color.rgb(34,157,235);
 
     // Google Project Number
-    String GOOGLE_PROJ_ID = "1079816997";
+    String GOOGLE_PROJECT_ID = "1079816997";
 
     // GCM Messages
     String GCM_TITLE = "title";

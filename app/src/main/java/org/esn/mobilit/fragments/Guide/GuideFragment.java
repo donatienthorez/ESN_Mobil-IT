@@ -9,18 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.activities.HomeActivity;
 import org.esn.mobilit.adapters.GuideListAdapter;
 import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.models.Node;
 import org.esn.mobilit.services.GuideService;
-import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
 
 import java.util.List;
 

@@ -22,6 +22,6 @@ public class Reversed<T> implements Iterable<T> {
     }
 
     public static <T> Reversed<T> reversed(List<T> original) {
-        return new Reversed<T>(original);
+        return new Reversed<>(original);
     }
 }

@@ -5,14 +5,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -28,7 +25,6 @@ import org.esn.mobilit.models.Section;
 import org.esn.mobilit.renderers.HomepageRenderer;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.CountriesService;
-import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
@@ -80,7 +76,7 @@ public class FirstLaunchActivity extends Activity {
     private BroadcastReceiver networkStateReceiver;
 
     /**
-     * Saves country and section in cache and launchs the HomeActivity.
+     * Saves country and section in cache and launches the HomeActivity.
      *
      * @param view The view.
      */

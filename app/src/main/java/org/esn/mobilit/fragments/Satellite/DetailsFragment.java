@@ -45,26 +45,28 @@ public class DetailsFragment extends Fragment {
             rssItem = (RSSItem) savedInstanceState.getSerializable("rssItem");
         }
 
-        title.setText(rssItem.getTitle());
+        if (rssItem != null) {
+            title.setText(rssItem.getTitle());
 
-        Glide.with(MobilITApplication.getContext())
-                .load(rssItem.getImage())
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .fitCenter()
-                .into(imageView);
+            Glide.with(MobilITApplication.getContext())
+                    .load(rssItem.getImage())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .fitCenter()
+                    .into(imageView);
 
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("<html><head><link href=\"detailsFragment.css\" type=\"text/css\" rel=\"stylesheet\"/></head><body>");
-        stringBuilder.append(rssItem.getDescription());
-        stringBuilder.append("</body></HTML>");
-        
-        webView.loadDataWithBaseURL("file:///android_asset/", stringBuilder.toString(), "text/html", "utf-8", null);
-        webView.setHorizontalScrollBarEnabled(false);
-        webView.setVerticalScrollBarEnabled(false);
-        webView.setScrollContainer(false);
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        webSettings.setJavaScriptEnabled(true);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("<html><head><link href=\"detailsFragment.css\" type=\"text/css\" rel=\"stylesheet\"/></head><body>");
+            stringBuilder.append(rssItem.getDescription());
+            stringBuilder.append("</body></HTML>");
+
+            webView.loadDataWithBaseURL("file:///android_asset/", stringBuilder.toString(), "text/html", "utf-8", null);
+            webView.setHorizontalScrollBarEnabled(false);
+            webView.setVerticalScrollBarEnabled(false);
+            webView.setScrollContainer(false);
+            WebSettings webSettings = webView.getSettings();
+            webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+            webSettings.setJavaScriptEnabled(true);
+        }
 
         return view;
     }
