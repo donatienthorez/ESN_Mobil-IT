@@ -35,13 +35,14 @@ public class GuideFragment extends Fragment {
     private Guide guide;
     private Node currentNode;
     private List<Node> listNodes;
+    private GuideListAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_guide, container, false);
         ButterKnife.bind(this, view);
 
-        GuideListAdapter adapter = new GuideListAdapter(listNodes);
+        adapter = new GuideListAdapter(listNodes);
         adapter.setNodes(listNodes, currentNode);
 
         recyclerView.setHasFixedSize(true);
@@ -109,6 +110,7 @@ public class GuideFragment extends Fragment {
             this.guide = guide;
             this.listNodes = node != null ? node.getNodes() : guide.getNodes();
             this.currentNode = node;
+            adapter.setNodes(listNodes, currentNode);
         }
         return this;
     }
