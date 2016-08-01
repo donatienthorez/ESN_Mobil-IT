@@ -110,7 +110,9 @@ public class GuideFragment extends Fragment {
             this.guide = guide;
             this.listNodes = node != null ? node.getNodes() : guide.getNodes();
             this.currentNode = node;
-            adapter.setNodes(listNodes, currentNode);
+            if (adapter != null && currentNode == null) {
+                adapter.setNodes(listNodes, currentNode);
+            }
         }
         return this;
     }
