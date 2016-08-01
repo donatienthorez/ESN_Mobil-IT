@@ -32,6 +32,8 @@ public class NewsService extends RSSFeedService {
 
     public void getFromSite(NetworkCallback<RSSFeedParser> networkCallback) {
         Section section = (Section) CacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
-        FeedProvider.makeNewsRequest(section.getWebsite(), getCallback(networkCallback));
+        if (section != null) {
+            FeedProvider.makeNewsRequest(section.getWebsite(), getCallback(networkCallback));
+        }
     }
 }

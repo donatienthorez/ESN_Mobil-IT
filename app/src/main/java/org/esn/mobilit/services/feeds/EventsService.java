@@ -34,6 +34,8 @@ public class EventsService extends RSSFeedService {
     @Override
     public void getFromSite(NetworkCallback<RSSFeedParser> networkCallback) {
         Section section = (Section) CacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
-        FeedProvider.makeEventRequest(section.getWebsite(), getCallback(networkCallback));
+        if (section != null) {
+            FeedProvider.makeEventRequest(section.getWebsite(), getCallback(networkCallback));
+        }
     }
 }
