@@ -53,7 +53,7 @@ public class CountriesService implements CachableInterface {
             List<Country> cachedCountries = (List<Country>) CacheService.getObjectFromCache(getInstance().getString());
 
             if (cachedCountries == null || cachedCountries.size() == 0) {
-                callback.onNoAvailableData();
+                callback.onFailure("No network");
             } else {
                 callback.onSuccess(cachedCountries);
             }

@@ -34,6 +34,8 @@ public class PartnersService extends RSSFeedService {
     @Override
     public void getFromSite(NetworkCallback<RSSFeedParser> networkCallback) {
         Section section = (Section) CacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
-        FeedProvider.makePartnersRequest(section.getWebsite(), getCallback(networkCallback));
+        if (section != null) {
+            FeedProvider.makePartnersRequest(section.getWebsite(), getCallback(networkCallback));
+        }
     }
 }

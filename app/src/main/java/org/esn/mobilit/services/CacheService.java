@@ -1,13 +1,8 @@
 package org.esn.mobilit.services;
 
-import android.util.Log;
-
 import com.crashlytics.android.Crashlytics;
 
-import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.storage.InternalStorage;
-
-import java.io.IOException;
 
 public class CacheService {
 
@@ -32,19 +27,14 @@ public class CacheService {
      * @return Object o
      */
     public static Object getObjectFromCache(String key){
-        Object object = null;
-        if (!key.equalsIgnoreCase("countries")) {
-            key = PreferencesService.getDefaults(ApplicationConstants.PREFERENCES_CODE_SECTION) + "_" + key;
-        }
-
         try {
             if (InternalStorage.objectExists(key)) {
-                object = InternalStorage.readObject(key);
+                return InternalStorage.readObject(key);
             }
         } catch (Exception exception){
             Crashlytics.logException(exception);
         }
-        return object;
+        return null;
     }
 
     /*
@@ -54,12 +44,17 @@ public class CacheService {
      * @param Object o
      */
     public static void saveObjectToCache(String key, Object object){
-        if (!key.equalsIgnoreCase("countries")) {
-            key = PreferencesService.getDefaults(ApplicationConstants.PREFERENCES_CODE_SECTION) + "_" + key;
-        }
 
         try {
             InternalStorage.writeObject(key, object);
+        } catch (Exception exception){
+            Crashlytics.logException(exception);
+        }
+    }
+
+    public static void deleteObjectFromCache(String key){
+        try {
+            InternalStorage.deleteObject(key);
         } catch (Exception exception){
             Crashlytics.logException(exception);
         }

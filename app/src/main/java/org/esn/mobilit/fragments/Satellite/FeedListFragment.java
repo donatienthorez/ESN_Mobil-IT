@@ -3,23 +3,23 @@ package org.esn.mobilit.fragments.Satellite;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.activities.HomeActivity;
-import org.esn.mobilit.adapters.ListAdapter;
+import org.esn.mobilit.adapters.FeedListAdapter;
 import org.esn.mobilit.services.feeds.RSSFeedService;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
+
+import android.support.v7.widget.RecyclerView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,42 +28,48 @@ public class FeedListFragment extends Fragment
 {
     private RSSFeedParser feed;
     private RSSFeedService rssFeedService;
-    private ListAdapter adapter;
+    private FeedListAdapter adapter;
 
     @Bind(R.id.swipe_refresh) protected SwipeRefreshLayout swipeRefreshLayoutListView;
-    @Bind(R.id.list) protected ListView listView;
+    @Bind(R.id.recyclerViewFeedList) protected RecyclerView recyclerView;
     @Bind(R.id.empty) protected TextView emptyListMessage;
 
     public FeedListFragment setService(RSSFeedService rssFeedService){
         this.rssFeedService = rssFeedService;
-        this.feed = rssFeedService.getFromCache();
         return this;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list_feeds, container, false);
+        View view = inflater.inflate(R.layout.fragment_card_list, container, false);
         ButterKnife.bind(this, view);
+        rssFeedService = ((HomeActivity) getActivity()).getCurrentFeedService();
+        this.feed = rssFeedService.getFromCache();
 
-        adapter = new ListAdapter(feed, inflater);
-        listView.setAdapter(adapter);
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        recyclerView.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        recyclerView.setItemAnimator(null);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new FeedListAdapter(feed);
+        recyclerView.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new FeedListAdapter.OnItemClickListener() {
             @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                int topRowVerticalPosition =
-                        (listView == null || listView.getChildCount() == 0) ?
-                                0 : listView.getChildAt(0).getTop();
-                swipeRefreshLayoutListView.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
+            public void onItemClick(View view, int position) {
+                ((HomeActivity) getActivity()).loadDetailsFragment(feed.getItem(position), true);
             }
         });
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ((HomeActivity) getActivity()).loadDetailsFragment(feed.getItem(position), true);
+            public void onScrollStateChanged(RecyclerView view, int scrollState) {
+                super.onScrollStateChanged(recyclerView, scrollState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                int topRowVerticalPosition = (recyclerView == null || recyclerView.getChildCount() == 0) ? 0 : recyclerView.getChildAt(0).getTop();
+                swipeRefreshLayoutListView.setEnabled(topRowVerticalPosition >= 0);
             }
         });
 
@@ -74,11 +80,11 @@ public class FeedListFragment extends Fragment
                     refreshContent();
                 } else {
                     Toast.makeText(
-                        MobilITApplication.getContext(),
-                        getResources().getString(Utils.isConnected() ?
-                                R.string.error_message_network :
-                                R.string.info_message_no_network),
-                        Toast.LENGTH_SHORT
+                            MobilITApplication.getContext(),
+                            getResources().getString(Utils.isConnected() ?
+                                    R.string.error_message_network :
+                                    R.string.info_message_no_network),
+                            Toast.LENGTH_SHORT
                     ).show();
                     swipeRefreshLayoutListView.setRefreshing(false);
                 }
@@ -100,15 +106,17 @@ public class FeedListFragment extends Fragment
                 rssFeedService.getFromSite(new NetworkCallback<RSSFeedParser>() {
                     @Override
                     public void onSuccess(RSSFeedParser result) {
-                        feed = result;
-                        adapter.setFeed(feed);
+                        if (feed.getItemCount() != result.getItemCount()) {
+                            feed = result;
+                            adapter.setFeed(feed);
+                        }
                         swipeRefreshLayoutListView.setRefreshing(false);
                         emptyListMessage.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onNoAvailableData() {
-                        if (feed == null) {
+                        if (feed == null || feed.getItemCount() == 0) {
                             adapter.setEmptyList();
                             swipeRefreshLayoutListView.setRefreshing(false);
                             emptyListMessage.setVisibility(View.VISIBLE);
@@ -118,7 +126,7 @@ public class FeedListFragment extends Fragment
                     @Override
                     public void onFailure(String error) {
                         swipeRefreshLayoutListView.setRefreshing(false);
-                        emptyListMessage.setVisibility(feed == null ? View.VISIBLE : View.GONE);
+                        emptyListMessage.setVisibility((feed == null || feed.getItemCount() == 0) ? View.VISIBLE : View.GONE);
                     }
                 });
             }

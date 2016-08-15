@@ -18,7 +18,7 @@ public class Country implements Serializable{
         this.code_country = code_country;
         this.website = website;
         this.email = email;
-        this.sections = new ArrayList<Section>();
+        this.sections = new ArrayList<>();
     }
 
     public String getName() {
@@ -74,7 +74,7 @@ public class Country implements Serializable{
     }
 
     public ArrayList<String> getSectionsNamesArray() {
-        ArrayList<String> sections = new ArrayList<String>();
+        ArrayList<String> sections = new ArrayList<>();
         for (Section section : this.getSections()) {
             sections.add(section.getName());
         }

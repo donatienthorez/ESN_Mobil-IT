@@ -1,7 +1,5 @@
 package org.esn.mobilit.network.providers;
 
-import android.util.Log;
-
 import com.crashlytics.android.Crashlytics;
 
 import org.esn.mobilit.utils.ApplicationConstants;
