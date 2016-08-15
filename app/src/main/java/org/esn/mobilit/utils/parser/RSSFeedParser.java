@@ -7,8 +7,8 @@ import org.esn.mobilit.models.RSS.RSS;
 import org.esn.mobilit.models.RSS.RSSItem;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import static org.esn.mobilit.utils.Reversed.reversed;
 
@@ -19,7 +19,7 @@ public class RSSFeedParser implements Serializable {
 	private List<RSSItem> itemlist;
 
 	public RSSFeedParser() {
-		itemlist = new Vector<RSSItem>(0);
+		itemlist = new ArrayList<>();
 	}
 
     public RSSFeedParser(List<RSSItem> itemlist){

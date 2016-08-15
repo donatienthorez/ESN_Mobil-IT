@@ -8,7 +8,7 @@ public interface ApplicationConstants {
     int ESNBlueRGB = Color.rgb(34,157,235);
 
     // Google Project Number
-    String GOOGLE_PROJ_ID = "1079816997";
+    String GOOGLE_PROJECT_ID = "1079816997";
 
     // GCM Messages
     String GCM_TITLE = "title";
@@ -23,14 +23,13 @@ public interface ApplicationConstants {
     String EVENTS_PATH = "/events";
 
     // Path of Back-Office API
-    String API_ENDPOINT = "http://mobilit.esnlille.fr/api/android/v1";
+    String API_ENDPOINT = "http://dev.mobilit.esnlille.fr/api/android/v1";
     String API_COUNTRIES = "/countries/";
     String API_GUIDE = "/guides/{section}";
     String API_REGIDS = "/regids/";
     String API_SECTIONS = "/sections/{section}";
 
     // Preferences and cache
-    String PREFERENCES_CODE_COUNTRY = "codeCountry";
     String PREFERENCES_CODE_SECTION = "codeSection";
     String PREFERENCES_REG_ID = "regId";
 

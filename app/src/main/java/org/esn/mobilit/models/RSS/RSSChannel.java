@@ -29,7 +29,7 @@ public class RSSChannel {
 
     public List<RSSItem> getList(){
         if (rssItemList == null) {
-            rssItemList = new ArrayList<RSSItem>();
+            rssItemList = new ArrayList<>();
         }
         return rssItemList;
     }

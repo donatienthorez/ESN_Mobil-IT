@@ -50,7 +50,7 @@ public class RegIdService implements CachableInterface {
             setRegId(
                     GoogleCloudMessaging
                             .getInstance(MobilITApplication.getContext())
-                            .register(ApplicationConstants.GOOGLE_PROJ_ID)
+                            .register(ApplicationConstants.GOOGLE_PROJECT_ID)
             );
         } catch (IOException exception) {
             Crashlytics.logException(exception);

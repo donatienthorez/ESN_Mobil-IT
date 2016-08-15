@@ -23,14 +23,18 @@ import org.esn.mobilit.fragments.AboutFragment;
 import org.esn.mobilit.fragments.Guide.GuideFragment;
 import org.esn.mobilit.fragments.Satellite.DetailsFragment;
 import org.esn.mobilit.fragments.Satellite.FeedListFragment;
+import org.esn.mobilit.models.Guide;
+import org.esn.mobilit.models.Node;
 import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.AboutService;
 import org.esn.mobilit.services.CacheService;
+import org.esn.mobilit.services.GuideService;
 import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.services.feeds.EventsService;
 import org.esn.mobilit.services.feeds.NewsService;
 import org.esn.mobilit.services.feeds.PartnersService;
+import org.esn.mobilit.services.feeds.RSSFeedService;
 import org.esn.mobilit.services.gcm.RegIdService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
@@ -49,26 +53,29 @@ public class HomeActivity extends AppCompatActivity {
     private HashMap<String, Fragment> fragmentHashMap;
     private int currentFragmentId;
     private Section section;
+    private RSSFeedService currentFeedService;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        section = (Section) getIntent().getSerializableExtra("section");
 
-        section = (Section) CacheService.
-                getObjectFromCache(ApplicationConstants.CACHE_SECTION);
+        if (section == null) {
+            section = (Section) CacheService.
+                    getObjectFromCache(ApplicationConstants.CACHE_SECTION);
+        }
 
         if (section == null || TextUtils.isEmpty(section.getWebsite())) {
             Intent intent = new Intent(this, FirstLaunchActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            return;
-        }
-        ButterKnife.bind(this);
+        } else {
+            ButterKnife.bind(this);
 
-        registerRegId();
-        buildMenu();
-        manageGCMRedirection();
-        updateSection();
+            registerRegId();
+            buildMenu();
+            manageGCMRedirection();
+            updateSection();
+        }
     }
 
     /**
@@ -172,25 +179,26 @@ public class HomeActivity extends AppCompatActivity {
      * @param menuItemId  Id of the item selected.
      */
     private void executeDrawerMenuAction(int menuItemId) {
+        clearFragmentBackStack();
+        CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, menuItemId);
+
         switch (menuItemId) {
             case R.id.drawer_item_news:
-                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_news);
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_NEWS), menuItemId, false);
+                this.currentFeedService = NewsService.getInstance();
                 break;
             case R.id.drawer_item_events:
-                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_events);
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_EVENTS), menuItemId, false);
+                this.currentFeedService = EventsService.getInstance();
                 break;
             case R.id.drawer_item_partners:
-                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_partners);
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_PARTNERS), menuItemId, false);
+                this.currentFeedService = PartnersService.getInstance();
                 break;
             case R.id.drawer_item_guide:
-                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_guide);
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_GUIDE), menuItemId, false);
                 break;
             case R.id.drawer_item_about:
-                CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, R.id.drawer_item_about);
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_ABOUT), menuItemId, false);
                 break;
             case R.id.drawer_item_reset:
@@ -234,6 +242,16 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
+     * Loads the details fragment into the content frame.
+     * @param node Node to display into the details fragment.
+     * @param addToBackStack If the current fragment should be added to the back stack.
+     */
+    public void loadGuideFragment(Guide guide, Node node, boolean addToBackStack){
+        GuideFragment fragment = (new GuideFragment()).setCurrentNode(guide, node);
+        loadFragment(fragment, this.currentFragmentId, addToBackStack);
+    }
+
+    /**
      * Sets the Fragment HashMap menu.
      */
     public void setFragmentHashMap()
@@ -241,19 +259,19 @@ public class HomeActivity extends AppCompatActivity {
         fragmentHashMap = new HashMap<>();
         fragmentHashMap.put(
                 ApplicationConstants.MENU_NEWS,
-                (new FeedListFragment()).setService(NewsService.getInstance())
+                (new FeedListFragment())
         );
         fragmentHashMap.put(
                 ApplicationConstants.MENU_EVENTS,
-                (new FeedListFragment()).setService(EventsService.getInstance())
+                (new FeedListFragment())
         );
         fragmentHashMap.put(
                 ApplicationConstants.MENU_PARTNERS,
-                (new FeedListFragment()).setService(PartnersService.getInstance())
+                (new FeedListFragment())
         );
         fragmentHashMap.put(
                 ApplicationConstants.MENU_GUIDE,
-                new GuideFragment()
+                (new GuideFragment()).setCurrentNode(GuideService.getInstance().getFromCache(), null)
         );
         fragmentHashMap.put(
                 ApplicationConstants.MENU_ABOUT,
@@ -270,5 +288,16 @@ public class HomeActivity extends AppCompatActivity {
         } else {
             getFragmentManager().popBackStack();
         }
+    }
+
+    public void clearFragmentBackStack(){
+        FragmentManager fm = getFragmentManager();
+        for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+            fm.popBackStack();
+        }
+    }
+
+    public RSSFeedService getCurrentFeedService(){
+        return currentFeedService;
     }
 }
