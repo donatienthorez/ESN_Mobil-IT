@@ -32,9 +32,11 @@
     <string name="country">pays</string>
     <string name="and">et ta</string>
     <string name="esnsection"> Section ESN</string>
-    <string name="start_button">Démarrer</string>
+    <string name="first_launch_start_button">Démarrer</string>
     <string name="selectyourcountry">Choisis ton pays</string>
     <string name="selectyoursection">Choisis ta section</string>
+
+    <string name="about_fragment_about">Si vous avez des questions ou besoin d\'aide n\'hésitez pas à nous contacter.</string>
 
     <!-- Action Bar Title -->
     <string name="menu_drawer_item_news">Nouvelles</string>
@@ -48,4 +50,7 @@
     <string name="icon_book">&#xf02d;</string>
     <string name="icon_settings">&#xf013;</string>
     <string name="menu_drawer_item_settings">Paramètres</string>
+
+    <!--List Feeds-->
+    <string name="list_feeds_image_content_description">Image du flux</string>
 </resources>
