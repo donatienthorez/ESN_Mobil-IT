@@ -106,10 +106,8 @@ public class FeedListFragment extends Fragment
                 rssFeedService.getFromSite(new NetworkCallback<RSSFeedParser>() {
                     @Override
                     public void onSuccess(RSSFeedParser result) {
-                        if (feed.getItemCount() != result.getItemCount()) {
-                            feed = result;
-                            adapter.setFeed(feed);
-                        }
+                        feed = result;
+                        adapter.setFeed(feed);
                         swipeRefreshLayoutListView.setRefreshing(false);
                         emptyListMessage.setVisibility(View.GONE);
                     }
