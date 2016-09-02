@@ -43,32 +43,70 @@ public class RSSFeedParser implements Serializable {
 	}
 
 	public RSSItem getRSSItemFromTitle(String title) {
+		title = title.replaceAll("\\s+","");
 		for(RSSItem item : this.getList()) {
-			if (item.getTitle().equalsIgnoreCase(title)) {
+			String itemTitle = item.getTitle().replaceAll("\\s+","");
+			if (itemTitle.equalsIgnoreCase(title)) {
 				return item;
 			}
 		}
 		return null;
 	}
 
-	public boolean isInList(String title, String link) {
-		for(RSSItem item : this.getList()){
-			if (item.getTitle().equalsIgnoreCase(title) && item.getLink().equalsIgnoreCase(link)) {
-				return true;
+	/**
+	 *
+	 * @param link Link of the node
+	 * @return int position of the item in the list, -1 if not present
+	 */
+	public int getIndex(List<RSSItem> list, String link) {
+		int i = 0;
+		for(RSSItem item : list){
+			if (item.getLink().equalsIgnoreCase(link)) {
+				return i;
 			}
+			i++;
 		}
-		return false;
+		return -1;
 	}
 
-	public RSSFeedParser addItems(RSS rss) {
-		List<RSSItem> items = rss.getRSSChannel().getList();
+	public RSSFeedParser updateItems(List<RSSItem> serverItems) {
+		if (serverItems.size() == 0) {
+			return this;
+		}
 
-		for (RSSItem newItem : reversed(items)) {
-			if (!isInList(newItem.getTitle(), newItem.getLink())) {
-				getList().add(0, newItem);
-				moveImage(newItem);
+		List<RSSItem> cachedItems = this.getList();
+
+		// Add or update serverItems in cachedItems
+		for (RSSItem serverItem : reversed(serverItems)) {
+			int itemPosition = getIndex(cachedItems, serverItem.getLink());
+
+			if (itemPosition == -1) {
+				cachedItems.add(0, serverItem);
+			} else {
+				cachedItems.set(itemPosition, serverItem);
+			}
+			moveImage(serverItem);
+		}
+
+		// Get last item of the server
+		RSSItem lastServerItem = serverItems.get(serverItems.size()-1);
+
+		// Get index of this item in the cached list
+		int index = getIndex(cachedItems, lastServerItem.getLink());
+
+		// Remove from cachedItems the items that are not in serverItems (before the last serverItem).
+		int i = 0;
+		while (i < index && i < cachedItems.size()) {
+			RSSItem cachedItem = cachedItems.get(i);
+			int itemPosition = getIndex(serverItems, cachedItem.getLink());
+			if (itemPosition == -1) {
+				cachedItems.remove(i);
+				index--;
+			} else {
+				i++;
 			}
 		}
+		this.itemlist = cachedItems;
 
 		return this;
 	}
