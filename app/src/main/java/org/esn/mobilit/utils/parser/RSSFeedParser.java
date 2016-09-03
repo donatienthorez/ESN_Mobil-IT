@@ -59,16 +59,16 @@ public class RSSFeedParser implements Serializable {
 		}
 		return false;
 	}
-
-	public RSSFeedParser addItems(RSS rss) {
-		List<RSSItem> items = rss.getRSSChannel().getList();
-
-		for (RSSItem newItem : reversed(items)) {
-			if (!isInList(newItem.getTitle(), newItem.getLink())) {
-				getList().add(0, newItem);
-				moveImage(newItem);
-			}
+	public RSSFeedParser updateItems(List<RSSItem> serverItems) {
+		if (serverItems.size() == 0) {
+			return this;
 		}
+
+		for (RSSItem serverItem : serverItems) {
+			moveImage(serverItem);
+		}
+
+		this.itemlist = serverItems;
 
 		return this;
 	}
