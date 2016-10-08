@@ -12,8 +12,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -21,6 +23,7 @@ import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.fragments.AboutFragment;
 import org.esn.mobilit.fragments.Guide.GuideFragment;
+import org.esn.mobilit.fragments.NotificationFragment;
 import org.esn.mobilit.fragments.Satellite.DetailsFragment;
 import org.esn.mobilit.fragments.Satellite.FeedListFragment;
 import org.esn.mobilit.models.Guide;
@@ -54,6 +57,23 @@ public class HomeActivity extends AppCompatActivity {
     private int currentFragmentId;
     private Section section;
     private RSSFeedService currentFeedService;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_toolbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_notification:
+                loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_NOTIFICATIONS), this.currentFragmentId, true);
+                break;
+        }
+        return true;
+    }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -276,6 +296,10 @@ public class HomeActivity extends AppCompatActivity {
         fragmentHashMap.put(
                 ApplicationConstants.MENU_ABOUT,
                 new AboutFragment()
+        );
+        fragmentHashMap.put(
+                ApplicationConstants.MENU_NOTIFICATIONS,
+                new NotificationFragment()
         );
     }
 

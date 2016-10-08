@@ -49,6 +49,7 @@ public interface ApplicationConstants {
     String MENU_PARTNERS = "partners";
     String MENU_GUIDE = "guide";
     String MENU_ABOUT = "about";
+    String MENU_NOTIFICATIONS = "notifications";
 
     String CACHE_COUNTRIES = "countries";
 

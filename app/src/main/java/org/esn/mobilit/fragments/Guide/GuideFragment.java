@@ -39,7 +39,6 @@ public class GuideFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_guide, container, false);
         ButterKnife.bind(this, view);
 
-        adapter = new GuideListAdapter(listNodes);
         adapter.setNodes(listNodes, currentNode);
 
         recyclerView.setHasFixedSize(true);
