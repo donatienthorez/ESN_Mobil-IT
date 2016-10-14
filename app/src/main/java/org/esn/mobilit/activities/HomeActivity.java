@@ -11,11 +11,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -28,6 +28,7 @@ import org.esn.mobilit.fragments.Satellite.DetailsFragment;
 import org.esn.mobilit.fragments.Satellite.FeedListFragment;
 import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.models.Node;
+import org.esn.mobilit.models.Notification;
 import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.AboutService;
@@ -93,7 +94,7 @@ public class HomeActivity extends AppCompatActivity {
 
             registerRegId();
             buildMenu();
-            manageGCMRedirection();
+            manageNotificationRedirection();
             updateSection();
         }
     }
@@ -154,7 +155,7 @@ public class HomeActivity extends AppCompatActivity {
     /**
      * Redirects to details page of the notifications.
      */
-    private void manageGCMRedirection() {
+    private void manageNotificationRedirection() {
         Intent intent = getIntent();
 
         if (intent != null) {
@@ -163,6 +164,12 @@ public class HomeActivity extends AppCompatActivity {
             if (rssItem != null) {
                 uncheckNavigationViewItems();
                 this.loadDetailsFragment(rssItem, false);
+            } else {
+                Notification notification = (Notification) intent.getSerializableExtra(ApplicationConstants.GCM_NOTIFICATION);
+                if (notification != null && notification.getType().equals("BO")) {
+                    this.loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_NOTIFICATIONS), this.currentFragmentId, true);
+                }
+
             }
         }
     }

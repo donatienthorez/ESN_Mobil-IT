@@ -5,10 +5,12 @@ import java.io.Serializable;
 public class Notification implements Serializable {
     private String title;
     private String description;
+    private String type;
 
-    public Notification(String title, String description) {
+    public Notification(String title, String description, String type) {
         this.title = title;
         this.description = description;
+        this.type = type;
     }
 
     public String getTitle() {
@@ -25,5 +27,13 @@ public class Notification implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

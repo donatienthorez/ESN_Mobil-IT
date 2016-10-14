@@ -15,6 +15,7 @@ public interface ApplicationConstants {
     String GCM_CONTENT = "content";
     String GCM_TYPE = "type";
     String GCM_RSS_ITEM = "rssItem";
+    String GCM_NOTIFICATION = "notification";
 
     // Path for news event & partners
     String FEED_PATH = "/feed";
@@ -40,6 +41,14 @@ public interface ApplicationConstants {
     String CACHE_EVENTS = "events";
     String CACHE_PARTNERS = "partners";
     String CACHE_NEWS = "news";
+    String CACHE_NOTIFICATIONS = "notifications";
+
+    String NOTIFICATION_TYPE_EVENTS = "events";
+    String NOTIFICATION_TYPE_PARTNERS = "partners";
+    String NOTIFICATION_TYPE_NEWS = "news";
+    String NOTIFICATION_TYPE_GUIDE = "guide";
+    String NOTIFICATION_TYPE_TEXT = "text";
+    String NOTIFICATION_TYPE_LINK = "link";
 
     String CACHE_DEFAULT_MENU = "defaultMenu";
 

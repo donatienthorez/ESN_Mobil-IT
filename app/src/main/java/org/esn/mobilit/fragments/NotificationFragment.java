@@ -10,10 +10,8 @@ import android.view.ViewGroup;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.adapters.NotificationAdapter;
-import org.esn.mobilit.models.Notification;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.esn.mobilit.services.NotificationService;
+import org.esn.mobilit.widgets.DividerItemDecoration;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -21,9 +19,6 @@ import butterknife.ButterKnife;
 public class NotificationFragment extends Fragment {
 
     @Bind(R.id.recyclerViewNotificationsList) protected RecyclerView recyclerView;
-
-    private List<Notification> notifications;
-    private NotificationAdapter adapter;
 
     public View onCreateView(
             LayoutInflater inflater,
@@ -34,25 +29,13 @@ public class NotificationFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        adapter = new NotificationAdapter(getNotificationsList());
+        NotificationAdapter adapter = new NotificationAdapter(NotificationService.getInstance().getFromCache());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+        RecyclerView.ItemDecoration itemDecoration = new
+                DividerItemDecoration(getActivity(), null);
+        recyclerView.addItemDecoration(itemDecoration);
 
         return view;
-    }
-
-    /**
-     * To be deleted, just to give data for now
-     *
-     * @return List<Notification>
-     */
-    public List<Notification> getNotificationsList(){
-
-        notifications = new ArrayList<>();
-        notifications.add(new Notification("t1", "d1"));
-        notifications.add(new Notification("t2", "d2"));
-        notifications.add(new Notification("t3", "d3"));
-
-        return notifications;
     }
 }
