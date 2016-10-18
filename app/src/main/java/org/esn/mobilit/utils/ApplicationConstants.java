@@ -16,6 +16,7 @@ public interface ApplicationConstants {
     String GCM_TYPE = "type";
     String GCM_RSS_ITEM = "rssItem";
     String GCM_NOTIFICATION = "notification";
+    String GCM_LINK = "link";
 
     // Path for news event & partners
     String FEED_PATH = "/feed";
@@ -43,12 +44,20 @@ public interface ApplicationConstants {
     String CACHE_NEWS = "news";
     String CACHE_NOTIFICATIONS = "notifications";
 
-    String NOTIFICATION_TYPE_EVENTS = "events";
-    String NOTIFICATION_TYPE_PARTNERS = "partners";
-    String NOTIFICATION_TYPE_NEWS = "news";
-    String NOTIFICATION_TYPE_GUIDE = "guide";
-    String NOTIFICATION_TYPE_TEXT = "text";
-    String NOTIFICATION_TYPE_LINK = "link";
+    /** to be removed in the future **/
+    String NOTIFICATION_TYPE_EVENTS_OLD = "events";
+    String NOTIFICATION_TYPE_PARTNERS_OLD = "partners";
+    String NOTIFICATION_TYPE_NEWS_OLD = "news";
+    /***/
+
+    String NOTIFICATION_TYPE_DRUPAL_EVENTS = "DRUPAL-events";
+    String NOTIFICATION_TYPE_DRUPAL_PARTNERS = "DRUPAL-partners";
+    String NOTIFICATION_TYPE_DRUPAL_NEWS = "DRUPAL-news";
+    String NOTIFICATION_TYPE_BO_EVENTS = "BO-events";
+    String NOTIFICATION_TYPE_BO_PARTNERS = "BO-partners";
+    String NOTIFICATION_TYPE_BO_NEWS = "BO-news";
+    String NOTIFICATION_TYPE_BO_TEXT = "BO-text";
+    String NOTIFICATION_TYPE_BO_LINK = "BO-link";
 
     String CACHE_DEFAULT_MENU = "defaultMenu";
 

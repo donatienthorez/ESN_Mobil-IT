@@ -49,19 +49,32 @@ public class GcmIntentService extends IntentService {
                     String title = extras.getString(ApplicationConstants.GCM_TITLE);
                     String content = extras.getString(ApplicationConstants.GCM_CONTENT);
                     String type = extras.getString(ApplicationConstants.GCM_TYPE);
+                    String link = extras.getString(ApplicationConstants.GCM_LINK);
 
-                    Notification notification = new Notification(title, content, type);
+                    Notification notification = new Notification(title, content, type, link);
                     NotificationService.getInstance().addToCache(notification);
 
                     switch (notification.getType()) {
-                        case ApplicationConstants.NOTIFICATION_TYPE_NEWS:
-                            downloadFeed(NewsService.getInstance(), notification);
+                        case ApplicationConstants.NOTIFICATION_TYPE_DRUPAL_NEWS:
+                        case ApplicationConstants.NOTIFICATION_TYPE_NEWS_OLD:
+                            downloadFeed(NewsService.getInstance(), notification, notification.getDescription());
                             break;
-                        case ApplicationConstants.NOTIFICATION_TYPE_EVENTS:
-                            downloadFeed(EventsService.getInstance(), notification);
+                        case ApplicationConstants.NOTIFICATION_TYPE_BO_NEWS:
+                            downloadFeed(NewsService.getInstance(), notification, notification.getLink());
                             break;
-                        case ApplicationConstants.NOTIFICATION_TYPE_PARTNERS:
-                            downloadFeed(PartnersService.getInstance(), notification);
+                        case ApplicationConstants.NOTIFICATION_TYPE_DRUPAL_EVENTS:
+                        case ApplicationConstants.NOTIFICATION_TYPE_EVENTS_OLD:
+                            downloadFeed(EventsService.getInstance(), notification, notification.getDescription());
+                            break;
+                        case ApplicationConstants.NOTIFICATION_TYPE_BO_EVENTS:
+                            downloadFeed(EventsService.getInstance(), notification, notification.getLink());
+                            break;
+                        case ApplicationConstants.NOTIFICATION_TYPE_DRUPAL_PARTNERS:
+                        case ApplicationConstants.NOTIFICATION_TYPE_PARTNERS_OLD:
+                            downloadFeed(PartnersService.getInstance(), notification, notification.getDescription());
+                            break;
+                        case ApplicationConstants.NOTIFICATION_TYPE_BO_PARTNERS:
+                            downloadFeed(PartnersService.getInstance(), notification, notification.getLink());
                             break;
                         default:
                             sendNotification(null, notification);
@@ -72,11 +85,11 @@ public class GcmIntentService extends IntentService {
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    private void downloadFeed(RSSFeedService feedService, final Notification notification) {
+    private void downloadFeed(RSSFeedService feedService, final Notification notification, final String searchItem) {
         feedService.getFromSite(new NetworkCallback<RSSFeedParser>() {
             @Override
             public void onSuccess(RSSFeedParser result) {
-                RSSItem rssItem = result.getRSSItemFromTitle(notification.getDescription());
+                RSSItem rssItem = result.getRSSItemFromTitle(searchItem);
                 sendNotification(rssItem, notification);
             }
 

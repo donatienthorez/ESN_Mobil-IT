@@ -6,11 +6,13 @@ public class Notification implements Serializable {
     private String title;
     private String description;
     private String type;
+    private String link;
 
-    public Notification(String title, String description, String type) {
+    public Notification(String title, String description, String type, String link) {
         this.title = title;
         this.description = description;
         this.type = type;
+        this.link = link;
     }
 
     public String getTitle() {
@@ -35,5 +37,13 @@ public class Notification implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }
