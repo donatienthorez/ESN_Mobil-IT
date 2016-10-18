@@ -14,8 +14,18 @@ import java.util.List;
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
 
     private List<Notification> notifications;
+    OnItemClickListener itemClickListener;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public interface OnItemClickListener {
+        void onItemClick(View view , int position);
+    }
+
+    public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
+        this.itemClickListener = mItemClickListener;
+    }
+
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView title;
         TextView description;
 
@@ -23,6 +33,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             super(v);
             title = (TextView) v.findViewById(R.id.title);
             description = (TextView) v.findViewById(R.id.description);
+            v.setOnClickListener(this);
         }
 
         public void setTitle(String title) {
@@ -30,6 +41,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         }
         public void setDescription(String description) {
             this.description.setText(description);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (itemClickListener != null) {
+                itemClickListener.onItemClick(v, getLayoutPosition());
+            }
         }
     }
 

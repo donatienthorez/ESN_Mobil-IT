@@ -52,7 +52,6 @@ public class GcmIntentService extends IntentService {
                     String link = extras.getString(ApplicationConstants.GCM_LINK);
 
                     Notification notification = new Notification(title, content, type, link);
-                    NotificationService.getInstance().addToCache(notification);
 
                     switch (notification.getType()) {
                         case ApplicationConstants.NOTIFICATION_TYPE_DRUPAL_NEWS:
@@ -105,19 +104,18 @@ public class GcmIntentService extends IntentService {
         });
     }
 
-    private void sendNotification(RSSItem rssItem, Notification notification) {
+    private void sendNotification(final RSSItem rssItem, Notification notification) {
 
         Intent resultIntent = new Intent(this, HomeActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         if (rssItem != null) {
-            resultIntent.putExtra(ApplicationConstants.GCM_RSS_ITEM, rssItem);
+            notification.setRssItem(rssItem);
         }
+        //TODO put a value instead of an object (like ID to retrieve)
         resultIntent.putExtra(ApplicationConstants.GCM_NOTIFICATION, notification);
 
-        if (notification.getType() != null) {
-            resultIntent.putExtra(ApplicationConstants.GCM_TYPE, notification.getType());
-        }
+        NotificationService.getInstance().addToCache(notification);
 
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0,
                 resultIntent, PendingIntent.FLAG_ONE_SHOT);

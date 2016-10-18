@@ -159,19 +159,21 @@ public class HomeActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         if (intent != null) {
-            RSSItem rssItem = (RSSItem) intent.getSerializableExtra(ApplicationConstants.GCM_RSS_ITEM);
-
-            if (rssItem != null) {
-                uncheckNavigationViewItems();
-                this.loadDetailsFragment(rssItem, false);
-            } else {
-                Notification notification = (Notification) intent.getSerializableExtra(ApplicationConstants.GCM_NOTIFICATION);
-                if (notification != null && notification.getType().equals("BO")) {
-                    this.loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_NOTIFICATIONS), this.currentFragmentId, true);
-                }
-
+            Notification notification = (Notification) intent.getSerializableExtra(ApplicationConstants.GCM_NOTIFICATION);
+            if (notification != null) {
+                loadNotificationFragment(notification);
             }
         }
+    }
+
+    public void loadNotificationFragment(Notification notification) {
+        RSSItem rssItem = notification.getRssItem();
+        if (rssItem != null) {
+            uncheckNavigationViewItems();
+            this.loadDetailsFragment(rssItem, false);
+            return;
+        }
+        this.loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_NOTIFICATIONS), this.currentFragmentId, true);
     }
 
     /**

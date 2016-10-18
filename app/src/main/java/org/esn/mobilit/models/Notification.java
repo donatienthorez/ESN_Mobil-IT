@@ -1,5 +1,7 @@
 package org.esn.mobilit.models;
 
+import org.esn.mobilit.models.RSS.RSSItem;
+
 import java.io.Serializable;
 
 public class Notification implements Serializable {
@@ -7,6 +9,7 @@ public class Notification implements Serializable {
     private String description;
     private String type;
     private String link;
+    private RSSItem rssItem;
 
     public Notification(String title, String description, String type, String link) {
         this.title = title;
@@ -45,5 +48,13 @@ public class Notification implements Serializable {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public RSSItem getRssItem() {
+        return rssItem;
+    }
+
+    public void setRssItem(RSSItem rssItem) {
+        this.rssItem = rssItem;
     }
 }
