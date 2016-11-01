@@ -73,4 +73,7 @@ public interface ApplicationConstants {
 
     String MOBILIT_TOKEN = "g6g2A52mGPPbKaaHmFjz";
 
+    String FRAGMENT_FEED_DETAILS = "fragment-feed-details";
+    String FRAGMENT_GUIDE = "fragment-guide";
+
 }
