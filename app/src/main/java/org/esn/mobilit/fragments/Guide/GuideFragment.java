@@ -30,19 +30,16 @@ public class GuideFragment extends Fragment {
     @Bind(R.id.recyclerViewFeedList) protected RecyclerView recyclerView;
     @Bind(R.id.empty) protected TextView emptyListMessage;
     private Guide guide;
+    private Node currentNode;
     private List<Node> listNodes;
     private GuideListAdapter adapter;
-
-    private Node currentNode;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_guide, container, false);
         ButterKnife.bind(this, view);
 
-        adapter = new GuideListAdapter(listNodes);
         adapter.setNodes(listNodes, currentNode);
-        adapter.notifyDataSetChanged();
 
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -56,11 +53,9 @@ public class GuideFragment extends Fragment {
         adapter.setOnItemClickListener(new GuideListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                if (currentNode != null) {
-                    position--;
-                }
+                if (currentNode != null) { position--;}
                 if (position >= 0 && listNodes.get(position) != null) {
-                    ((HomeActivity) getActivity()).loadGuideFragment(guide, listNodes.get(position));
+                    ((HomeActivity) getActivity()).loadGuideFragment(guide, listNodes.get(position), true);
                 }
             }
         });
@@ -106,19 +101,15 @@ public class GuideFragment extends Fragment {
         swipeRefreshLayoutListView.post(thread);
     }
 
-    public void setCurrentNode(Guide guide, Node node) {
+    public GuideFragment setCurrentNode(Guide guide, Node node) {
         if (guide != null && guide.isActivated() && guide.isCreated()) {
             this.guide = guide;
-            currentNode = node;
-
-            if (node != null) {
-                this.listNodes = node.getNodes();
-            } else {
-                this.listNodes = guide.getNodes();
-            }
-            if (adapter != null) {
+            this.listNodes = node != null ? node.getNodes() : guide.getNodes();
+            this.currentNode = node;
+            if (adapter != null && currentNode == null) {
                 adapter.setNodes(listNodes, currentNode);
             }
         }
+        return this;
     }
 }

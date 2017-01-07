@@ -34,9 +34,15 @@ public class FeedListFragment extends Fragment
     @Bind(R.id.recyclerViewFeedList) protected RecyclerView recyclerView;
     @Bind(R.id.empty) protected TextView emptyListMessage;
 
+    public FeedListFragment setService(RSSFeedService rssFeedService){
+        this.rssFeedService = rssFeedService;
+        return this;
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_card_list, container, false);
         ButterKnife.bind(this, view);
+        rssFeedService = ((HomeActivity) getActivity()).getCurrentFeedService();
         this.feed = rssFeedService.getFromCache();
 
         recyclerView.setHasFixedSize(true);
@@ -125,9 +131,5 @@ public class FeedListFragment extends Fragment
         });
         thread.setPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
         swipeRefreshLayoutListView.post(thread);
-    }
-
-    public void setRssFeedService(RSSFeedService rssFeedService) {
-        this.rssFeedService = rssFeedService;
     }
 }

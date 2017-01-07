@@ -7,7 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.activities.HomeActivity;
 import org.esn.mobilit.adapters.NotificationAdapter;
