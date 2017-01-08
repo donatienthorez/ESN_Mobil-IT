@@ -43,6 +43,9 @@ public class RSSFeedParser implements Serializable {
 	}
 
 	public RSSItem getRSSItemFromTitle(String title) {
+		if (title == null) {
+			return null;
+		}
 		title = title.replaceAll("\\s+","");
 		for(RSSItem item : this.getList()) {
 			String itemTitle = item.getTitle().replaceAll("\\s+","");

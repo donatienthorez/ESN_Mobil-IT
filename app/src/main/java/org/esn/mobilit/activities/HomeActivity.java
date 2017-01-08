@@ -11,7 +11,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
 
@@ -21,10 +23,12 @@ import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.fragments.AboutFragment;
 import org.esn.mobilit.fragments.Guide.GuideFragment;
+import org.esn.mobilit.fragments.NotificationFragment;
 import org.esn.mobilit.fragments.Satellite.DetailsFragment;
 import org.esn.mobilit.fragments.Satellite.FeedListFragment;
 import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.models.Node;
+import org.esn.mobilit.models.Notification;
 import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.AboutService;
@@ -55,6 +59,23 @@ public class HomeActivity extends AppCompatActivity {
     private Section section;
     private RSSFeedService currentFeedService;
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_toolbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_notification:
+                loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_NOTIFICATIONS), this.currentFragmentId, true);
+                break;
+        }
+        return true;
+    }
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
@@ -73,7 +94,7 @@ public class HomeActivity extends AppCompatActivity {
 
             registerRegId();
             buildMenu();
-            manageGCMRedirection();
+            manageNotificationRedirection();
             updateSection();
         }
     }
@@ -134,17 +155,25 @@ public class HomeActivity extends AppCompatActivity {
     /**
      * Redirects to details page of the notifications.
      */
-    private void manageGCMRedirection() {
+    private void manageNotificationRedirection() {
         Intent intent = getIntent();
 
         if (intent != null) {
-            RSSItem rssItem = (RSSItem) intent.getSerializableExtra(ApplicationConstants.GCM_RSS_ITEM);
-
-            if (rssItem != null) {
-                uncheckNavigationViewItems();
-                this.loadDetailsFragment(rssItem, false);
+            Notification notification = (Notification) intent.getSerializableExtra(ApplicationConstants.GCM_NOTIFICATION);
+            if (notification != null) {
+                loadNotificationFragment(notification);
             }
         }
+    }
+
+    public void loadNotificationFragment(Notification notification) {
+        RSSItem rssItem = notification.getRssItem();
+        if (rssItem != null) {
+            uncheckNavigationViewItems();
+            this.loadDetailsFragment(rssItem, false);
+            return;
+        }
+        this.loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_NOTIFICATIONS), this.currentFragmentId, true);
     }
 
     /**
@@ -276,6 +305,10 @@ public class HomeActivity extends AppCompatActivity {
         fragmentHashMap.put(
                 ApplicationConstants.MENU_ABOUT,
                 new AboutFragment()
+        );
+        fragmentHashMap.put(
+                ApplicationConstants.MENU_NOTIFICATIONS,
+                new NotificationFragment()
         );
     }
 
