@@ -1,5 +1,6 @@
 package org.esn.mobilit.services.gcm;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -15,25 +16,28 @@ import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.services.interfaces.CachableInterface;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.Callback;
+import org.esn.mobilit.utils.inject.ForApplication;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import retrofit.client.Response;
 
+@Singleton
 public class RegIdService implements CachableInterface {
 
     String regId = "";
-    public static final String TAG = "RegIdService";
+    private static final String TAG = "RegIdService";
 
-    private static RegIdService instance;
+    Context context;
+    @Inject
+    PreferencesService preferencesService;
 
-    private RegIdService(){}
-
-    public static RegIdService getInstance(){
-        if (instance == null){
-            instance = new RegIdService();
-        }
-        return instance;
+    @Inject
+    public RegIdService(@ForApplication Context context) {
+        this.context = context;
     }
 
     public String getString(){
@@ -49,7 +53,7 @@ public class RegIdService implements CachableInterface {
         try {
             setRegId(
                     GoogleCloudMessaging
-                            .getInstance(MobilITApplication.getContext())
+                            .getInstance(context)
                             .register(ApplicationConstants.GOOGLE_PROJECT_ID)
             );
         } catch (IOException exception) {
@@ -66,7 +70,7 @@ public class RegIdService implements CachableInterface {
                 new Callback<Response>() {
                     @Override
                     public void onSuccess(Response result) {
-                        PreferencesService.setDefaults(getString(), regId);
+                        preferencesService.setDefaults(getString(), regId);
                     }
 
                     @Override
@@ -78,7 +82,7 @@ public class RegIdService implements CachableInterface {
 
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil
-                .isGooglePlayServicesAvailable(MobilITApplication.getContext());
+                .isGooglePlayServicesAvailable(context);
         return resultCode == ConnectionResult.SUCCESS;
     }
 

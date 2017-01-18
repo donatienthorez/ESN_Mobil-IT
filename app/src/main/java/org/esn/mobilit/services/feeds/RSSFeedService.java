@@ -5,19 +5,27 @@ import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.interfaces.CachableInterface;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
+import org.simpleframework.xml.util.Cache;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public abstract class RSSFeedService implements CachableInterface {
 
     public abstract String getString();
     public abstract void getFromSite(NetworkCallback<RSSFeedParser> networkCallback);
     public abstract void resetService();
 
+    @Inject
+    CacheService cacheService;
+
     private void setFeedToCache(RSSFeedParser feed) {
-        CacheService.saveObjectToCache(this.getString(), feed);
+        cacheService.saveObjectToCache(this.getString(), feed);
     }
 
     public RSSFeedParser getFromCache() {
-        RSSFeedParser rssFeedParser = (RSSFeedParser) CacheService.getObjectFromCache(this.getString());
+        RSSFeedParser rssFeedParser = (RSSFeedParser) cacheService.getObjectFromCache(this.getString());
         return rssFeedParser != null ? rssFeedParser : new RSSFeedParser();
     }
 

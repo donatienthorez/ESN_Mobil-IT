@@ -16,10 +16,13 @@ import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.models.Node;
 import org.esn.mobilit.services.GuideService;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
+import org.esn.mobilit.utils.inject.InjectUtil;
 
 import android.support.v7.widget.RecyclerView;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,11 +37,15 @@ public class GuideFragment extends Fragment {
     private List<Node> listNodes;
     private GuideListAdapter adapter;
 
+    @Inject
+    GuideService guideService;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_guide, container, false);
         ButterKnife.bind(this, view);
-
+        InjectUtil.component().inject(this);
+        adapter = new GuideListAdapter();
         adapter.setNodes(listNodes, currentNode);
 
         recyclerView.setHasFixedSize(true);
@@ -72,7 +79,7 @@ public class GuideFragment extends Fragment {
         Thread thread = (new Thread() {
             @Override
             public void run() {
-                GuideService.getInstance().getFromSite(new NetworkCallback<Guide>() {
+                guideService.getFromSite(new NetworkCallback<Guide>() {
                     @Override
                     public void onSuccess(Guide result) {
                         setCurrentNode(result, currentNode);

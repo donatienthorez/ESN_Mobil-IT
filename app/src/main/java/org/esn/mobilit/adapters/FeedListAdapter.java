@@ -1,5 +1,6 @@
 package org.esn.mobilit.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.RSS.RSSItem;
+import org.esn.mobilit.utils.inject.ForApplication;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
+
+import javax.inject.Inject;
 
 public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHolder> {
 

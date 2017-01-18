@@ -1,5 +1,7 @@
 package org.esn.mobilit.utils.parser;
 
+import android.content.Context;
+
 import com.bumptech.glide.Glide;
 
 import org.esn.mobilit.MobilITApplication;
@@ -9,6 +11,8 @@ import org.esn.mobilit.models.RSS.RSSItem;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import static org.esn.mobilit.utils.Reversed.reversed;
 
@@ -41,6 +45,8 @@ public class RSSFeedParser implements Serializable {
 	public int getItemCount() {
 		return getList().size();
 	}
+
+	Context context;
 
 	public RSSItem getRSSItemFromTitle(String title) {
 		if (title == null) {

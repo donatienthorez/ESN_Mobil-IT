@@ -3,6 +3,7 @@ package org.esn.mobilit.activities;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -42,8 +43,12 @@ import org.esn.mobilit.services.feeds.RSSFeedService;
 import org.esn.mobilit.services.gcm.RegIdService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
+import org.esn.mobilit.utils.inject.AppComponent;
+import org.esn.mobilit.utils.inject.InjectUtil;
 
 import java.util.HashMap;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -58,6 +63,24 @@ public class HomeActivity extends AppCompatActivity {
     private int currentFragmentId;
     private Section section;
     private RSSFeedService currentFeedService;
+
+    @Inject
+    CacheService cacheService;
+
+    @Inject
+    PreferencesService preferencesService;
+    @Inject
+    RegIdService regIdService;
+    @Inject
+    AboutService aboutService;
+    @Inject
+    EventsService eventsService;
+    @Inject
+    NewsService newsService;
+    @Inject
+    PartnersService partnersService;
+    @Inject
+    GuideService guideService;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -79,11 +102,12 @@ public class HomeActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        AppComponent parentComponent = InjectUtil.component();
+        inject(parentComponent);
         section = (Section) getIntent().getSerializableExtra("section");
 
         if (section == null) {
-            section = (Section) CacheService.
-                    getObjectFromCache(ApplicationConstants.CACHE_SECTION);
+            section = (Section) cacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
         }
 
         if (section == null || TextUtils.isEmpty(section.getWebsite())) {
@@ -99,12 +123,16 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    protected void inject(AppComponent component) {
+        component.inject(this);
+    }
+
     /**
      * Build the left drawer menu.
      */
     private void buildMenu() {
         setFragmentHashMap();
-        Object defaultMenu = CacheService.getObjectFromCache(ApplicationConstants.CACHE_DEFAULT_MENU);
+        Object defaultMenu = cacheService.getObjectFromCache(ApplicationConstants.CACHE_DEFAULT_MENU);
         executeDrawerMenuAction(defaultMenu != null ? (int) defaultMenu : R.id.drawer_item_news);
         setSupportActionBar(toolbar);
 
@@ -122,9 +150,9 @@ public class HomeActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
-        Glide.with(MobilITApplication.getContext())
-                .load(section.getLogo_url())
-                .downloadOnly(150, 250);
+//        Glide.with(context)
+//                .load(section.getLogo_url())
+//                .downloadOnly(150, 250);
     }
 
     /**
@@ -145,7 +173,7 @@ public class HomeActivity extends AppCompatActivity {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                RegIdService.getInstance().register(section);
+                regIdService.register(section);
             }
         });
         thread.setPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
@@ -180,7 +208,7 @@ public class HomeActivity extends AppCompatActivity {
      * Updates the section..
      */
     private void updateSection(){
-        AboutService.getInstance().getFromSite(new NetworkCallback<Section>() {
+        aboutService.getFromSite(new NetworkCallback<Section>() {
             @Override
             public void onSuccess(Section result) {
                 // If the user is on the about tab it updates the section.
@@ -209,20 +237,20 @@ public class HomeActivity extends AppCompatActivity {
      */
     private void executeDrawerMenuAction(int menuItemId) {
         clearFragmentBackStack();
-        CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, menuItemId);
+        cacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, menuItemId);
 
         switch (menuItemId) {
             case R.id.drawer_item_news:
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_NEWS), menuItemId, false);
-                this.currentFeedService = NewsService.getInstance();
+                this.currentFeedService = newsService;
                 break;
             case R.id.drawer_item_events:
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_EVENTS), menuItemId, false);
-                this.currentFeedService = EventsService.getInstance();
+                this.currentFeedService = eventsService;
                 break;
             case R.id.drawer_item_partners:
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_PARTNERS), menuItemId, false);
-                this.currentFeedService = PartnersService.getInstance();
+                this.currentFeedService = partnersService;
                 break;
             case R.id.drawer_item_guide:
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_GUIDE), menuItemId, false);
@@ -231,7 +259,7 @@ public class HomeActivity extends AppCompatActivity {
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_ABOUT), menuItemId, false);
                 break;
             case R.id.drawer_item_reset:
-                PreferencesService.resetSection();
+                preferencesService.resetSection();
                 Intent intent = new Intent(this, FirstLaunchActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -300,7 +328,7 @@ public class HomeActivity extends AppCompatActivity {
         );
         fragmentHashMap.put(
                 ApplicationConstants.MENU_GUIDE,
-                (new GuideFragment()).setCurrentNode(GuideService.getInstance().getFromCache(), null)
+                (new GuideFragment()).setCurrentNode(guideService.getFromCache(), null)
         );
         fragmentHashMap.put(
                 ApplicationConstants.MENU_ABOUT,

@@ -24,12 +24,26 @@ import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class GcmIntentService extends IntentService {
     public static final int notifyID = 9001;
 
+    @Inject
     public GcmIntentService() {
         super("GcmIntentService");
     }
+
+    @Inject
+    NewsService newsService;
+    @Inject
+    EventsService eventsService;
+    @Inject
+    PartnersService partnersService;
+    @Inject
+    NotificationService notificationService;
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -56,24 +70,24 @@ public class GcmIntentService extends IntentService {
                     switch (notification.getType()) {
                         case ApplicationConstants.NOTIFICATION_TYPE_DRUPAL_NEWS:
                         case ApplicationConstants.NOTIFICATION_TYPE_NEWS_OLD:
-                            downloadFeed(NewsService.getInstance(), notification, notification.getDescription());
+                            downloadFeed(newsService, notification, notification.getDescription());
                             break;
                         case ApplicationConstants.NOTIFICATION_TYPE_BO_NEWS:
-                            downloadFeed(NewsService.getInstance(), notification, notification.getLink());
+                            downloadFeed(newsService, notification, notification.getLink());
                             break;
                         case ApplicationConstants.NOTIFICATION_TYPE_DRUPAL_EVENTS:
                         case ApplicationConstants.NOTIFICATION_TYPE_EVENTS_OLD:
-                            downloadFeed(EventsService.getInstance(), notification, notification.getDescription());
+                            downloadFeed(eventsService, notification, notification.getDescription());
                             break;
                         case ApplicationConstants.NOTIFICATION_TYPE_BO_EVENTS:
-                            downloadFeed(EventsService.getInstance(), notification, notification.getLink());
+                            downloadFeed(eventsService, notification, notification.getLink());
                             break;
                         case ApplicationConstants.NOTIFICATION_TYPE_DRUPAL_PARTNERS:
                         case ApplicationConstants.NOTIFICATION_TYPE_PARTNERS_OLD:
-                            downloadFeed(PartnersService.getInstance(), notification, notification.getDescription());
+                            downloadFeed(partnersService, notification, notification.getDescription());
                             break;
                         case ApplicationConstants.NOTIFICATION_TYPE_BO_PARTNERS:
-                            downloadFeed(PartnersService.getInstance(), notification, notification.getLink());
+                            downloadFeed(partnersService, notification, notification.getLink());
                             break;
                         default:
                             sendNotification(null, notification);
@@ -115,7 +129,7 @@ public class GcmIntentService extends IntentService {
         //TODO put a value instead of an object (like ID to retrieve)
         resultIntent.putExtra(ApplicationConstants.GCM_NOTIFICATION, notification);
 
-        NotificationService.getInstance().addToCache(notification);
+        notificationService.addToCache(notification);
 
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0,
                 resultIntent, PendingIntent.FLAG_ONE_SHOT);

@@ -27,9 +27,13 @@ import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.CountriesService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
+import org.esn.mobilit.utils.inject.InjectUtil;
+import org.simpleframework.xml.util.Cache;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -48,6 +52,14 @@ public class FirstLaunchActivity extends Activity {
     public Spinner spinnerCountries;
     @Bind(R.id.spinnerSections)
     public Spinner spinnerSections;
+
+    @Inject
+    CacheService cacheService;
+    @Inject
+    CountriesService countriesService;
+    @Inject
+    HomepageRenderer homepageRenderer;
+
 
     private List<Country> countryList;
     private Country currentCountry;
@@ -84,8 +96,8 @@ public class FirstLaunchActivity extends Activity {
     public void launchHomeActivity(View view) {
         Section currentSection = currentCountry.getSections().get(sectionPosition);
 
-        CacheService.saveObjectToCache(ApplicationConstants.CACHE_COUNTRY, currentCountry);
-        CacheService.saveObjectToCache(ApplicationConstants.CACHE_SECTION, currentSection);
+        cacheService.saveObjectToCache(ApplicationConstants.CACHE_COUNTRY, currentCountry);
+        cacheService.saveObjectToCache(ApplicationConstants.CACHE_SECTION, currentSection);
 
         Intent intent = new Intent(FirstLaunchActivity.this, HomeActivity.class);
         intent.putExtra("section", currentSection);
@@ -98,6 +110,7 @@ public class FirstLaunchActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_launch);
+        InjectUtil.component().inject(this);
 
         initContent();
         networkStateReceiver = new BroadcastReceiver() {
@@ -131,7 +144,6 @@ public class FirstLaunchActivity extends Activity {
 
         startButton.setEnabled(false);
 
-        HomepageRenderer homepageRenderer = new HomepageRenderer();
         SpannableStringBuilder text = homepageRenderer.renderHomepageText();
         chooseCountryTextView.setText(text, TextView.BufferType.SPANNABLE);
 
@@ -149,7 +161,7 @@ public class FirstLaunchActivity extends Activity {
      * Gets the countries and initializes country spinner on success.
      */
     private void getCountries() {
-        CountriesService.getCountries(new NetworkCallback<List<Country>>() {
+        countriesService.getCountries(new NetworkCallback<List<Country>>() {
             @Override
             public void onSuccess(List<Country> result) {
                 countryLoaded = true;
@@ -164,21 +176,21 @@ public class FirstLaunchActivity extends Activity {
 
             @Override
             public void onNoAvailableData() {
-                Toast.makeText(
-                        MobilITApplication.getContext(),
-                        getResources().getString(R.string.error_message_no_data_countries),
-                        Toast.LENGTH_LONG
-                ).show();
+//                Toast.makeText(
+//                        context,
+//                        getResources().getString(R.string.error_message_no_data_countries),
+//                        Toast.LENGTH_LONG
+//                ).show();
             }
 
             @Override
             public void onFailure(String error) {
-                Toast.makeText(
-                        MobilITApplication.getContext(),
-                        getResources().getString(R.string.error_message_network),
-                        Toast.LENGTH_LONG
-                ).show();
-                progressBar.setVisibility(View.GONE);
+//                Toast.makeText(
+//                        context,
+//                        getResources().getString(R.string.error_message_network),
+//                        Toast.LENGTH_LONG
+//                ).show();
+//                progressBar.setVisibility(View.GONE);
             }
         });
     }

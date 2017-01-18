@@ -7,23 +7,14 @@ import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class EventsService extends RSSFeedService {
 
-    private static EventsService instance;
-
-    private EventsService(){
-    }
-
-    public static EventsService getInstance(){
-        if (instance == null){
-            instance = new EventsService();
-        }
-        return instance;
-    }
-
-    @Override
-    public void resetService() {
-        instance = new EventsService();
+    @Inject
+    public EventsService() {
     }
 
     @Override
@@ -33,9 +24,14 @@ public class EventsService extends RSSFeedService {
 
     @Override
     public void getFromSite(NetworkCallback<RSSFeedParser> networkCallback) {
-        Section section = (Section) CacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
+        Section section = (Section) cacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
         if (section != null) {
             FeedProvider.makeEventRequest(section.getWebsite(), getCallback(networkCallback));
         }
+    }
+
+    @Override
+    public void resetService() {
+
     }
 }

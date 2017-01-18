@@ -1,14 +1,17 @@
 buildscript {
     repositories {
+        mavenCentral()
         maven { url 'https://maven.fabric.io/public' }
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'io.fabric.tools:gradle:1.22.0'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
     }
 }
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
+apply plugin: 'com.neenbedankt.android-apt'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
@@ -23,6 +26,11 @@ android {
         minSdkVersion 14
         targetSdkVersion 23
         multiDexEnabled true
+    }
+
+    dexOptions {
+        incremental true
+        javaMaxHeapSize "4g"
     }
 
     buildTypes {
@@ -58,4 +66,7 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.github.bumptech.glide:glide:3.6.1'
+    apt 'com.google.dagger:dagger-compiler:2.5'
+    compile 'com.google.dagger:dagger:2.5'
+    provided 'javax.annotation:jsr250-api:1.0' // needed by the dagger compiler during compilation
 }

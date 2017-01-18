@@ -9,29 +9,29 @@ import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class CountriesService implements CachableInterface {
+    @Inject
+    CacheService cacheService;
+    @Inject
+    Utils utils;
 
-    private static CountriesService instance;
-
-    private CountriesService(){
+    @Inject
+    public CountriesService(){
     }
 
-    public static CountriesService getInstance(){
-        if (instance == null){
-            instance = new CountriesService();
-        }
-        return instance;
-    }
-
-    public static void getCountries(final NetworkCallback<List<Country>> callback) {
-        if (Utils.isConnected()) {
+    public void getCountries(final NetworkCallback<List<Country>> callback) {
+        if (utils.isConnected()) {
             Thread thread = (new Thread() {
                 @Override
                 public void run() {
                     CountryProvider.makeCountriesRequest(new NetworkCallback<List<Country>>() {
                         @Override
                         public void onSuccess(List<Country> result) {
-                            CacheService.saveObjectToCache(getInstance().getString(), result);
+                            cacheService.saveObjectToCache(getString(), result);
                             callback.onSuccess(result);
                         }
 
@@ -50,7 +50,7 @@ public class CountriesService implements CachableInterface {
             thread.setPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
             thread.start();
         } else {
-            List<Country> cachedCountries = (List<Country>) CacheService.getObjectFromCache(getInstance().getString());
+            List<Country> cachedCountries = (List<Country>) cacheService.getObjectFromCache(getString());
 
             if (cachedCountries == null || cachedCountries.size() == 0) {
                 callback.onFailure("No network");

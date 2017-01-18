@@ -7,11 +7,16 @@ import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class PartnersService extends RSSFeedService {
 
     private static PartnersService instance;
 
-    private PartnersService() {
+    @Inject
+    public PartnersService() {
     }
 
     public static PartnersService getInstance() {
@@ -33,7 +38,7 @@ public class PartnersService extends RSSFeedService {
 
     @Override
     public void getFromSite(NetworkCallback<RSSFeedParser> networkCallback) {
-        Section section = (Section) CacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
+        Section section = (Section) cacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
         if (section != null) {
             FeedProvider.makePartnersRequest(section.getWebsite(), getCallback(networkCallback));
         }

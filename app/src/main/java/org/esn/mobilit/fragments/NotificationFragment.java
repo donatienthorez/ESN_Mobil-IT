@@ -15,9 +15,12 @@ import org.esn.mobilit.activities.HomeActivity;
 import org.esn.mobilit.adapters.NotificationAdapter;
 import org.esn.mobilit.models.Notification;
 import org.esn.mobilit.services.NotificationService;
+import org.esn.mobilit.utils.inject.InjectUtil;
 import org.esn.mobilit.widgets.DividerItemDecoration;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -27,6 +30,9 @@ public class NotificationFragment extends Fragment {
     @Bind(R.id.recyclerViewNotificationsList) protected RecyclerView recyclerView;
     private List<Notification> notificationList;
 
+    @Inject
+    NotificationService notificationService;
+
     public View onCreateView(
             LayoutInflater inflater,
             ViewGroup container,
@@ -34,9 +40,10 @@ public class NotificationFragment extends Fragment {
     ){
         View view = inflater.inflate(R.layout.fragment_notification, container, false);
         ButterKnife.bind(this, view);
+        InjectUtil.component().inject(this);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        notificationList = NotificationService.getInstance().getFromCache();
+        notificationList = notificationService.getFromCache();
         NotificationAdapter adapter = new NotificationAdapter(notificationList);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);

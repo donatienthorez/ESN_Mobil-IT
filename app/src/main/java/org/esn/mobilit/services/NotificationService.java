@@ -6,27 +6,26 @@ import org.esn.mobilit.utils.ApplicationConstants;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class NotificationService implements CachableInterface {
+
+    @Inject
+    CacheService cacheService;
+
+    @Inject
+    public NotificationService() {
+    }
 
     @Override
     public String getString() {
         return ApplicationConstants.CACHE_NOTIFICATIONS;
     }
 
-    private static NotificationService instance;
-
-    private NotificationService(){
-    }
-
-    public static NotificationService getInstance(){
-        if (instance == null){
-            instance = new NotificationService();
-        }
-        return instance;
-    }
-
     public ArrayList<Notification> getFromCache() {
-        return  (ArrayList<Notification>) CacheService.getObjectFromCache(getString());
+        return  (ArrayList<Notification>) cacheService.getObjectFromCache(getString());
     }
 
     public void addToCache(Notification notification) {
@@ -41,6 +40,6 @@ public class NotificationService implements CachableInterface {
     }
 
     public void setToCache(ArrayList<Notification> notifications) {
-        CacheService.saveObjectToCache(getString(), notifications);
+        cacheService.saveObjectToCache(getString(), notifications);
     }
 }

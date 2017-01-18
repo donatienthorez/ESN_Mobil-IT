@@ -1,23 +1,30 @@
 package org.esn.mobilit.services;
 
+import android.content.Context;
+
 import com.crashlytics.android.Crashlytics;
 
+import org.esn.mobilit.utils.inject.ForApplication;
 import org.esn.mobilit.utils.storage.InternalStorage;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class CacheService {
 
     private static final String TAG = CacheService.class.getSimpleName();
-    private static CacheService instance;
 
-    private CacheService(){
+    Context context;
+
+    @Inject
+    public CacheService(@ForApplication Context context) {
+        this.context = context;
     }
 
-    public static CacheService getInstance(){
-        if (instance == null){
-            instance = new CacheService();
-        }
-        return instance;
-    }
+    @Inject
+    InternalStorage internalStorage;
+
 
     /*
      * Get serializable object in cache
@@ -26,10 +33,10 @@ public class CacheService {
      *
      * @return Object o
      */
-    public static Object getObjectFromCache(String key){
+    public Object getObjectFromCache(String key){
         try {
-            if (InternalStorage.objectExists(key)) {
-                return InternalStorage.readObject(key);
+            if (internalStorage.objectExists(key)) {
+                return internalStorage.readObject(key);
             }
         } catch (Exception exception){
             Crashlytics.logException(exception);
@@ -43,18 +50,18 @@ public class CacheService {
      * @param String key
      * @param Object o
      */
-    public static void saveObjectToCache(String key, Object object){
+    public void saveObjectToCache(String key, Object object){
 
         try {
-            InternalStorage.writeObject(key, object);
+            internalStorage.writeObject(key, object);
         } catch (Exception exception){
             Crashlytics.logException(exception);
         }
     }
 
-    public static void deleteObjectFromCache(String key){
+    public void deleteObjectFromCache(String key){
         try {
-            InternalStorage.deleteObject(key);
+            internalStorage.deleteObject(key);
         } catch (Exception exception){
             Crashlytics.logException(exception);
         }

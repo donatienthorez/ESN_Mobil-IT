@@ -1,6 +1,7 @@
 package org.esn.mobilit.fragments.Satellite;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -17,9 +18,12 @@ import org.esn.mobilit.adapters.FeedListAdapter;
 import org.esn.mobilit.services.feeds.RSSFeedService;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
+import org.esn.mobilit.utils.inject.InjectUtil;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 import android.support.v7.widget.RecyclerView;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -33,6 +37,9 @@ public class FeedListFragment extends Fragment
     @Bind(R.id.swipe_refresh) protected SwipeRefreshLayout swipeRefreshLayoutListView;
     @Bind(R.id.recyclerViewFeedList) protected RecyclerView recyclerView;
     @Bind(R.id.empty) protected TextView emptyListMessage;
+    Context context = MobilITApplication.getContext();
+    @Inject
+    Utils utils;
 
     public FeedListFragment setService(RSSFeedService rssFeedService){
         this.rssFeedService = rssFeedService;
@@ -42,6 +49,8 @@ public class FeedListFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_card_list, container, false);
         ButterKnife.bind(this, view);
+
+        InjectUtil.component().inject(this);
         rssFeedService = ((HomeActivity) getActivity()).getCurrentFeedService();
         this.feed = rssFeedService.getFromCache();
 
@@ -76,12 +85,12 @@ public class FeedListFragment extends Fragment
         swipeRefreshLayoutListView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (Utils.isConnected()) {
+                if (utils.isConnected()) {
                     refreshContent();
                 } else {
                     Toast.makeText(
-                            MobilITApplication.getContext(),
-                            getResources().getString(Utils.isConnected() ?
+                            context,
+                            getResources().getString(utils.isConnected() ?
                                     R.string.error_message_network :
                                     R.string.info_message_no_network),
                             Toast.LENGTH_SHORT

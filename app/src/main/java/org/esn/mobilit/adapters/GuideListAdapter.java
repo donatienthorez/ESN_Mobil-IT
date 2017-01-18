@@ -1,5 +1,6 @@
 package org.esn.mobilit.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +16,22 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Node;
+import org.esn.mobilit.utils.inject.ForApplication;
+import org.esn.mobilit.utils.inject.InjectUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.ViewHolderItem> {
     private List<Node> nodes;
     private Node currentNode;
+    private Context context;
+
+    public GuideListAdapter() {
+        context = MobilITApplication.getContext();
+    }
 
     OnItemClickListener itemClickListener;
 
@@ -53,7 +63,7 @@ public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.View
 
         public void setImage(String imageLink) {
             if (imageLink != null && !imageLink.isEmpty()) {
-                Glide.with(MobilITApplication.getContext())
+                Glide.with(context)
                         .load(imageLink)
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .into(imageView);

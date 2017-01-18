@@ -1,5 +1,7 @@
 package org.esn.mobilit.services;
 
+import android.content.Context;
+
 import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Guide;
@@ -9,24 +11,31 @@ import org.esn.mobilit.services.interfaces.CachableInterface;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
+import org.esn.mobilit.utils.inject.ForApplication;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class GuideService implements CachableInterface {
-    private static GuideService instance;
+
+    @Inject
+    CacheService cacheService;
+    @Inject
+    AboutService aboutService;
+    @Inject
+    Utils utils;
+
+    Context context;
 
     private Guide guide;
 
-    private GuideService(){
-    }
-
-    public static GuideService getInstance() {
-        if (instance == null){
-            instance = new GuideService();
-        }
-        return instance;
+    @Inject
+    public GuideService(@ForApplication Context context) {
+        this.context = context;
     }
 
     public void resetService() {
-        instance = new GuideService();
     }
 
     public void setGuide(Guide guide) {
@@ -42,17 +51,17 @@ public class GuideService implements CachableInterface {
     }
 
     public Guide getFromCache() {
-        return (Guide) CacheService.getObjectFromCache(getString());
+        return (Guide) cacheService.getObjectFromCache(getString());
     }
 
-    public void setGuideToCache(Guide guide) {
-        CacheService.saveObjectToCache(getString(), guide);
+    private void setGuideToCache(Guide guide) {
+        cacheService.saveObjectToCache(getString(), guide);
     }
 
     public void getFromSite(final NetworkCallback<Guide> callback) {
-        final Section section = AboutService.getInstance().getFromCache();
-        if (!Utils.isConnected()) {
-            callback.onFailure(MobilITApplication.getContext().getResources().getString(
+        final Section section = aboutService.getFromCache();
+        if (!utils.isConnected()) {
+            callback.onFailure(context.getResources().getString(
                     R.string.info_message_no_network
             ));
         }
