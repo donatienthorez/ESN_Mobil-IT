@@ -4,12 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.services.feeds.EventsService;
 import org.esn.mobilit.services.feeds.NewsService;
 import org.esn.mobilit.services.feeds.PartnersService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.inject.ForApplication;
+import org.esn.mobilit.utils.inject.InjectUtil;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -24,13 +24,17 @@ public class PreferencesService {
     @Inject
     NewsService newsService;
     @Inject
+    PartnersService partnersService;
+    @Inject
     GuideService guideService;
 
+    @ForApplication
+    @Inject
     Context context;
 
     @Inject
-    public PreferencesService(@ForApplication Context context) {
-        this.context = context;
+    public PreferencesService() {
+        InjectUtil.component().inject(this);
     }
 
     public void setDefaults(String key, String value) {
@@ -49,17 +53,17 @@ public class PreferencesService {
         guideService.resetService();
         eventsService.resetService();
         newsService.resetService();
-        PartnersService.getInstance().resetService();
+        partnersService.resetService();
         setDefaults(ApplicationConstants.CACHE_DEFAULT_MENU, null);
         setDefaults(ApplicationConstants.PREFERENCES_CODE_SECTION, null);
         setDefaults(ApplicationConstants.PREFERENCES_REG_ID, null);
-        cacheService.deleteObjectFromCache(ApplicationConstants.CACHE_EVENTS);
-        cacheService.deleteObjectFromCache(ApplicationConstants.CACHE_PARTNERS);
-        cacheService.deleteObjectFromCache(ApplicationConstants.CACHE_NEWS);
-        cacheService.deleteObjectFromCache(ApplicationConstants.CACHE_GUIDE);
-        cacheService.deleteObjectFromCache(ApplicationConstants.CACHE_DEFAULT_MENU);
-        cacheService.deleteObjectFromCache(ApplicationConstants.CACHE_COUNTRY);
-        cacheService.deleteObjectFromCache(ApplicationConstants.CACHE_SECTION);
+        cacheService.delete(ApplicationConstants.CACHE_EVENTS);
+        cacheService.delete(ApplicationConstants.CACHE_PARTNERS);
+        cacheService.delete(ApplicationConstants.CACHE_NEWS);
+        cacheService.delete(ApplicationConstants.CACHE_GUIDE);
+        cacheService.delete(ApplicationConstants.CACHE_DEFAULT_MENU);
+        cacheService.delete(ApplicationConstants.CACHE_COUNTRY);
+        cacheService.delete(ApplicationConstants.CACHE_SECTION);
 
     }
 }

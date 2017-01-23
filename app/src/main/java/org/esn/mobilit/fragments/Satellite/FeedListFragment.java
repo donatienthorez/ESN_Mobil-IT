@@ -11,13 +11,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.activities.HomeActivity;
 import org.esn.mobilit.adapters.FeedListAdapter;
 import org.esn.mobilit.services.feeds.RSSFeedService;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
+import org.esn.mobilit.utils.inject.ForApplication;
 import org.esn.mobilit.utils.inject.InjectUtil;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
@@ -37,7 +37,11 @@ public class FeedListFragment extends Fragment
     @Bind(R.id.swipe_refresh) protected SwipeRefreshLayout swipeRefreshLayoutListView;
     @Bind(R.id.recyclerViewFeedList) protected RecyclerView recyclerView;
     @Bind(R.id.empty) protected TextView emptyListMessage;
-    Context context = MobilITApplication.getContext();
+
+    @ForApplication
+    @Inject
+    Context context;
+
     @Inject
     Utils utils;
 

@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.utils.inject.ForApplication;
@@ -36,7 +35,9 @@ public class DetailsFragment extends Fragment {
     @Bind(R.id.desc) WebView webView;
     @Bind(R.id.scrollView) ScrollView scrollView;
 
-    Context context = MobilITApplication.getContext();
+    @ForApplication
+    @Inject
+    Context context;
 
     public DetailsFragment setFeed(RSSItem rssItem){
         this.rssItem = rssItem;

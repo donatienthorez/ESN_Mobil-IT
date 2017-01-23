@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.AboutService;
@@ -38,7 +37,9 @@ public class AboutFragment extends Fragment {
     @Inject
     AboutService aboutService;
 
-    Context context = MobilITApplication.getContext();
+    @ForApplication
+    @Inject
+    Context context;
 
     public View onCreateView(
             LayoutInflater inflater,

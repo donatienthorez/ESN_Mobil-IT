@@ -4,26 +4,26 @@ import android.content.Context;
 
 import com.bumptech.glide.Glide;
 
-import org.esn.mobilit.MobilITApplication;
-import org.esn.mobilit.models.RSS.RSS;
 import org.esn.mobilit.models.RSS.RSSItem;
+import org.esn.mobilit.utils.inject.ForApplication;
+import org.esn.mobilit.utils.inject.InjectUtil;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import static org.esn.mobilit.utils.Reversed.reversed;
-
-public class RSSFeedParser implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class RSSFeedParser {
 
 	private List<RSSItem> itemlist;
 
+	@ForApplication
+	@Inject
+	Context context;
+
 	public RSSFeedParser() {
 		itemlist = new ArrayList<>();
+		InjectUtil.component().inject(this);
 	}
 
     public RSSFeedParser(List<RSSItem> itemlist){
@@ -46,7 +46,6 @@ public class RSSFeedParser implements Serializable {
 		return getList().size();
 	}
 
-	Context context;
 
 	public RSSItem getRSSItemFromTitle(String title) {
 		if (title == null) {
@@ -94,7 +93,7 @@ public class RSSFeedParser implements Serializable {
 	public void moveImage(RSSItem rssItem){
 		DOMParser.moveImage(rssItem);
 
-		Glide.with(MobilITApplication.getContext())
+		Glide.with(context)
 				.load(rssItem.getImage())
 				.preload(150, 250);
 	}

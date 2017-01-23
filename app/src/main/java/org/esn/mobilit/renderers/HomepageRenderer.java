@@ -5,9 +5,7 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
-import org.esn.mobilit.activities.HomeActivity;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.inject.ForApplication;
 

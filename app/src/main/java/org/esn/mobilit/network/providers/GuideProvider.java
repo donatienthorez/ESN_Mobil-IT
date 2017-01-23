@@ -17,8 +17,6 @@ import retrofit.http.Query;
 
 public class GuideProvider {
 
-    public static final String TAG = "GuideProvider";
-
     private static RestAdapter restAdapter = new RestAdapter.Builder()
             .setEndpoint(ApplicationConstants.API_ENDPOINT)
             .build();

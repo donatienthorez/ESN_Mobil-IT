@@ -11,10 +11,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.utils.inject.ForApplication;
+import org.esn.mobilit.utils.inject.InjectUtil;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 import javax.inject.Inject;
@@ -23,6 +23,10 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 
     private RSSFeedParser feed;
     OnItemClickListener itemClickListener;
+
+    @ForApplication
+    @Inject
+    Context context;
 
     public interface OnItemClickListener {
         void onItemClick(View view , int position);
@@ -48,7 +52,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
         }
 
         public void setImage(String imageLink) {
-            Glide.with(MobilITApplication.getContext())
+            Glide.with(context)
                     .load(imageLink)
                     .placeholder(R.drawable.default_list_item)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -81,6 +85,8 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
                                                    int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_feeds, parent, false);
+
+        InjectUtil.component().inject(this);
 
         return new ViewHolder(view);
     }

@@ -29,7 +29,4 @@ public class InjectUtil {
     public static AppComponent component() {
         return component;
     }
-
-    public static void inject(HomeActivity homeActivity) {
-    }
 }

@@ -31,7 +31,7 @@ public class CountriesService implements CachableInterface {
                     CountryProvider.makeCountriesRequest(new NetworkCallback<List<Country>>() {
                         @Override
                         public void onSuccess(List<Country> result) {
-                            cacheService.saveObjectToCache(getString(), result);
+                            cacheService.save(getString(), result);
                             callback.onSuccess(result);
                         }
 
@@ -50,7 +50,7 @@ public class CountriesService implements CachableInterface {
             thread.setPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
             thread.start();
         } else {
-            List<Country> cachedCountries = (List<Country>) cacheService.getObjectFromCache(getString());
+            List<Country> cachedCountries = (List<Country>) cacheService.get(getString());
 
             if (cachedCountries == null || cachedCountries.size() == 0) {
                 callback.onFailure("No network");

@@ -1,10 +1,9 @@
 package org.esn.mobilit.services.feeds;
 
-import org.esn.mobilit.models.Section;
 import org.esn.mobilit.network.providers.FeedProvider;
-import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
+import org.esn.mobilit.utils.inject.InjectUtil;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 import javax.inject.Inject;
@@ -14,7 +13,11 @@ import javax.inject.Singleton;
 public class EventsService extends RSSFeedService {
 
     @Inject
+    FeedProvider feedProvider;
+
+    @Inject
     public EventsService() {
+        InjectUtil.component().inject(this);
     }
 
     @Override
@@ -24,10 +27,7 @@ public class EventsService extends RSSFeedService {
 
     @Override
     public void getFromSite(NetworkCallback<RSSFeedParser> networkCallback) {
-        Section section = (Section) cacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
-        if (section != null) {
-            FeedProvider.makeEventRequest(section.getWebsite(), getCallback(networkCallback));
-        }
+        feedProvider.makeEventRequest(getCallback(networkCallback));
     }
 
     @Override

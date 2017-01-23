@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Node;
 import org.esn.mobilit.utils.inject.ForApplication;
@@ -27,11 +26,10 @@ import javax.inject.Inject;
 public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.ViewHolderItem> {
     private List<Node> nodes;
     private Node currentNode;
-    private Context context;
 
-    public GuideListAdapter() {
-        context = MobilITApplication.getContext();
-    }
+    @ForApplication
+    @Inject
+    Context context;
 
     OnItemClickListener itemClickListener;
 
@@ -109,9 +107,7 @@ public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.View
         }
     }
 
-    public GuideListAdapter(List<Node> nodes) {
-        this.nodes = nodes;
-    }
+    public GuideListAdapter() {}
 
     public void setNodes(List<Node> nodes, Node currentNode) {
         this.nodes = nodes != null ? nodes : new ArrayList<Node>();
@@ -122,6 +118,7 @@ public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.View
     @Override
     public ViewHolderItem onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
+        InjectUtil.component().inject(this);
 
         if (viewType == DEFAULT_CATEGORY_DETAILS) {
             view = LayoutInflater.from(parent.getContext())

@@ -11,8 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,7 +18,6 @@ import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.fragments.AboutFragment;
 import org.esn.mobilit.fragments.Guide.GuideFragment;
@@ -33,6 +30,7 @@ import org.esn.mobilit.models.Notification;
 import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.AboutService;
+import org.esn.mobilit.services.AppState;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.GuideService;
 import org.esn.mobilit.services.PreferencesService;
@@ -43,7 +41,7 @@ import org.esn.mobilit.services.feeds.RSSFeedService;
 import org.esn.mobilit.services.gcm.RegIdService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
-import org.esn.mobilit.utils.inject.AppComponent;
+import org.esn.mobilit.utils.inject.ForApplication;
 import org.esn.mobilit.utils.inject.InjectUtil;
 
 import java.util.HashMap;
@@ -61,7 +59,6 @@ public class HomeActivity extends AppCompatActivity {
     @Bind(R.id.navigation_view) protected NavigationView navigationView;
     private HashMap<String, Fragment> fragmentHashMap;
     private int currentFragmentId;
-    private Section section;
     private RSSFeedService currentFeedService;
 
     @Inject
@@ -81,6 +78,14 @@ public class HomeActivity extends AppCompatActivity {
     PartnersService partnersService;
     @Inject
     GuideService guideService;
+
+    /***********************************/
+
+    @ForApplication @Inject
+    Context context;
+
+    @Inject
+    AppState appState;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -102,15 +107,9 @@ public class HomeActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        AppComponent parentComponent = InjectUtil.component();
-        inject(parentComponent);
-        section = (Section) getIntent().getSerializableExtra("section");
+        InjectUtil.component().inject(this);
 
-        if (section == null) {
-            section = (Section) cacheService.getObjectFromCache(ApplicationConstants.CACHE_SECTION);
-        }
-
-        if (section == null || TextUtils.isEmpty(section.getWebsite())) {
+        if (!appState.hasValidSection()) {
             Intent intent = new Intent(this, FirstLaunchActivity.class);
             startActivity(intent);
         } else {
@@ -123,16 +122,12 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    protected void inject(AppComponent component) {
-        component.inject(this);
-    }
-
     /**
      * Build the left drawer menu.
      */
     private void buildMenu() {
         setFragmentHashMap();
-        Object defaultMenu = cacheService.getObjectFromCache(ApplicationConstants.CACHE_DEFAULT_MENU);
+        Object defaultMenu = cacheService.get(ApplicationConstants.CACHE_DEFAULT_MENU);
         executeDrawerMenuAction(defaultMenu != null ? (int) defaultMenu : R.id.drawer_item_news);
         setSupportActionBar(toolbar);
 
@@ -150,9 +145,9 @@ public class HomeActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
-//        Glide.with(context)
-//                .load(section.getLogo_url())
-//                .downloadOnly(150, 250);
+        Glide.with(context)
+                .load(appState.getSection().getLogo_url())
+                .downloadOnly(150, 250);
     }
 
     /**
@@ -173,7 +168,7 @@ public class HomeActivity extends AppCompatActivity {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                regIdService.register(section);
+                regIdService.register(appState.getSection());
             }
         });
         thread.setPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
@@ -214,7 +209,7 @@ public class HomeActivity extends AppCompatActivity {
                 // If the user is on the about tab it updates the section.
                 if (currentFragmentId == R.id.drawer_item_about) {
                     ((AboutFragment) fragmentHashMap.get(ApplicationConstants.MENU_ABOUT)).setSection(result);
-                    section = result;
+                    appState.setSection(result, true);
                 }
             }
 
@@ -237,7 +232,7 @@ public class HomeActivity extends AppCompatActivity {
      */
     private void executeDrawerMenuAction(int menuItemId) {
         clearFragmentBackStack();
-        cacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, menuItemId);
+        cacheService.save(ApplicationConstants.CACHE_DEFAULT_MENU, menuItemId);
 
         switch (menuItemId) {
             case R.id.drawer_item_news:

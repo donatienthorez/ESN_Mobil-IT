@@ -17,18 +17,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.adapters.SpinnerAdapter;
 import org.esn.mobilit.models.Country;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.renderers.HomepageRenderer;
+import org.esn.mobilit.services.AppState;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.CountriesService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
+import org.esn.mobilit.utils.inject.ForApplication;
 import org.esn.mobilit.utils.inject.InjectUtil;
-import org.simpleframework.xml.util.Cache;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +60,12 @@ public class FirstLaunchActivity extends Activity {
     @Inject
     HomepageRenderer homepageRenderer;
 
+    @ForApplication
+    @Inject
+    Context context;
+
+    @Inject
+    AppState appState;
 
     private List<Country> countryList;
     private Country currentCountry;
@@ -96,11 +102,12 @@ public class FirstLaunchActivity extends Activity {
     public void launchHomeActivity(View view) {
         Section currentSection = currentCountry.getSections().get(sectionPosition);
 
-        cacheService.saveObjectToCache(ApplicationConstants.CACHE_COUNTRY, currentCountry);
-        cacheService.saveObjectToCache(ApplicationConstants.CACHE_SECTION, currentSection);
+        cacheService.save(ApplicationConstants.CACHE_COUNTRY, currentCountry);
+        cacheService.save(ApplicationConstants.CACHE_SECTION, currentSection);
 
         Intent intent = new Intent(FirstLaunchActivity.this, HomeActivity.class);
-        intent.putExtra("section", currentSection);
+        appState.setSection(currentSection, true);
+
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
@@ -176,21 +183,21 @@ public class FirstLaunchActivity extends Activity {
 
             @Override
             public void onNoAvailableData() {
-//                Toast.makeText(
-//                        context,
-//                        getResources().getString(R.string.error_message_no_data_countries),
-//                        Toast.LENGTH_LONG
-//                ).show();
+                Toast.makeText(
+                        context,
+                        getResources().getString(R.string.error_message_no_data_countries),
+                        Toast.LENGTH_LONG
+                ).show();
             }
 
             @Override
             public void onFailure(String error) {
-//                Toast.makeText(
-//                        context,
-//                        getResources().getString(R.string.error_message_network),
-//                        Toast.LENGTH_LONG
-//                ).show();
-//                progressBar.setVisibility(View.GONE);
+                Toast.makeText(
+                        context,
+                        getResources().getString(R.string.error_message_network),
+                        Toast.LENGTH_LONG
+                ).show();
+                progressBar.setVisibility(View.GONE);
             }
         });
     }

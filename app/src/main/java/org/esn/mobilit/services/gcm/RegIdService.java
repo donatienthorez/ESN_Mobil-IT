@@ -9,7 +9,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.network.providers.PostRegProvider;
 import org.esn.mobilit.services.PreferencesService;
@@ -31,7 +30,9 @@ public class RegIdService implements CachableInterface {
     String regId = "";
     private static final String TAG = "RegIdService";
 
+
     Context context;
+
     @Inject
     PreferencesService preferencesService;
 

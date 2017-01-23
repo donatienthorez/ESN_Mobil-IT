@@ -2,8 +2,8 @@ package org.esn.mobilit.utils.storage;
 
 import android.content.Context;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.utils.inject.ForApplication;
+import org.esn.mobilit.utils.inject.InjectUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,11 +19,13 @@ import javax.inject.Singleton;
 @Singleton
 public class InternalStorage {
 
+    @ForApplication
+    @Inject
     Context context;
 
     @Inject
-    public InternalStorage(@ForApplication Context context) {
-        this.context = context;
+    public InternalStorage() {
+        InjectUtil.component().inject(this);
     }
 
     public void writeObject(String key, Object object) throws IOException {

@@ -25,7 +25,7 @@ public class NotificationService implements CachableInterface {
     }
 
     public ArrayList<Notification> getFromCache() {
-        return  (ArrayList<Notification>) cacheService.getObjectFromCache(getString());
+        return  (ArrayList<Notification>) cacheService.get(getString());
     }
 
     public void addToCache(Notification notification) {
@@ -40,6 +40,6 @@ public class NotificationService implements CachableInterface {
     }
 
     public void setToCache(ArrayList<Notification> notifications) {
-        cacheService.saveObjectToCache(getString(), notifications);
+        cacheService.save(getString(), notifications);
     }
 }

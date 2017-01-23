@@ -2,7 +2,6 @@ package org.esn.mobilit.services;
 
 import android.content.Context;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.network.providers.SectionProvider;
@@ -40,11 +39,11 @@ public class AboutService implements CachableInterface {
     }
 
     public Section getFromCache() {
-        return (Section) cacheService.getObjectFromCache(this.getString());
+        return (Section) cacheService.get(this.getString());
     }
 
     public void setSectionToCache(Section section) {
-        cacheService.saveObjectToCache(getString(), section);
+        cacheService.save(getString(), section);
     }
 
     @Override

@@ -3,7 +3,6 @@ package org.esn.mobilit.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.utils.inject.ForApplication;
 
 import javax.inject.Inject;

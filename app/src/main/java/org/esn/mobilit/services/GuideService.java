@@ -2,7 +2,6 @@ package org.esn.mobilit.services;
 
 import android.content.Context;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.models.Section;
@@ -51,11 +50,11 @@ public class GuideService implements CachableInterface {
     }
 
     public Guide getFromCache() {
-        return (Guide) cacheService.getObjectFromCache(getString());
+        return (Guide) cacheService.get(getString());
     }
 
     private void setGuideToCache(Guide guide) {
-        cacheService.saveObjectToCache(getString(), guide);
+        cacheService.save(getString(), guide);
     }
 
     public void getFromSite(final NetworkCallback<Guide> callback) {
