@@ -101,6 +101,10 @@ public class GcmIntentService extends IntentService {
     private void downloadFeed(RSSFeedService feedService, final Notification notification, final String searchItem) {
         feedService.getFromSite(new NetworkCallback<RSSFeedParser>() {
             @Override
+            public void onNoConnection() {
+            }
+
+            @Override
             public void onSuccess(RSSFeedParser result) {
                 RSSItem rssItem = result.getRSSItemFromTitle(searchItem);
                 sendNotification(rssItem, notification);

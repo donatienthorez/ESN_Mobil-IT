@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.bumptech.glide.Glide;
 
+import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.utils.inject.ForApplication;
 import org.esn.mobilit.utils.inject.InjectUtil;
@@ -17,13 +18,8 @@ public class RSSFeedParser {
 
 	private List<RSSItem> itemlist;
 
-	@ForApplication
-	@Inject
-	Context context;
-
 	public RSSFeedParser() {
 		itemlist = new ArrayList<>();
-		InjectUtil.component().inject(this);
 	}
 
     public RSSFeedParser(List<RSSItem> itemlist){
@@ -76,9 +72,9 @@ public class RSSFeedParser {
 		}
 		return -1;
 	}
-	public RSSFeedParser updateItems(List<RSSItem> serverItems) {
+	public void updateItems(List<RSSItem> serverItems) {
 		if (serverItems.size() == 0) {
-			return this;
+			return;
 		}
 
 		for (RSSItem serverItem : serverItems) {
@@ -86,15 +82,17 @@ public class RSSFeedParser {
 		}
 
 		this.itemlist = serverItems;
-
-		return this;
 	}
 
 	public void moveImage(RSSItem rssItem){
 		DOMParser.moveImage(rssItem);
 
-		Glide.with(context)
+		Glide.with(MobilITApplication.getContext())
 				.load(rssItem.getImage())
 				.preload(150, 250);
+	}
+
+	public boolean isEmpty() {
+		return itemlist.size() == 0;
 	}
 }

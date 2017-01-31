@@ -64,6 +64,10 @@ public class AboutService implements CachableInterface {
         if (section != null) {
             SectionProvider.makeRequest(section, new NetworkCallback<Section>() {
                 @Override
+                public void onNoConnection() {
+                }
+
+                @Override
                 public void onSuccess(Section section) {
                     setSection(section);
                     setSectionToCache(section);

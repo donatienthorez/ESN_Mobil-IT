@@ -170,6 +170,10 @@ public class FirstLaunchActivity extends Activity {
     private void getCountries() {
         countriesService.getCountries(new NetworkCallback<List<Country>>() {
             @Override
+            public void onNoConnection() {
+            }
+
+            @Override
             public void onSuccess(List<Country> result) {
                 countryLoaded = true;
                 countries.add(getResources().getString(R.string.selectyourcountry));

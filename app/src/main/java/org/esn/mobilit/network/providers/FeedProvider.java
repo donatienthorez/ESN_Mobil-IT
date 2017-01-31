@@ -1,13 +1,12 @@
 package org.esn.mobilit.network.providers;
 
-import com.bumptech.glide.util.Util;
 import com.crashlytics.android.Crashlytics;
 
 import org.esn.mobilit.models.RSS.RSS;
 import org.esn.mobilit.services.AppState;
 import org.esn.mobilit.utils.ApplicationConstants;
+import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
-import org.esn.mobilit.utils.inject.ForApplication;
 import org.esn.mobilit.utils.inject.InjectUtil;
 
 import javax.inject.Inject;
@@ -27,6 +26,9 @@ public class FeedProvider {
     AppState appState;
 
     @Inject
+    Utils utils;
+
+    @Inject
     public FeedProvider() {
         InjectUtil.component().inject(this);
     }
@@ -43,6 +45,11 @@ public class FeedProvider {
     }
 
     public void makeEventRequest(final NetworkCallback<RSS> callback) {
+        if (!utils.isConnected()) {
+            callback.onNoConnection();
+            return;
+        }
+
         if (appState.hasValidSection()) {
             FeedProviderInterface feedProvider = createBuilder(appState.getSectionWebsite());
             feedProvider.getEvents(createCallback(callback));
@@ -51,6 +58,11 @@ public class FeedProvider {
     }
 
     public void makeNewsRequest(final NetworkCallback<RSS> callback) {
+        if (!utils.isConnected()) {
+            callback.onNoConnection();
+            return;
+        }
+
         if (appState.hasValidSection()) {
             FeedProviderInterface feedProvider = createBuilder(appState.getSectionWebsite());
             feedProvider.getNews(createCallback(callback));
@@ -59,6 +71,11 @@ public class FeedProvider {
     }
 
     public void makePartnersRequest(final NetworkCallback<RSS> callback) {
+        if (!utils.isConnected()) {
+            callback.onNoConnection();
+            return;
+        }
+
         if (appState.hasValidSection()) {
             FeedProviderInterface feedProvider = createBuilder(appState.getSectionWebsite());
             feedProvider.getPartners(createCallback(callback));

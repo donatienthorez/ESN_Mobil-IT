@@ -31,12 +31,17 @@ public abstract class RSSFeedService implements CachableInterface {
     protected NetworkCallback<RSS> getCallback(final NetworkCallback<RSSFeedParser> callback) {
         return new NetworkCallback<RSS>() {
             @Override
+            public void onNoConnection() {
+
+            }
+
+            @Override
             public void onSuccess(RSS clientRss) {
                 RSSFeedParser rssFeedParser = (getFromCache() != null)
                         ? getFromCache()
                         : new RSSFeedParser();
 
-                rssFeedParser = rssFeedParser.updateItems(clientRss.getRSSChannel().getList());
+                rssFeedParser.updateItems(clientRss.getRSSChannel().getList());
 
                 setFeedToCache(rssFeedParser);
                 callback.onSuccess(rssFeedParser);

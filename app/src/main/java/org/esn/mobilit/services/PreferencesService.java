@@ -20,12 +20,6 @@ public class PreferencesService {
     @Inject
     CacheService cacheService;
     @Inject
-    EventsService eventsService;
-    @Inject
-    NewsService newsService;
-    @Inject
-    PartnersService partnersService;
-    @Inject
     GuideService guideService;
 
     @ForApplication
@@ -51,9 +45,6 @@ public class PreferencesService {
 
     public void resetSection(){
         guideService.resetService();
-        eventsService.resetService();
-        newsService.resetService();
-        partnersService.resetService();
         setDefaults(ApplicationConstants.CACHE_DEFAULT_MENU, null);
         setDefaults(ApplicationConstants.PREFERENCES_CODE_SECTION, null);
         setDefaults(ApplicationConstants.PREFERENCES_REG_ID, null);

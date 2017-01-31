@@ -25,7 +25,8 @@ public class NotificationService implements CachableInterface {
     }
 
     public ArrayList<Notification> getFromCache() {
-        return  (ArrayList<Notification>) cacheService.get(getString());
+        ArrayList<Notification> notifications = (ArrayList<Notification>) cacheService.get(getString());
+        return notifications != null ? notifications : new ArrayList<Notification>() ;
     }
 
     public void addToCache(Notification notification) {

@@ -28,6 +28,11 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
     @Inject
     Context context;
 
+    public FeedListAdapter() {
+        InjectUtil.component().inject(this);
+        this.feed = new RSSFeedParser();
+    }
+
     public interface OnItemClickListener {
         void onItemClick(View view , int position);
     }
@@ -67,10 +72,6 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
         }
     }
 
-    public FeedListAdapter(RSSFeedParser feed) {
-        this.feed = feed != null ? feed : new RSSFeedParser();
-    }
-
     public void setFeed(RSSFeedParser feed) {
         this.feed = feed != null ? feed : new RSSFeedParser();
         this.notifyDataSetChanged();
@@ -85,8 +86,6 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
                                                    int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_feeds, parent, false);
-
-        InjectUtil.component().inject(this);
 
         return new ViewHolder(view);
     }

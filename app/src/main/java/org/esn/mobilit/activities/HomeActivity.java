@@ -35,9 +35,9 @@ import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.GuideService;
 import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.services.feeds.EventsService;
+import org.esn.mobilit.services.feeds.FeedType;
 import org.esn.mobilit.services.feeds.NewsService;
 import org.esn.mobilit.services.feeds.PartnersService;
-import org.esn.mobilit.services.feeds.RSSFeedService;
 import org.esn.mobilit.services.gcm.RegIdService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
@@ -57,9 +57,10 @@ public class HomeActivity extends AppCompatActivity {
     @Bind(R.id.left_drawer)     protected RelativeLayout drawerRelativeLayout;
     @Bind(R.id.toolbar)         protected Toolbar toolbar;
     @Bind(R.id.navigation_view) protected NavigationView navigationView;
+
     private HashMap<String, Fragment> fragmentHashMap;
+
     private int currentFragmentId;
-    private RSSFeedService currentFeedService;
 
     @Inject
     CacheService cacheService;
@@ -78,8 +79,6 @@ public class HomeActivity extends AppCompatActivity {
     PartnersService partnersService;
     @Inject
     GuideService guideService;
-
-    /***********************************/
 
     @ForApplication @Inject
     Context context;
@@ -115,7 +114,8 @@ public class HomeActivity extends AppCompatActivity {
         } else {
             ButterKnife.bind(this);
 
-            registerRegId();
+            // register the user with GCM.
+            regIdService.register();
             buildMenu();
             manageNotificationRedirection();
             updateSection();
@@ -132,7 +132,6 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 executeDrawerMenuAction(menuItem.getItemId());
@@ -159,20 +158,6 @@ public class HomeActivity extends AppCompatActivity {
             MenuItem item = menu.getItem(i);
             item.setChecked(false);
         }
-    }
-
-    /**
-     * Calls the RegIdService to register the regId.
-     */
-    private void registerRegId() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                regIdService.register(appState.getSection());
-            }
-        });
-        thread.setPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-        thread.start();
     }
 
     /**
@@ -204,6 +189,10 @@ public class HomeActivity extends AppCompatActivity {
      */
     private void updateSection(){
         aboutService.getFromSite(new NetworkCallback<Section>() {
+            @Override
+            public void onNoConnection() {
+            }
+
             @Override
             public void onSuccess(Section result) {
                 // If the user is on the about tab it updates the section.
@@ -237,15 +226,12 @@ public class HomeActivity extends AppCompatActivity {
         switch (menuItemId) {
             case R.id.drawer_item_news:
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_NEWS), menuItemId, false);
-                this.currentFeedService = newsService;
                 break;
             case R.id.drawer_item_events:
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_EVENTS), menuItemId, false);
-                this.currentFeedService = eventsService;
                 break;
             case R.id.drawer_item_partners:
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_PARTNERS), menuItemId, false);
-                this.currentFeedService = partnersService;
                 break;
             case R.id.drawer_item_guide:
                 loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_GUIDE), menuItemId, false);
@@ -311,15 +297,15 @@ public class HomeActivity extends AppCompatActivity {
         fragmentHashMap = new HashMap<>();
         fragmentHashMap.put(
                 ApplicationConstants.MENU_NEWS,
-                (new FeedListFragment())
+                (new FeedListFragment()).setType(FeedType.NEWS)
         );
         fragmentHashMap.put(
                 ApplicationConstants.MENU_EVENTS,
-                (new FeedListFragment())
+                (new FeedListFragment()).setType(FeedType.EVENTS)
         );
         fragmentHashMap.put(
                 ApplicationConstants.MENU_PARTNERS,
-                (new FeedListFragment())
+                (new FeedListFragment()).setType(FeedType.PARTNERS)
         );
         fragmentHashMap.put(
                 ApplicationConstants.MENU_GUIDE,
@@ -351,9 +337,5 @@ public class HomeActivity extends AppCompatActivity {
         for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
             fm.popBackStack();
         }
-    }
-
-    public RSSFeedService getCurrentFeedService(){
-        return currentFeedService;
     }
 }

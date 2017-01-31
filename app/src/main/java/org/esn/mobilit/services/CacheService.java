@@ -2,8 +2,12 @@ package org.esn.mobilit.services;
 
 import com.crashlytics.android.Crashlytics;
 
+import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.utils.inject.InjectUtil;
+import org.esn.mobilit.utils.parser.RSSFeedParser;
 import org.esn.mobilit.utils.storage.InternalStorage;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -58,5 +62,13 @@ public class CacheService {
         } catch (Exception exception){
             Crashlytics.logException(exception);
         }
+    }
+
+    public RSSFeedParser getFeed(String feedType) {
+        return new RSSFeedParser((List<RSSItem>) this.get(feedType));
+    }
+
+    public void setFeed(String feedType, List<RSSItem> rssItemList) {
+        this.save(feedType, rssItemList);
     }
 }

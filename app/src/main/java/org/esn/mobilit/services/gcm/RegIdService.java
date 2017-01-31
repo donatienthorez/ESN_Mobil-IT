@@ -9,13 +9,14 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import org.esn.mobilit.models.Section;
 import org.esn.mobilit.network.providers.PostRegProvider;
+import org.esn.mobilit.services.AppState;
 import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.services.interfaces.CachableInterface;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.Callback;
 import org.esn.mobilit.utils.inject.ForApplication;
+import org.esn.mobilit.utils.inject.InjectUtil;
 
 import java.io.IOException;
 
@@ -30,55 +31,69 @@ public class RegIdService implements CachableInterface {
     String regId = "";
     private static final String TAG = "RegIdService";
 
-
+    @ForApplication
+    @Inject
     Context context;
+
+    @Inject
+    AppState appState;
 
     @Inject
     PreferencesService preferencesService;
 
     @Inject
-    public RegIdService(@ForApplication Context context) {
-        this.context = context;
+    public RegIdService() {
+        InjectUtil.component().inject(this);
     }
 
     public String getString(){
         return ApplicationConstants.PREFERENCES_REG_ID;
     }
 
-    public void register(Section section) {
-        if (!checkPlayServices()) {
-            Crashlytics.log(Log.ERROR, TAG, "CheckPlay services is not available");
-            return;
-        }
 
-        try {
-            setRegId(
-                    GoogleCloudMessaging
-                            .getInstance(context)
-                            .register(ApplicationConstants.GOOGLE_PROJECT_ID)
-            );
-        } catch (IOException exception) {
-            Crashlytics.logException(exception);
-        }
+    public void register() {
 
-        if (TextUtils.isEmpty(getRegId())) {
-            return;
-        }
-
-        PostRegProvider.makeRequest(
-                section.getCode_section(),
-                getRegId(),
-                new Callback<Response>() {
-                    @Override
-                    public void onSuccess(Response result) {
-                        preferencesService.setDefaults(getString(), regId);
-                    }
-
-                    @Override
-                    public void onFailure(String error) {
-                    }
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (!checkPlayServices()) {
+                    Crashlytics.log(Log.ERROR, TAG, "CheckPlay services is not available");
+                    return;
                 }
-        );
+
+                try {
+                    setRegId(
+                            GoogleCloudMessaging
+                                    .getInstance(context)
+                                    .register(ApplicationConstants.GOOGLE_PROJECT_ID)
+                    );
+                } catch (IOException exception) {
+                    Crashlytics.logException(exception);
+                }
+
+                if (TextUtils.isEmpty(getRegId())) {
+                    return;
+                }
+
+                PostRegProvider.makeRequest(
+                        appState.getSection().getCode_section(),
+                        getRegId(),
+                        new Callback<Response>() {
+                            @Override
+                            public void onSuccess(Response result) {
+                                preferencesService.setDefaults(getString(), regId);
+                            }
+
+                            @Override
+                            public void onFailure(String error) {
+                            }
+                        }
+                );
+            }
+        });
+        thread.setPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+        thread.start();
+
     }
 
     private boolean checkPlayServices() {

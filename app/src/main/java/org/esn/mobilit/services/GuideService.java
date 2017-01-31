@@ -67,6 +67,10 @@ public class GuideService implements CachableInterface {
 
         GuideProvider.makeGuideRequest(section, new NetworkCallback<Guide>() {
             @Override
+            public void onNoConnection() {
+            }
+
+            @Override
             public void onSuccess(Guide guide) {
                 setGuide(guide);
                 setGuideToCache(guide);

@@ -25,7 +25,6 @@ public class InternalStorage {
 
     @Inject
     public InternalStorage() {
-        InjectUtil.component().inject(this);
     }
 
     public void writeObject(String key, Object object) throws IOException {

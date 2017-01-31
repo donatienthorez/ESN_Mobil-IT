@@ -32,6 +32,7 @@ public class GuideFragment extends Fragment {
     @Bind(R.id.swipe_refresh) protected SwipeRefreshLayout swipeRefreshLayoutListView;
     @Bind(R.id.recyclerViewFeedList) protected RecyclerView recyclerView;
     @Bind(R.id.empty) protected TextView emptyListMessage;
+
     private Guide guide;
     private Node currentNode;
     private List<Node> listNodes;
@@ -80,6 +81,10 @@ public class GuideFragment extends Fragment {
             @Override
             public void run() {
                 guideService.getFromSite(new NetworkCallback<Guide>() {
+                    @Override
+                    public void onNoConnection() {
+                    }
+
                     @Override
                     public void onSuccess(Guide result) {
                         setCurrentNode(result, currentNode);

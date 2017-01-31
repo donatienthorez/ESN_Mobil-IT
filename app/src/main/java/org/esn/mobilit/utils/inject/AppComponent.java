@@ -15,8 +15,10 @@ import org.esn.mobilit.services.AppState;
 import org.esn.mobilit.services.CacheService;
 import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.services.feeds.EventsService;
+import org.esn.mobilit.services.feeds.FeedService;
 import org.esn.mobilit.services.feeds.NewsService;
 import org.esn.mobilit.services.feeds.PartnersService;
+import org.esn.mobilit.services.gcm.RegIdService;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
 import org.esn.mobilit.utils.storage.InternalStorage;
 
@@ -63,4 +65,8 @@ public interface AppComponent{
 
 
     void inject(FeedListFragment feedListFragment);
+
+    void inject(RegIdService regIdService);
+
+    void inject(FeedService feedService);
 }

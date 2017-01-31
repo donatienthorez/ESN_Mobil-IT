@@ -30,6 +30,10 @@ public class CountriesService implements CachableInterface {
                 public void run() {
                     CountryProvider.makeCountriesRequest(new NetworkCallback<List<Country>>() {
                         @Override
+                        public void onNoConnection() {
+                        }
+
+                        @Override
                         public void onSuccess(List<Country> result) {
                             cacheService.save(getString(), result);
                             callback.onSuccess(result);
