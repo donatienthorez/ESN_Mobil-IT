@@ -31,13 +31,10 @@ import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.AboutService;
 import org.esn.mobilit.services.AppState;
-import org.esn.mobilit.services.CacheService;
+import org.esn.mobilit.services.cache.CacheService;
 import org.esn.mobilit.services.GuideService;
 import org.esn.mobilit.services.PreferencesService;
-import org.esn.mobilit.services.feeds.EventsService;
 import org.esn.mobilit.services.feeds.FeedType;
-import org.esn.mobilit.services.feeds.NewsService;
-import org.esn.mobilit.services.feeds.PartnersService;
 import org.esn.mobilit.services.gcm.RegIdService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
@@ -71,12 +68,6 @@ public class HomeActivity extends AppCompatActivity {
     RegIdService regIdService;
     @Inject
     AboutService aboutService;
-    @Inject
-    EventsService eventsService;
-    @Inject
-    NewsService newsService;
-    @Inject
-    PartnersService partnersService;
     @Inject
     GuideService guideService;
 
@@ -190,7 +181,7 @@ public class HomeActivity extends AppCompatActivity {
     private void updateSection(){
         aboutService.getFromSite(new NetworkCallback<Section>() {
             @Override
-            public void onNoConnection() {
+            public void onNoConnection(Section section) {
             }
 
             @Override

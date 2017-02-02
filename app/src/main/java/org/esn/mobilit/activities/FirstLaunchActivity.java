@@ -23,7 +23,7 @@ import org.esn.mobilit.models.Country;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.renderers.HomepageRenderer;
 import org.esn.mobilit.services.AppState;
-import org.esn.mobilit.services.CacheService;
+import org.esn.mobilit.services.cache.CacheService;
 import org.esn.mobilit.services.CountriesService;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
@@ -170,7 +170,8 @@ public class FirstLaunchActivity extends Activity {
     private void getCountries() {
         countriesService.getCountries(new NetworkCallback<List<Country>>() {
             @Override
-            public void onNoConnection() {
+            public void onNoConnection(List<Country> cachedCountries) {
+                //FIXME
             }
 
             @Override

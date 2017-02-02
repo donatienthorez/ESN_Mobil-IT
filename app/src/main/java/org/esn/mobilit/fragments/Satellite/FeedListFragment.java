@@ -9,28 +9,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.activities.HomeActivity;
 import org.esn.mobilit.adapters.FeedListAdapter;
-import org.esn.mobilit.services.CacheService;
+import org.esn.mobilit.models.RSS.RSS;
+import org.esn.mobilit.models.RSS.RSSItem;
+import org.esn.mobilit.services.cache.CacheService;
 import org.esn.mobilit.services.feeds.FeedService;
-import org.esn.mobilit.services.feeds.RSSFeedService;
+import org.esn.mobilit.services.feeds.FeedType;
+import org.esn.mobilit.services.feeds.RSSItemListHelper;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.inject.ForApplication;
 import org.esn.mobilit.utils.inject.InjectUtil;
-import org.esn.mobilit.utils.parser.RSSFeedParser;
 
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class FeedListFragment extends Fragment
+public class FeedListFragment extends Fragment implements NetworkCallback<ArrayList<RSSItem>>
 {
     @ForApplication
     @Inject
@@ -44,16 +48,17 @@ public class FeedListFragment extends Fragment
 
     @Inject
     CacheService cacheService;
+    @Inject
+    RSSItemListHelper rssItemListHelper;
 
-    private RSSFeedParser feed;
     private FeedListAdapter adapter;
-    private String feedType;
+    private FeedType feedType;
 
     @Bind(R.id.swipe_refresh) protected SwipeRefreshLayout swipeRefreshLayoutListView;
     @Bind(R.id.recyclerViewFeedList) protected RecyclerView recyclerView;
     @Bind(R.id.empty) protected TextView emptyListMessage;
 
-    public FeedListFragment setType(String feedType){
+    public FeedListFragment setType(FeedType feedType){
         this.feedType = feedType;
         return this;
     }
@@ -76,7 +81,7 @@ public class FeedListFragment extends Fragment
         adapter.setOnItemClickListener(new FeedListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                ((HomeActivity) getActivity()).loadDetailsFragment(feed.getItem(position), true);
+                ((HomeActivity) getActivity()).loadDetailsFragment(adapter.getItem(position), true);
             }
         });
 
@@ -99,20 +104,21 @@ public class FeedListFragment extends Fragment
         swipeRefreshLayoutListView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                if (utils.isConnected()) {
+                if (utils.isConnected()) {
                     refreshContent();
-//                } else {
-//                    Toast.makeText(
-//                            context,
-//                            getResources().getString(utils.isConnected() ?
-//                                    R.string.error_message_network :
-//                                    R.string.info_message_no_network),
-//                            Toast.LENGTH_SHORT
-//                    ).show();
-//                    swipeRefreshLayoutListView.setRefreshing(false);
-//                }
+                } else {
+                    Toast.makeText(
+                            context,
+                            getResources().getString(utils.isConnected() ?
+                                    R.string.error_message_network :
+                                    R.string.info_message_no_network),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    swipeRefreshLayoutListView.setRefreshing(false);
+                }
             }
         });
+        adapter.setRSSItemList(cacheService.getFeed(feedType.getCacheableString()));
         refreshContent();
         return view;
     }
@@ -123,37 +129,40 @@ public class FeedListFragment extends Fragment
     private void refreshContent(){
         swipeRefreshLayoutListView.measure(View.MEASURED_SIZE_MASK, View.MEASURED_HEIGHT_STATE_SHIFT);
         swipeRefreshLayoutListView.setRefreshing(true);
-        feedService.getFromSite(feedType, new NetworkCallback<RSSFeedParser>() {
-            @Override
-            public void onNoConnection() {
-                if (adapter.getItemCount() == 0) {
-                    adapter.setFeed(cacheService.getFeed(feedType));
-                }
-                swipeRefreshLayoutListView.setRefreshing(false);
-            }
+        feedService.getFromSite(feedType, this);
+    }
 
-            @Override
-            public void onSuccess(RSSFeedParser result) {
-                feed = result;
-                adapter.setFeed(feed);
-                swipeRefreshLayoutListView.setRefreshing(false);
-                emptyListMessage.setVisibility(View.GONE);
-            }
+    @Override
+    public void onNoConnection(ArrayList<RSSItem> rssItemList) {
+        if (adapter.getItemCount() == 0) {
+            adapter.setRSSItemList(rssItemList);
+        }
+        swipeRefreshLayoutListView.setRefreshing(false);
+    }
 
-            @Override
-            public void onNoAvailableData() {
-                if (feed == null || feed.getItemCount() == 0) {
-                    adapter.setEmptyList();
-                    swipeRefreshLayoutListView.setRefreshing(false);
-                    emptyListMessage.setVisibility(View.VISIBLE);
-                }
-            }
+    @Override
+    public void onSuccess(ArrayList<RSSItem> rssItemList) {
+        if (rssItemListHelper.needsAdapterUpdate(feedType, rssItemList)) {
+            adapter.setRSSItemList(rssItemList);
+        }
+        swipeRefreshLayoutListView.setRefreshing(false);
+        emptyListMessage.setVisibility(View.GONE);
+    }
 
-            @Override
-            public void onFailure(String error) {
-                swipeRefreshLayoutListView.setRefreshing(false);
-                emptyListMessage.setVisibility((feed == null || feed.getItemCount() == 0) ? View.VISIBLE : View.GONE);
-            }
-        });
+    @Override
+    public void onNoAvailableData() {
+        if (adapter.getItemCount() == 0) {
+            adapter.setEmptyList();
+            swipeRefreshLayoutListView.setRefreshing(false);
+            emptyListMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onFailure(String error) {
+        swipeRefreshLayoutListView.setRefreshing(false);
+        if (adapter.getItemCount() == 0) {
+            emptyListMessage.setVisibility(View.VISIBLE);
+        }
     }
 }

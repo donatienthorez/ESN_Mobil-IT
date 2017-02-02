@@ -12,15 +12,12 @@ import org.esn.mobilit.fragments.Satellite.DetailsFragment;
 import org.esn.mobilit.fragments.Satellite.FeedListFragment;
 import org.esn.mobilit.network.providers.FeedProvider;
 import org.esn.mobilit.services.AppState;
-import org.esn.mobilit.services.CacheService;
+import org.esn.mobilit.services.cache.CacheService;
 import org.esn.mobilit.services.PreferencesService;
-import org.esn.mobilit.services.feeds.EventsService;
 import org.esn.mobilit.services.feeds.FeedService;
-import org.esn.mobilit.services.feeds.NewsService;
-import org.esn.mobilit.services.feeds.PartnersService;
 import org.esn.mobilit.services.gcm.RegIdService;
 import org.esn.mobilit.utils.parser.RSSFeedParser;
-import org.esn.mobilit.utils.storage.InternalStorage;
+import org.esn.mobilit.services.cache.InternalStorage;
 
 import javax.inject.Singleton;
 
@@ -58,11 +55,6 @@ public interface AppComponent{
     void inject(AppState appState);
 
     void inject(FeedProvider feedProvider);
-
-    void inject(EventsService eventsService);
-    void inject(NewsService newsService);
-    void inject(PartnersService partnersService);
-
 
     void inject(FeedListFragment feedListFragment);
 

@@ -3,6 +3,7 @@ package org.esn.mobilit.services;
 import android.content.Context;
 
 import org.esn.mobilit.R;
+import org.esn.mobilit.services.cache.CacheService;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.network.providers.SectionProvider;
 import org.esn.mobilit.services.interfaces.CachableInterface;
@@ -64,7 +65,8 @@ public class AboutService implements CachableInterface {
         if (section != null) {
             SectionProvider.makeRequest(section, new NetworkCallback<Section>() {
                 @Override
-                public void onNoConnection() {
+                public void onNoConnection(Section section) {
+                    //FIXME
                 }
 
                 @Override

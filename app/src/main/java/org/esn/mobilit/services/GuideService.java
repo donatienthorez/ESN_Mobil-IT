@@ -3,6 +3,7 @@ package org.esn.mobilit.services;
 import android.content.Context;
 
 import org.esn.mobilit.R;
+import org.esn.mobilit.services.cache.CacheService;
 import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.network.providers.GuideProvider;
@@ -67,7 +68,8 @@ public class GuideService implements CachableInterface {
 
         GuideProvider.makeGuideRequest(section, new NetworkCallback<Guide>() {
             @Override
-            public void onNoConnection() {
+            public void onNoConnection(Guide guide) {
+                //FIXME
             }
 
             @Override

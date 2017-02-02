@@ -15,13 +15,14 @@ import org.esn.mobilit.R;
 import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.utils.inject.ForApplication;
 import org.esn.mobilit.utils.inject.InjectUtil;
-import org.esn.mobilit.utils.parser.RSSFeedParser;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHolder> {
 
-    private RSSFeedParser feed;
+    private ArrayList<RSSItem> rssItemList;
     OnItemClickListener itemClickListener;
 
     @ForApplication
@@ -30,7 +31,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 
     public FeedListAdapter() {
         InjectUtil.component().inject(this);
-        this.feed = new RSSFeedParser();
+        rssItemList = new ArrayList<>();
     }
 
     public interface OnItemClickListener {
@@ -39,6 +40,14 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 
     public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
         this.itemClickListener = mItemClickListener;
+    }
+
+    public RSSItem getItem(int position) {
+        if (position < rssItemList.size()) {
+            return rssItemList.get(position);
+        }
+        // Should never enter here
+        return null;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -72,13 +81,13 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
         }
     }
 
-    public void setFeed(RSSFeedParser feed) {
-        this.feed = feed != null ? feed : new RSSFeedParser();
+    public void setRSSItemList(ArrayList<RSSItem> rssItemList) {
+        this.rssItemList = rssItemList == null ? new ArrayList<RSSItem>() : rssItemList;
         this.notifyDataSetChanged();
     }
 
     public void setEmptyList() {
-        setFeed(null);
+        setRSSItemList(null);
     }
 
     @Override
@@ -92,13 +101,13 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        RSSItem currentFeed = feed.getList().get(position);
+        RSSItem currentFeed = rssItemList.get(position);
         holder.setTitle(currentFeed.getTitle());
         holder.setImage(currentFeed.getImage());
     }
 
     @Override
     public int getItemCount() {
-        return feed.getItemCount();
+        return rssItemList.size();
     }
 }

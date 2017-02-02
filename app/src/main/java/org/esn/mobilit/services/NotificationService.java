@@ -1,5 +1,6 @@
 package org.esn.mobilit.services;
 
+import org.esn.mobilit.services.cache.CacheService;
 import org.esn.mobilit.models.Notification;
 import org.esn.mobilit.services.interfaces.CachableInterface;
 import org.esn.mobilit.utils.ApplicationConstants;

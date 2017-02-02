@@ -3,11 +3,17 @@ package org.esn.mobilit.network.providers;
 import com.crashlytics.android.Crashlytics;
 
 import org.esn.mobilit.models.RSS.RSS;
+import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.services.AppState;
+import org.esn.mobilit.services.cache.CacheService;
+import org.esn.mobilit.services.feeds.FeedType;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.inject.InjectUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -29,6 +35,9 @@ public class FeedProvider {
     Utils utils;
 
     @Inject
+    CacheService cacheService;
+
+    @Inject
     public FeedProvider() {
         InjectUtil.component().inject(this);
     }
@@ -44,41 +53,27 @@ public class FeedProvider {
         void getPartners(Callback<RSS> callback);
     }
 
-    public void makeEventRequest(final NetworkCallback<RSS> callback) {
+
+    public void makeFeedRequest(FeedType feedType, final NetworkCallback<ArrayList<RSSItem>> callback) {
         if (!utils.isConnected()) {
-            callback.onNoConnection();
+            callback.onNoConnection(cacheService.getFeed(feedType.getCacheableString()));
             return;
         }
 
         if (appState.hasValidSection()) {
             FeedProviderInterface feedProvider = createBuilder(appState.getSectionWebsite());
-            feedProvider.getEvents(createCallback(callback));
-        }
-        //TODO else log exception
-    }
-
-    public void makeNewsRequest(final NetworkCallback<RSS> callback) {
-        if (!utils.isConnected()) {
-            callback.onNoConnection();
-            return;
-        }
-
-        if (appState.hasValidSection()) {
-            FeedProviderInterface feedProvider = createBuilder(appState.getSectionWebsite());
-            feedProvider.getNews(createCallback(callback));
-        }
-        //TODO else log exception
-    }
-
-    public void makePartnersRequest(final NetworkCallback<RSS> callback) {
-        if (!utils.isConnected()) {
-            callback.onNoConnection();
-            return;
-        }
-
-        if (appState.hasValidSection()) {
-            FeedProviderInterface feedProvider = createBuilder(appState.getSectionWebsite());
-            feedProvider.getPartners(createCallback(callback));
+            //FIXME change cacheable strings to feed_type
+            switch (feedType.getCacheableString()) {
+                case ApplicationConstants.FEED_TYPE_NEWS:
+                    feedProvider.getNews(createCallback(callback));
+                    break;
+                case ApplicationConstants.FEED_TYPE_EVENTS:
+                    feedProvider.getEvents(createCallback(callback));
+                    break;
+                case ApplicationConstants.FEED_TYPE_PARTNERS:
+                    feedProvider.getPartners(createCallback(callback));
+                    break;
+            }
         }
         //TODO else log exception
     }
@@ -91,14 +86,16 @@ public class FeedProvider {
                 .create(FeedProviderInterface.class);
     }
 
-    private static Callback<RSS> createCallback(final NetworkCallback<RSS> callback) {
+    private static Callback<RSS> createCallback(final NetworkCallback<ArrayList<RSSItem>> callback) {
         return new Callback<RSS>() {
             @Override
             public void success(RSS result, Response response) {
                 if (result.getListSize() == 0) {
                     callback.onNoAvailableData();
                 } else {
-                    callback.onSuccess(result);
+                    ArrayList<RSSItem> rssItems = new ArrayList<>();
+                    rssItems.addAll(result.getRSSChannel().getList());
+                    callback.onSuccess(rssItems);
                 }
             }
 

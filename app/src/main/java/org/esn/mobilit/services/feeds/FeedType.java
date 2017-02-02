@@ -1,7 +1,23 @@
 package org.esn.mobilit.services.feeds;
 
-public class FeedType {
-    public static final String NEWS = "news";
-    public static final String EVENTS = "events";
-    public static final String PARTNERS = "partners";
+import org.esn.mobilit.utils.ApplicationConstants;
+
+public enum FeedType {
+    NEWS (ApplicationConstants.FEED_TYPE_NEWS),
+    EVENTS (ApplicationConstants.FEED_TYPE_EVENTS),
+    PARTNERS (ApplicationConstants.FEED_TYPE_PARTNERS);
+
+    private String cacheableString;
+
+    FeedType(String cacheableString) {
+        this.cacheableString = cacheableString;
+    }
+
+    public String getCacheableString() {
+        return cacheableString;
+    }
+
+    public void setCacheableString(String cacheableString) {
+        this.cacheableString = cacheableString;
+    }
 }

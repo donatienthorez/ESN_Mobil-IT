@@ -82,7 +82,7 @@ public class GuideFragment extends Fragment {
             public void run() {
                 guideService.getFromSite(new NetworkCallback<Guide>() {
                     @Override
-                    public void onNoConnection() {
+                    public void onNoConnection(Guide guide) {
                     }
 
                     @Override

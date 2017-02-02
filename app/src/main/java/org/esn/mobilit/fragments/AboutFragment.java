@@ -56,7 +56,7 @@ public class AboutFragment extends Fragment {
 
         aboutService.getFromSite(new NetworkCallback<Section>() {
             @Override
-            public void onNoConnection() {
+            public void onNoConnection(Section section) {
             }
 
             @Override

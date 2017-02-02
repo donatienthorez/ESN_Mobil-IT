@@ -2,6 +2,7 @@ package org.esn.mobilit.services;
 
 import android.text.TextUtils;
 
+import org.esn.mobilit.services.cache.CacheService;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.inject.InjectUtil;

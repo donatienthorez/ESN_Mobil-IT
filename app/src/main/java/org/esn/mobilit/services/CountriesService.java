@@ -1,5 +1,6 @@
 package org.esn.mobilit.services;
 
+import org.esn.mobilit.services.cache.CacheService;
 import org.esn.mobilit.models.Country;
 import org.esn.mobilit.network.providers.CountryProvider;
 import org.esn.mobilit.services.interfaces.CachableInterface;
@@ -30,7 +31,7 @@ public class CountriesService implements CachableInterface {
                 public void run() {
                     CountryProvider.makeCountriesRequest(new NetworkCallback<List<Country>>() {
                         @Override
-                        public void onNoConnection() {
+                        public void onNoConnection(List<Country> countries) {
                         }
 
                         @Override

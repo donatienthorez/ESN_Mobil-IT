@@ -1,12 +1,13 @@
 package org.esn.mobilit.services.feeds;
 
-import org.esn.mobilit.models.RSS.RSS;
+import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.network.providers.FeedProvider;
-import org.esn.mobilit.services.CacheService;
-import org.esn.mobilit.utils.ApplicationConstants;
+import org.esn.mobilit.services.cache.CacheService;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.inject.InjectUtil;
-import org.esn.mobilit.utils.parser.RSSFeedParser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -19,25 +20,27 @@ public class FeedService {
 
     @Inject
     FeedProvider feedProvider;
+    @Inject
+    RSSItemListHelper rssItemListHelper;
 
     @Inject
     public FeedService(){
         InjectUtil.component().inject(this);}
 
-    public void getFromSite(final String feedType, final NetworkCallback<RSSFeedParser> networkCallback) {
-        makeFeedRequest(feedType, new NetworkCallback<RSS>() {
+    public void getFromSite(final FeedType feedType, final NetworkCallback<ArrayList<RSSItem>> networkCallback) {
+        feedProvider.makeFeedRequest(feedType, new NetworkCallback<ArrayList<RSSItem>>() {
             @Override
-            public void onNoConnection() {
-                networkCallback.onNoConnection();
+            public void onNoConnection(ArrayList<RSSItem> result) {
+                networkCallback.onNoConnection(new ArrayList<>(result));
             }
 
             @Override
-            public void onSuccess(RSS result) {
-                RSSFeedParser rssFeedParser = new RSSFeedParser();
-                rssFeedParser.updateItems(result.getRSSChannel().getList());
+            public void onSuccess(ArrayList<RSSItem> result) {
+                List<RSSItem> rssItems = rssItemListHelper.moveRSSImages(result);
+                ArrayList<RSSItem>  rssItemList = new ArrayList<>(rssItems);
 
-                cacheService.setFeed(getString(feedType), rssFeedParser.getList());
-                networkCallback.onSuccess(rssFeedParser);
+                cacheService.setFeed(feedType.getCacheableString(), rssItemList);
+                networkCallback.onSuccess(rssItemList);
             }
 
             @Override
@@ -50,32 +53,5 @@ public class FeedService {
                 networkCallback.onFailure(error);
             }
         });
-    }
-
-    private void makeFeedRequest(final String feedType, NetworkCallback<RSS> callback){
-        switch (feedType) {
-            case FeedType.NEWS:
-                feedProvider.makeNewsRequest(callback);
-                break;
-            case FeedType.EVENTS:
-                feedProvider.makeEventRequest(callback);
-                break;
-            case FeedType.PARTNERS:
-                feedProvider.makePartnersRequest(callback);
-                break;
-        }
-    }
-
-    public String getString(String feedType) {
-        switch (feedType) {
-            case FeedType.NEWS:
-                return ApplicationConstants.CACHE_NEWS;
-            case FeedType.EVENTS:
-                return ApplicationConstants.CACHE_EVENTS;
-            case FeedType.PARTNERS:
-                return ApplicationConstants.CACHE_PARTNERS;
-        }
-        //TODO improve
-        throw new RuntimeException("Unsupported FeedService type");
     }
 }

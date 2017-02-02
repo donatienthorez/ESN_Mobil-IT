@@ -1,9 +1,8 @@
-package org.esn.mobilit.utils.storage;
+package org.esn.mobilit.services.cache;
 
 import android.content.Context;
 
 import org.esn.mobilit.utils.inject.ForApplication;
-import org.esn.mobilit.utils.inject.InjectUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
