@@ -106,7 +106,7 @@ public class FirstLaunchActivity extends Activity {
         cacheService.save(ApplicationConstants.CACHE_SECTION, currentSection);
 
         Intent intent = new Intent(FirstLaunchActivity.this, HomeActivity.class);
-        appState.setSection(currentSection, true);
+        appState.setSection(currentSection);
 
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);

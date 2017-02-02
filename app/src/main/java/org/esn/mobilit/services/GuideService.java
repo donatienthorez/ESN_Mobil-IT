@@ -25,6 +25,8 @@ public class GuideService implements CachableInterface {
     AboutService aboutService;
     @Inject
     Utils utils;
+    @Inject
+    AppState appState;
 
     Context context;
 
@@ -59,7 +61,7 @@ public class GuideService implements CachableInterface {
     }
 
     public void getFromSite(final NetworkCallback<Guide> callback) {
-        final Section section = aboutService.getFromCache();
+        final Section section = appState.getSection();
         if (!utils.isConnected()) {
             callback.onFailure(context.getResources().getString(
                     R.string.info_message_no_network

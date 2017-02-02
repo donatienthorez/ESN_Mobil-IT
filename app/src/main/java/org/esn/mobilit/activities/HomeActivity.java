@@ -28,7 +28,6 @@ import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.models.Node;
 import org.esn.mobilit.models.Notification;
 import org.esn.mobilit.models.RSS.RSSItem;
-import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.AboutService;
 import org.esn.mobilit.services.AppState;
 import org.esn.mobilit.services.cache.CacheService;
@@ -37,7 +36,6 @@ import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.services.feeds.FeedType;
 import org.esn.mobilit.services.gcm.RegIdService;
 import org.esn.mobilit.utils.ApplicationConstants;
-import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.inject.ForApplication;
 import org.esn.mobilit.utils.inject.InjectUtil;
 
@@ -109,7 +107,6 @@ public class HomeActivity extends AppCompatActivity {
             regIdService.register();
             buildMenu();
             manageNotificationRedirection();
-            updateSection();
         }
     }
 
@@ -173,36 +170,6 @@ public class HomeActivity extends AppCompatActivity {
             return;
         }
         this.loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_NOTIFICATIONS), this.currentFragmentId, true);
-    }
-
-    /**
-     * Updates the section..
-     */
-    private void updateSection(){
-        aboutService.getFromSite(new NetworkCallback<Section>() {
-            @Override
-            public void onNoConnection(Section section) {
-            }
-
-            @Override
-            public void onSuccess(Section result) {
-                // If the user is on the about tab it updates the section.
-                if (currentFragmentId == R.id.drawer_item_about) {
-                    ((AboutFragment) fragmentHashMap.get(ApplicationConstants.MENU_ABOUT)).setSection(result);
-                    appState.setSection(result, true);
-                }
-            }
-
-            @Override
-            public void onNoAvailableData() {
-                //TODO manage onNoAvailableData error.
-            }
-
-            @Override
-            public void onFailure(String error) {
-                //TODO manage onFailure error.
-            }
-        });
     }
 
     /**

@@ -17,6 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.AboutService;
+import org.esn.mobilit.services.AppState;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.inject.ForApplication;
 import org.esn.mobilit.utils.inject.InjectUtil;
@@ -27,6 +28,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+//FIXME listen to section changes
 public class AboutFragment extends Fragment {
 
     @Bind(R.id.section_logo) ImageView logo;
@@ -34,12 +36,15 @@ public class AboutFragment extends Fragment {
     @Bind(R.id.first_info_card) InfoCard firstInfoCard;
     @Bind(R.id.second_info_card) InfoCard secondInfoCard;
 
-    @Inject
-    AboutService aboutService;
-
     @ForApplication
     @Inject
     Context context;
+
+    @Inject
+    AboutService aboutService;
+
+    @Inject
+    AppState appState;
 
     public View onCreateView(
             LayoutInflater inflater,
@@ -52,11 +57,15 @@ public class AboutFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        setSection(aboutService.getFromCache());
+        // put the cached section
+        setSection(appState.getSection());
 
         aboutService.getFromSite(new NetworkCallback<Section>() {
             @Override
             public void onNoConnection(Section section) {
+                onFailure(context.getResources().getString(
+                        R.string.info_message_no_network
+                ));
             }
 
             @Override

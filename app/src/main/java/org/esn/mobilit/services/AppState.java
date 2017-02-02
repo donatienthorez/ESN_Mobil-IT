@@ -17,9 +17,9 @@ public class AppState {
 	CacheService cacheService;
 
 	/**
-	 * The current section that the user selected
+	 * The current section of the user
 	 */
-	Section section;
+	private Section section;
 
 	@Inject
 	public AppState() {
@@ -28,16 +28,14 @@ public class AppState {
 
 	public Section getSection() {
 		if (section == null) {
-			setSection((Section) cacheService.get(ApplicationConstants.CACHE_SECTION), false);
+			section = (Section) cacheService.get(ApplicationConstants.CACHE_SECTION);
 		}
 		return section;
 	}
 
-	public void setSection(Section section, boolean cache) {
+	public void setSection(Section section) {
 		this.section = section;
-		if (cache) {
-			cacheService.save(ApplicationConstants.CACHE_SECTION, section);
-		}
+		cacheService.save(ApplicationConstants.CACHE_SECTION, section);
 	}
 
 	public boolean hasValidSection() {
@@ -46,9 +44,5 @@ public class AppState {
 
 	public String getSectionWebsite() {
 		return getSection().getWebsite();
-	}
-
-	//TODO
-	public void resetSection() {
 	}
 }

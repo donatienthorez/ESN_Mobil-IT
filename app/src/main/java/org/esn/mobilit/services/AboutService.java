@@ -16,49 +16,28 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class AboutService implements CachableInterface {
+public class AboutService {
 
-    private Section section;
-
+    @ForApplication
     Context context;
     @Inject
     CacheService cacheService;
     @Inject
     Utils utils;
+    @Inject
+    AppState appState;
 
     @Inject
-    public AboutService(@ForApplication Context context) {
-        this.context = context;
-    }
-
-    public void setSection(Section section) {
-        this.section = section;
-    }
-
-    public Section getSection() {
-        return section;
-    }
-
-    public Section getFromCache() {
-        return (Section) cacheService.get(this.getString());
-    }
-
-    public void setSectionToCache(Section section) {
-        cacheService.save(getString(), section);
-    }
-
-    @Override
-    public String getString() {
-        return ApplicationConstants.CACHE_SECTION;
+    public AboutService() {
     }
 
     public void getFromSite(final NetworkCallback<Section> callback) {
-        final Section section = getFromCache();
+        Section section = appState.getSection();
 
         if (!utils.isConnected()) {
-            callback.onFailure(context.getResources().getString(
-                    R.string.info_message_no_network
-            ));
+            if (callback != null) {
+                callback.onNoConnection(section);
+            }
             return;
         }
 
@@ -71,19 +50,24 @@ public class AboutService implements CachableInterface {
 
                 @Override
                 public void onSuccess(Section section) {
-                    setSection(section);
-                    setSectionToCache(section);
-                    callback.onSuccess(section);
+                    appState.setSection(section);
+                    if (callback != null) {
+                        callback.onSuccess(section);
+                    }
                 }
 
                 @Override
                 public void onNoAvailableData() {
-                    callback.onNoAvailableData();
+                    if (callback != null) {
+                        callback.onNoAvailableData();
+                    }
                 }
 
                 @Override
                 public void onFailure(String error) {
-                    callback.onFailure(error);
+                    if (callback != null) {
+                        callback.onFailure(error);
+                    }
                 }
             });
         }
