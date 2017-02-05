@@ -29,17 +29,22 @@ import butterknife.ButterKnife;
 
 public class GuideFragment extends Fragment {
 
-    @Bind(R.id.swipe_refresh) protected SwipeRefreshLayout swipeRefreshLayoutListView;
-    @Bind(R.id.recyclerViewFeedList) protected RecyclerView recyclerView;
-    @Bind(R.id.empty) protected TextView emptyListMessage;
+    @Inject
+    GuideService guideService;
+
+    @Bind(R.id.swipe_refresh)
+    protected SwipeRefreshLayout swipeRefreshLayoutListView;
+
+    @Bind(R.id.recyclerViewFeedList)
+    protected RecyclerView recyclerView;
+
+    @Bind(R.id.empty)
+    protected TextView emptyListMessage;
 
     private Guide guide;
     private Node currentNode;
     private List<Node> listNodes;
     private GuideListAdapter adapter;
-
-    @Inject
-    GuideService guideService;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,9 +55,7 @@ public class GuideFragment extends Fragment {
         adapter.setNodes(listNodes, currentNode);
 
         recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setItemAnimator(null);
-        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
         swipeRefreshLayoutListView.setEnabled(false);

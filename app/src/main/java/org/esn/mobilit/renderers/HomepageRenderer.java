@@ -15,11 +15,11 @@ import javax.inject.Singleton;
 @Singleton
 public class HomepageRenderer {
 
+    @ForApplication
     Context context;
 
     @Inject
-    public HomepageRenderer(@ForApplication Context context) {
-        this.context = context;
+    public HomepageRenderer() {
     }
 
     public SpannableStringBuilder renderHomepageText(){

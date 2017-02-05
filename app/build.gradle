@@ -32,6 +32,10 @@ android {
         javaMaxHeapSize "4g"
     }
 
+    dataBinding {
+        enabled = true
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix '.debug'

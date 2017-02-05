@@ -39,24 +39,26 @@ public class FeedListFragment extends Fragment implements NetworkCallback<ArrayL
     @ForApplication
     @Inject
     Context context;
-
     @Inject
     Utils utils;
-
     @Inject
     FeedService feedService;
-
     @Inject
     CacheService cacheService;
     @Inject
     RSSItemListHelper rssItemListHelper;
 
+    @Bind(R.id.swipe_refresh)
+    protected SwipeRefreshLayout swipeRefreshLayoutListView;
+
+    @Bind(R.id.recyclerViewFeedList)
+    protected RecyclerView recyclerView;
+
+    @Bind(R.id.empty)
+    protected TextView emptyListMessage;
+
     private FeedListAdapter adapter;
     private FeedType feedType;
-
-    @Bind(R.id.swipe_refresh) protected SwipeRefreshLayout swipeRefreshLayoutListView;
-    @Bind(R.id.recyclerViewFeedList) protected RecyclerView recyclerView;
-    @Bind(R.id.empty) protected TextView emptyListMessage;
 
     public FeedListFragment setType(FeedType feedType){
         this.feedType = feedType;
@@ -66,14 +68,13 @@ public class FeedListFragment extends Fragment implements NetworkCallback<ArrayL
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_card_list, container, false);
         ButterKnife.bind(this, view);
-
         InjectUtil.component().inject(this);
 
         recyclerView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        recyclerView.setItemAnimator(null);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(null);
 
         adapter = new FeedListAdapter();
         recyclerView.setAdapter(adapter);
@@ -120,6 +121,7 @@ public class FeedListFragment extends Fragment implements NetworkCallback<ArrayL
         });
         adapter.setRSSItemList(cacheService.getFeed(feedType.getCacheableString()));
         refreshContent();
+
         return view;
     }
 

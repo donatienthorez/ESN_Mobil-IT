@@ -1,10 +1,7 @@
 package org.esn.mobilit.services;
 
-import org.esn.mobilit.services.cache.CacheService;
 import org.esn.mobilit.models.Country;
 import org.esn.mobilit.network.providers.CountryProvider;
-import org.esn.mobilit.services.interfaces.CachableInterface;
-import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 
@@ -14,11 +11,11 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class CountriesService implements CachableInterface {
-    @Inject
-    CacheService cacheService;
+public class CountriesService {
     @Inject
     Utils utils;
+    @Inject
+    AppState appState;
 
     @Inject
     public CountriesService(){
@@ -36,7 +33,7 @@ public class CountriesService implements CachableInterface {
 
                         @Override
                         public void onSuccess(List<Country> result) {
-                            cacheService.save(getString(), result);
+                            appState.setCountryList(result);
                             callback.onSuccess(result);
                         }
 
@@ -55,7 +52,7 @@ public class CountriesService implements CachableInterface {
             thread.setPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
             thread.start();
         } else {
-            List<Country> cachedCountries = (List<Country>) cacheService.get(getString());
+            List<Country> cachedCountries = appState.getCountryList();
 
             if (cachedCountries == null || cachedCountries.size() == 0) {
                 callback.onFailure("No network");
@@ -63,11 +60,6 @@ public class CountriesService implements CachableInterface {
                 callback.onSuccess(cachedCountries);
             }
         }
-    }
-
-    @Override
-    public String getString() {
-        return ApplicationConstants.CACHE_COUNTRIES;
     }
 }
 

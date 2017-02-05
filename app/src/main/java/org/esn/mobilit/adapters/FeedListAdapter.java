@@ -20,6 +20,9 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHolder> {
 
     private ArrayList<RSSItem> rssItemList;
@@ -51,13 +54,16 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        @Bind(R.id.image)
         ImageView imageView;
+
+        @Bind(R.id.title)
         TextView textView;
 
         public ViewHolder(View v) {
             super(v);
-            imageView = (ImageView) v.findViewById(R.id.image);
-            textView = (TextView) v.findViewById(R.id.title);
+            ButterKnife.bind(v);
             v.setOnClickListener(this);
         }
 

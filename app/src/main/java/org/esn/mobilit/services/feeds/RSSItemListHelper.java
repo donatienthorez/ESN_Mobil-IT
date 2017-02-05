@@ -1,11 +1,14 @@
 package org.esn.mobilit.services.feeds;
 
+import android.content.Context;
+
 import com.bumptech.glide.Glide;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.services.cache.CacheService;
-import org.esn.mobilit.utils.parser.DOMParser;
+import org.esn.mobilit.utils.inject.ForApplication;
+import org.jsoup.Jsoup;
+import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,10 @@ public class RSSItemListHelper {
 
     @Inject
     CacheService cacheService;
+
+    @Inject
+    @ForApplication
+    Context context;
 
     @Inject
     public RSSItemListHelper() {
@@ -47,14 +54,33 @@ public class RSSItemListHelper {
      */
     public List<RSSItem> moveRSSImages(List<RSSItem> serverItems) {
         for (RSSItem serverItem : serverItems) {
-            DOMParser.moveImage(serverItem);
+            moveImage(serverItem);
 
-            Glide.with(MobilITApplication.getContext())
+            Glide.with(context)
                     .load(serverItem.getImage())
                     .preload(150, 250);
         }
 
         return serverItems;
+    }
+
+    public void moveImage(RSSItem item){
+        org.jsoup.nodes.Document docHtml = Jsoup.parse(item.getDescription());
+        Elements imgEle = docHtml.select("img");
+        Elements colorboxLink = docHtml.getElementsByClass("colorbox");
+
+        if(imgEle != null && imgEle.first() != null) {
+            item.setImage(imgEle.first().attr("src"));
+            String description = item.getDescription().replace(imgEle.first().toString(), "");
+            item.setDescription(description);
+        }
+        /**
+         * ColorBoxLink is a image with a better quality but not present all the time
+         * if we find it we replace the image by the better one
+         */
+        if (colorboxLink != null && colorboxLink.first() != null) {
+            item.setImage(colorboxLink.first().attr("href"));
+        }
     }
 
     public boolean needsAdapterUpdate(FeedType feedtype, ArrayList<RSSItem> rssItemList) {

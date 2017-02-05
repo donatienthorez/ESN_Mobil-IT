@@ -11,18 +11,10 @@ import io.fabric.sdk.android.Fabric;
 
 public class MobilITApplication extends Application {
 
-    private static Context context;
-
     @Override
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
-        context = getApplicationContext();
         InjectUtil.initialize(this);
     }
-
-    public static Context getContext(){
-        return context;
-    }
-
 }

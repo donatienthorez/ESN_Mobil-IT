@@ -16,7 +16,6 @@ import org.esn.mobilit.services.cache.CacheService;
 import org.esn.mobilit.services.PreferencesService;
 import org.esn.mobilit.services.feeds.FeedService;
 import org.esn.mobilit.services.gcm.RegIdService;
-import org.esn.mobilit.utils.parser.RSSFeedParser;
 import org.esn.mobilit.services.cache.InternalStorage;
 
 import javax.inject.Singleton;
@@ -43,8 +42,6 @@ public interface AppComponent{
     void inject(GuideListAdapter guideListAdapter);
 
     void inject(FeedListAdapter feedListAdapter);
-
-    void inject(RSSFeedParser rssFeedParser);
 
     void inject(PreferencesService preferencesService);
 
