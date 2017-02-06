@@ -8,6 +8,7 @@ import org.esn.mobilit.models.Section;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.inject.InjectUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,6 +19,8 @@ public class AppState {
 
 	@Inject
 	CacheService cacheService;
+	@Inject
+	PreferencesService preferencesService;
 
 	/**
 	 * The current section of the user
@@ -28,10 +31,18 @@ public class AppState {
 	 * The current country of the user
 	 */
 	private Country country;
+
 	/**
 	 * The current country of the user
 	 */
 	private List<Country> countryList;
+
+	/**
+	 * The regId of the user
+	 */
+	private String regId;
+
+	//// FIXME: 06/02/2017  add feedLists : news, events, partners
 
 	@Inject
 	public AppState() {
@@ -52,11 +63,20 @@ public class AppState {
 		return country;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Country> getCountryList() {
 		if (countryList == null) {
-			countryList = (List<Country>) cacheService.get(ApplicationConstants.CACHE_COUNTRY);
+			countryList = (List<Country>) cacheService.get(ApplicationConstants.CACHE_COUNTRIES);
+			return countryList == null ? new ArrayList<Country>() : countryList;
 		}
 		return countryList;
+	}
+
+	public String getRegId() {
+		if (regId == null) {
+			regId = preferencesService.getDefaults(ApplicationConstants.PREFERENCES_REG_ID);
+		}
+		return regId;
 	}
 
 	public void setSection(Section section) {
@@ -72,6 +92,11 @@ public class AppState {
 	public void setCountryList(List<Country> countryList) {
 		this.countryList = countryList;
 		cacheService.save(ApplicationConstants.CACHE_COUNTRIES, countryList);
+	}
+
+	public void setRegId(String regId) {
+		this.regId = regId;
+		preferencesService.setDefaults(ApplicationConstants.PREFERENCES_REG_ID, regId);
 	}
 
 	public boolean hasValidSection() {

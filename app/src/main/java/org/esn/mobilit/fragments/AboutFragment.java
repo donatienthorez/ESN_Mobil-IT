@@ -52,9 +52,7 @@ public class AboutFragment extends Fragment {
             Bundle savedInstanceState
     ){
         View view = inflater.inflate(R.layout.fragment_about_re, container, false);
-
         InjectUtil.component().inject(this);
-
         ButterKnife.bind(this, view);
 
         // put the cached section

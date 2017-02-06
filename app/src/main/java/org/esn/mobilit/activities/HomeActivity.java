@@ -48,18 +48,19 @@ import butterknife.ButterKnife;
 
 public class HomeActivity extends AppCompatActivity {
 
-    @Bind(R.id.drawer_layout)   protected DrawerLayout drawerLayout;
-    @Bind(R.id.left_drawer)     protected RelativeLayout drawerRelativeLayout;
-    @Bind(R.id.toolbar)         protected Toolbar toolbar;
-    @Bind(R.id.navigation_view) protected NavigationView navigationView;
+    @Bind(R.id.drawer_layout)
+    protected DrawerLayout drawerLayout;
+    @Bind(R.id.left_drawer)
+    protected RelativeLayout drawerRelativeLayout;
+    @Bind(R.id.toolbar)
+    protected Toolbar toolbar;
+    @Bind(R.id.navigation_view)
+    protected NavigationView navigationView;
 
-    private HashMap<String, Fragment> fragmentHashMap;
-
-    private int currentFragmentId;
-
+    @ForApplication @Inject
+    Context context;
     @Inject
     CacheService cacheService;
-
     @Inject
     PreferencesService preferencesService;
     @Inject
@@ -68,12 +69,11 @@ public class HomeActivity extends AppCompatActivity {
     AboutService aboutService;
     @Inject
     GuideService guideService;
-
-    @ForApplication @Inject
-    Context context;
-
     @Inject
     AppState appState;
+
+    private HashMap<String, Fragment> fragmentHashMap;
+    private int currentFragmentId;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

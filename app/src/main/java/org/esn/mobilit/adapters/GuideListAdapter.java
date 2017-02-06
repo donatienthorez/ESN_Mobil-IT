@@ -23,15 +23,18 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.ViewHolderItem> {
-    private List<Node> nodes;
-    private Node currentNode;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
+public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.ViewHolderItem> {
     @ForApplication
     @Inject
     Context context;
 
     OnItemClickListener itemClickListener;
+
+    private List<Node> nodes;
+    private Node currentNode;
 
     final int DEFAULT_CATEGORY_ITEM = 0;
     final int DEFAULT_CATEGORY_DETAILS = 1;
@@ -45,18 +48,21 @@ public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.View
     }
 
     public class ViewHolderItem extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        @Bind(R.id.image)
         ImageView imageView;
-        TextView titleView;
+
+        @Bind(R.id.title)
+        TextView textView;
 
         public ViewHolderItem(View v) {
             super(v);
-            imageView = (ImageView) v.findViewById(R.id.image);
-            titleView = (TextView) v.findViewById(R.id.title);
+            ButterKnife.bind(v);
             v.setOnClickListener(this);
         }
 
         public void setTitle(String title) {
-            titleView.setText(title);
+            textView.setText(title);
         }
 
         public void setImage(String imageLink) {

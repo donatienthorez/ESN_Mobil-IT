@@ -1,3 +1,4 @@
+
 package org.esn.mobilit.fragments.Satellite;
 
 import android.app.Fragment;
@@ -28,16 +29,20 @@ import butterknife.ButterKnife;
 
 public class DetailsFragment extends Fragment {
 
-    protected RSSItem rssItem;
-
-    @Bind(R.id.title) TextView title;
-    @Bind(R.id.header) ImageView imageView;
-    @Bind(R.id.desc) WebView webView;
-    @Bind(R.id.scrollView) ScrollView scrollView;
-
     @ForApplication
     @Inject
     Context context;
+
+    @Bind(R.id.title)
+    TextView title;
+    @Bind(R.id.header)
+    ImageView imageView;
+    @Bind(R.id.desc)
+    WebView webView;
+    @Bind(R.id.scrollView)
+    ScrollView scrollView;
+
+    protected RSSItem rssItem;
 
     public DetailsFragment setFeed(RSSItem rssItem){
         this.rssItem = rssItem;
@@ -51,6 +56,7 @@ public class DetailsFragment extends Fragment {
         InjectUtil.component().inject(this);
         ButterKnife.bind(this, view);
 
+        //// FIXME: 06/02/2017 use string and get rssitem from an array inside appstate
         if (savedInstanceState != null) {
             rssItem = (RSSItem) savedInstanceState.getSerializable("rssItem");
         }

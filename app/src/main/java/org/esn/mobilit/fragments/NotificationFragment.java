@@ -2,7 +2,6 @@ package org.esn.mobilit.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,11 +24,14 @@ import butterknife.ButterKnife;
 
 public class NotificationFragment extends Fragment {
 
-    @Bind(R.id.recyclerViewNotificationsList) protected RecyclerView recyclerView;
-    private List<Notification> notificationList;
-
     @Inject
     NotificationService notificationService;
+
+    @Bind(R.id.recyclerViewNotificationsList)
+    protected RecyclerView recyclerView;
+
+    //fixme put that list inside appState
+    private List<Notification> notificationList;
 
     public View onCreateView(
             LayoutInflater inflater,
@@ -40,10 +42,8 @@ public class NotificationFragment extends Fragment {
         ButterKnife.bind(this, view);
         InjectUtil.component().inject(this);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         notificationList = notificationService.getFromCache();
         NotificationAdapter adapter = new NotificationAdapter(notificationList);
-        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         RecyclerView.ItemDecoration itemDecoration = new
                 DividerItemDecoration(getActivity(), null);
