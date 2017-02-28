@@ -22,38 +22,19 @@ public class GuideService implements CachableInterface {
     @Inject
     CacheService cacheService;
     @Inject
-    AboutService aboutService;
-    @Inject
     Utils utils;
     @Inject
     AppState appState;
 
     Context context;
 
-    private Guide guide;
-
     @Inject
     public GuideService(@ForApplication Context context) {
         this.context = context;
     }
 
-    public void resetService() {
-    }
-
-    public void setGuide(Guide guide) {
-        this.guide = guide;
-    }
-
-    public Guide getGuide() {
-        return guide;
-    }
-
     public String getString() {
         return ApplicationConstants.CACHE_GUIDE;
-    }
-
-    public Guide getFromCache() {
-        return (Guide) cacheService.get(getString());
     }
 
     private void setGuideToCache(Guide guide) {
@@ -76,8 +57,7 @@ public class GuideService implements CachableInterface {
 
             @Override
             public void onSuccess(Guide guide) {
-                setGuide(guide);
-                setGuideToCache(guide);
+                appState.setGuide(guide);
                 callback.onSuccess(guide);
             }
 

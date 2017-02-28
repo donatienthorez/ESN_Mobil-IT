@@ -5,6 +5,7 @@ import android.content.Context;
 import com.bumptech.glide.Glide;
 
 import org.esn.mobilit.models.RSS.RSSItem;
+import org.esn.mobilit.services.AppState;
 import org.esn.mobilit.services.cache.CacheService;
 import org.esn.mobilit.utils.inject.ForApplication;
 import org.jsoup.Jsoup;
@@ -21,6 +22,8 @@ public class RSSItemListHelper {
 
     @Inject
     CacheService cacheService;
+    @Inject
+    AppState appState;
 
     @Inject
     @ForApplication
@@ -84,7 +87,7 @@ public class RSSItemListHelper {
     }
 
     public boolean needsAdapterUpdate(FeedType feedtype, ArrayList<RSSItem> rssItemList) {
-        ArrayList<RSSItem>  cachedList = cacheService.getFeed(feedtype.getCacheableString());
+        ArrayList<RSSItem>  cachedList = appState.getFeed(feedtype);
         if (cachedList == null || rssItemList == null || cachedList.size() != rssItemList.size()) {
             return true;
         }

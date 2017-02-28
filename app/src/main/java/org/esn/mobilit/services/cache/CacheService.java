@@ -3,6 +3,7 @@ package org.esn.mobilit.services.cache;
 import com.crashlytics.android.Crashlytics;
 
 import org.esn.mobilit.models.RSS.RSSItem;
+import org.esn.mobilit.services.feeds.FeedType;
 import org.esn.mobilit.utils.inject.InjectUtil;
 
 import java.util.ArrayList;
@@ -62,11 +63,11 @@ public class CacheService {
         }
     }
 
-    public ArrayList<RSSItem> getFeed(String feedType) {
-        return (ArrayList<RSSItem>) this.get(feedType);
+    public ArrayList<RSSItem> getFeed(FeedType feedType) {
+        return (ArrayList<RSSItem>) this.get(feedType.getFeedTypeString());
     }
 
-    public void setFeed(String feedType, ArrayList<RSSItem>  rssItemList) {
-        this.save(feedType, rssItemList);
+    public void setFeed(FeedType feedType, ArrayList<RSSItem>  rssItemList) {
+        this.save(feedType.getFeedTypeString(), rssItemList);
     }
 }

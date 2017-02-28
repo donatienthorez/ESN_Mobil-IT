@@ -63,7 +63,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 
         public ViewHolder(View v) {
             super(v);
-            ButterKnife.bind(v);
+            ButterKnife.bind(this, v);
             v.setOnClickListener(this);
         }
 

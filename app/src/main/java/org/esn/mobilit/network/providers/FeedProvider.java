@@ -55,14 +55,14 @@ public class FeedProvider {
 
     public void makeFeedRequest(FeedType feedType, final NetworkCallback<ArrayList<RSSItem>> callback) {
         if (!utils.isConnected()) {
-            callback.onNoConnection(cacheService.getFeed(feedType.getCacheableString()));
+            callback.onNoConnection(appState.getFeed(feedType));
             return;
         }
 
         if (appState.hasValidSection()) {
             FeedProviderInterface feedProvider = createBuilder(appState.getSectionWebsite());
             //FIXME change cacheable strings to feed_type
-            switch (feedType.getCacheableString()) {
+            switch (feedType.getFeedTypeString()) {
                 case ApplicationConstants.FEED_TYPE_NEWS:
                     feedProvider.getNews(createCallback(callback));
                     break;

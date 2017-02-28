@@ -3,18 +3,20 @@ package org.esn.mobilit.fragments.Guide;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.esn.mobilit.R;
-import org.esn.mobilit.activities.HomeActivity;
+import org.esn.mobilit.activities.BaseActivity;
 import org.esn.mobilit.adapters.GuideListAdapter;
 import org.esn.mobilit.models.Guide;
 import org.esn.mobilit.models.Node;
+import org.esn.mobilit.services.AppState;
 import org.esn.mobilit.services.GuideService;
+import org.esn.mobilit.services.navigation.NavigationUri;
+import org.esn.mobilit.services.navigation.NavigationUriType;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.inject.InjectUtil;
 
@@ -31,6 +33,8 @@ public class GuideFragment extends Fragment {
 
     @Inject
     GuideService guideService;
+    @Inject
+    AppState appState;
 
     @Bind(R.id.swipe_refresh)
     protected SwipeRefreshLayout swipeRefreshLayoutListView;
@@ -41,7 +45,6 @@ public class GuideFragment extends Fragment {
     @Bind(R.id.empty)
     protected TextView emptyListMessage;
 
-    private Guide guide;
     private Node currentNode;
     private List<Node> listNodes;
     private GuideListAdapter adapter;
@@ -66,7 +69,9 @@ public class GuideFragment extends Fragment {
             public void onItemClick(View view, int position) {
                 if (currentNode != null) { position--;}
                 if (position >= 0 && listNodes.get(position) != null) {
-                    ((HomeActivity) getActivity()).loadGuideFragment(guide, listNodes.get(position), true);
+                    NavigationUri navigationUri = new NavigationUri(NavigationUriType.GUIDE);
+                    navigationUri.setParameter("node", listNodes.get(position));
+                    ((BaseActivity) getActivity()).navigateToUri(navigationUri, true);
                 }
             }
         });
@@ -90,14 +95,14 @@ public class GuideFragment extends Fragment {
 
                     @Override
                     public void onSuccess(Guide result) {
-                        setCurrentNode(result, currentNode);
+                        setCurrentNode(currentNode);
                         swipeRefreshLayoutListView.setRefreshing(false);
-                        emptyListMessage.setVisibility(guide != null ? View.GONE : View.VISIBLE);
+                        emptyListMessage.setVisibility(appState.getGuide() != null ? View.GONE : View.VISIBLE);
                     }
 
                     @Override
                     public void onNoAvailableData() {
-                        if (guide == null) {
+                        if (appState.getGuide() == null) {
                             swipeRefreshLayoutListView.setRefreshing(false);
                             emptyListMessage.setVisibility(View.VISIBLE);
                             recyclerView.setVisibility(View.GONE);
@@ -107,7 +112,7 @@ public class GuideFragment extends Fragment {
                     @Override
                     public void onFailure(String error) {
                         swipeRefreshLayoutListView.setRefreshing(false);
-                        emptyListMessage.setVisibility(guide == null ? View.VISIBLE : View.GONE);
+                        emptyListMessage.setVisibility(appState.getGuide() == null ? View.VISIBLE : View.GONE);
                     }
                 });
             }
@@ -116,10 +121,11 @@ public class GuideFragment extends Fragment {
         swipeRefreshLayoutListView.post(thread);
     }
 
-    public GuideFragment setCurrentNode(Guide guide, Node node) {
+    private GuideFragment setCurrentNode(Node node) {
+        Guide guide = appState.getGuide();
+
         if (guide != null && guide.isActivated() && guide.isCreated()) {
-            this.guide = guide;
-            this.listNodes = node != null ? node.getNodes() : guide.getNodes();
+            this.listNodes = node == null ? guide.getNodes() : node.getNodes();
             this.currentNode = node;
             if (adapter != null && currentNode == null) {
                 adapter.setNodes(listNodes, currentNode);

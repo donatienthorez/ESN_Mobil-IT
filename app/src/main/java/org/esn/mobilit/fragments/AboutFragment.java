@@ -39,10 +39,8 @@ public class AboutFragment extends Fragment {
     @ForApplication
     @Inject
     Context context;
-
     @Inject
     AboutService aboutService;
-
     @Inject
     AppState appState;
 

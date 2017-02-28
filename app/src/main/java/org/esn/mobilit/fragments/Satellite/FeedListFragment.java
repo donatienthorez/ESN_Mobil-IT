@@ -11,14 +11,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.esn.mobilit.R;
-import org.esn.mobilit.activities.HomeActivity;
+import org.esn.mobilit.activities.BaseActivity;
 import org.esn.mobilit.adapters.FeedListAdapter;
-import org.esn.mobilit.models.RSS.RSS;
 import org.esn.mobilit.models.RSS.RSSItem;
+import org.esn.mobilit.services.AppState;
 import org.esn.mobilit.services.cache.CacheService;
 import org.esn.mobilit.services.feeds.FeedService;
 import org.esn.mobilit.services.feeds.FeedType;
 import org.esn.mobilit.services.feeds.RSSItemListHelper;
+import org.esn.mobilit.services.navigation.NavigationUri;
+import org.esn.mobilit.services.navigation.NavigationUriType;
 import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
 import org.esn.mobilit.utils.inject.ForApplication;
@@ -48,6 +50,9 @@ public class FeedListFragment extends Fragment implements NetworkCallback<ArrayL
     @Inject
     RSSItemListHelper rssItemListHelper;
 
+    @Inject
+    AppState appState;
+
     @Bind(R.id.swipe_refresh)
     protected SwipeRefreshLayout swipeRefreshLayoutListView;
 
@@ -60,15 +65,15 @@ public class FeedListFragment extends Fragment implements NetworkCallback<ArrayL
     private FeedListAdapter adapter;
     private FeedType feedType;
 
-    public FeedListFragment setType(FeedType feedType){
-        this.feedType = feedType;
-        return this;
-    }
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_card_list, container, false);
         ButterKnife.bind(this, view);
         InjectUtil.component().inject(this);
+
+        this.feedType = (FeedType) getArguments().get("feedType");
+        if (feedType == null) {
+            //TODO manage that case
+        }
 
         recyclerView.setHasFixedSize(true);
 
@@ -82,7 +87,12 @@ public class FeedListFragment extends Fragment implements NetworkCallback<ArrayL
         adapter.setOnItemClickListener(new FeedListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                ((HomeActivity) getActivity()).loadDetailsFragment(adapter.getItem(position), true);
+                Bundle bundle = new Bundle();
+                bundle.putInt("position", position);
+                bundle.putSerializable("feedType", feedType);
+
+                NavigationUri navigationUri = new NavigationUri(NavigationUriType.FEED_DETAILS, bundle);
+                ((BaseActivity) getActivity()).navigateToUri(navigationUri, true);
             }
         });
 
@@ -119,7 +129,7 @@ public class FeedListFragment extends Fragment implements NetworkCallback<ArrayL
                 }
             }
         });
-        adapter.setRSSItemList(cacheService.getFeed(feedType.getCacheableString()));
+        adapter.setRSSItemList(appState.getFeed(feedType));
         refreshContent();
 
         return view;

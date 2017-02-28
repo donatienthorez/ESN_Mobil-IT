@@ -18,6 +18,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.RSS.RSSItem;
+import org.esn.mobilit.services.AppState;
+import org.esn.mobilit.services.feeds.FeedType;
 import org.esn.mobilit.utils.inject.ForApplication;
 import org.esn.mobilit.utils.inject.InjectUtil;
 
@@ -32,6 +34,8 @@ public class DetailsFragment extends Fragment {
     @ForApplication
     @Inject
     Context context;
+    @Inject
+    AppState appState;
 
     @Bind(R.id.title)
     TextView title;
@@ -42,12 +46,9 @@ public class DetailsFragment extends Fragment {
     @Bind(R.id.scrollView)
     ScrollView scrollView;
 
-    protected RSSItem rssItem;
-
-    public DetailsFragment setFeed(RSSItem rssItem){
-        this.rssItem = rssItem;
-        return this;
-    }
+    private FeedType feedType;
+    private int position;
+    private RSSItem rssItem;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -56,9 +57,22 @@ public class DetailsFragment extends Fragment {
         InjectUtil.component().inject(this);
         ButterKnife.bind(this, view);
 
-        //// FIXME: 06/02/2017 use string and get rssitem from an array inside appstate
+        this.feedType = (FeedType) getArguments().get("feedType");
+        if (feedType == null) {
+            //TODO manage that case
+        }
+
+        //TODO checks for position
+        this.position = getArguments().getInt("position");
+
+
         if (savedInstanceState != null) {
+            //// FIXME: 07/02/2017 Add this in a application constants
             rssItem = (RSSItem) savedInstanceState.getSerializable("rssItem");
+            position = savedInstanceState.getInt("position");
+            feedType = (FeedType) savedInstanceState.getSerializable("feedType");
+        } else {
+            rssItem = appState.getFeed(feedType).get(position);
         }
 
         if (rssItem != null) {
@@ -89,6 +103,9 @@ public class DetailsFragment extends Fragment {
 
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        //// FIXME: 07/02/2017 Add this in a application constants
         outState.putSerializable("rssItem", rssItem);
+        outState.putSerializable("feedType", feedType);
+        outState.putSerializable("position", position);
     }
 }

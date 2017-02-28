@@ -3,8 +3,12 @@ package org.esn.mobilit.services;
 import android.text.TextUtils;
 
 import org.esn.mobilit.models.Country;
+import org.esn.mobilit.models.Guide;
+import org.esn.mobilit.models.RSS.RSS;
+import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.services.cache.CacheService;
 import org.esn.mobilit.models.Section;
+import org.esn.mobilit.services.feeds.FeedType;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.inject.InjectUtil;
 
@@ -42,7 +46,10 @@ public class AppState {
 	 */
 	private String regId;
 
-	//// FIXME: 06/02/2017  add feedLists : news, events, partners
+	private ArrayList<RSSItem> news;
+	private ArrayList<RSSItem> events;
+	private ArrayList<RSSItem> partners;
+	private Guide guide;
 
 	@Inject
 	public AppState() {
@@ -79,6 +86,91 @@ public class AppState {
 		return regId;
 	}
 
+	public ArrayList<RSSItem> getNews() {
+		if (news == null || news.isEmpty()) {
+			news = cacheService.getFeed(FeedType.NEWS);
+		}
+		return news;
+	}
+
+	public ArrayList<RSSItem> getEvents() {
+		if (events == null || events.isEmpty()) {
+			return cacheService.getFeed(FeedType.EVENTS);
+		}
+		return events;
+	}
+
+	public ArrayList<RSSItem> getPartners() {
+		if (partners == null || partners.isEmpty()) {
+			return cacheService.getFeed(FeedType.PARTNERS);
+		}
+		return partners;
+	}
+
+	public ArrayList<RSSItem> getFeed(FeedType feedType) {
+		if (feedType.getFeedTypeString().equals(FeedType.EVENTS.getFeedTypeString())) {
+			return getEvents();
+		}
+
+		if (feedType.getFeedTypeString().equals(FeedType.NEWS.getFeedTypeString())) {
+			return getNews();
+		}
+
+		if (feedType.getFeedTypeString().equals(FeedType.PARTNERS.getFeedTypeString())) {
+			return getPartners();
+		}
+		// Should never go there
+		//FIXME improve this error
+		throw new RuntimeException("getFeed : feedType unknown {} feedType");
+	}
+
+	public void setFeed(FeedType feedType, ArrayList<RSSItem> feed) {
+		if (feedType.getFeedTypeString().equals(FeedType.EVENTS.getFeedTypeString())) {
+			setEvents(feed);
+			return;
+		}
+
+		if (feedType.getFeedTypeString().equals(FeedType.NEWS.getFeedTypeString())) {
+			setNews(feed);
+			return;
+		}
+
+		if (feedType.getFeedTypeString().equals(FeedType.PARTNERS.getFeedTypeString())) {
+			setPartners(feed);
+			return;
+		}
+		// Should never go there
+		//FIXME improve this error
+		throw new RuntimeException("setFeed : feedType unknown {} feedType");
+	}
+
+	public void setGuide(Guide guide) {
+		this.guide = guide;
+		cacheService.save(ApplicationConstants.CACHE_GUIDE, guide);
+	}
+
+	public Guide getGuide() {
+		if (guide != null) {
+			guide = (Guide) cacheService.get(ApplicationConstants.CACHE_GUIDE);
+		}
+		return guide;
+	}
+
+	public void setNews(ArrayList<RSSItem> news) {
+		this.news = news;
+		cacheService.save(ApplicationConstants.CACHE_NEWS, section);
+	}
+
+	public void setEvents(ArrayList<RSSItem> events) {
+		this.events = events;
+		cacheService.save(ApplicationConstants.CACHE_EVENTS, section);
+	}
+
+	public void setPartners(ArrayList<RSSItem> partners) {
+		this.partners = partners;
+		cacheService.save(ApplicationConstants.CACHE_PARTNERS, section);
+	}
+
 	public void setSection(Section section) {
 		this.section = section;
 		cacheService.save(ApplicationConstants.CACHE_SECTION, section);
@@ -106,4 +198,6 @@ public class AppState {
 	public String getSectionWebsite() {
 		return getSection().getWebsite();
 	}
+
+
 }

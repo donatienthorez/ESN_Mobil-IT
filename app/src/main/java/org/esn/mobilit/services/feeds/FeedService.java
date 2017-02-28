@@ -16,7 +16,7 @@ import javax.inject.Singleton;
 public class FeedService {
 
     @Inject
-    CacheService cacheService;
+    CacheService appState;
 
     @Inject
     FeedProvider feedProvider;
@@ -39,7 +39,7 @@ public class FeedService {
                 List<RSSItem> rssItems = rssItemListHelper.moveRSSImages(result);
                 ArrayList<RSSItem>  rssItemList = new ArrayList<>(rssItems);
 
-                cacheService.setFeed(feedType.getCacheableString(), rssItemList);
+                appState.setFeed(feedType, rssItemList);
                 networkCallback.onSuccess(rssItemList);
             }
 
