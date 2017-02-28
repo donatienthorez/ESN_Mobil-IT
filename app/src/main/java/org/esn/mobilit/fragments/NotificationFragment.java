@@ -9,15 +9,12 @@ import android.view.ViewGroup;
 
 import org.esn.mobilit.R;
 import org.esn.mobilit.activities.BaseActivity;
-import org.esn.mobilit.activities.HomeActivity;
 import org.esn.mobilit.adapters.NotificationAdapter;
 import org.esn.mobilit.models.Notification;
 import org.esn.mobilit.services.NotificationService;
-import org.esn.mobilit.services.feeds.FeedType;
 import org.esn.mobilit.services.navigation.NavigationUri;
 import org.esn.mobilit.services.navigation.NavigationUriType;
 import org.esn.mobilit.utils.inject.InjectUtil;
-import org.esn.mobilit.widgets.DividerItemDecoration;
 
 import java.util.List;
 
@@ -49,15 +46,13 @@ public class NotificationFragment extends Fragment {
         notificationList = notificationService.getFromCache();
         NotificationAdapter adapter = new NotificationAdapter(notificationList);
         recyclerView.setAdapter(adapter);
-        RecyclerView.ItemDecoration itemDecoration = new
-                DividerItemDecoration(getActivity(), null);
-        recyclerView.addItemDecoration(itemDecoration);
 
         adapter.setOnItemClickListener(new NotificationAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 NavigationUri navigationUri = new NavigationUri(NavigationUriType.NOTIFICATIONS);
-                navigationUri.setParameter("rssItem", notificationList.get(position).getRssItem());
+                //FIXME
+//                navigationUri.setParameter("rssItem", notificationList.get(position).getRssItem());
                 ((BaseActivity) getActivity()).navigateToUri(navigationUri, false);
             }
         });

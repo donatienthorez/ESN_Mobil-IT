@@ -129,33 +129,26 @@ public class HomeActivity extends BaseActivity {
     private void executeDrawerMenuAction(int menuItemId) {
         clearFragmentBackStack();
         cacheService.save(ApplicationConstants.CACHE_DEFAULT_MENU, menuItemId);
-
-        NavigationUri navigationUri;
         Bundle bundle = new Bundle();
 
         switch (menuItemId) {
             case R.id.drawer_item_news:
                 bundle.putSerializable("feedType", FeedType.NEWS);
-                navigationUri = new NavigationUri(NavigationUriType.FEED_LIST, bundle);
-                navigateToUri(navigationUri, false);
+                navigateToUri(new NavigationUri(NavigationUriType.FEED_LIST, bundle), false);
                 break;
             case R.id.drawer_item_events:
                 bundle.putSerializable("feedType", FeedType.EVENTS);
-                navigationUri = new NavigationUri(NavigationUriType.FEED_LIST, bundle);
-                navigateToUri(navigationUri, false);
+                navigateToUri(new NavigationUri(NavigationUriType.FEED_LIST, bundle), false);
                 break;
             case R.id.drawer_item_partners:
                 bundle.putSerializable("feedType", FeedType.PARTNERS);
-                navigationUri = new NavigationUri(NavigationUriType.FEED_LIST, bundle);
-                navigateToUri(navigationUri, false);
+                navigateToUri(new NavigationUri(NavigationUriType.FEED_LIST, bundle), false);
                 break;
             case R.id.drawer_item_guide:
-                navigationUri = new NavigationUri(NavigationUriType.GUIDE);
-                navigateToUri(navigationUri, false);
+                navigateToUri(new NavigationUri(NavigationUriType.GUIDE), false);
                 break;
             case R.id.drawer_item_about:
-                navigationUri = new NavigationUri(NavigationUriType.ABOUT);
-                navigateToUri(navigationUri, false);
+                navigateToUri(new NavigationUri(NavigationUriType.ABOUT), false);
                 break;
             case R.id.drawer_item_reset:
                 preferencesService.resetSection();

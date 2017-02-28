@@ -55,7 +55,9 @@ public class GuideFragment extends Fragment {
         ButterKnife.bind(this, view);
         InjectUtil.component().inject(this);
         adapter = new GuideListAdapter();
-        adapter.setNodes(listNodes, currentNode);
+        if (getArguments() != null && getArguments().getSerializable("node") != null) {
+            setCurrentNode((Node) getArguments().getSerializable("node"));
+        }
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(null);
@@ -69,8 +71,9 @@ public class GuideFragment extends Fragment {
             public void onItemClick(View view, int position) {
                 if (currentNode != null) { position--;}
                 if (position >= 0 && listNodes.get(position) != null) {
-                    NavigationUri navigationUri = new NavigationUri(NavigationUriType.GUIDE);
-                    navigationUri.setParameter("node", listNodes.get(position));
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("node", listNodes.get(position) );
+                    NavigationUri navigationUri = new NavigationUri(NavigationUriType.GUIDE, bundle);
                     ((BaseActivity) getActivity()).navigateToUri(navigationUri, true);
                 }
             }
@@ -121,7 +124,7 @@ public class GuideFragment extends Fragment {
         swipeRefreshLayoutListView.post(thread);
     }
 
-    private GuideFragment setCurrentNode(Node node) {
+    private void setCurrentNode(Node node) {
         Guide guide = appState.getGuide();
 
         if (guide != null && guide.isActivated() && guide.isCreated()) {
@@ -131,6 +134,5 @@ public class GuideFragment extends Fragment {
                 adapter.setNodes(listNodes, currentNode);
             }
         }
-        return this;
     }
 }

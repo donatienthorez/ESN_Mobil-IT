@@ -86,10 +86,10 @@ public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.View
         }
     }
 
-    public class ViewHolderItemDetailled extends ViewHolderItem{
+    public class ViewHolderItemDetailed extends ViewHolderItem{
         WebView resumeView;
         TextView categoryLabel;
-        public ViewHolderItemDetailled(View v) {
+        public ViewHolderItemDetailed(View v) {
             super(v);
             resumeView  = (WebView) v.findViewById(R.id.webview);
             categoryLabel  = (TextView) v.findViewById(R.id.categoryLabel);
@@ -113,10 +113,13 @@ public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.View
         }
     }
 
-    public GuideListAdapter() {}
-
     public void setNodes(List<Node> nodes, Node currentNode) {
-        this.nodes = nodes != null ? nodes : new ArrayList<Node>();
+        if (this.nodes != null) {
+            this.nodes.clear();
+            this.nodes.addAll(nodes);
+        } else {
+            this.nodes = new ArrayList<>();
+        }
         this.currentNode = currentNode;
         this.notifyDataSetChanged();
     }
@@ -129,7 +132,7 @@ public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.View
         if (viewType == DEFAULT_CATEGORY_DETAILS) {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.list_guide_item_detailled, parent, false);
-            return new ViewHolderItemDetailled(view);
+            return new ViewHolderItemDetailed(view);
         } else {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.list_item_guide, parent, false);
