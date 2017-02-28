@@ -134,5 +134,6 @@ public class GuideFragment extends Fragment {
                 adapter.setNodes(listNodes, currentNode);
             }
         }
+        return this;
     }
 }

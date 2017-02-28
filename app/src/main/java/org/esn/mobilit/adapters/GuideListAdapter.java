@@ -113,13 +113,13 @@ public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.View
         }
     }
 
+    public GuideListAdapter() {
+        this.nodes = new ArrayList<>();
+    }
+
     public void setNodes(List<Node> nodes, Node currentNode) {
-        if (this.nodes != null) {
-            this.nodes.clear();
-            this.nodes.addAll(nodes);
-        } else {
-            this.nodes = new ArrayList<>();
-        }
+        this.nodes.clear();
+        this.nodes.addAll(nodes);
         this.currentNode = currentNode;
         this.notifyDataSetChanged();
     }

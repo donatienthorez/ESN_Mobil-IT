@@ -16,6 +16,7 @@ import javax.inject.Singleton;
 public class HomepageRenderer {
 
     @ForApplication
+    @Inject
     Context context;
 
     @Inject
