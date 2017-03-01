@@ -27,6 +27,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.ViewHolderItem> {
+
     @ForApplication
     @Inject
     Context context;
@@ -55,10 +56,10 @@ public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.View
         @Bind(R.id.title)
         TextView textView;
 
-        public ViewHolderItem(View v) {
-            super(v);
-            ButterKnife.bind(v);
-            v.setOnClickListener(this);
+        public ViewHolderItem(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+            view.setOnClickListener(this);
         }
 
         public void setTitle(String title) {
@@ -115,6 +116,7 @@ public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.View
 
     public GuideListAdapter() {
         this.nodes = new ArrayList<>();
+        InjectUtil.component().inject(this);
     }
 
     public void setNodes(List<Node> nodes, Node currentNode) {

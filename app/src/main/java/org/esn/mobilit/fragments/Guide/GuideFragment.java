@@ -3,6 +3,7 @@ package org.esn.mobilit.fragments.Guide;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,10 +58,14 @@ public class GuideFragment extends Fragment {
         adapter = new GuideListAdapter();
         if (getArguments() != null && getArguments().getSerializable("node") != null) {
             setCurrentNode((Node) getArguments().getSerializable("node"));
+        } else {
+            refreshContent();
         }
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(null);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);
 
         swipeRefreshLayoutListView.setEnabled(false);
@@ -130,10 +135,9 @@ public class GuideFragment extends Fragment {
         if (guide != null && guide.isActivated() && guide.isCreated()) {
             this.listNodes = node == null ? guide.getNodes() : node.getNodes();
             this.currentNode = node;
-            if (adapter != null && currentNode == null) {
+            if (adapter != null) {
                 adapter.setNodes(listNodes, currentNode);
             }
         }
-        return this;
     }
 }

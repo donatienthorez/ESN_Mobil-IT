@@ -81,6 +81,7 @@ public class HomeActivity extends BaseActivity {
             // register the user with GCM.
             regIdService.register();
             buildMenu();
+            startMenu();
         }
     }
 
@@ -88,8 +89,6 @@ public class HomeActivity extends BaseActivity {
      * Build the left drawer menu.
      */
     private void buildMenu() {
-        Object defaultMenu = cacheService.get(ApplicationConstants.CACHE_DEFAULT_MENU);
-        executeDrawerMenuAction(defaultMenu != null ? (int) defaultMenu : R.id.drawer_item_news);
         setSupportActionBar(toolbar);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -111,18 +110,34 @@ public class HomeActivity extends BaseActivity {
     }
 
     /**
-     * Unchecks all the element of the left drawer menu.
+     * Shows the last selected menu of the precedent session.
+     *
+     * The last menu has been saved into cache. This method executes the menu the same way as
+     * the user would have click on it.
      */
-    private void uncheckNavigationViewItems() {
+    private void startMenu() {
+        Object defaultMenu = cacheService.get(ApplicationConstants.CACHE_DEFAULT_MENU);
+        int menuToLaunch = defaultMenu != null ? (int) defaultMenu : R.id.drawer_item_news;
+        executeDrawerMenuAction(menuToLaunch);
+    }
+    /**
+     * Checks the item given. Uncheck all the other elements of the left drawer menu.
+     */
+    private void checkNavigationViewItem(int menuItemId) {
         Menu menu = navigationView.getMenu();
         for (int i = 0; i < menu.size(); i++) {
             MenuItem item = menu.getItem(i);
-            item.setChecked(false);
+            if (item.getItemId() == menuItemId) {
+                item.setChecked(true);
+            } else {
+                item.setChecked(false);
+            }
         }
     }
 
     /**
-     * Executes the action of the menuItem id
+     * Executes the action of the menuItem id.
+     * Checks the item on the menu.
      *
      * @param menuItemId  Id of the item selected.
      */
@@ -157,6 +172,6 @@ public class HomeActivity extends BaseActivity {
                 startActivity(intent);
                 break;
         }
+        checkNavigationViewItem(menuItemId);
     }
-    //FIXME check correct menu item
 }
