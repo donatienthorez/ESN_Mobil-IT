@@ -1,54 +1,55 @@
 package org.esn.mobilit.services;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import org.esn.mobilit.MobilITApplication;
-import org.esn.mobilit.services.feeds.EventsService;
-import org.esn.mobilit.services.feeds.NewsService;
-import org.esn.mobilit.services.feeds.PartnersService;
+import org.esn.mobilit.services.cache.CacheService;
 import org.esn.mobilit.utils.ApplicationConstants;
+import org.esn.mobilit.utils.inject.ForApplication;
+import org.esn.mobilit.utils.inject.InjectUtil;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class PreferencesService {
-    private static PreferencesService instance;
 
-    private PreferencesService(){
+    @Inject
+    CacheService cacheService;
+
+    @ForApplication
+    @Inject
+    Context context;
+
+    @Inject
+    public PreferencesService() {
+        InjectUtil.component().inject(this);
     }
 
-    public static PreferencesService getInstance(){
-        if (instance == null){
-            instance = new PreferencesService();
-        }
-        return instance;
-    }
-
-    public static void setDefaults(String key, String value) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MobilITApplication.getContext());
+    public void setDefaults(String key, String value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(key, value);
         editor.commit();
     }
 
-    public static String getDefaults(String key) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MobilITApplication.getContext());
+    public String getDefaults(String key) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getString(key, null);
     }
 
-    public static void resetSection(){
-        GuideService.getInstance().resetService();
-        EventsService.getInstance().resetService();
-        NewsService.getInstance().resetService();
-        PartnersService.getInstance().resetService();
+    public void resetSection(){
         setDefaults(ApplicationConstants.CACHE_DEFAULT_MENU, null);
         setDefaults(ApplicationConstants.PREFERENCES_CODE_SECTION, null);
         setDefaults(ApplicationConstants.PREFERENCES_REG_ID, null);
-        CacheService.deleteObjectFromCache(ApplicationConstants.CACHE_EVENTS);
-        CacheService.deleteObjectFromCache(ApplicationConstants.CACHE_PARTNERS);
-        CacheService.deleteObjectFromCache(ApplicationConstants.CACHE_NEWS);
-        CacheService.deleteObjectFromCache(ApplicationConstants.CACHE_GUIDE);
-        CacheService.deleteObjectFromCache(ApplicationConstants.CACHE_DEFAULT_MENU);
-        CacheService.deleteObjectFromCache(ApplicationConstants.CACHE_COUNTRY);
-        CacheService.deleteObjectFromCache(ApplicationConstants.CACHE_SECTION);
+        cacheService.delete(ApplicationConstants.CACHE_EVENTS);
+        cacheService.delete(ApplicationConstants.CACHE_PARTNERS);
+        cacheService.delete(ApplicationConstants.CACHE_NEWS);
+        cacheService.delete(ApplicationConstants.CACHE_GUIDE);
+        cacheService.delete(ApplicationConstants.CACHE_DEFAULT_MENU);
+        cacheService.delete(ApplicationConstants.CACHE_COUNTRY);
+        cacheService.delete(ApplicationConstants.CACHE_SECTION);
 
     }
 }

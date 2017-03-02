@@ -14,8 +14,6 @@ import retrofit.http.POST;
 
 public class PostRegProvider {
 
-    public static final String TAG = "PostRegProvider";
-
     private static RestAdapter restAdapter = new RestAdapter.Builder()
             .setEndpoint(ApplicationConstants.API_ENDPOINT)
             .build();

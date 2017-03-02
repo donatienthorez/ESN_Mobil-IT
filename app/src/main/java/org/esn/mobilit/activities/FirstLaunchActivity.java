@@ -17,19 +17,22 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.adapters.SpinnerAdapter;
 import org.esn.mobilit.models.Country;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.renderers.HomepageRenderer;
-import org.esn.mobilit.services.CacheService;
+import org.esn.mobilit.services.AppState;
+import org.esn.mobilit.services.cache.CacheService;
 import org.esn.mobilit.services.CountriesService;
-import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
+import org.esn.mobilit.utils.inject.ForApplication;
+import org.esn.mobilit.utils.inject.InjectUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -37,6 +40,18 @@ import butterknife.OnClick;
 import butterknife.OnItemSelected;
 
 public class FirstLaunchActivity extends Activity {
+
+    @ForApplication
+    @Inject
+    Context context;
+    @Inject
+    CacheService cacheService;
+    @Inject
+    CountriesService countriesService;
+    @Inject
+    HomepageRenderer homepageRenderer;
+    @Inject
+    AppState appState;
 
     @Bind(R.id.startButton)
     public Button startButton;
@@ -49,17 +64,17 @@ public class FirstLaunchActivity extends Activity {
     @Bind(R.id.spinnerSections)
     public Spinner spinnerSections;
 
-    private List<Country> countryList;
+    private List<Country> countryObjectList;
     private Country currentCountry;
     private ArrayAdapter countriesAdapter, sectionsAdapter;
-    private ArrayList<String> countries, sections;
+    private ArrayList<String> countriesNames, sections;
     private int sectionPosition;
     private boolean countryLoaded;
 
     @OnItemSelected(R.id.spinnerCountries)
     public void onCountriesItemSelected(Spinner spinner, int position) {
         if (position != 0) {
-            currentCountry = countryList.get(position - 1);
+            currentCountry = countryObjectList.get(position - 1);
             initSectionsSpinner();
         }
     }
@@ -84,11 +99,10 @@ public class FirstLaunchActivity extends Activity {
     public void launchHomeActivity(View view) {
         Section currentSection = currentCountry.getSections().get(sectionPosition);
 
-        CacheService.saveObjectToCache(ApplicationConstants.CACHE_COUNTRY, currentCountry);
-        CacheService.saveObjectToCache(ApplicationConstants.CACHE_SECTION, currentSection);
+        appState.setSection(currentSection);
+        appState.setCountry(currentCountry);
 
         Intent intent = new Intent(FirstLaunchActivity.this, HomeActivity.class);
-        intent.putExtra("section", currentSection);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
@@ -98,6 +112,7 @@ public class FirstLaunchActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_launch);
+        InjectUtil.component().inject(this);
 
         initContent();
         networkStateReceiver = new BroadcastReceiver() {
@@ -131,33 +146,41 @@ public class FirstLaunchActivity extends Activity {
 
         startButton.setEnabled(false);
 
-        HomepageRenderer homepageRenderer = new HomepageRenderer();
         SpannableStringBuilder text = homepageRenderer.renderHomepageText();
         chooseCountryTextView.setText(text, TextView.BufferType.SPANNABLE);
 
-        countries = new ArrayList<>();
-        countriesAdapter = new SpinnerAdapter<String>(this, android.R.layout.simple_list_item_1, countries);
+        countriesNames = new ArrayList<>();
+        countriesAdapter = new SpinnerAdapter(this, android.R.layout.simple_list_item_1, countriesNames);
         spinnerCountries.setAdapter(countriesAdapter);
 
         sections = new ArrayList<>();
-        sectionsAdapter = new SpinnerAdapter<String>(this, android.R.layout.simple_list_item_1, sections);
+        sectionsAdapter = new SpinnerAdapter(this, android.R.layout.simple_list_item_1, sections);
         spinnerSections.setAdapter(sectionsAdapter);
     }
 
 
     /**
-     * Gets the countries and initializes country spinner on success.
+     * Gets the countriesNames and initializes country spinner on success.
      */
     private void getCountries() {
-        CountriesService.getCountries(new NetworkCallback<List<Country>>() {
+        countriesService.getCountries(new NetworkCallback<List<Country>>() {
+            @Override
+            public void onNoConnection(List<Country> cachedCountries) {
+                Toast.makeText(
+                        context,
+                        getResources().getString(R.string.error_message_network),
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+
             @Override
             public void onSuccess(List<Country> result) {
                 countryLoaded = true;
-                countries.add(getResources().getString(R.string.selectyourcountry));
+                countriesNames.add(getResources().getString(R.string.selectyourcountry));
                 for (Country country : result) {
-                    countries.add(country.getName());
+                    countriesNames.add(country.getName());
                 }
-                countryList = result;
+                countryObjectList = result;
 
                 initCountriesSpinner();
             }
@@ -165,7 +188,7 @@ public class FirstLaunchActivity extends Activity {
             @Override
             public void onNoAvailableData() {
                 Toast.makeText(
-                        MobilITApplication.getContext(),
+                        context,
                         getResources().getString(R.string.error_message_no_data_countries),
                         Toast.LENGTH_LONG
                 ).show();
@@ -174,7 +197,7 @@ public class FirstLaunchActivity extends Activity {
             @Override
             public void onFailure(String error) {
                 Toast.makeText(
-                        MobilITApplication.getContext(),
+                        context,
                         getResources().getString(R.string.error_message_network),
                         Toast.LENGTH_LONG
                 ).show();
@@ -185,14 +208,13 @@ public class FirstLaunchActivity extends Activity {
 
 
     /**
-     * Initializes the countries spinner depending on the currentCountry selected.
+     * Initializes the countriesNames spinner depending on the currentCountry selected.
      */
     private void initCountriesSpinner() {
         countriesAdapter.notifyDataSetChanged();
 
         spinnerCountries.setSelection(0);
         spinnerCountries.setVisibility(View.VISIBLE);
-
         progressBar.setVisibility(View.GONE);
     }
 

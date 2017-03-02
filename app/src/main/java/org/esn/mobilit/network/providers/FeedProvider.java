@@ -3,8 +3,19 @@ package org.esn.mobilit.network.providers;
 import com.crashlytics.android.Crashlytics;
 
 import org.esn.mobilit.models.RSS.RSS;
+import org.esn.mobilit.models.RSS.RSSItem;
+import org.esn.mobilit.services.AppState;
+import org.esn.mobilit.services.cache.CacheService;
+import org.esn.mobilit.services.feeds.FeedType;
 import org.esn.mobilit.utils.ApplicationConstants;
+import org.esn.mobilit.utils.Utils;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
+import org.esn.mobilit.utils.inject.InjectUtil;
+
+import java.util.ArrayList;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -13,9 +24,22 @@ import retrofit.client.Response;
 import retrofit.converter.SimpleXMLConverter;
 import retrofit.http.GET;
 
+@Singleton
 public class FeedProvider {
 
-    public static final String TAG = "FeedProvider";
+    @Inject
+    AppState appState;
+
+    @Inject
+    Utils utils;
+
+    @Inject
+    CacheService cacheService;
+
+    @Inject
+    public FeedProvider() {
+        InjectUtil.component().inject(this);
+    }
 
     private interface FeedProviderInterface{
         @GET(ApplicationConstants.EVENTS_PATH + ApplicationConstants.FEED_PATH)
@@ -28,19 +52,29 @@ public class FeedProvider {
         void getPartners(Callback<RSS> callback);
     }
 
-    public static void makeEventRequest(String sectionWebsite, final NetworkCallback<RSS> callback) {
-        FeedProviderInterface feedProvider = createBuilder(sectionWebsite);
-        feedProvider.getEvents(createCallback(callback));
-    }
 
-    public static void makeNewsRequest(String sectionWebsite, final NetworkCallback<RSS> callback) {
-        FeedProviderInterface feedProvider = createBuilder(sectionWebsite);
-        feedProvider.getNews(createCallback(callback));
-    }
+    public void makeFeedRequest(FeedType feedType, final NetworkCallback<ArrayList<RSSItem>> callback) {
+        if (!utils.isConnected()) {
+            callback.onNoConnection(appState.getFeed(feedType));
+            return;
+        }
 
-    public static void makePartnersRequest(String sectionWebsite, final NetworkCallback<RSS> callback) {
-        FeedProviderInterface feedProvider = createBuilder(sectionWebsite);
-        feedProvider.getPartners(createCallback(callback));
+        if (appState.hasValidSection()) {
+            FeedProviderInterface feedProvider = createBuilder(appState.getSectionWebsite());
+            //FIXME change cacheable strings to feed_type
+            switch (feedType.getFeedTypeString()) {
+                case ApplicationConstants.FEED_TYPE_NEWS:
+                    feedProvider.getNews(createCallback(callback));
+                    break;
+                case ApplicationConstants.FEED_TYPE_EVENTS:
+                    feedProvider.getEvents(createCallback(callback));
+                    break;
+                case ApplicationConstants.FEED_TYPE_PARTNERS:
+                    feedProvider.getPartners(createCallback(callback));
+                    break;
+            }
+        }
+        //TODO else log exception
     }
 
     private static FeedProviderInterface createBuilder(String sectionWebsite) {
@@ -51,14 +85,16 @@ public class FeedProvider {
                 .create(FeedProviderInterface.class);
     }
 
-    private static Callback<RSS> createCallback(final NetworkCallback<RSS> callback) {
+    private static Callback<RSS> createCallback(final NetworkCallback<ArrayList<RSSItem>> callback) {
         return new Callback<RSS>() {
             @Override
             public void success(RSS result, Response response) {
                 if (result.getListSize() == 0) {
                     callback.onNoAvailableData();
                 } else {
-                    callback.onSuccess(result);
+                    ArrayList<RSSItem> rssItems = new ArrayList<>();
+                    rssItems.addAll(result.getRSSChannel().getList());
+                    callback.onSuccess(rssItems);
                 }
             }
 

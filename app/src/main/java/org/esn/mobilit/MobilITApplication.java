@@ -5,20 +5,16 @@ import android.content.Context;
 
 import com.crashlytics.android.Crashlytics;
 
+import org.esn.mobilit.utils.inject.InjectUtil;
+
 import io.fabric.sdk.android.Fabric;
 
 public class MobilITApplication extends Application {
 
-    private static Context context;
-
     @Override
     public void onCreate() {
         super.onCreate();
-        context = getApplicationContext();
         Fabric.with(this, new Crashlytics());
-    }
-
-    public static Context getContext(){
-        return context;
+        InjectUtil.initialize(this);
     }
 }

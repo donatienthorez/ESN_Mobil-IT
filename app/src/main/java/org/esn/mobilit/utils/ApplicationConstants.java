@@ -73,4 +73,7 @@ public interface ApplicationConstants {
 
     String MOBILIT_TOKEN = "g6g2A52mGPPbKaaHmFjz";
 
+    String FEED_TYPE_NEWS = "news";
+    String FEED_TYPE_PARTNERS = "partners";
+    String FEED_TYPE_EVENTS = "events";
 }

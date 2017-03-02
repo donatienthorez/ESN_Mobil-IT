@@ -1,5 +1,6 @@
 package org.esn.mobilit.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,18 +13,28 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Node;
+import org.esn.mobilit.utils.inject.ForApplication;
+import org.esn.mobilit.utils.inject.InjectUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.ViewHolderItem> {
-    private List<Node> nodes;
-    private Node currentNode;
+    @ForApplication
+    @Inject
+    Context context;
 
     OnItemClickListener itemClickListener;
+
+    private List<Node> nodes;
+    private Node currentNode;
 
     final int DEFAULT_CATEGORY_ITEM = 0;
     final int DEFAULT_CATEGORY_DETAILS = 1;
@@ -37,23 +48,26 @@ public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.View
     }
 
     public class ViewHolderItem extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        @Bind(R.id.image)
         ImageView imageView;
-        TextView titleView;
+
+        @Bind(R.id.title)
+        TextView textView;
 
         public ViewHolderItem(View v) {
             super(v);
-            imageView = (ImageView) v.findViewById(R.id.image);
-            titleView = (TextView) v.findViewById(R.id.title);
+            ButterKnife.bind(v);
             v.setOnClickListener(this);
         }
 
         public void setTitle(String title) {
-            titleView.setText(title);
+            textView.setText(title);
         }
 
         public void setImage(String imageLink) {
             if (imageLink != null && !imageLink.isEmpty()) {
-                Glide.with(MobilITApplication.getContext())
+                Glide.with(context)
                         .load(imageLink)
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .into(imageView);
@@ -72,10 +86,10 @@ public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.View
         }
     }
 
-    public class ViewHolderItemDetailled extends ViewHolderItem{
+    public class ViewHolderItemDetailed extends ViewHolderItem{
         WebView resumeView;
         TextView categoryLabel;
-        public ViewHolderItemDetailled(View v) {
+        public ViewHolderItemDetailed(View v) {
             super(v);
             resumeView  = (WebView) v.findViewById(R.id.webview);
             categoryLabel  = (TextView) v.findViewById(R.id.categoryLabel);
@@ -99,12 +113,13 @@ public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.View
         }
     }
 
-    public GuideListAdapter(List<Node> nodes) {
-        this.nodes = nodes;
-    }
-
     public void setNodes(List<Node> nodes, Node currentNode) {
-        this.nodes = nodes != null ? nodes : new ArrayList<Node>();
+        if (this.nodes != null) {
+            this.nodes.clear();
+            this.nodes.addAll(nodes);
+        } else {
+            this.nodes = new ArrayList<>();
+        }
         this.currentNode = currentNode;
         this.notifyDataSetChanged();
     }
@@ -112,11 +127,12 @@ public class GuideListAdapter extends RecyclerView.Adapter<GuideListAdapter.View
     @Override
     public ViewHolderItem onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
+        InjectUtil.component().inject(this);
 
         if (viewType == DEFAULT_CATEGORY_DETAILS) {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.list_guide_item_detailled, parent, false);
-            return new ViewHolderItemDetailled(view);
+            return new ViewHolderItemDetailed(view);
         } else {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.list_item_guide, parent, false);

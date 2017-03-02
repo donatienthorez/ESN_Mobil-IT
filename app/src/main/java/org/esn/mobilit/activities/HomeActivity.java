@@ -1,17 +1,11 @@
 package org.esn.mobilit.activities;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,45 +13,41 @@ import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
-import org.esn.mobilit.fragments.AboutFragment;
-import org.esn.mobilit.fragments.Guide.GuideFragment;
-import org.esn.mobilit.fragments.NotificationFragment;
-import org.esn.mobilit.fragments.Satellite.DetailsFragment;
-import org.esn.mobilit.fragments.Satellite.FeedListFragment;
-import org.esn.mobilit.models.Guide;
-import org.esn.mobilit.models.Node;
-import org.esn.mobilit.models.Notification;
-import org.esn.mobilit.models.RSS.RSSItem;
-import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.AboutService;
-import org.esn.mobilit.services.CacheService;
-import org.esn.mobilit.services.GuideService;
+import org.esn.mobilit.services.AppState;
 import org.esn.mobilit.services.PreferencesService;
-import org.esn.mobilit.services.feeds.EventsService;
-import org.esn.mobilit.services.feeds.NewsService;
-import org.esn.mobilit.services.feeds.PartnersService;
-import org.esn.mobilit.services.feeds.RSSFeedService;
+import org.esn.mobilit.services.feeds.FeedType;
 import org.esn.mobilit.services.gcm.RegIdService;
+import org.esn.mobilit.services.navigation.NavigationUri;
+import org.esn.mobilit.services.navigation.NavigationUriType;
 import org.esn.mobilit.utils.ApplicationConstants;
-import org.esn.mobilit.utils.callbacks.NetworkCallback;
+import org.esn.mobilit.utils.inject.InjectUtil;
 
-import java.util.HashMap;
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends BaseActivity {
 
-    @Bind(R.id.drawer_layout)   protected DrawerLayout drawerLayout;
-    @Bind(R.id.left_drawer)     protected RelativeLayout drawerRelativeLayout;
-    @Bind(R.id.toolbar)         protected Toolbar toolbar;
-    @Bind(R.id.navigation_view) protected NavigationView navigationView;
-    private HashMap<String, Fragment> fragmentHashMap;
-    private int currentFragmentId;
-    private Section section;
-    private RSSFeedService currentFeedService;
+    @Bind(R.id.drawer_layout)
+    protected DrawerLayout drawerLayout;
+    @Bind(R.id.left_drawer)
+    protected RelativeLayout drawerRelativeLayout;
+    @Bind(R.id.toolbar)
+    protected Toolbar toolbar;
+    @Bind(R.id.navigation_view)
+    protected NavigationView navigationView;
+
+    @Inject
+    PreferencesService preferencesService;
+    @Inject
+    RegIdService regIdService;
+    @Inject
+    AboutService aboutService;
+    @Inject
+    AppState appState;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -70,32 +60,27 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_notification:
-                loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_NOTIFICATIONS), this.currentFragmentId, true);
+                navigateToUri(new NavigationUri(NavigationUriType.NOTIFICATIONS), true);
                 break;
         }
         return true;
     }
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        section = (Section) getIntent().getSerializableExtra("section");
+        InjectUtil.component().inject(this);
 
-        if (section == null) {
-            section = (Section) CacheService.
-                    getObjectFromCache(ApplicationConstants.CACHE_SECTION);
-        }
-
-        if (section == null || TextUtils.isEmpty(section.getWebsite())) {
+        if (!appState.hasValidSection()) {
             Intent intent = new Intent(this, FirstLaunchActivity.class);
             startActivity(intent);
         } else {
             ButterKnife.bind(this);
 
-            registerRegId();
+            // register the user with GCM.
+            regIdService.register();
             buildMenu();
-            manageNotificationRedirection();
-            updateSection();
         }
     }
 
@@ -103,13 +88,11 @@ public class HomeActivity extends AppCompatActivity {
      * Build the left drawer menu.
      */
     private void buildMenu() {
-        setFragmentHashMap();
-        Object defaultMenu = CacheService.getObjectFromCache(ApplicationConstants.CACHE_DEFAULT_MENU);
+        Object defaultMenu = cacheService.get(ApplicationConstants.CACHE_DEFAULT_MENU);
         executeDrawerMenuAction(defaultMenu != null ? (int) defaultMenu : R.id.drawer_item_news);
         setSupportActionBar(toolbar);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 executeDrawerMenuAction(menuItem.getItemId());
@@ -122,8 +105,8 @@ public class HomeActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
-        Glide.with(MobilITApplication.getContext())
-                .load(section.getLogo_url())
+        Glide.with(context)
+                .load(appState.getSection().getLogo_url())
                 .downloadOnly(150, 250);
     }
 
@@ -139,198 +122,42 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
-     * Calls the RegIdService to register the regId.
-     */
-    private void registerRegId() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                RegIdService.getInstance().register(section);
-            }
-        });
-        thread.setPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-        thread.start();
-    }
-
-    /**
-     * Redirects to details page of the notifications.
-     */
-    private void manageNotificationRedirection() {
-        Intent intent = getIntent();
-
-        if (intent != null) {
-            Notification notification = (Notification) intent.getSerializableExtra(ApplicationConstants.GCM_NOTIFICATION);
-            if (notification != null) {
-                loadNotificationFragment(notification);
-            }
-        }
-    }
-
-    public void loadNotificationFragment(Notification notification) {
-        RSSItem rssItem = notification.getRssItem();
-        if (rssItem != null) {
-            uncheckNavigationViewItems();
-            this.loadDetailsFragment(rssItem, false);
-            return;
-        }
-        this.loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_NOTIFICATIONS), this.currentFragmentId, true);
-    }
-
-    /**
-     * Updates the section..
-     */
-    private void updateSection(){
-        AboutService.getInstance().getFromSite(new NetworkCallback<Section>() {
-            @Override
-            public void onSuccess(Section result) {
-                // If the user is on the about tab it updates the section.
-                if (currentFragmentId == R.id.drawer_item_about) {
-                    ((AboutFragment) fragmentHashMap.get(ApplicationConstants.MENU_ABOUT)).setSection(result);
-                    section = result;
-                }
-            }
-
-            @Override
-            public void onNoAvailableData() {
-                //TODO manage onNoAvailableData error.
-            }
-
-            @Override
-            public void onFailure(String error) {
-                //TODO manage onFailure error.
-            }
-        });
-    }
-
-    /**
      * Executes the action of the menuItem id
      *
      * @param menuItemId  Id of the item selected.
      */
     private void executeDrawerMenuAction(int menuItemId) {
         clearFragmentBackStack();
-        CacheService.saveObjectToCache(ApplicationConstants.CACHE_DEFAULT_MENU, menuItemId);
+        cacheService.save(ApplicationConstants.CACHE_DEFAULT_MENU, menuItemId);
+        Bundle bundle = new Bundle();
 
         switch (menuItemId) {
             case R.id.drawer_item_news:
-                loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_NEWS), menuItemId, false);
-                this.currentFeedService = NewsService.getInstance();
+                bundle.putSerializable("feedType", FeedType.NEWS);
+                navigateToUri(new NavigationUri(NavigationUriType.FEED_LIST, bundle), false);
                 break;
             case R.id.drawer_item_events:
-                loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_EVENTS), menuItemId, false);
-                this.currentFeedService = EventsService.getInstance();
+                bundle.putSerializable("feedType", FeedType.EVENTS);
+                navigateToUri(new NavigationUri(NavigationUriType.FEED_LIST, bundle), false);
                 break;
             case R.id.drawer_item_partners:
-                loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_PARTNERS), menuItemId, false);
-                this.currentFeedService = PartnersService.getInstance();
+                bundle.putSerializable("feedType", FeedType.PARTNERS);
+                navigateToUri(new NavigationUri(NavigationUriType.FEED_LIST, bundle), false);
                 break;
             case R.id.drawer_item_guide:
-                loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_GUIDE), menuItemId, false);
+                navigateToUri(new NavigationUri(NavigationUriType.GUIDE), false);
                 break;
             case R.id.drawer_item_about:
-                loadFragment(fragmentHashMap.get(ApplicationConstants.MENU_ABOUT), menuItemId, false);
+                navigateToUri(createNavigationUri("about"), false);
+//                navigateToUri(new NavigationUri(NavigationUriType.ABOUT), false);
                 break;
             case R.id.drawer_item_reset:
-                PreferencesService.resetSection();
+                preferencesService.resetSection();
                 Intent intent = new Intent(this, FirstLaunchActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 break;
         }
     }
-
-    /**
-     * Loads the fragment into the content frame.
-     * @param fragment Fragment to load.
-     * @param currentFragmentId Id of the current fragment displayed.
-     * @param addToBackStack If the current fragment should be added to the back stack.
-     */
-    public void loadFragment(Fragment fragment, int currentFragmentId, boolean addToBackStack) {
-        this.currentFragmentId = currentFragmentId;
-
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction= fragmentManager
-                .beginTransaction()
-                .replace(R.id.content_frame, fragment);
-
-        if (addToBackStack) {
-            fragmentTransaction.addToBackStack(null);
-        }
-        fragmentTransaction.commit();
-        navigationView.setCheckedItem(currentFragmentId);
-    }
-
-    /**
-     * Loads the details fragment into the content frame.
-     * @param rssItem RssItem to display into the details fragment.
-     * @param addToBackStack If the current fragment should be added to the back stack.
-     */
-    public void loadDetailsFragment(RSSItem rssItem, boolean addToBackStack){
-        Fragment fragment = (new DetailsFragment()).setFeed(rssItem);
-        loadFragment(fragment, this.currentFragmentId, addToBackStack);
-    }
-
-    /**
-     * Loads the details fragment into the content frame.
-     * @param node Node to display into the details fragment.
-     * @param addToBackStack If the current fragment should be added to the back stack.
-     */
-    public void loadGuideFragment(Guide guide, Node node, boolean addToBackStack){
-        GuideFragment fragment = (new GuideFragment()).setCurrentNode(guide, node);
-        loadFragment(fragment, this.currentFragmentId, addToBackStack);
-    }
-
-    /**
-     * Sets the Fragment HashMap menu.
-     */
-    public void setFragmentHashMap()
-    {
-        fragmentHashMap = new HashMap<>();
-        fragmentHashMap.put(
-                ApplicationConstants.MENU_NEWS,
-                (new FeedListFragment())
-        );
-        fragmentHashMap.put(
-                ApplicationConstants.MENU_EVENTS,
-                (new FeedListFragment())
-        );
-        fragmentHashMap.put(
-                ApplicationConstants.MENU_PARTNERS,
-                (new FeedListFragment())
-        );
-        fragmentHashMap.put(
-                ApplicationConstants.MENU_GUIDE,
-                (new GuideFragment()).setCurrentNode(GuideService.getInstance().getFromCache(), null)
-        );
-        fragmentHashMap.put(
-                ApplicationConstants.MENU_ABOUT,
-                new AboutFragment()
-        );
-        fragmentHashMap.put(
-                ApplicationConstants.MENU_NOTIFICATIONS,
-                new NotificationFragment()
-        );
-    }
-
-    @Override
-    public void onBackPressed() {
-        int count = getFragmentManager().getBackStackEntryCount();
-
-        if (count == 0) {
-            super.onBackPressed();
-        } else {
-            getFragmentManager().popBackStack();
-        }
-    }
-
-    public void clearFragmentBackStack(){
-        FragmentManager fm = getFragmentManager();
-        for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
-            fm.popBackStack();
-        }
-    }
-
-    public RSSFeedService getCurrentFeedService(){
-        return currentFeedService;
-    }
+    //FIXME check correct menu item
 }

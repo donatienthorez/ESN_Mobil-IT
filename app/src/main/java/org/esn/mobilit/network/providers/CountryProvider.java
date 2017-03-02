@@ -17,8 +17,6 @@ import retrofit.http.Query;
 
 public class CountryProvider {
 
-    public static final String TAG = "CountryProvider";
-
     private static RestAdapter restAdapter = new RestAdapter.Builder()
             .setEndpoint(ApplicationConstants.API_ENDPOINT)
             .build();
