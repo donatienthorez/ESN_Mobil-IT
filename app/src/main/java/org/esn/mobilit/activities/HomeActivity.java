@@ -148,7 +148,8 @@ public class HomeActivity extends BaseActivity {
                 navigateToUri(new NavigationUri(NavigationUriType.GUIDE), false);
                 break;
             case R.id.drawer_item_about:
-                navigateToUri(new NavigationUri(NavigationUriType.ABOUT), false);
+                navigateToUri(createNavigationUri("about"), false);
+//                navigateToUri(new NavigationUri(NavigationUriType.ABOUT), false);
                 break;
             case R.id.drawer_item_reset:
                 preferencesService.resetSection();
