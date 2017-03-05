@@ -16,20 +16,34 @@ import org.esn.mobilit.activities.HomeActivity;
 import org.esn.mobilit.models.Notification;
 import org.esn.mobilit.models.RSS.RSSItem;
 import org.esn.mobilit.services.NotificationService;
-import org.esn.mobilit.services.feeds.EventsService;
-import org.esn.mobilit.services.feeds.NewsService;
-import org.esn.mobilit.services.feeds.PartnersService;
-import org.esn.mobilit.services.feeds.RSSFeedService;
+import org.esn.mobilit.services.feeds.FeedService;
+import org.esn.mobilit.services.feeds.FeedType;
+import org.esn.mobilit.services.feeds.RSSItemListHelper;
 import org.esn.mobilit.utils.ApplicationConstants;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
-import org.esn.mobilit.utils.parser.RSSFeedParser;
 
+import java.util.ArrayList;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class GcmIntentService extends IntentService {
     public static final int notifyID = 9001;
 
+    @Inject
     public GcmIntentService() {
         super("GcmIntentService");
     }
+
+    @Inject
+    NotificationService notificationService;
+
+    @Inject
+    FeedService feedService;
+
+    @Inject
+    RSSItemListHelper rssItemListHelper;
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -56,24 +70,24 @@ public class GcmIntentService extends IntentService {
                     switch (notification.getType()) {
                         case ApplicationConstants.NOTIFICATION_TYPE_DRUPAL_NEWS:
                         case ApplicationConstants.NOTIFICATION_TYPE_NEWS_OLD:
-                            downloadFeed(NewsService.getInstance(), notification, notification.getDescription());
+                            downloadFeed(FeedType.NEWS, notification, notification.getDescription());
                             break;
                         case ApplicationConstants.NOTIFICATION_TYPE_BO_NEWS:
-                            downloadFeed(NewsService.getInstance(), notification, notification.getLink());
+                            downloadFeed(FeedType.NEWS, notification, notification.getLink());
                             break;
                         case ApplicationConstants.NOTIFICATION_TYPE_DRUPAL_EVENTS:
                         case ApplicationConstants.NOTIFICATION_TYPE_EVENTS_OLD:
-                            downloadFeed(EventsService.getInstance(), notification, notification.getDescription());
+                            downloadFeed(FeedType.EVENTS, notification, notification.getDescription());
                             break;
                         case ApplicationConstants.NOTIFICATION_TYPE_BO_EVENTS:
-                            downloadFeed(EventsService.getInstance(), notification, notification.getLink());
+                            downloadFeed(FeedType.EVENTS, notification, notification.getLink());
                             break;
                         case ApplicationConstants.NOTIFICATION_TYPE_DRUPAL_PARTNERS:
                         case ApplicationConstants.NOTIFICATION_TYPE_PARTNERS_OLD:
-                            downloadFeed(PartnersService.getInstance(), notification, notification.getDescription());
+                            downloadFeed(FeedType.PARTNERS, notification, notification.getDescription());
                             break;
                         case ApplicationConstants.NOTIFICATION_TYPE_BO_PARTNERS:
-                            downloadFeed(PartnersService.getInstance(), notification, notification.getLink());
+                            downloadFeed(FeedType.PARTNERS, notification, notification.getLink());
                             break;
                         default:
                             sendNotification(null, notification);
@@ -84,11 +98,15 @@ public class GcmIntentService extends IntentService {
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    private void downloadFeed(RSSFeedService feedService, final Notification notification, final String searchItem) {
-        feedService.getFromSite(new NetworkCallback<RSSFeedParser>() {
+    private void downloadFeed(FeedType feedType, final Notification notification, final String searchItem) {
+        feedService.getFromSite(feedType, new NetworkCallback<ArrayList<RSSItem>>() {
             @Override
-            public void onSuccess(RSSFeedParser result) {
-                RSSItem rssItem = result.getRSSItemFromTitle(searchItem);
+            public void onNoConnection(ArrayList<RSSItem> arrayList) {
+            }
+
+            @Override
+            public void onSuccess(ArrayList<RSSItem> result) {
+                RSSItem rssItem = rssItemListHelper.getRSSItemFromTitle(searchItem, result);
                 sendNotification(rssItem, notification);
             }
 
@@ -115,7 +133,7 @@ public class GcmIntentService extends IntentService {
         //TODO put a value instead of an object (like ID to retrieve)
         resultIntent.putExtra(ApplicationConstants.GCM_NOTIFICATION, notification);
 
-        NotificationService.getInstance().addToCache(notification);
+        notificationService.addToCache(notification);
 
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0,
                 resultIntent, PendingIntent.FLAG_ONE_SHOT);

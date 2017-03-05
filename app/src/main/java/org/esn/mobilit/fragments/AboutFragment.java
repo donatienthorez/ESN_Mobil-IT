@@ -1,6 +1,7 @@
 package org.esn.mobilit.fragments;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,16 +14,21 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import org.esn.mobilit.MobilITApplication;
 import org.esn.mobilit.R;
 import org.esn.mobilit.models.Section;
 import org.esn.mobilit.services.AboutService;
+import org.esn.mobilit.services.AppState;
 import org.esn.mobilit.utils.callbacks.NetworkCallback;
+import org.esn.mobilit.utils.inject.ForApplication;
+import org.esn.mobilit.utils.inject.InjectUtil;
 import org.esn.mobilit.widgets.InfoCard;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+//FIXME listen to section changes
 public class AboutFragment extends Fragment {
 
     @Bind(R.id.section_logo) ImageView logo;
@@ -30,18 +36,34 @@ public class AboutFragment extends Fragment {
     @Bind(R.id.first_info_card) InfoCard firstInfoCard;
     @Bind(R.id.second_info_card) InfoCard secondInfoCard;
 
+    @ForApplication
+    @Inject
+    Context context;
+    @Inject
+    AboutService aboutService;
+    @Inject
+    AppState appState;
+
     public View onCreateView(
             LayoutInflater inflater,
             ViewGroup container,
             Bundle savedInstanceState
     ){
         View view = inflater.inflate(R.layout.fragment_about_re, container, false);
-
+        InjectUtil.component().inject(this);
         ButterKnife.bind(this, view);
 
-        setSection(AboutService.getInstance().getFromCache());
+        // put the cached section
+        setSection(appState.getSection());
 
-        AboutService.getInstance().getFromSite(new NetworkCallback<Section>() {
+        aboutService.getFromSite(new NetworkCallback<Section>() {
+            @Override
+            public void onNoConnection(Section section) {
+                onFailure(context.getResources().getString(
+                        R.string.info_message_no_network
+                ));
+            }
+
             @Override
             public void onSuccess(Section result) {
                 setSection(result);
@@ -62,7 +84,7 @@ public class AboutFragment extends Fragment {
     }
 
     public void setSection(final Section section){
-        Glide.with(MobilITApplication.getContext())
+        Glide.with(context)
                 .load(section.getLogo_url())
                 .placeholder(R.drawable.logo_small_2_25)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)

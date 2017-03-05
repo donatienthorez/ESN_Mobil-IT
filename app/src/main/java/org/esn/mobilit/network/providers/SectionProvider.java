@@ -16,8 +16,6 @@ import retrofit.http.Query;
 
 public class SectionProvider {
 
-    public static final String TAG = "SectionProvider";
-
     private static RestAdapter restAdapter = new RestAdapter.Builder()
             .setEndpoint(ApplicationConstants.API_ENDPOINT)
             .build();
